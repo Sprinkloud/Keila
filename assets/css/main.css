@@ -3997,7 +3997,7 @@ input, select, textarea {
 		padding-top: 0;
 	}
 #banner .logo-container img {
-	max-width: 170px;
+	max-width: auto;
 	height: auto;
 	margin-bottom: 0px;
 
