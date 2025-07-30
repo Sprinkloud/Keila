@@ -4003,6 +4003,16 @@ input, select, textarea {
 
 }
 
+/* --- Mobile-Specific Styles --- */
+@media (max-width: 768px) { /* Adjust this breakpoint if needed */
+	body.landing #page-wrapper {
+		background-attachment: scroll; /* Change to scroll for mobile */
+		/* Optionally, you might want to serve a smaller image for mobile */
+		/* background-image: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("../../images/violin-mobile-optimized.jpg"); */
+	}
+}
+
+
 	body.landing #footer {
 		background-color: rgba(29, 36, 42, 0.9);
 	}
