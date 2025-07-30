@@ -13,7 +13,6 @@
   <component name="ChangesViewManager">
     <option name="groupingKeys">
       <option value="directory" />
-      <option value="module" />
     </option>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -127,7 +126,7 @@
       <workItem from="1753671412356" duration="207000" />
       <workItem from="1753672610245" duration="913000" />
       <workItem from="1753738503968" duration="1599000" />
-      <workItem from="1753913920836" duration="2881000" />
+      <workItem from="1753913920836" duration="2919000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -193,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753916769591</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="que no aguanta el teléfono">
+      <option name="closed" value="true" />
+      <created>1753916839416</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1753916839416</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
