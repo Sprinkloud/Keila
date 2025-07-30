@@ -4,15 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Sábado 27/25">
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Domingo 27/7/25">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/metodología.html" beforeDir="false" afterPath="$PROJECT_DIR$/metodología.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/musicband.html" beforeDir="false" afterPath="$PROJECT_DIR$/musicband.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -50,6 +57,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JavaScript Debug.elements.html.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript Debug.este.html.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -75,6 +83,9 @@
     </key>
   </component>
   <component name="RunManager" selected="JavaScript Debug.index.html">
+    <configuration name="elements.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Main.java/elements.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
     <configuration name="este.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Main.java/este.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
@@ -84,6 +95,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="JavaScript Debug.index.html" />
+        <item itemvalue="JavaScript Debug.elements.html" />
         <item itemvalue="JavaScript Debug.este.html" />
       </list>
     </recent_temporary>
@@ -116,7 +128,11 @@
       <workItem from="1753550914662" duration="8505000" />
       <workItem from="1753585664149" duration="18181000" />
       <workItem from="1753604304109" duration="1068000" />
-      <workItem from="1753667446765" duration="1688000" />
+      <workItem from="1753667446765" duration="3126000" />
+      <workItem from="1753671412356" duration="207000" />
+      <workItem from="1753672610245" duration="913000" />
+      <workItem from="1753738503968" duration="1599000" />
+      <workItem from="1753913920836" duration="2134000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -134,7 +150,23 @@
       <option name="project" value="LOCAL" />
       <updated>1753604132505</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Domingo 27/25">
+      <option name="closed" value="true" />
+      <created>1753669208259</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1753669208259</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Domingo 27/7/25">
+      <option name="closed" value="true" />
+      <created>1753669988863</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1753669988863</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,7 +186,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Links de instagram y whatsapp" />
     <MESSAGE value="Sábado 27/25" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sábado 27/25" />
+    <MESSAGE value="Domingo 27/25" />
+    <MESSAGE value="Domingo 27/7/25" />
+    <option name="LAST_COMMIT_MESSAGE" value="Domingo 27/7/25" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
