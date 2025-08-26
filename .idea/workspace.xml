@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="que no aguanta 1">
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="que no aguanta 32">
+      <change afterPath="$PROJECT_DIR$/material.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/elements.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/metodología.html" beforeDir="false" afterPath="$PROJECT_DIR$/metodología.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/musicband.html" beforeDir="false" afterPath="$PROJECT_DIR$/musicband.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,19 +84,19 @@
     </key>
   </component>
   <component name="RunManager" selected="JavaScript Debug.index.html">
-    <configuration name="elements.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Main.java/elements.html" useBuiltInWebServerPort="true">
-      <method v="2" />
-    </configuration>
     <configuration name="este.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Main.java/este.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Pagina Sprinkloud/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
+    <configuration name="material.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Main.java/material.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JavaScript Debug.index.html" />
-        <item itemvalue="JavaScript Debug.elements.html" />
+        <item itemvalue="JavaScript Debug.material.html" />
         <item itemvalue="JavaScript Debug.este.html" />
       </list>
     </recent_temporary>
@@ -128,7 +133,8 @@
       <workItem from="1753671412356" duration="207000" />
       <workItem from="1753672610245" duration="913000" />
       <workItem from="1753738503968" duration="1599000" />
-      <workItem from="1753913920836" duration="3549000" />
+      <workItem from="1753913920836" duration="4215000" />
+      <workItem from="1756223924244" duration="7723000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -226,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753917108104</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="que no aguanta 32">
+      <option name="closed" value="true" />
+      <created>1753917564817</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1753917564817</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,7 +267,8 @@
     <MESSAGE value="que no aguanta el teléfono" />
     <MESSAGE value="que no aguanta" />
     <MESSAGE value="que no aguanta 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="que no aguanta 1" />
+    <MESSAGE value="que no aguanta 32" />
+    <option name="LAST_COMMIT_MESSAGE" value="que no aguanta 32" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
