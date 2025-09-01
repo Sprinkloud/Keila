@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Bien echo Muñequita" />
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Tenemos editor">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/material.html" beforeDir="false" afterPath="$PROJECT_DIR$/material.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/metodología.html" beforeDir="false" afterPath="$PROJECT_DIR$/metodología.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/musicband.html" beforeDir="false" afterPath="$PROJECT_DIR$/musicband.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +20,9 @@
     <option name="groupingKeys">
       <option value="directory" />
     </option>
+  </component>
+  <component name="ComposerSettings">
+    <execution />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -40,10 +49,10 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/assets/css/main.css" root0="SKIP_HIGHLIGHTING" />
   </component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -134,7 +143,8 @@
       <workItem from="1753672610245" duration="913000" />
       <workItem from="1753738503968" duration="1599000" />
       <workItem from="1753913920836" duration="4215000" />
-      <workItem from="1756223924244" duration="10573000" />
+      <workItem from="1756223924244" duration="12889000" />
+      <workItem from="1756745084782" duration="1236000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -272,7 +282,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756242701253</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Tenemos editor">
+      <option name="closed" value="true" />
+      <created>1756244857536</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1756244857536</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -303,7 +321,8 @@
     <MESSAGE value="lo hicimos Keila" />
     <MESSAGE value="lo hicimos Keila 1" />
     <MESSAGE value="Bien echo Muñequita" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bien echo Muñequita" />
+    <MESSAGE value="Tenemos editor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tenemos editor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
