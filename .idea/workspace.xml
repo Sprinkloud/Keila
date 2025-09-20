@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Paciencia">
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +143,7 @@
       <workItem from="1756223924244" duration="12889000" />
       <workItem from="1756745084782" duration="2098000" />
       <workItem from="1758216771231" duration="316000" />
-      <workItem from="1758223048314" duration="24071000" />
+      <workItem from="1758223048314" duration="32560000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -305,7 +305,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758381785923</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Paciencia">
+      <option name="closed" value="true" />
+      <created>1758382357206</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1758382357206</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
