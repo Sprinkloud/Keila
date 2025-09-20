@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Compases en la Música | Compases Simples y Compuestos</title>
+    <meta name="description" content="Aprende los diferentes tipos de compases en la música: compases simples, compuestos y cómo se utilizan en partituras.">
+    <meta name="keywords" content="compases, compases simples, compases compuestos, teoría musical, música, partituras">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.2.0/dist/abcjs-basic-min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+
+    <style>
+        /* --- Estilos Generales --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        main {
+            font-family: 'Playfair Display', Serif;
+        }
+
+        h2, h3 {
+            letter-spacing: 0px;
+        }
+
+        p {
+            letter-spacing: -0.5px;
+        }
+
+        /* --- Componentes --- */
+
+        /* Botón de escucha (definición única y clara) */
+        .listen-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #073B4C;
+            color: white;
+            font-weight: bold;
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            transition: background-color 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .listen-btn:hover {
+            background-color: #118AB2;
+            transform: scale(1.05);
+        }
+
+        .listen-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        /* Contenedor del gráfico */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+
+        /* Diagrama de notas musicales */
+        .note-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .pulse {
+            font-size: 3rem;
+            color: #073B4C;
+        }
+
+        .division {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 2.5rem;
+            color: #118AB2;
+        }
+
+        .arrow {
+            color: #FFD166;
+            transform: rotate(90deg);
+        }
+
+        /* Ajuste para la notación de ABCJS */
+        .abc-notation-container svg {
+            width: 100% !important;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body class="text-[#073B4C]">
+
+<header class="relative bg-[#073B4C] text-white p-12 shadow-lg">
+    <div class="max-w-7xl mx-auto flex items-center">
+        <div class="absolute right-12">
+            <a href="https://sprinkloud.vercel.app/">
+                <img src="LOGO_Sprinkloud__6_-removebg-preview.png"
+                     alt="Sprinkloud Club Musical Logo"
+                     class="h-28 md:h-36 lg:h-40 object-contain
+                        transition-transform duration-300 hover:-translate-y-2 hover:scale-105 cursor-pointer">
+            </a>
+        </div>
+
+        <div class="flex-1 text-center">
+            <h1 class="text-4xl md:text-5xl font-black tracking-tight">
+                El Ritmo al Descubierto
+            </h1>
+            <p class="text-lg md:text-xl mt-2 text-[#a7c5d0]">
+                Compases Simples, Compuestos y de Amalgama
+            </p>
+        </div>
+    </div>
+</header>
+
+<main class="container max-w-[1350px] mx-auto px-6 py-8">
+
+    <section id="simples" class="mb-12">
+        <div class="text-center mb-8">
+            <h2 class="text-5xl md:text-4xl font-bold tracking-tight text-[#FF6B6B]">Compases Simples: El Pulso Binario</h2>
+            <p class="max-w-3xl mx-auto mt-2 text-lg">En los compases simples, cada pulso principal se siente como un latido firme y se divide naturalmente en dos mitades iguales. Piensa en el ritmo constante de una marcha o el pop: "un-y, dos-y...".</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+                <h3 class="text-xl font-bold text-center mb-4 text-black">La División del Pulso Simple</h3>
+                <p class="text-center mb-6">El corazón de un compás simple es su pulso, que se parte en dos. Una figura (el pulso) se convierte en dos de menor duración (la división).</p>
+                <div class="note-diagram">
+                    <div class="text-center">
+                        <div class="pulse">♩</div>
+                        <div class="font-bold">PULSO</div>
+                    </div>
+                    <div class="arrow">➔</div>
+                    <div class="text-center">
+                        <div class="division"><span>♪</span><span>♪</span></div>
+                        <div class="font-bold">DIVISIÓN</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+                <h3 class="text-xl font-bold text-center text-black mb-4">Tiempos por Compás</h3>
+                <p class="text-center mb-2">Este gráfico muestra cuántos pulsos (tiempos) principales tiene cada tipo de compás simple. El numerador nos da la respuesta directa.</p>
+                <div class="chart-container">
+                    <canvas id="simpleMeterChart"></canvas>
+                </div>
+                <div class="mt-4 text-center space-x-2">
+                    <button class="listen-btn" data-meter='{"type": "simple", "beats": 2}'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.29 8.11a.5.5 0 00-.979.22L4 12.83a.5.5 0 00.958.287l.33-1.05a3.991 3.991 0 013.78-2.583h1.304a4 4 0 013.78 2.583l.33 1.05a.5.5 0 00.958-.287L14.69 8.33a.5.5 0 00-.979-.22L13.38 9h-6.76l-.33-1.89zM15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Escuchar 2/4</button>
+                    <button class="listen-btn" data-meter='{"type": "simple", "beats": 3}'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.29 8.11a.5.5 0 00-.979.22L4 12.83a.5.5 0 00.958.287l.33-1.05a3.991 3.991 0 013.78-2.583h1.304a4 4 0 013.78 2.583l.33 1.05a.5.5 0 00.958-.287L14.69 8.33a.5.5 0 00-.979-.22L13.38 9h-6.76l-.33-1.89zM15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Escuchar 3/4</button>
+                    <button class="listen-btn" data-meter='{"type": "simple", "beats": 4}'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.29 8.11a.5.5 0 00-.979.22L4 12.83a.5.5 0 00.958.287l.33-1.05a3.991 3.991 0 013.78-2.583h1.304a4 4 0 013.78 2.583l.33 1.05a.5.5 0 00.958-.287L14.69 8.33a.5.5 0 00-.979-.22L13.38 9h-6.76l-.33-1.89zM15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Escuchar 4/4</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="compuestos" class="mb-12">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#118AB2]">Compases Compuestos: El Pulso Ternario</h2>
+            <p class="max-w-3xl mx-auto mt-2 text-lg">Los compases compuestos tienen un aire más "saltarín" o de vals. Cada pulso principal se divide en tres partes iguales, creando un ritmo que fluye. Piensa "un-dos-tres, un-dos-tres...".</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+                <h3 class="text-xl font-bold text-center text-black mb-4">Pulsos por Compás</h3>
+                <p class="text-center mb-2">Aunque el numerador es grande (6, 9, 12), en realidad sentimos menos pulsos principales. Para saber cuántos, ¡simplemente divide el numerador entre 3!</p>
+                <div class="chart-container">
+                    <canvas id="compoundMeterChart"></canvas>
+                </div>
+                <div class="mt-4 text-center space-x-2">
+                    <button class="listen-btn" data-meter='{"type": "compound", "beats": 2}'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.29 8.11a.5.5 0 00-.979.22L4 12.83a.5.5 0 00.958.287l.33-1.05a3.991 3.991 0 013.78-2.583h1.304a4 4 0 013.78 2.583l.33 1.05a.5.5 0 00.958-.287L14.69 8.33a.5.5 0 00-.979-.22L13.38 9h-6.76l-.33-1.89zM15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Escuchar 6/8</button>
+                    <button class="listen-btn" data-meter='{"type": "compound", "beats": 3}'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.29 8.11a.5.5 0 00-.979.22L4 12.83a.5.5 0 00.958.287l.33-1.05a3.991 3.991 0 013.78-2.583h1.304a4 4 0 013.78 2.583l.33 1.05a.5.5 0 00.958-.287L14.69 8.33a.5.5 0 00-.979-.22L13.38 9h-6.76l-.33-1.89zM15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Escuchar 9/8</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+                <h3 class="text-xl font-bold text-center text-black mb-4">La División del Pulso Compuesto</h3>
+                <p class="text-center mb-6">Aquí, el pulso es una figura con puntillo, que por naturaleza se divide en tres. Una figura con puntillo se convierte en tres de menor duración.</p>
+                <div class="note-diagram">
+                    <div class="text-center">
+                        <div class="pulse">♩.</div>
+                        <div class="font-bold">PULSO</div>
+                    </div>
+                    <div class="arrow">➔</div>
+                    <div class="text-center">
+                        <div class="division"><span>♪</span><span>♪</span><span>♪</span></div>
+                        <div class="font-bold">DIVISIÓN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="amalgama" class="mb-12">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#F77F00]">Compases de Amalgama: La Fusión de Ritmos</h2>
+            <p class="max-w-3xl mx-auto mt-2 text-lg">Estos compases se crean "amalgamando" o uniendo dos o más compases simples y/o compuestos. Esto crea ritmos asimétricos y muy interesantes, comunes en el jazz, rock progresivo y música folclórica.</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+            <h3 class="text-xl font-bold text-center text-black mb-4">Ejemplo: Creando un 5/4</h3>
+            <p class="text-center mb-6">Un compás de 5/4 se siente a menudo como la suma de un 2/4 y un 3/4 (o viceversa). La acentuación define cómo se percibe el ritmo.</p>
+            <div class="flex items-center justify-center text-3xl md:text-4xl font-black text-center gap-4">
+                <div class="p-4 bg-red-100 rounded">2/4</div>
+                <div class="text-[#F77F00]">+</div>
+                <div class="p-4 bg-red-100 rounded">3/4</div>
+                <div class="text-[#F77F00]">=</div>
+                <div class="p-4 bg-orange-100 rounded">5/4</div>
+            </div>
+            <div class="mt-6 text-center">
+                <button class="listen-btn" data-meter='{"type": "amalgam", "beats": [2, 3]}'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.29 8.11a.5.5 0 00-.979.22L4 12.83a.5.5 0 00.958.287l.33-1.05a3.991 3.991 0 013.78-2.583h1.304a4 4 0 013.78 2.583l.33 1.05a.5.5 0 00.958-.287L14.69 8.33a.5.5 0 00-.979-.22L13.38 9h-6.76l-.33-1.89zM15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Escuchar 5/4 (2+3)</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="truco" class="bg-[#06D6A0] text-[#073B4C] rounded-lg shadow-xl p-8 mb-12">
+        <div class="text-center">
+            <h2 class="text-3xl md:text-4xl font-black">🧐 El Truco del Numerador</h2>
+            <p class="max-w-3xl mx-auto mt-2 text-lg">¿No estás seguro? ¡Solo mira el número de arriba en el compás!</p>
+        </div>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+            <div class="bg-white/70 p-6 rounded-lg">
+                <h3 class="text-5xl font-black text-[#FF6B6B]">2, 3, 4</h3>
+                <p class="mt-2 text-2xl font-bold">Es un Compás SIMPLE</p>
+                <p class="mt-1 text-lg">(El pulso se divide en 2)</p>
+            </div>
+            <div class="bg-white/70 p-6 rounded-lg">
+                <h3 class="text-5xl font-black text-[#118AB2]">6, 9, 12</h3>
+                <p class="mt-2 text-2xl font-bold">Es un Compás COMPUESTO</p>
+                <p class="mt-1 text-lg">(El pulso se divide en 3)</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pentagrama" class="mb-12">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#4D194D]">Visualización en Pentagrama</h2>
+            <p class="max-w-3xl mx-auto mt-2 text-lg">Así es como se escriben y se ven los compases en una partitura musical. La clave de sol y la indicación de compás establecen el marco para las notas.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="staff-2-4" class="abc-notation-container "></div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="staff-3-4" class="abc-notation-container"></div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="staff-4-4" class="abc-notation-container"></div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="staff-6-8" class="abc-notation-container"></div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="staff-5-4" class="abc-notation-container"></div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="staff-7-8" class="abc-notation-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="explorador" class="mb-12">
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold mb-4 text-black">🎵 Explorador Musical</h2>
+            <p class="text-gray-600 mb-4">Selecciona un compás y descubre canciones reales que lo utilizan.</p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <select id="compasSelect" class="w-full sm:w-60 p-2 border rounded">
+                    <option value="4/4">Compás 4/4</option>
+                    <option value="3/4">Compás 3/4</option>
+                    <option value="6/8">Compás 6/8</option>
+                </select>
+                <button id="buscarCancionesBtn" class="listen-btn sm:w-auto">
+                    ✨ Encontrar Canciones
+                </button>
+            </div>
+        </div>
+        <div id="resultados" class="mt-6 space-y-3 max-w-2xl mx-auto"></div>
+    </section>
+
+</main>
+
+<footer id="footer">
+    <ul class="icons">
+        <li><a href="https://https://wa.me/593987999154" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+        <li><a href="https://beacons.ai/sprinkloud" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+        <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+        <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+        <li><a href="mailto:sprinkloud@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+    </ul>
+    <ul class="copyright">
+        <li>&copy; Untitled</li><li>BY: <a href="https://sprinkloud.vercel.app/">SPRINKLOUD</a></li>
+    </ul>
+</footer>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+<script>
+    // Espera a que todo el contenido del HTML esté cargado antes de ejecutar el script.
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Lógica del Explorador Musical (API de iTunes) ---
+        const compasSelect = document.getElementById('compasSelect');
+        const buscarBtn = document.getElementById('buscarCancionesBtn');
+        const resultadosDiv = document.getElementById('resultados');
+
+        async function buscarCanciones() {
+            const compas = compasSelect.value;
+            resultadosDiv.innerHTML = "⏳ Buscando canciones...";
+
+            const query = compas === "3/4" ? "waltz" : compas === "6/8" ? "irish jig" : "pop rock";
+            const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=5`;
+
+            try {
+                const resp = await fetch(url);
+                const data = await resp.json();
+                if (data.results.length === 0) {
+                    resultadosDiv.innerHTML = "<p class='text-center'>😕 No se encontraron canciones para esa búsqueda.</p>";
+                    return;
+                }
+                resultadosDiv.innerHTML = data.results.map(song => `
+                      <div class="p-4 bg-gray-50 rounded shadow-sm flex items-center justify-between gap-4">
+                        <div class="flex-grow min-w-0">
+                          <p class="font-semibold truncate">${song.trackName}</p>
+                          <p class="text-sm text-gray-600 truncate">${song.artistName}</p>
+                        </div>
+                        <audio controls src="${song.previewUrl}" class="h-8"></audio>
+                      </div>
+                    `).join("");
+            } catch (e) {
+                resultadosDiv.innerHTML = "<p class='text-center text-red-500'>❌ Error al cargar canciones. Inténtalo de nuevo.</p>";
+                console.error(e);
+            }
+        }
+        if(buscarBtn) {
+            buscarBtn.addEventListener('click', buscarCanciones);
+        }
+
+        // --- Configuración de Chart.js ---
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1, color: '#073B4C', font: { weight: 'bold' } },
+                    grid: { color: '#e0e0e0' }
+                },
+                x: {
+                    ticks: { color: '#073B4C', font: { size: 14, weight: 'bold' } },
+                    grid: { display: false }
+                }
+            },
+            plugins: { legend: { display: false } }
+        };
+
+        new Chart(document.getElementById('simpleMeterChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['2/4', '3/4', '4/4'],
+                datasets: [{
+                    label: 'Tiempos por Compás',
+                    data: [2, 3, 4],
+                    backgroundColor: '#FF6B6B',
+                    borderRadius: 5
+                }]
+            },
+            options: { ...commonChartOptions }
+        });
+
+        new Chart(document.getElementById('compoundMeterChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['6/8', '9/8', '12/8'],
+                datasets: [{
+                    label: 'Pulsos por Compás',
+                    data: [2, 3, 4],
+                    backgroundColor: '#118AB2',
+                    borderRadius: 5
+                }]
+            },
+            options: { ...commonChartOptions }
+        });
+
+        // --- Renderizado de Pentagramas con ABCJS ---
+        function renderStaves() {
+            const options = { responsive: "resize" };
+            ABCJS.renderAbc('staff-2-4', "X:1\nM:2/4\nL:1/4\nK:C\nC D |", options);
+            ABCJS.renderAbc('staff-3-4', "X:1\nM:3/4\nL:1/4\nK:C\nC D E |", options);
+            ABCJS.renderAbc('staff-4-4', "X:1\nM:4/4\nL:1/4\nK:C\nC D E F |", options);
+            ABCJS.renderAbc('staff-6-8', "X:1\nM:6/8\nK:C\nCDE FGA |", options);
+            ABCJS.renderAbc('staff-5-4', "X:1\nM:5/4\nK:C\nL:1/4\nC D E F G |", options);
+            ABCJS.renderAbc('staff-7-8', "X:1\nM:7/8\nK:C\nL:1/8\nCDEFGAB |", options);
+        }
+        renderStaves();
+
+        // --- Lógica de Audio con Tone.js ---
+        const synth = new Tone.Synth().toDestination();
+        const playMeter = (meter) => {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            let notes = [], subdivision;
+
+            if (meter.type === 'simple') {
+                notes = ['C4', ...Array(meter.beats - 1).fill('G3')];
+                subdivision = `${meter.beats}n`;
+            } else if (meter.type === 'compound') {
+                for (let i = 0; i < meter.beats; i++) notes.push('C4', 'G3', 'G3');
+                subdivision = '8n';
+            } else if (meter.type === 'amalgam') {
+                meter.beats.forEach(group => {
+                    notes.push('C4');
+                    for (let i = 1; i < group; i++) notes.push('G3');
+                });
+                subdivision = '4n';
+            }
+
+            new Tone.Sequence((time, note) => {
+                synth.triggerAttackRelease(note, 0.1, time);
+            }, notes, subdivision).start(0);
+
+            Tone.Transport.bpm.value = 130;
+            Tone.Transport.start();
+
+            // Detener después de 2 compases para no sonar indefinidamente
+            const measureDuration = Tone.Time(subdivision).toSeconds() * notes.length;
+            setTimeout(() => Tone.Transport.stop(), measureDuration * 2 * 1000);
+        };
+
+        document.querySelectorAll('.listen-btn[data-meter]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                await Tone.start(); // El usuario debe interactuar para iniciar el audio
+                const meterData = JSON.parse(btn.dataset.meter);
+                playMeter(meterData);
+            });
+        });
+    });
+</script>
+</body>
+</html>

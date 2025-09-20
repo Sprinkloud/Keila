@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Tenemos editor">
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="el editor resulto ser el mejor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/material.html" beforeDir="false" afterPath="$PROJECT_DIR$/material.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/metodología.html" beforeDir="false" afterPath="$PROJECT_DIR$/metodología.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/musicband.html" beforeDir="false" afterPath="$PROJECT_DIR$/musicband.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +53,7 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -144,7 +145,9 @@
       <workItem from="1753738503968" duration="1599000" />
       <workItem from="1753913920836" duration="4215000" />
       <workItem from="1756223924244" duration="12889000" />
-      <workItem from="1756745084782" duration="1236000" />
+      <workItem from="1756745084782" duration="2098000" />
+      <workItem from="1758216771231" duration="316000" />
+      <workItem from="1758223048314" duration="23438000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -290,7 +293,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756244857536</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="el editor resulto ser el mejor">
+      <option name="closed" value="true" />
+      <created>1756758262512</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1756758262512</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -322,7 +333,8 @@
     <MESSAGE value="lo hicimos Keila 1" />
     <MESSAGE value="Bien echo Muñequita" />
     <MESSAGE value="Tenemos editor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tenemos editor" />
+    <MESSAGE value="el editor resulto ser el mejor" />
+    <option name="LAST_COMMIT_MESSAGE" value="el editor resulto ser el mejor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
