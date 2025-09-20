@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="el editor resulto ser el mejor">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/main.css" afterDir="false" />
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Paciencia">
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/material.html" beforeDir="false" afterPath="$PROJECT_DIR$/material.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metodología.html" beforeDir="false" afterPath="$PROJECT_DIR$/metodología.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +143,7 @@
       <workItem from="1756223924244" duration="12889000" />
       <workItem from="1756745084782" duration="2098000" />
       <workItem from="1758216771231" duration="316000" />
-      <workItem from="1758223048314" duration="23438000" />
+      <workItem from="1758223048314" duration="24071000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
@@ -301,7 +297,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756758262512</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Paciencia">
+      <option name="closed" value="true" />
+      <created>1758381785923</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1758381785923</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -334,7 +338,8 @@
     <MESSAGE value="Bien echo Muñequita" />
     <MESSAGE value="Tenemos editor" />
     <MESSAGE value="el editor resulto ser el mejor" />
-    <option name="LAST_COMMIT_MESSAGE" value="el editor resulto ser el mejor" />
+    <MESSAGE value="Paciencia" />
+    <option name="LAST_COMMIT_MESSAGE" value="Paciencia" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
