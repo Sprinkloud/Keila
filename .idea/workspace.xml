@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="Paciencia" />
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="25/9/2025 buscador optimizado 1" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -311,7 +311,23 @@
       <option name="project" value="LOCAL" />
       <updated>1758382357206</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="25/9/2025 buscador optimizado">
+      <option name="closed" value="true" />
+      <created>1758817635117</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1758817635117</updated>
+    </task>
+    <task id="LOCAL-00023" summary="25/9/2025 buscador optimizado 1">
+      <option name="closed" value="true" />
+      <created>1758817956350</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1758817956350</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -345,7 +361,9 @@
     <MESSAGE value="Tenemos editor" />
     <MESSAGE value="el editor resulto ser el mejor" />
     <MESSAGE value="Paciencia" />
-    <option name="LAST_COMMIT_MESSAGE" value="Paciencia" />
+    <MESSAGE value="25/9/2025 buscador optimizado" />
+    <MESSAGE value="25/9/2025 buscador optimizado 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="25/9/2025 buscador optimizado 1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
