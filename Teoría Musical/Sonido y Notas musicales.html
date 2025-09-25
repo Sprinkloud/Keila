@@ -40,35 +40,72 @@
         h1, h2, h3 {
             font-family: 'Poppins', sans-serif;
         }
-        /* Estilos para el teclado del piano */
+
+        /* Estilos para el Piano (Versión Unificada) */
+
+        /* Contenedor principal del teclado */
+        #piano-keyboard {
+            display: flex;
+            justify-content: center; /* Centra las teclas si no ocupan todo el espacio */
+            position: relative;
+            height: 320px;
+        }
+
+        /* Estilo base para TODAS las teclas (blancas y negras) */
         .key {
+            /* --- Propiedades combinadas de ambos bloques --- */
+            display: flex;
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: flex-end;   /* Alinea la etiqueta de la nota en la parte inferior */
+            position: relative;
+            cursor: pointer;
+
+            /* --- Estilos visuales del primer bloque (más detallados) --- */
             border: 2px solid #1A1A2E;
             border-radius: 0 0 8px 8px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.1s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
         }
+
+        /* Estilo específico para las teclas blancas */
         .key.white {
             background-color: #F5F5F5;
             height: 280px;
             width: 60px;
+            z-index: 1; /* Esencial para que las teclas negras se superpongan */
         }
+
+        /* Estilo específico para las teclas negras */
         .key.black {
             background-color: #2D2D2D;
             height: 170px;
             width: 38px;
+            /* El margen negativo es el truco para superponerlas */
             margin-left: -20px;
             margin-right: -20px;
-            z-index: 10;
+            z-index: 10; /* Un z-index más alto para estar por encima de las blancas */
         }
+
+        /* Etiqueta con el nombre de la nota (Do, Re, etc.) */
+        .note-label {
+            margin-bottom: 10px; /* Separación del borde inferior */
+            font-size: 14px;
+            pointer-events: none; /* Evita que el texto interfiera con el clic en la tecla */
+        }
+
+        /* Efectos al interactuar con las teclas */
         .key:hover {
-            border-color: #F0A500;
+            border-color: #F0A500; /* Resaltado al pasar el mouse */
         }
+
         .key.pressed {
-            transform: translateY(4px);
+            transform: translateY(4px); /* Simula que la tecla se presiona */
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+
+        /* Animación de la nota musical que aparece al tocar */
         .note-emoji {
             position: absolute;
             top: 50%;
@@ -79,6 +116,7 @@
             pointer-events: none;
             transition: all 0.5s ease-out;
         }
+
         .note-emoji.play {
             opacity: 1;
             transform: translate(-50%, -200%);
@@ -98,45 +136,7 @@
             transform: translateY(1px);
             border-width: 4px;
         }
-        /* Estilos para el Piano */
-        #piano-keyboard {
-            display: flex;
-            position: relative;
-            height: 320px;
-        }
 
-        .key {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* etiqueta al fondo */
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .white {
-            background: white;
-            border: 1px solid black;
-            width: 50px;
-            height: 200px;
-            z-index: 1;
-        }
-
-        .black {
-            background: black;
-            width: 30px;
-            height: 120px;
-            margin-left: -15px;
-            margin-right: -15px;
-            z-index: 2;
-        }
-
-        .note-label {
-            margin-bottom: 5px; /* separa del borde inferior */
-            font-size: 14px;
-            pointer-events: none; /* no bloquea clics en la tecla */
-        }
         /* Estilos para el slider de volumen */
         input[type=range] {
             -webkit-appearance: none;
@@ -224,22 +224,44 @@
         #footer .copyright a:hover {
             color: #ffffff;
         }
+        /* Agrega esto al final de tu etiqueta <style> */
+
+        @media (max-width: 640px) {
+            /* Hacemos las teclas más pequeñas solo en móviles */
+            #piano-keyboard {
+                height: 250px; /* Reducimos la altura general del contenedor */
+            }
+            .key.white {
+                width: 40px;  /* Ancho reducido */
+                height: 180px; /* Altura reducida */
+            }
+            .key.black {
+                width: 25px;   /* Ancho reducido */
+                height: 110px;  /* Altura reducida */
+                margin-left: -13px; /* Ajuste de margen */
+                margin-right: -13px;
+            }
+            /* También ajustamos el texto del header para que no se vea tan grande */
+            h1 {
+                font-size: 2rem; /* equivale a text-3xl */
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
 <div class="w-full max-w-5xl mx-auto space-y-16">
 
     <!-- Módulo 1: Título Principal -->
-    <header class="text-center">
-        <div class="absolute right-12">
-            <a href="https://sprinkloud.vercel.app/">
-                <img src="LOGO_Sprinkloud__6_-removebg-preview.png"
-                     alt="Sprinkloud Club Musical Logo"
-                     class="h-28 md:h-36 lg:h-40 object-contain
-                        transition-transform duration-300 hover:-translate-y-2 hover:scale-105 cursor-pointer">
-            </a>
-        </div>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">Módulo 1: <span class="text-[#00C4FF]">Sonido y Notas musicales</span></h1>
+    <header class="w-full flex justify-between items-center px-4">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-left">
+            Módulo 1: <br class="sm:hidden"><span class="text-[#00C4FF]">Sonido y Notas</span>
+        </h1>
+
+        <a href="https://sprinkloud.vercel.app/">
+            <img src="LOGO_Sprinkloud__6_-removebg-preview.png"
+                 alt="Sprinkloud Club Musical Logo"
+                 class="h-24 md:h-32 object-contain transition-transform duration-300 hover:scale-105">
+        </a>
     </header>
 
     <!-- Sección 1: El Piano como Mapa -->
