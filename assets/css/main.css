@@ -3899,11 +3899,7 @@ input, select, textarea {
 				}
 
 		}
-
-	body.is-mobile #main > header {
-		background-attachment: scroll;
-	}
-
+/*Esperemos que estos cambios ayuden*/
 /* =================================================================
 FIX PARA IMAGEN DE FONDO EN MÓVILES (ESPECIALMENTE iOS)
 ================================================================= */
