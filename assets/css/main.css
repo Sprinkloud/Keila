@@ -3904,6 +3904,17 @@ input, select, textarea {
 		background-attachment: scroll;
 	}
 
+/* =================================================================
+FIX PARA IMAGEN DE FONDO EN MÓVILES (ESPECIALMENTE iOS)
+================================================================= */
+@media screen and (max-width: 1024px) {
+	#main > header {
+		/* Cambiamos 'fixed' a 'scroll' en pantallas pequeñas.
+           'scroll' es el comportamiento por defecto y funciona en todos los dispositivos. */
+		background-attachment: scroll !important;
+	}
+}
+
 /* Footer */
 
 	#footer {
