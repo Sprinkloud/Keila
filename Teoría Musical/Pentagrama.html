@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende Música Interactiva</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/4.0.0/vexflow-min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        section { margin-bottom: 40px; }
+        h2 { text-align: center; }
+        .staff-container { width: 400px; height: 200px; margin: 20px auto; border: 1px solid #ccc; }
+        .buttons { text-align: center; }
+        .button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .button:hover { background: #0056b3; }
+        .rhythm { display: inline-block; margin: 20px; cursor: pointer; }
+        .piano { position: relative; width: 800px; height: 150px; margin: 20px auto; border: 1px solid #000; display: flex; }
+        .key { height: 100%; box-sizing: border-box; border: 1px solid #000; cursor: pointer; }
+        .white { width: calc(100% / 14); background: white; position: relative; z-index: 1; }
+        .black { width: calc(100% / 21); background: black; position: absolute; z-index: 2; height: 60%; }
+        .active { background: yellow !important; }
+    </style>
+</head>
+<body>
+<h1>Aprende Música de Forma Práctica</h1>
+
+<section id="topic1">
+    <h2>1. Pentagrama, Claves y Figuras Rítmicas</h2>
+
+    <!-- Pentagrama y Claves -->
+    <div class="staff-container" id="staff-clef"></div>
+    <div class="buttons">
+        <button class="button" onclick="renderStaff('treble')">Clave de Sol</button>
+        <button class="button" onclick="renderStaff('bass')">Clave de Fa</button>
+        <button class="button" onclick="renderStaff('alto')">Clave de Do</button>
+    </div>
+
+    <!-- Figuras Rítmicas -->
+    <div style="text-align: center;">
+        <div class="rhythm" id="whole" onclick="playRhythm('w', 2000)"></div>
+        <div class="rhythm" id="half" onclick="playRhythm('h', 1000)"></div>
+        <div class="rhythm" id="quarter" onclick="playRhythm('q', 500)"></div>
+        <div class="rhythm" id="eighth" onclick="playRhythm('8', 250)"></div>
+        <div class="rhythm" id="sixteenth" onclick="playRhythm('16', 125)"></div>
+    </div>
+</section>
+
+<section id="topic2">
+    <h2>2. Ubicar las Notas del Pentagrama en el Piano</h2>
+    <div class="staff-container" id="staff-piano"></div>
+    <div class="piano" id="piano"></div>
+</section>
+
+<script>
+    const freq = {'C2': 65.41, 'C#2': 69.3, 'D2': 73.42, 'D#2': 77.78, 'E2': 82.41, 'F2': 87.31, 'F#2': 92.5, 'G2': 98.0, 'G#2': 103.83, 'A2': 110.0, 'A#2': 116.54, 'B2': 123.47, 'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'D#3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.0, 'G3': 196.0, 'G#3': 207.65, 'A3': 220.0, 'A#3': 233.08, 'B3': 246.94, 'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13, 'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.0, 'G#4': 415.3, 'A4': 440.0, 'A#4': 466.16, 'B4': 493.88, 'C5': 523.25, 'C#5': 554.37, 'D5': 587.33, 'D#5': 622.25, 'E5': 659.26, 'F5': 698.46, 'F#5': 739.99, 'G5': 783.99, 'G#5': 830.61, 'A5': 880.0, 'A#5': 932.33, 'B5': 987.77, 'C6': 1046.5, 'C#6': 1108.73, 'D6': 1174.66, 'D#6': 1244.51, 'E6': 1318.51, 'F6': 1396.91, 'F#6': 1479.98, 'G6': 1567.98, 'G#6': 1661.22, 'A6': 1760.0, 'A#6': 1864.66, 'B6': 1975.53};
+
+    function playNote(frequency, duration = 500) {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        setTimeout(() => oscillator.stop(), duration);
+    }
+
+    function renderStaff(clef) {
+        const div = document.getElementById('staff-clef');
+        div.innerHTML = '';
+        const vf = new Vex.Flow.Factory({ renderer: { elementId: 'staff-clef', width: 400, height: 200 } });
+        const score = vf.EasyScore();
+        const system = vf.System();
+        system.addStave({ voices: [score.voice(score.notes('C4/q'))] }).addClef(clef);
+        vf.draw();
+    }
+
+    function playRhythm(durationSymbol, ms) {
+        playNote(freq['C4'], ms);
+    }
+
+    // Render rhythmic figures
+    ['whole', 'half', 'quarter', 'eighth', 'sixteenth'].forEach((id, index) => {
+        const durations = ['w', 'h', 'q', '8', '16'];
+        const div = document.getElementById(id);
+        const vf = new Vex.Flow.Factory({ renderer: { elementId: id, width: 100, height: 150 } });
+        const score = vf.EasyScore();
+        const system = vf.System({ width: 80 });
+        system.addStave({ voices: [score.voice(score.notes(`C4/${durations[index]}`))] }).addClef('treble');
+        vf.draw();
+    });
+
+    // Piano keyboard setup (two octaves: C4 to C6)
+    const piano = document.getElementById('piano');
+    const notes = ['C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5','A5','B5'];
+    const blackNotes = ['C#4','D#4','F#4','G#4','A#4','C#5','D#5','F#5','G#5','A#5'];
+    const whitePositions = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
+    const blackPositions = [0.7,1.7,3.7,4.7,5.7,7.7,8.7,10.7,11.7,12.7]; // relative to white keys
+
+    notes.forEach((note, i) => {
+        const key = document.createElement('div');
+        key.classList.add('key', 'white');
+        key.dataset.note = note;
+        key.onclick = () => {
+            playNote(freq[note]);
+            renderPianoNote(note);
+            document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
+            key.classList.add('active');
+        };
+        piano.appendChild(key);
+    });
+
+    blackNotes.forEach((note, i) => {
+        const key = document.createElement('div');
+        key.classList.add('key', 'black');
+        key.style.left = `${blackPositions[i] * (800 / 14)}px`;
+        key.dataset.note = note;
+        key.onclick = () => {
+            playNote(freq[note]);
+            renderPianoNote(note);
+            document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
+            key.classList.add('active');
+        };
+        piano.appendChild(key);
+    });
+
+    function renderPianoNote(note) {
+        const div = document.getElementById('staff-piano');
+        div.innerHTML = '';
+        const vf = new Vex.Flow.Factory({ renderer: { elementId: 'staff-piano', width: 400, height: 200 } });
+        const score = vf.EasyScore();
+        const system = vf.System();
+        const clef = parseInt(note.slice(-1)) < 4 ? 'bass' : 'treble'; // Simple clef choice based on octave
+        system.addStave({ voices: [score.voice(score.notes(`${note}/q`))] }).addClef(clef);
+        vf.draw();
+    }
+
+    // Initial renders
+    renderStaff('treble');
+    renderPianoNote('C4');
+</script>
+</body>
+</html>
