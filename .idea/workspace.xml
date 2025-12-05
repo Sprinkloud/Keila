@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="25/9/2025 descripción cambiada" />
+    <list default="true" id="d3af9c2b-458b-4920-8895-d9401290dd0f" name="Changes" comment="ay">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Teoría Musical/Pentagrama.html" beforeDir="false" afterPath="$PROJECT_DIR$/Teoría Musical/Pentagrama.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Teoría Musical/compases.html" beforeDir="false" afterPath="$PROJECT_DIR$/Teoría Musical/compases.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -143,6 +147,8 @@
       <workItem from="1758216771231" duration="316000" />
       <workItem from="1758223048314" duration="32560000" />
       <workItem from="1758819332324" duration="1866000" />
+      <workItem from="1759205624563" duration="270000" />
+      <workItem from="1763419344895" duration="165000" />
     </task>
     <task id="LOCAL-00001" summary="Links de instagram y whatsapp">
       <option name="closed" value="true" />
