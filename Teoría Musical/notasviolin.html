@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
     <style>
         :root {
-            --verde-oscuro: #265C3D;
+            --verde-oscuro: rgb(21 118 191 / 0.49);
             --verde-claro: #73997B;
             --verde-debil: rgba(115, 153, 123, 0.25);
             --bronce: #C69D6D;
@@ -117,18 +117,18 @@
         /* COMPONENTE INTERFAZ VIOLÍN EN ORIENTACIÓN HORIZONTAL */
         .interfaz-violin {
             display: flex;
-            flex-direction: row; /* Cambio clave: alineado horizontalmente */
+            flex-direction: row;
             align-items: center;
             position: relative;
         }
 
         .cejilla {
             width: 35px;
-            height: 240px; /* Invierte dimensiones */
+            height: 240px;
             background: var(--bronce);
             border-radius: 12px 4px 4px 12px;
             display: flex;
-            flex-direction: column; /* Botones ordenados de arriba a abajo */
+            flex-direction: column;
             justify-content: space-around;
             align-items: center;
             padding: 10px 0;
@@ -136,22 +136,7 @@
             z-index: 15;
         }
 
-        .cuerda-aire {
-            background: white;
-            border: 2px solid var(--verde-oscuro);
-            color: var(--verde-oscuro);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.1s, background-color 0.2s;
-            box-shadow: -3px 2px 0 var(--verde-oscuro);
-        }
+    
 
         .cuerda-aire:active {
             transform: translate(-3px, 2px);
@@ -160,34 +145,52 @@
 
         .mastil {
             background-color: var(--madera);
-            width: 680px; /* El mástil ahora se extiende a lo largo */
-            height: 240px; /* Ancho del mástil */
+            width: 680px;
+            height: 240px;
             border-radius: 0 25px 25px 0;
             display: flex;
-            flex-direction: column; /* Las cuerdas van paralelas una debajo de la otra */
+            flex-direction: column;
             justify-content: space-around;
             padding: 10px 0;
             position: relative;
             border-right: 15px solid #26150b;
         }
 
+        /* CINTAS GUÍA VERTICALES (NUEVO) */
+        .cinta-guia {
+            position: absolute;
+            top: 0;
+            width: 45px; /* Ancho simulado de la cinta adhesiva */
+            height: 100%;
+            background-color: rgb(246 209 161 / 0.85); /* Color bronce/amarillo translúcido */
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+            transform: translateX(-50%);
+            z-index: 2; /* Por encima del mástil pero por debajo de las notas activas */
+            pointer-events: none; /* No interfiere con los clicks */
+        }
 
+        /* Posicionamiento dinámico matemático basado en la fórmula JS: (semitonos / 13) * 100 */
+        .cinta-1 { left: calc((2 / 13) * 100%); } /* Mi en cuerda D (2 semitonos) */
+        .cinta-2 { left: calc((3 / 13) * 100%); } /* Fa en cuerda D (3 semitonos) */
+        .cinta-3 { left: calc((5 / 13) * 100%); } /* Sol en cuerda D (5 semitonos) */
 
         .cuerda {
-            height: 5px; /* La cuerda ahora tiene espesor vertical y longitud horizontal */
+            height: 5px;
             background: linear-gradient(180deg, #ddd, #fff, #bbb);
             width: 100%;
             position: relative;
+            z-index: 5; /* Por encima de las cintas guía */
         }
 
         /* NOTAS / CÍRCULOS HORIZONTALES */
         .nota {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             position: absolute;
-            top: 50%; /* Centrada verticalmente sobre su respectiva cuerda */
-            left: 50%; /* Posicionada dinámicamente mediante JS a lo largo del eje X */
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
             cursor: pointer;
             display: flex;
@@ -218,89 +221,10 @@
             border: 3px solid white !important;
             transform: translate(-50%, -50%) scale(1.3);
             box-shadow: 0 0 15px var(--bronce);
+            z-index: 12;
         }
 
-        /* PANEL DE LA MANO UBICADO ABAJO EN POSICIÓN ANATÓMICA */
-        .contenedor-mano {
-            display: flex;
-            flex-direction: row; /* Estructura horizontal para acompañar el flujo */
-            align-items: center;
-            gap: 30px;
-            width: 100%;
-            justify-content: center;
-            border-top: 2px dashed #eee;
-            padding-top: 20px;
-        }
 
-        .mano-titulo {
-            font-size: 1rem;
-            color: var(--bronce);
-            background: var(--bronce-claro);
-            padding: 8px 18px;
-            border-radius: 12px;
-            text-align: center;
-            min-width: 250px;
-        }
-
-        .mano {
-            position: relative;
-            width: 140px;
-            height: 120px;
-            background: var(--piel);
-            border-radius: 30px 30px 60px 60px; /* Ajuste para vista inferior del diapasón */
-            box-shadow: inset 0 -8px 10px var(--piel-oscura);
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-            padding: 0 15px;
-        }
-        .pulgar {
-            position: absolute;
-            left: -35px;
-            top: 2px;
-            width: 40px;
-            height: 65px;
-            background: #f4a261;
-            border-radius: 50%;
-            box-shadow: inset -8px 0 10px #e07a4f;
-            transform: rotate(-35deg);
-        }
-
-        .dedo {
-            width: 28px;
-            height: 75px;
-            background: var(--piel);
-            margin-top: -66px; /* Los dedos emergen hacia arriba apuntando al mástil */
-            border-radius: 15px 15px 0 0;
-            box-shadow: inset -4px 0 6px var(--piel-oscura);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 8px;
-            font-size: 0.85rem;
-            color: var(--verde-oscuro);
-            font-weight: bold;
-        }
-
-        .dedo.oculto {
-            height: 30px;
-            margin-top: -20px;
-            box-shadow: inset 0 0 5px var(--piel-oscura);
-            color: transparent;
-        }
-
-        /* SEPARACIONES DINÁMICAS HORIZONTALES MEDIANTE MÁRGENES (Reglas Pedagógicas) */
-        .mano.modo-sol #dedo-1 { margin-right: auto; } /* Índice separado */
-        .mano.modo-sol #dedo-2 { margin-right: 2px; }  /* Medio y Anular juntos */
-        .mano.modo-sol #dedo-3 { margin-left: 2px; }
-
-        .mano.modo-relado #dedo-1 { margin-right: 2px; } /* Índice y Medio juntos */
-        .mano.modo-relado #dedo-2 { margin-left: 2px; margin-right: auto; } /* Anular separado */
-
-        .mano.modo-mi #dedo-1 { margin-right: 8px; } /* Todos separados */
-        .mano.modo-mi #dedo-2 { margin-right: 8px; }
     </style>
 </head>
 <body>
@@ -308,16 +232,17 @@
 <h1>SPRINKLOUD</h1>
 <div class="subtitle">CLUB MUSICAL</div>
 
-
+<div class="instrucciones">
+    🎻 <strong>¡Las notas en el violín!</strong><br>
+    Memoriza la posición de las notas naturales utilizando las cintas guía del diapasón.
+</div>
 
 <div class="contenedor-pentagrama-bloque">
     <div id="pentagrama"></div>
 </div>
 
 <div class="interactor-container">
-
     <div class="interfaz-violin">
-
         <div class="cejilla">
             <button class="cuerda-aire" onclick="tocarCuerdaAire(196.00, 'sol', 'g/3', 'n')">Sol</button>
             <button class="cuerda-aire" onclick="tocarCuerdaAire(293.66, 're', 'd/4', 'n')">Re</button>
@@ -326,22 +251,12 @@
         </div>
 
         <div class="mastil" id="mastil">
-
+            <!-- Cintas guía añadidas aquí para que crucen el diapasón verticalmente -->
+            <div class="cinta-guia cinta-1"></div>
+            <div class="cinta-guia cinta-2"></div>
+            <div class="cinta-guia cinta-3"></div>
         </div>
     </div>
-
-    <div class="contenedor-mano">
-        <div class="mano-titulo" id="mano-estado">Cuerda Suelta</div>
-        <div class="mano" id="mano-visual">
-            <div class="pulgar"></div>
-            <div id="dedo-1" class="dedo oculto">I</div>
-            <div id="dedo-2" class="dedo oculto">M</div>
-            <div id="dedo-3" class="dedo oculto">A</div>
-
-
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -351,11 +266,12 @@
             id: 'sol',
             baseFreq: 196.00,
             notas: [
-                { semitonos: 2, tipo: 'natural', label: '', vfKey: 'a/3', acc: 'n' },
-                { semitonos: 3, tipo: 'alterada', label: '', vfKey: 'a/3', acc: '#' },
-                { semitonos: 4, tipo: 'natural', label: '', vfKey: 'b/3', acc: 'n' },
+                { semitonos: 1, tipo: 'alterada', label: 'Sol#', vfKey: 'g/3', acc: '#' },
+                { semitonos: 2, tipo: 'natural', label: 'La', vfKey: 'a/3', acc: 'n' },
+                { semitonos: 3, tipo: 'alterada', label: 'La#', vfKey: 'a/3', acc: '#' },
+                { semitonos: 4, tipo: 'natural', label: 'Si', vfKey: 'b/3', acc: 'n' },
                 { semitonos: 5, tipo: 'natural', label: 'Do', vfKey: 'c/4', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: '', vfKey: 'c/4', acc: '#' },
+                { semitonos: 6, tipo: 'alterada', label: 'Do#', vfKey: 'c/4', acc: '#' },
                 { semitonos: 7, tipo: 'natural', label: '', vfKey: 'd/4', acc: 'n' }
             ]
         },
@@ -363,12 +279,12 @@
             id: 're',
             baseFreq: 293.66,
             notas: [
-                { semitonos: 1, tipo: 'alterada', label: '', vfKey: 'd/4', acc: '#' },
+                { semitonos: 1, tipo: 'alterada', label: 'Re#', vfKey: 'd/4', acc: '#' },
                 { semitonos: 2, tipo: 'natural', label: 'Mi', vfKey: 'e/4', acc: 'n' },
                 { semitonos: 3, tipo: 'natural', label: 'Fa', vfKey: 'f/4', acc: 'n' },
-                { semitonos: 4, tipo: 'alterada', label: '', vfKey: 'f/4', acc: '#' },
+                { semitonos: 4, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' },
                 { semitonos: 5, tipo: 'natural', label: 'Sol', vfKey: 'g/4', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: '', vfKey: 'g/4', acc: '#' },
+                { semitonos: 6, tipo: 'alterada', label: 'Sol#', vfKey: 'g/4', acc: '#' },
                 { semitonos: 7, tipo: 'natural', label: '', vfKey: 'a/4', acc: 'n' }
             ]
         },
@@ -376,12 +292,12 @@
             id: 'la',
             baseFreq: 440.00,
             notas: [
-                { semitonos: 1, tipo: 'alterada', label: '', vfKey: 'a/4', acc: '#' },
+                { semitonos: 1, tipo: 'alterada', label: 'La#', vfKey: 'a/4', acc: '#' },
                 { semitonos: 2, tipo: 'natural', label: 'Si', vfKey: 'b/4', acc: 'n' },
                 { semitonos: 3, tipo: 'natural', label: 'Do', vfKey: 'c/5', acc: 'n' },
-                { semitonos: 4, tipo: 'alterada', label: '', vfKey: 'c/5', acc: '#' },
+                { semitonos: 4, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' },
                 { semitonos: 5, tipo: 'natural', label: 'Re', vfKey: 'd/5', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: '', vfKey: 'd/5', acc: '#' },
+                { semitonos: 6, tipo: 'alterada', label: 'Re#', vfKey: 'd/5', acc: '#' },
                 { semitonos: 7, tipo: 'natural', label: '', vfKey: 'e/5', acc: 'n' }
             ]
         },
@@ -390,24 +306,20 @@
             baseFreq: 659.25,
             notas: [
                 { semitonos: 1, tipo: 'natural', label: 'Fa', vfKey: 'f/5', acc: 'n' },
-                { semitonos: 2, tipo: 'alterada', label: '', vfKey: 'f/5', acc: '#' },
+                { semitonos: 2, tipo: 'alterada', label: 'Fa#', vfKey: 'f/5', acc: '#' },
                 { semitonos: 3, tipo: 'natural', label: 'Sol', vfKey: 'g/5', acc: 'n' },
-                { semitonos: 4, tipo: 'alterada', label: '', vfKey: 'g/5', acc: '#' },
+                { semitonos: 4, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' },
                 { semitonos: 5, tipo: 'natural', label: 'La', vfKey: 'a/5', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: '', vfKey: 'a/5', acc: '#' },
+                { semitonos: 6, tipo: 'alterada', label: 'La#', vfKey: 'a/5', acc: '#' },
                 { semitonos: 7, tipo: 'natural', label: 'Si', vfKey: 'b/5', acc: 'n' },
                 { semitonos: 8, tipo: 'natural', label: 'Do', vfKey: 'c/6', acc: 'n' },
-                /*{ semitonos: 9, tipo: 'alterada', label: 'Do#', vfKey: 'c/6', acc: '#' },
+                { semitonos: 9, tipo: 'alterada', label: 'Do#', vfKey: 'c/6', acc: '#' },
                 { semitonos: 10, tipo: 'natural', label: 'Re', vfKey: 'd/6', acc: 'n' },
-                { semitonos: 11, tipo: 'alterada', label: 'Re#', vfKey: 'd/6', acc: '#' },
-                { semitonos: 12, tipo: 'natural', label: 'Mi', vfKey: 'e/6', acc: 'n' }*/
             ]
         }
     ];
 
     const mastil = document.getElementById('mastil');
-    const manoVisual = document.getElementById('mano-visual');
-    const manoEstado = document.getElementById('mano-estado');
     let ctxAudio = null;
 
     const { Renderer, Stave, StaveNote, Accidental, Formatter } = Vex.Flow;
@@ -470,34 +382,9 @@
         return base * Math.pow(2, semitonos / 12);
     }
 
-    function actualizarMano(cuerdaId) {
-        manoVisual.className = "mano";
-
-        document.getElementById('dedo-1').classList.remove('oculto');
-        document.getElementById('dedo-2').classList.remove('oculto');
-        document.getElementById('dedo-3').classList.remove('oculto');
-
-        if (cuerdaId === 'sol') {
-            manoVisual.classList.add('modo-sol');
-            manoEstado.innerHTML = "Cuerda SOL <br> (M & A juntos)";
-        } else if (cuerdaId === 're' || cuerdaId === 'la') {
-            manoVisual.classList.add('modo-relado');
-            manoEstado.innerHTML = `Cuerda ${cuerdaId.toUpperCase()} <br> (Í & M juntos)`;
-        } else if (cuerdaId === 'mi') {
-            manoVisual.classList.add('modo-mi');
-            manoEstado.innerHTML = "Cuerda MI <br> (Todos separados)";
-        }
-    }
-
     function tocarCuerdaAire(frec, cuerdaId, vfKey, acc) {
         emitirSonido(frec);
         renderizarPentagrama(vfKey, acc);
-        manoEstado.innerHTML = `Cuerda ${cuerdaId.toUpperCase()} al Aire`;
-
-        document.getElementById('dedo-1').classList.add('oculto');
-        document.getElementById('dedo-2').classList.add('oculto');
-        document.getElementById('dedo-3').classList.add('oculto');
-
         document.querySelectorAll('.nota').forEach(el => el.classList.remove('activa'));
     }
 
@@ -511,7 +398,6 @@
             nodoNota.className = `nota ${n.tipo}`;
             nodoNota.innerText = n.label;
 
-            // En lugar de "top", ahora calculamos "left" para la progresión en el eje X
             const distanciaLeft = (n.semitonos / 13) * 100;
             nodoNota.style.left = `${distanciaLeft}%`;
 
@@ -522,7 +408,6 @@
 
                 const freqFinal = calcularFrecuencia(cuerda.baseFreq, n.semitonos);
                 emitirSonido(freqFinal);
-                actualizarMano(cuerda.id);
                 renderizarPentagrama(n.vfKey, n.acc);
 
                 nodoNota.classList.add('activa');
