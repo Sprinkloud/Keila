@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+
     <meta name="description" content="Aprende las notas en el violín con nuestro simulador interactivo horizontal. Visualiza la posición de los dedos en la mano y su relación exacta en el pentagrama. ¡Ideal para estudiantes de música!">
     <meta name="keywords" content="violin, notas violin, pentagrama violin, posicion de dedos violin, aprender violin, simulador de violin, cuerdas violin, musica, sprinkloud">
     <meta name="author" content="Sprinkloud Club Musical">
@@ -13,11 +13,11 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.sprinkloud.com/simulador-violin"> 
+    <meta property="og:url" content="https://www.sprinkloud.com/simulador-violin">
     <meta property="og:title" content="Simulador de Violín Interactivo Horizontal - Sprinkloud">
     <meta property="og:description" content="Toca las cuerdas, mira la postura real de la mano y aprende a leer partituras con nuestro simulador dinámico de violín con VexFlow.">
-    <meta property="og:image" content="https://www.sprinkloud.com/assets/images/preview-violin.jpg"> 
-    
+    <meta property="og:image" content="https://www.sprinkloud.com/assets/images/preview-violin.jpg">
+
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://www.sprinkloud.com/simulador-violin">
     <meta property="twitter:title" content="Simulador de Violín Interactivo Horizontal - Sprinkloud">
@@ -25,7 +25,7 @@
     <meta property="twitter:image" content="https://www.sprinkloud.com/assets/images/preview-violin.jpg">
 
     <link rel="icon" type="image/png" href="https://www.sprinkloud.com/favicon.png">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
     <style>
         :root {
@@ -288,12 +288,16 @@
             baseFreq: 196.00,
             notas: [
                 { semitonos: 1, tipo: 'alterada', label: 'Sol#', vfKey: 'g/3', acc: '#' },
-                { semitonos: 2, tipo: 'natural', label: 'La', vfKey: 'a/3', acc: 'n' },
+                { semitonos: 2, tipo: 'alterada', label: 'La', vfKey: 'a/3', acc: 'n' },
                 { semitonos: 3, tipo: 'alterada', label: 'La#', vfKey: 'a/3', acc: '#' },
-                { semitonos: 4, tipo: 'natural', label: 'Si', vfKey: 'b/3', acc: 'n' },
+                { semitonos: 4, tipo: 'alterada', label: 'Si', vfKey: 'b/3', acc: 'n' },
                 { semitonos: 5, tipo: 'natural', label: 'Do', vfKey: 'c/4', acc: 'n' },
                 { semitonos: 6, tipo: 'alterada', label: 'Do#', vfKey: 'c/4', acc: '#' },
-                { semitonos: 7, tipo: 'natural', label: '', vfKey: 'd/4', acc: 'n' }
+                { semitonos: 7, tipo: 'alterada', label: 'Re', vfKey: 'd/4', acc: 'n' },
+                { semitonos: 8, tipo: 'alterada', label: 'Re#', vfKey: 'd/4', acc: '#' },
+                { semitonos: 9, tipo: 'alterada', label: 'Mi', vfKey: 'e/4', acc: 'n' },
+                { semitonos: 10, tipo: 'alterada', label: 'Fa', vfKey: 'f/4', acc: 'n' },
+                { semitonos: 11, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' }
             ]
         },
         {
@@ -306,7 +310,11 @@
                 { semitonos: 4, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' },
                 { semitonos: 5, tipo: 'natural', label: 'Sol', vfKey: 'g/4', acc: 'n' },
                 { semitonos: 6, tipo: 'alterada', label: 'Sol#', vfKey: 'g/4', acc: '#' },
-                { semitonos: 7, tipo: 'natural', label: '', vfKey: 'a/4', acc: 'n' }
+                { semitonos: 7, tipo: 'alterada', label: 'La', vfKey: 'a/4', acc: 'n' },
+                { semitonos: 8, tipo: 'alterada', label: 'La#', vfKey: 'a/4', acc: '#' },
+                { semitonos: 9, tipo: 'alterada', label: 'Si', vfKey: 'b/4', acc: 'n' },
+                { semitonos: 10, tipo: 'alterada', label: 'Do', vfKey: 'c/5', acc: 'n' },
+                { semitonos: 11, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' },
             ]
         },
         {
@@ -319,7 +327,11 @@
                 { semitonos: 4, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' },
                 { semitonos: 5, tipo: 'natural', label: 'Re', vfKey: 'd/5', acc: 'n' },
                 { semitonos: 6, tipo: 'alterada', label: 'Re#', vfKey: 'd/5', acc: '#' },
-                { semitonos: 7, tipo: 'natural', label: '', vfKey: 'e/5', acc: 'n' }
+                { semitonos: 7, tipo: 'alterada', label: 'Mi', vfKey: 'e/5', acc: 'n' },
+                { semitonos: 8, tipo: 'alterada', label: 'Fa', vfKey: 'f/5', acc: 'n' },
+                { semitonos: 9, tipo: 'alterada', label: 'Fa#', vfKey: 'f/5', acc: '#' },
+                { semitonos: 10, tipo: 'alterada', label: 'Sol', vfKey: 'g/5', acc: 'n' },
+                { semitonos: 11, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' },
             ]
         },
         {
@@ -332,10 +344,11 @@
                 { semitonos: 4, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' },
                 { semitonos: 5, tipo: 'natural', label: 'La', vfKey: 'a/5', acc: 'n' },
                 { semitonos: 6, tipo: 'alterada', label: 'La#', vfKey: 'a/5', acc: '#' },
-                { semitonos: 7, tipo: 'natural', label: 'Si', vfKey: 'b/5', acc: 'n' },
-                { semitonos: 8, tipo: 'natural', label: 'Do', vfKey: 'c/6', acc: 'n' },
+                { semitonos: 7, tipo: 'alterada', label: 'Si', vfKey: 'b/5', acc: 'n' },
+                { semitonos: 8, tipo: 'alterada', label: 'Do', vfKey: 'c/6', acc: 'n' },
                 { semitonos: 9, tipo: 'alterada', label: 'Do#', vfKey: 'c/6', acc: '#' },
-                { semitonos: 10, tipo: 'natural', label: 'Re', vfKey: 'd/6', acc: 'n' },
+                { semitonos: 10, tipo: 'alterada', label: 'Re', vfKey: 'd/6', acc: 'n' },
+                { semitonos: 11, tipo: 'alterada', label: 'Re#', vfKey: 'd/6', acc: '#' }
             ]
         }
     ];
@@ -385,7 +398,7 @@
         if (ctx.state === 'suspended') {
             ctx.resume();
         }
-        
+
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
 
