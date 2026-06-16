@@ -16,115 +16,149 @@
     <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
     <meta property="og:title" content="Simulador de Violín Interactivo Horizontal - Sprinkloud">
     <meta property="og:description" content="Toca las cuerdas, mira la postura real de la mano y aprende a leer partituras con nuestro simulador dinámico de violín con VexFlow.">
-   <meta property="og:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/violin-4533910_1280.jpg">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/violin-4533910_1280.jpg">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
     <meta property="twitter:title" content="Simulador de Violín Interactivo Horizontal - Sprinkloud">
     <meta property="twitter:description" content="Toca las cuerdas, mira la postura real de la mano y aprende a leer partituras con nuestro simulador dinámico de violín.">
-   <meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/violin-4533910_1280.jpg">
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/violin-4533910_1280.jpg">
 
-   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/violin-4533910_1280.jpg">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/violin-4533910_1280.jpg">
 
     <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
     <style>
         :root {
-            --verde-oscuro: rgb(21 118 191 / 0.49);
-            --verde-claro: #73997B;
-            --verde-debil: rgba(115, 153, 123, 0.25);
-            --bronce: #C69D6D;
-            --bronce-claro: #f4ebd9;
-            --fondo: #f5f7f6;
-            --madera: #3d2314;
-            --piel: #f4a261;
-            --piel-oscura: #e07a4f;
+            /* Paleta de colores Premium Oscuro */
+            --fondo-oscuro: #1A1A2E;
+            --texto-claro: #F5F5F5;
+            --texto-debil: rgba(255, 255, 255, 0.6);
+            --dorado: #F0A500;
+            --contenedor-bg: #2D2D44;
+            --contenedor-borde: #4A4A6A;
+            --madera-mastil: #3d2314;;
         }
 
         * {
             box-sizing: border-box;
-            /* Tipografía limpia, recta y sin churos */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-style: normal !important; /* Evita letras inclinadas o cursivas de sistema */
+            font-style: normal !important;
         }
 
         body {
-            background-color: var(--fondo);
-            color: var(--verde-oscuro);
+            background-color: var(--fondo-oscuro);
+            color: var(--texto-claro);
             display: flex;
             flex-direction: column;
             align-items: center;
             margin: 0;
-            padding: 12px;
+            padding: 12px 12px 90px 12px; /* Espacio extra abajo para que el footer no tape nada */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            margin: 0;
         }
 
         h1 {
-            color: var(--verde-oscuro);
+            color: var(--texto-claro);
             font-size: 1.8rem;
+            margin-top: 5px;
             margin-bottom: 3px;
-            text-shadow: 1px 1px var(--bronce-claro);
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-align: center;
             font-weight: 800;
         }
 
         .subtitle {
-            color: var(--bronce);
+            color: var(--dorado);
             font-size: 0.9rem;
             margin-top: 0;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
             font-weight: bold;
             text-align: center;
         }
 
+        /* Botón de regreso con el estilo de la nueva interfaz */
+        .btn-volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            align-self: flex-start;
+            margin-bottom: 15px;
+            padding: 8px 16px;
+            background-color: var(--contenedor-bg);
+            color: var(--texto-claro);
+            border: 2px solid var(--contenedor-borde);
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .btn-volver:hover {
+            transform: translateY(-2px);
+            border-color: var(--dorado);
+            box-shadow: 0 6px 15px rgba(240, 165, 0, 0.2);
+        }
+
         .instrucciones {
-            background: white;
+            background: var(--contenedor-bg);
             padding: 12px 15px;
             border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
             text-align: center;
             width: 100%;
             max-width: 600px;
-            border: 2px dashed var(--verde-claro);
+            border: 2px dashed var(--contenedor-borde);
             font-size: 0.85rem;
-            color: #444;
+            color: var(--texto-debil);
         }
 
-        /* Contenedor del pentagrama optimizado y más corto */
+        .instrucciones strong, .instrucciones b {
+            color: var(--texto-claro);
+        }
+
+        /* Contenedor del pentagrama (Fondo blanco obligatorio para legibilidad de VexFlow) */
         .contenedor-pentagrama-bloque {
-            background: white;
+            background: #FFFFFF;
             padding: 10px;
             border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: 2px solid var(--bronce-claro);
+            border: 3px solid var(--contenedor-borde);
             width: 100%;
-            max-width: 340px; /* Ancho máximo reducido */
+            max-width: 340px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
         #pentagrama {
-            width: 320px; /* Lienzo acortado */
+            width: 315px;
             height: 120px;
         }
 
-        /* CONTENEDOR INTERACTIVO: Alinea al inicio para no cortar la zona izquierda en móviles */
+        /* Contenedor principal del diapasón */
         .interactor-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Evita que el scroll oculte la cejilla */
-            background: white;
+            align-items: flex-start;
+            background: var(--contenedor-bg);
             padding: 15px;
             border-radius: 25px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 2px solid var(--contenedor-borde);
             width: 100%;
             max-width: 850px;
-            overflow-x: auto; /* Permite deslizar el diapasón hacia la derecha */
+            overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
@@ -136,18 +170,20 @@
             padding: 10px 0;
         }
 
+        /* Cejilla dorada/bronce satinada */
         .cejilla {
             width: 55px;
             height: 240px;
-            background: var(--bronce);
+            background: rgb(128 74 27);
             border-radius: 12px 4px 4px 12px;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
             padding: 10px 4px;
-            box-shadow: -4px 0 6px rgba(0,0,0,0.1);
+            box-shadow: -4px 0 10px rgba(0,0,0,0.4);
             z-index: 15;
+            border-right: 2px solid #5A4530;
         }
 
         .cuerda-aire {
@@ -155,22 +191,29 @@
             padding: 8px 0;
             font-size: 0.8rem;
             font-weight: bold;
-            border: none;
-            background: white;
-            color: #333;
+            border: 1px solid rgba(0,0,0,0.2);
+            background: rgb(255 255 255 / 0.11);
+            color: #1A1A2E;
             border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             text-transform: uppercase;
+            transition: all 0.1s ease;
+        }
+
+        .cuerda-aire:hover {
+            background: rgb(255 207 150 / 0.3);
+            color: #1A1A2E;
         }
 
         .cuerda-aire:active {
             transform: translate(-1px, 1px);
-            box-shadow: 0px 1px 0 var(--verde-oscuro);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.4);
         }
 
+        /* Mástil de madera */
         .mastil {
-            background-color: var(--madera);
+            background-color: var(--madera-mastil);
             width: 680px;
             height: 240px;
             border-radius: 0 25px 25px 0;
@@ -179,15 +222,17 @@
             justify-content: space-around;
             padding: 10px 0;
             position: relative;
-            border-right: 15px solid #26150b;
+            border-right: 15px solid #110905;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
         }
 
+        /* Cintas guía satinadas */
         .cinta-guia {
             position: absolute;
             top: 0;
             width: 45px;
             height: 100%;
-            background-color: rgb(246 209 161 / 0.85);
+            background-color: rgb(232 197 151 / 0.84);
             border-left: 1px solid rgba(255, 255, 255, 0.4);
             border-right: 1px solid rgba(255, 255, 255, 0.4);
             transform: translateX(-50%);
@@ -199,14 +244,16 @@
         .cinta-2 { left: calc((3 / 13) * 100%); }
         .cinta-3 { left: calc((5 / 13) * 100%); }
 
+        /* Cuerdas metálicas */
         .cuerda {
             height: 5px;
-            background: linear-gradient(180deg, #ddd, #fff, #bbb);
+            background: linear-gradient(180deg, #888, #ddd, #555);
             width: 100%;
             position: relative;
             z-index: 5;
         }
 
+        /* Círculos de las Notas */
         .nota {
             width: 42px;
             height: 42px;
@@ -221,62 +268,127 @@
             align-items: center;
             font-size: 0.75rem;
             font-weight: bold;
-            color: white;
+            color: var(--texto-claro);
             transition: transform 0.12s, background-color 0.3s;
             z-index: 10;
             user-select: none;
             -webkit-user-select: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
         }
 
+        /* Notas naturales */
         .nota.natural {
-            background-color: var(--verde-oscuro);
-            border: 3px solid white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background-color: #0b2a7a;
+            border: 2px solid var(--contenedor-borde);
         }
 
+        .nota.natural:hover {
+            border-color: #000f32
+        }
+
+        /* Notas alteradas */
         .nota.alterada {
-            background-color: var(--verde-debil);
-            border: 2px dashed rgba(255,255,255,0.6);
-            color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(74, 74, 106, 0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            color: var(--texto-debil);
         }
 
+        /* Nota en ejecución: Resplandece en dorado */
         .nota.activa {
-            background-color: var(--bronce) !important;
-            color: white !important;
-            border: 3px solid white !important;
-            transform: translate(-50%, -50%) scale(1.2);
-            box-shadow: 0 0 15px var(--bronce);
+            background-color: #031e4a !important;
+            color: #ffffff !important;
+            border: 3px solid #001d45 !important;
+            transform: translate(-50%, -50%) scale(1.18);
+            box-shadow: 0 0 20px #81510a;
             z-index: 12;
+        }
+
+        /* Footer moderno con efecto Glassmorphism */
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1em 1.5em;
+            background-color: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            text-align: center;
+            color: var(--texto-debil);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 100;
+        }
+
+        #footer .icons {
+            list-style: none;
+            margin: 0 0 0.4em 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.5em;
+            font-size: 0.9em;
+        }
+
+        #footer .icons a {
+            color: var(--texto-debil);
+            transition: color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        #footer .icons a:hover {
+            color: var(--dorado);
+            transform: scale(1.15);
+        }
+
+        #footer .copyright {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 0.8rem;
+            letter-spacing: 0.10em;
+            display: flex;
+            justify-content: center;
+            gap: 0.5em;
+            flex-wrap: wrap;
+        }
+
+        #footer .copyright a {
+            color: var(--texto-debil);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #footer .copyright a:hover {
+            color: var(--dorado);
+        }
+
+        /* Ajustes de optimización para móviles */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .subtitle {
+                font-size: 0.8rem;
+                margin-bottom: 15px;
+            }
+            .interactor-container {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-<a href="https://sprinkloud.vercel.app/material.html" style="
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    align-self: flex-start;
-    margin-bottom: 15px;
-    padding: 8px 16px;
-    background-color: white;
-    color: var(--verde-oscuro);
-    border: 2px solid var(--bronce-claro);
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    transition: all 0.2s ease;
-    cursor: pointer;
-">
+
+<a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
     Back
 </a>
+
 <h1>SPRINKLOUD</h1>
 <div class="subtitle">CLUB MUSICAL</div>
 
 <div class="instrucciones">
-    🎻 <strong>¡Las notas en el violín!</strong><br>
-    Usa las cintas guía para memorizar las notas naturales en cada cuerda, usando los dedos 1, 2 y 3. 
+    <strong>¡Las notas en el violín!</strong><br>
+    Usa las cintas guía para memorizar las notas naturales en cada cuerda, <p>usando los dedos 1, 2 y 3.</p>
 </div>
 
 <div class="contenedor-pentagrama-bloque">
@@ -386,10 +498,10 @@
         divPentagrama.innerHTML = "";
 
         const renderer = new Renderer(divPentagrama, Renderer.Backends.SVG);
-        renderer.resize(320, 120); /* Ajuste de tamaño del lienzo */
+        renderer.resize(320, 120);
         const context = renderer.getContext();
 
-        const stave = new Stave(10, 5, 290); /* Pentagrama acortado */
+        const stave = new Stave(10, 5, 290);
         stave.addClef("treble");
         stave.setContext(context).draw();
 
@@ -475,5 +587,17 @@
         mastil.appendChild(contenedorCuerda);
     });
 </script>
+
+<footer id="footer">
+    <ul class="icons">
+        <li><a href="https://wa.me/593987999154" class="icon brands fa-whatsapp"><span class="label">WhatsApp</span></a></li>
+        <li><a href="mailto:sprinkloud@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+        <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+    </ul>
+    <ul class="copyright">
+        <li>&copy; 2026</li>
+        <li><a href="https://sprinkloud.vercel.app/">SPRINKLOUD</a></li>
+    </ul>
+</footer>
 </body>
 </html>
