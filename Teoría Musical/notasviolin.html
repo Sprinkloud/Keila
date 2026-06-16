@@ -3,6 +3,9 @@
 <head>
     <title>Simulador de Violín Interactivo | Aprende Notas y Pentagrama - Sprinkloud</title>
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <meta name="description" content="Aprende las notas en el violín con nuestro simulador interactivo horizontal. Visualiza la posición de los dedos en la mano y su relación exacta en el pentagrama. ¡Ideal para estudiantes de música!">
     <meta name="keywords" content="violin, notas violin, pentagrama violin, posicion de dedos violin, aprender violin, simulador de violin, cuerdas violin, musica, sprinkloud">
     <meta name="author" content="Sprinkloud Club Musical">
@@ -21,11 +24,10 @@
     <meta property="twitter:image" content="https://www.sprinkloud.com/assets/images/preview-violin.jpg">
 
     <link rel="icon" type="image/png" href="https://www.sprinkloud.com/favicon.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Simulador de Violín Horizontal - Sprinkloud</title>
     <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
-    <style>
+   <style>
         :root {
             --verde-oscuro: rgb(21 118 191 / 0.49);
             --verde-claro: #73997B;
@@ -40,7 +42,9 @@
 
         * {
             box-sizing: border-box;
-            font-family: 'Fredoka One', 'Comic Sans MS', cursive, sans-serif;
+            /* CAMBIO DE LETRA: Ahora es normal, limpia, recta y sin churos */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-style: normal !important; /* Fuerza a que nada salga inclinado o cursivo */
         }
 
         body {
@@ -50,54 +54,58 @@
             flex-direction: column;
             align-items: center;
             margin: 0;
-            padding: 15px; /* Reducido para ganar espacio en móviles */
+            padding: 12px;
         }
 
         h1 {
             color: var(--verde-oscuro);
-            font-size: 2rem; /* Reducido ligeramente para móvil */
-            margin-bottom: 5px;
-            text-shadow: 2px 2px var(--bronce-claro);
+            font-size: 1.8rem;
+            margin-bottom: 3px;
+            text-shadow: 1px 1px var(--bronce-claro);
             letter-spacing: 1px;
             text-align: center;
+            font-weight: 800;
         }
 
         .subtitle {
             color: var(--bronce);
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-top: 0;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
             font-weight: bold;
             text-align: center;
         }
 
         .instrucciones {
             background: white;
-            padding: 12px 20px;
-            border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            padding: 12px 15px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
             text-align: center;
             width: 100%;
             max-width: 600px;
-            border: 3px dashed var(--verde-claro);
-            font-size: 0.9rem;
+            border: 2px dashed var(--verde-claro);
+            font-size: 0.85rem;
+            color: #444;
         }
 
+        /* Contenedor del pentagrama adaptable */
         .contenedor-pentagrama-bloque {
             background: white;
             padding: 10px;
-            border-radius: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             border: 2px solid var(--bronce-claro);
             width: 100%;
             max-width: 470px;
-            overflow-x: auto; /* Evita que el SVG rompa la pantalla */
+            overflow-x: auto; /* Si el pentagrama es muy grande, permite deslizarlo en vez de romper la pantalla */
+            -webkit-overflow-scrolling: touch;
         }
 
         #pentagrama {
@@ -105,23 +113,21 @@
             height: 130px;
         }
 
-        /* CONTENEDOR INTERACTIVO OPTIMIZADO PARA MÓVIL */
+        /* CONTENEDOR DEL VIOLÍN: No se corta en el teléfono */
         .interactor-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 40px;
             background: white;
-            padding: 20px; /* Reducido para pantallas pequeñas */
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 15px;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
             width: 100%;
             max-width: 850px;
-            overflow-x: auto; /* Permite scroll horizontal del violín en pantallas chicas */
+            overflow-x: auto; /* Permite deslizar el violín de izquierda a derecha con el dedo en celulares */
             -webkit-overflow-scrolling: touch;
         }
 
-        /* COMPONENTE INTERFAZ VIOLÍN */
         .interfaz-violin {
             display: flex;
             flex-direction: row;
@@ -131,7 +137,7 @@
         }
 
         .cejilla {
-            width: 50px; /* Más ancho para mejorar el tap en móviles */
+            width: 55px; /* Más ancho para que sea fácil presionar las cuerdas al aire */
             height: 240px;
             background: var(--bronce);
             border-radius: 12px 4px 4px 12px;
@@ -139,32 +145,33 @@
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            padding: 10px 2px;
+            padding: 10px 4px;
             box-shadow: -4px 0 6px rgba(0,0,0,0.1);
             z-index: 15;
         }
 
-        /* Estilo mejorado para los botones de cuerda al aire */
         .cuerda-aire {
             width: 90%;
-            padding: 8px 2px;
+            padding: 8px 0;
             font-size: 0.8rem;
             font-weight: bold;
             border: none;
             background: white;
-            border-radius: 8px;
+            color: #333;
+            border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            text-transform: uppercase;
         }
 
         .cuerda-aire:active {
-            transform: translate(-2px, 1px);
+            transform: translate(-1px, 1px);
             box-shadow: 0px 1px 0 var(--verde-oscuro);
         }
 
         .mastil {
             background-color: var(--madera);
-            width: 680px; /* Se mantiene para conservar proporciones de las notas */
+            width: 680px; /* Mantiene la escala musical exacta */
             height: 240px;
             border-radius: 0 25px 25px 0;
             display: flex;
@@ -175,7 +182,6 @@
             border-right: 15px solid #26150b;
         }
 
-        /* CINTAS GUÍA VERTICALES */
         .cinta-guia {
             position: absolute;
             top: 0;
@@ -201,9 +207,8 @@
             z-index: 5;
         }
 
-        /* NOTAS / CÍRCULOS HORIZONTALES */
         .nota {
-            width: 42px; /* Ligeramente más grande para facilitar el toque táctil */
+            width: 42px; /* Botones de notas un poco más grandes para pantallas táctiles */
             height: 42px;
             border-radius: 50%;
             position: absolute;
@@ -217,9 +222,10 @@
             font-size: 0.75rem;
             font-weight: bold;
             color: white;
-            transition: transform 0.15s, background-color 0.3s, box-shadow 0.3s;
+            transition: transform 0.12s, background-color 0.3s;
             z-index: 10;
-            user-select: none; /* Evita que se seleccione el texto al tocar rápido */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .nota.natural {
@@ -231,7 +237,7 @@
         .nota.alterada {
             background-color: var(--verde-debil);
             border: 2px dashed rgba(255,255,255,0.6);
-            color: rgba(38, 92, 61, 0.4);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .nota.activa {
@@ -251,7 +257,7 @@
 
 <div class="instrucciones">
     🎻 <strong>¡Las notas en el violín!</strong><br>
-    Memoriza la posición de las notas naturales utilizando las cintas guía del diapasón. En móviles, puedes deslizar el mástil hacia los lados.
+    Usa las cintas guía para memorizar las notas. En tu teléfono puedes <b>deslizar el mástil hacia los lados</b> para ver todas las notas cómodamente.
 </div>
 
 <div class="contenedor-pentagrama-bloque">
@@ -378,11 +384,10 @@
 
     function emitirSonido(frecuencia) {
         const ctx = obtenerContextoAudio();
-        // Asegura que el contexto se reactive tras interacción en móviles (política de auto-play)
         if (ctx.state === 'suspended') {
             ctx.resume();
         }
-
+        
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
 
@@ -422,7 +427,7 @@
             const distanciaLeft = (n.semitonos / 13) * 100;
             nodoNota.style.left = `${distanciaLeft}%`;
 
-            // Se cambia a 'pointerdown' para una respuesta táctil inmediata sin lag en smartphones
+            // Uso de pointerdown para evitar retrasos táctiles (lag) en teléfonos
             nodoNota.addEventListener('pointerdown', (e) => {
                 e.stopPropagation();
 
