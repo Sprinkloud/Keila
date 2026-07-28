@@ -118,6 +118,79 @@
         .shadow-2xl {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
+
+         /* Footer moderno con efecto Glassmorphism */
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1em 1.5em;
+            background-color: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            text-align: center;
+            color: var(--texto-debil);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 100;
+        }
+
+        #footer .icons {
+            list-style: none;
+            margin: 0 0 0.4em 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.5em;
+            font-size: 0.9em;
+        }
+
+        #footer .icons a {
+            color: var(--texto-debil);
+            transition: color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        #footer .icons a:hover {
+            color: var(--dorado);
+            transform: scale(1.15);
+        }
+
+        #footer .copyright {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 0.8rem;
+            letter-spacing: 0.10em;
+            display: flex;
+            justify-content: center;
+            gap: 0.5em;
+            flex-wrap: wrap;
+        }
+
+        #footer .copyright a {
+            color: var(--texto-debil);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #footer .copyright a:hover {
+            color: var(--dorado);
+        }
+
+        /* Ajustes de optimización para móviles */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .subtitle {
+                font-size: 0.8rem;
+                margin-bottom: 15px;
+            }
+            .interactor-container {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body class="antialiased overflow-x-hidden">
