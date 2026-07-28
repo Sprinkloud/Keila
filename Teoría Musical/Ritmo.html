@@ -3,550 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO -->
-    <title>Pentagrama, claves y figuras rítmicas | Aprende música online con Sprinkloud</title>
-    <meta name="description" content="Aprende los fundamentos de la música de forma interactiva. Explora el pentagrama, las claves, las notas musicales, las figuras rítmicas y practica con nuestro piano virtual. ¡Empieza tu aventura musical con Sprinkloud!">
-    <meta name="keywords" content="aprender música, teoría musical, pentagrama, clave de sol, notas musicales, figuras rítmicas, piano virtual, Sprinkloud, educación musical">
-
-
-    <!-- VexFlow -->
-    <script src="https://unpkg.com/vexflow/releases/vexflow-min.js"></script>
-
-    <!-- Tone.js -->
-    <script src="https://cdn.jsdelivr.net/npm/tone@latest/build/Tone.min.js"></script>
-
-    <!-- Tailwind CSS -->
+    <title>Células Rítmicas — Mínima</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Librerías de Música (Versiones estables y actualizadas) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/4.2.3/vexflow.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #073B4C;
-            color: #FFFFFF;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #f8fafc;
         }
-        .piano-key {
-            border: 1px solid #073B4C;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-            transition: all 0.1s ease-out;
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #cbd5e1;
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #0f172a;
             cursor: pointer;
+            transition: transform 0.1s ease;
         }
-        .white-key {
-            background-color: white;
-            color: #333;
-        }
-        .black-key {
-            background-color: #222;
-            color: white;
-            z-index: 10;
-        }
-        .key-active {
-            transform: scale(0.98) translateY(2px);
-            background: linear-gradient(to bottom, #D4AF37, #b89a3a);
-            box-shadow: 0px 0px 5px #D4AF37;
-        }
-        .note-highlight {
-            fill: #D4AF37 !important;
-            stroke: #D4AF37 !important;
-        }
-        .feedback-correct {
-            animation: flash-green 0.5s ease-out;
-        }
-        .feedback-incorrect {
-            animation: flash-red 0.5s ease-out;
-        }
-        @keyframes flash-green {
-            0%, 100% { background-color: #2A9D8F; }
-            50% { background-color: #3fdbc6; }
-        }
-        @keyframes flash-red {
-            0%, 100% { background-color: #e53e3e; }
-            50% { background-color: #fc8181; }
-        }
-        .bg-[#115164] {
-            background-color: #115164;
-        }
-        .rhythm-figure svg {
-            height: 80px; /* Matches h-20 in Tailwind */
-            margin: 0 auto 8px;
-            filter: invert(100%) brightness(0); /* Matches invert brightness-0 */
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 2rem; /* Matches gap-8 in Tailwind */
-        }
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
-        }
-        .text-center {
-            text-align: center;
-        }
-        .font-semibold {
-            font-weight: 600;
-        }
-        .text-3xl {
-            font-size: 1.875rem;
-            line-height: 2.25rem;
-        }
-        .font-bold {
-            font-weight: 700;
-        }
-        .mb-8 {
-            margin-bottom: 2rem;
-        }
-        .mb-16 {
-            margin-bottom: 4rem;
-        }
-        .p-8 {
-            padding: 2rem;
-        }
-        .rounded-2xl {
-            border-radius: 1rem;
-        }
-        .shadow-2xl {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
 
-         /* Footer moderno con efecto Glassmorphism */
-        #footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 1em 1.5em;
-            background-color: rgba(26, 26, 46, 0.8);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            text-align: center;
-            color: var(--texto-debil);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 100;
+        .staff-measure {
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
-        #footer .icons {
-            list-style: none;
-            margin: 0 0 0.4em 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: 1.5em;
-            font-size: 0.9em;
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        #footer .icons a {
-            color: var(--texto-debil);
-            transition: color 0.3s, transform 0.3s;
-            text-decoration: none;
-        }
-
-        #footer .icons a:hover {
-            color: var(--dorado);
-            transform: scale(1.15);
-        }
-
-        #footer .copyright {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            font-size: 0.8rem;
-            letter-spacing: 0.10em;
-            display: flex;
-            justify-content: center;
-            gap: 0.5em;
-            flex-wrap: wrap;
-        }
-
-        #footer .copyright a {
-            color: var(--texto-debil);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        #footer .copyright a:hover {
-            color: var(--dorado);
-        }
-
-        /* Ajustes de optimización para móviles */
-        @media (max-width: 640px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-            .subtitle {
-                font-size: 0.8rem;
-                margin-bottom: 15px;
-            }
-            .interactor-container {
-                padding: 10px;
-            }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
-    <a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
-    Back
-</a>
 </head>
-<body class="antialiased overflow-x-hidden">
+<body class="text-slate-700 min-h-screen overflow-hidden flex flex-col">
 
-<!-- Modal de Inicio
-<div id="start-modal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-    <div class="text-center p-8 rounded-lg">
-        <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Bienvenido a la Lección Interactiva</h2>
-        <button id="start-button" class="bg-[#2A9D8F] text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-[#3fdbc6] transition-transform duration-300 hover:scale-105 text-xl">
-            ¡Empezar a Aprender!
-        </button>
-    </div>
-</div> -->
+<div class="flex h-screen w-full">
 
-<!-- Header -->
-<header class="container mx-auto px-6 py-4 flex justify-center items-center">
-    <a href="https://sprinkloud.vercel.app/" target="_blank">
-        <img src="LOGO_Sprinkloud__6_-removebg-preview.png"
-             alt="Sprinkloud Club Musical Logo"
-             class="h-24 md:h-32 object-contain transition-transform duration-300 hover:scale-105">
-    </a>
-</header>
+    <aside class="w-80 bg-white border-r border-slate-200 shadow-sm flex flex-col justify-between">
+        <div class="p-6 flex-1 flex flex-col min-h-0">
+            <header class="mb-6">
+                <span class="text-[10px] tracking-[0.2em] text-slate-400 font-medium block mb-1">ESTUDIO RÍTMICO</span>
+                <h1 class="text-lg font-normal tracking-tight text-slate-900">SPRINKLOUD<span class="text-slate-400 font-light text-sm"> 4/4</span></h1>
+            </header>
 
-<main class="container mx-auto px-6 py-8">
-    <!-- Título principal SEO -->
-    <h1 class="text-3xl md:text-5xl font-bold text-center mb-12 text-[#D4AF37]">
-        Pentagrama, claves y figuras rítmicas
-    </h1>
+            <nav class="flex border-b border-slate-200 mb-6 text-[11px] font-medium tracking-wide">
+                <button onclick="switchTab('base')" id="tab-base" class="flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors">
+                    Rítmicas
+                </button>
+                <button onclick="switchTab('extended')" id="tab-extended" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
+                    Largas
+                </button>
+                <button onclick="switchTab('silences')" id="tab-silences" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
+                    Silencios
+                </button>
+            </nav>
 
-    <!-- Sección Interactiva Principal -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-        <!-- Columna del Pentagrama -->
-        <div class="bg-[#115164] p-6 rounded-2xl shadow-2xl">
-            <h2 class="text-2xl font-bold mb-4 text-center">El Pentagrama y las Notas</h2>
-            <p class="text-center mb-4 text-gray-300">Haz clic en una nota en el pentagrama para escucharla y verla en el piano.</p>
-            <div id="staff-container" class="w-full h-48 flex justify-center items-center"></div>
-        </div>
-
-        <!-- Columna del Teclado -->
-        <div class="bg-[#115164] p-6 rounded-2xl shadow-2xl">
-            <h2 class="text-2xl font-bold mb-4 text-center">El Piano</h2>
-            <p class="text-center mb-4 text-gray-300">Haz clic en una tecla para escucharla y verla en el pentagrama.</p>
-            <div id="piano-container" class="relative flex justify-center h-48 select-none">
-                <!-- Las teclas del piano se generarán aquí con JS -->
+            <div class="flex-1 overflow-y-auto pr-1 no-scrollbar">
+                <div id="cells-palette" class="grid grid-cols-1 gap-2.5"></div>
             </div>
         </div>
-    </section>
 
-    <!-- Sección Figuras Rítmicas -->
-    <section class="bg-[#115164] p-8 rounded-2xl shadow-2xl mb-16">
-        <h2 class="text-3xl font-bold text-center mb-8">Figuras Rítmicas</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <!-- Figura: Redonda -->
-            <div class="rhythm-figure" data-duration="1n" data-name="Redonda">
-                <div id="redonda"></div>
-                <p class="font-semibold">Redonda (4 tiempos)</p>
-            </div>
-            <!-- Figura: Blanca -->
-            <div class="rhythm-figure" data-duration="2n" data-name="Blanca">
-                <div id="blanca"></div>
-                <p class="font-semibold">Blanca (2 tiempos)</p>
-            </div>
-            <!-- Figura: Negra -->
-            <div class="rhythm-figure" data-duration="4n" data-name="Negra">
-                <div id="negra"></div>
-                <p class="font-semibold">Negra (1 tiempo)</p>
-            </div>
-            <!-- Figura: Corchea -->
-            <div class="rhythm-figure" data-duration="8n" data-name="Corchea">
-                <div id="corchea"></div>
-                <p class="font-semibold">Corchea (1/2 tiempo)</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección de Ejercicios -->
-    <section class="bg-[#115164] p-8 rounded-2xl shadow-2xl">
-        <h2 class="text-3xl font-bold text-center mb-6">¡Hora de Practicar!</h2>
-        <div id="exercise-container" class="text-center">
-            <p id="exercise-prompt" class="text-xl mb-6 h-8"></p>
-            <button id="new-exercise-btn" class="bg-[#2A9D8F] text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-[#3fdbc6] transition-transform duration-300 hover:scale-105">
-                Nuevo Ejercicio
+        <div class="p-6 border-t border-slate-200 grid grid-cols-2 gap-3 bg-slate-50/50">
+            <button onclick="clearComposition()" class="py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600 transition-colors shadow-sm">
+                Clear
+            </button>
+            <button onclick="addMeasure()" class="py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-800 transition-colors shadow-sm">
+                + Compás Mudo
             </button>
         </div>
-    </section>
+    </aside>
 
-</main>
+    <main class="flex-1 flex flex-col bg-slate-100/60">
 
-<!-- Footer -->
-<footer class="text-center py-12 mt-12 bg-[#052c38]">
-    <div class="flex justify-center space-x-6 mb-4">
-        <a href="https://wa.me/593987999154" target="_blank" class="text-2xl text-gray-400 hover:text-[#D4AF37] transition-colors"><i class="fab fa-whatsapp"></i></a>
-        <a href="mailto:sprinkloud@gmail.com" class="text-2xl text-gray-400 hover:text-[#D4AF37] transition-colors"><i class="fas fa-envelope"></i></a>
-        <a href="https://instagram.com/sprinkloud" target="_blank" class="text-2xl text-gray-400 hover:text-[#D4AF37] transition-colors"><i class="fab fa-instagram"></i></a>
-    </div>
-    <div class="text-gray-500">
-        &copy; 2025 <a href="https://sprinkloud.vercel.app/" target="_blank" class="hover:text-[#D4AF37] transition-colors">SPRINKLOUD</a>
-    </div>
-</footer>
+        <header class="h-20 border-b border-slate-200 bg-white px-10 flex items-center justify-between shadow-xs">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full px-4 py-2">
+                    <span class="text-xs text-slate-400 font-medium">BPM</span>
+                    <span id="tempo-value" class="text-sm font-medium font-mono text-slate-800 min-w-[28px]">60</span>
+                    <input type="range" id="tempo-slider" min="40" max="160" value="60" oninput="updateTempo(this.value)" class="w-32 accent-slate-800">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="stopPlayback()" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors shadow-xs">
+                    <i class="fa-solid fa-stop text-xs"></i>
+                </button>
+                <button onclick="togglePlay()" id="play-btn" class="h-10 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-sm">
+                    <i id="play-icon" class="fa-solid fa-play text-[10px]"></i>
+                    <span id="play-text">PLAY</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 p-12 overflow-y-auto" id="composition-area">
+            <div id="measures-container" class="grid grid-cols-1 gap-6 max-w-4xl mx-auto"></div>
+        </div>
+
+        <footer class="h-14 border-t border-slate-200 bg-white px-10 flex items-center justify-between text-xs text-slate-400">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span id="status-dot" class="w-1.5 h-1.5 bg-slate-400 rounded-full transition-colors duration-300"></span>
+                    <span id="status" class="text-slate-600 font-light">Listo</span>
+                </div>
+                <span class="text-slate-300">|</span>
+                <div>Total Pulsos: <span id="total-beats" class="font-mono text-slate-600">0</span></div>
+            </div>
+            <div class="font-light text-slate-400">
+                Espacio para reproducir • Click en la celda para remover
+            </div>
+        </footer>
+    </main>
+</div>
 
 <script>
+    const rhythmicCells = [
+        { id: "cell1", name: "chocolate", symbol: "♬♬", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.25, 0.25], type: "base" },
+        { id: "cell2", name: "gránchico", symbol: "♪♬", duration: 1, subdivisions: 4, pattern: [0.5, 0.25, 0.25], type: "base" },
+        { id: "cell3", name: "camarón", symbol: "♬♪", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.5], type: "base" },
+        { id: "cell4", name: "valiente", symbol: "𝅘𝅥𝅯 ♪𝅘𝅥𝅯", duration: 1, subdivisions: 4, pattern: [0.25, 0.5, 0.25], type: "base" },
+        { id: "cell5", name: "blanco", symbol: "♩.♪", duration: 1, subdivisions: 4, pattern: [0.75, 0.25], type: "base" },
+        { id: "cell9", name: "queso", symbol: "♪♩.", duration: 1, subdivisions: 4, pattern: [0.25, 0.75], type: "base" },
+        { id: "cell6", name: "música", symbol: "𝅘𝅥𝅮𝅘𝅥𝅮𝅘𝅥𝅮", duration: 1, subdivisions: 3, pattern: [0.333, 0.333, 0.333], type: "base" },
+        { id: "cell7", name: "luna", symbol: "♫", duration: 1, subdivisions: 2, pattern: [0.5, 0.5], type: "base" },
+        { id: "cell8", name: "pan", symbol: "♩", duration: 1, subdivisions: 1, pattern: [1], type: "base" },
+        { id: "cell11", name: "y", symbol: "♪", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "base" },
 
-    // Load Verovio toolkit
-    verovio.module.onRuntimeInitialized = function () {
-        const toolkit = new verovio.toolkit();
+        { id: "cell10", name: "Lee", symbol: "♩.", duration: 1.5, subdivisions: 1, pattern: [1.5], type: "extended" },
+        { id: "cell12", name: "1, 2", symbol: "𝅗𝅥", duration: 2, subdivisions: 1, pattern: [2], type: "extended" },
+        { id: "cell13", name: "1, 2, 3, 4", symbol: "𝅝", duration: 4, subdivisions: 1, pattern: [4], type: "extended" },
 
-        // Define rhythmic figures in PAE (Plaine & Easie) format
-        const notes = {
-            redonda: "@clef:G-2 @keysig: @timesig:4/4 @data:1c",
-            blanca: "@clef:G-2 @keysig: @timesig:4/4 @data:2c",
-            negra: "@clef:G-2 @keysig: @timesig:4/4 @data:4c",
-            corchea: "@clef:G-2 @keysig: @timesig:4/4 @data:8c"
-        };
+        { id: "cell14_1", name: "Semicorchea (t)", symbol: "𝄿", duration: 0.25, subdivisions: 1, pattern: [0.25], type: "silences" },
+        { id: "cell14_2", name: "Corchea (y)", symbol: "𝄾", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "silences" },
+        { id: "cell8_sil", name: "Negra (pan)", symbol: "𝄽", duration: 1, subdivisions: 1, pattern: [1], type: "silences" },
+    ];
 
-        // Render each note
-        for (const [id, pae] of Object.entries(notes)) {
-            const svg = toolkit.renderData(pae, {
-                adjustPageHeight: true,
-                pageHeight: 200,
-                pageWidth: 200,
-                scale: 40
-            });
-            document.getElementById(id).innerHTML = svg;
+    let currentTab = 'base';
+    let composition = [];
+    let isPlaying = false;
+    let currentTempo = 60;
+    let audioContext;
+    let timeoutIds = [];
+
+    function initAudio() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
-    };
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- CONSTANTES Y VARIABLES GLOBALES ---
-        const { Renderer, Stave, StaveNote, Formatter, Voice, Accidental } = vexflow.Flow;
+    }
 
-        const staffContainer = document.getElementById('staff-container');
-        const pianoContainer = document.getElementById('piano-container');
-        const startButton = document.getElementById('start-button');
-        const startModal = document.getElementById('start-modal');
-        const exercisePrompt = document.getElementById('exercise-prompt');
-        const newExerciseBtn = document.getElementById('new-exercise-btn');
+    function createCellElement(cell) {
+        const button = document.createElement('button');
+        button.className = "group w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 rounded-xl p-3.5 flex items-center justify-between transition-all duration-200 text-left shadow-xs";
+        button.innerHTML = `
+            <div>
+                <div class="text-xs font-medium text-slate-700 capitalize group-hover:text-slate-900 transition-colors">${cell.name}</div>
+                <div class="text-[10px] text-slate-400 font-light mt-0.5">${cell.duration} ${cell.duration === 1 ? 'pulso' : 'pulsos'}</div>
+            </div>
+            <div class="text-xl text-slate-600 group-hover:text-slate-900 transition-colors font-light">${cell.symbol}</div>
+        `;
+        button.onclick = () => addToComposition(cell);
+        return button;
+    }
 
-        let renderer, context, stave, voice, notes, noteElements = [];
-        let synth;
+    function renderPalette() {
+        const container = document.getElementById('cells-palette');
+        container.innerHTML = '';
+        const filteredCells = rhythmicCells.filter(cell => cell.type === currentTab);
+        filteredCells.forEach(cell => container.appendChild(createCellElement(cell)));
+    }
 
-        const noteMapping = [
-            { vex: "c/4", tone: "C4", type: "white" }, { vex: "c#/4", tone: "C#4", type: "black" },
-            { vex: "d/4", tone: "D4", type: "white" }, { vex: "d#/4", tone: "D#4", type: "black" },
-            { vex: "e/4", tone: "E4", type: "white" },
-            { vex: "f/4", tone: "F4", type: "white" }, { vex: "f#/4", tone: "F#4", type: "black" },
-            { vex: "g/4", tone: "G4", type: "white" }, { vex: "g#/4", tone: "G#4", type: "black" },
-            { vex: "a/4", tone: "A4", type: "white" }, { vex: "a#/4", tone: "A#4", type: "black" },
-            { vex: "b/4", tone: "B4", type: "white" },
-            { vex: "c/5", tone: "C5", type: "white" }
-        ];
+    function switchTab(tabName) {
+        currentTab = tabName;
+        ['base', 'extended', 'silences'].forEach(t => {
+            const el = document.getElementById(`tab-${t}`);
+            el.className = t === tabName
+                ? "flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors"
+                : "flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors";
+        });
+        renderPalette();
+    }
 
-        let currentExercise = null;
+    function renderComposition() {
+        const container = document.getElementById('measures-container');
+        container.innerHTML = '';
 
-        // --- INICIALIZACIÓN ---
+        let accumulatedBeats = 0;
+        let currentMeasure = [];
+        let measureIndex = 0;
 
-        // Inicializar Tone.js al hacer clic en el botón de inicio
-        startButton.addEventListener('click', async () => {
-            await Tone.start();
-            synth = new Tone.Synth().toDestination();
-            console.log('Audio context started');
-            startModal.style.display = 'none';
-            init();
+        if (composition.length === 0) {
+            container.innerHTML = `
+                <div class="border border-dashed border-slate-300 rounded-2xl h-40 flex items-center justify-center text-xs text-slate-400 font-light bg-white/50">
+                    El lienzo está vacío. Selecciona células en el panel izquierdo.
+                </div>`;
+            document.getElementById('total-beats').textContent = '0';
+            return;
+        }
+
+        composition.forEach((cell, idx) => {
+            currentMeasure.push({ cell, originalIndex: idx });
+            accumulatedBeats += cell.duration;
+
+            if (accumulatedBeats >= 4 || idx === composition.length - 1) {
+                const measureDiv = document.createElement('div');
+                measureDiv.className = `staff-measure bg-white border border-slate-200/90 shadow-xs rounded-2xl p-6 relative flex flex-col gap-4`;
+                measureDiv.dataset.measureIndex = measureIndex;
+
+                measureDiv.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <span class="text-[10px] font-mono tracking-wider text-slate-400">COMPÁS 0${measureIndex + 1}</span>
+                        <span class="text-[10px] font-light text-slate-500">${accumulatedBeats} / 4 Pulsos</span>
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center min-h-[60px]" id="measure-slots-${measureIndex}"></div>
+                `;
+
+                const cellsContainer = measureDiv.querySelector(`#measure-slots-${measureIndex}`);
+                currentMeasure.forEach((item) => {
+                    const cellMini = document.createElement('div');
+                    cellMini.className = "group relative bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50/30 rounded-xl px-4 py-2.5 cursor-pointer flex flex-col items-center justify-center min-w-[64px] transition-all shadow-xs";
+                    cellMini.onclick = () => removeCell(item.originalIndex);
+                    cellMini.innerHTML = `
+                        <div class="text-lg text-slate-800 group-hover:text-red-600 transition-colors">${item.cell.symbol}</div>
+                        <div class="text-[9px] text-slate-400 uppercase tracking-tight group-hover:hidden">${item.cell.name.split(' ')[0]}</div>
+                        <div class="text-[9px] text-red-600 uppercase tracking-tight hidden group-hover:block font-medium">Quitar</div>
+                    `;
+                    cellsContainer.appendChild(cellMini);
+                });
+
+                container.appendChild(measureDiv);
+                currentMeasure = [];
+                measureIndex++;
+                accumulatedBeats = 0;
+            }
         });
 
-        function init() {
-            drawStaff();
-            createPiano();
-            setupEventListeners();
+        const absoluteTotal = composition.reduce((acc, c) => acc + c.duration, 0);
+        document.getElementById('total-beats').textContent = Math.round(absoluteTotal * 100) / 100;
+    }
+
+    function addToComposition(cell) {
+        const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
+        const rem = currentTotal % 4;
+        const spaceLeftInMeasure = rem === 0 ? 4 : 4 - rem;
+
+        if (cell.duration > spaceLeftInMeasure) {
+            triggerStatusAlert(`No cabe en el compás (Espacio disponible: ${spaceLeftInMeasure} pulso${spaceLeftInMeasure !== 1 ? 's' : ''})`, true);
+            return;
         }
 
-        // --- VEXFLOW: DIBUJAR PENTAGRAMA ---
-        function drawStaff(highlightNote = null) {
-            staffContainer.innerHTML = '';
-            renderer = new Renderer(staffContainer, Renderer.Backends.SVG);
+        composition.push({...cell});
+        renderComposition();
+        triggerStatusAlert(`Añadido: ${cell.name}`, false);
+    }
 
-            const containerWidth = staffContainer.clientWidth;
-            renderer.resize(containerWidth, 150);
-            context = renderer.getContext();
-            context.setFont('Arial', 10, '').setBackgroundFillStyle('#115164');
+    function triggerStatusAlert(message, isError) {
+        const status = document.getElementById('status');
+        const dot = document.getElementById('status-dot');
 
-            stave = new Stave(10, 20, containerWidth - 20);
-            stave.addClef('treble').addTimeSignature('4/4');
-            stave.setContext(context).draw();
+        status.textContent = message;
+        if (isError) {
+            status.className = "text-red-600 font-medium animate-pulse";
+            dot.className = "w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse";
+        } else {
+            status.className = "text-slate-800 font-normal";
+            dot.className = "w-1.5 h-1.5 bg-slate-600 rounded-full";
+        }
 
-            notes = [
-                new StaveNote({ keys: ['c/4'], duration: 'q' }),
-                new StaveNote({ keys: ['d/4'], duration: 'q' }),
-                new StaveNote({ keys: ['e/4'], duration: 'q' }),
-                new StaveNote({ keys: ['f/4'], duration: 'q' }),
-                new StaveNote({ keys: ['g/4'], duration: 'q' }),
-                new StaveNote({ keys: ['a/4'], duration: 'q' }),
-                new StaveNote({ keys: ['b/4'], duration: 'q' }),
-                new StaveNote({ keys: ['c/5'], duration: 'q' }),
-            ];
+        setTimeout(() => {
+            status.textContent = 'Listo';
+            status.className = "text-slate-600 font-light";
+            dot.className = "w-1.5 h-1.5 bg-slate-400 rounded-full remove-animation";
+        }, 1800);
+    }
 
-            voice = new Voice({ num_beats: 8, beat_value: 4 });
-            voice.addTickables(notes);
+    function removeCell(index) {
+        composition.splice(index, 1);
+        renderComposition();
+    }
 
-            new Formatter().joinVoices([voice]).format([voice], containerWidth - 50);
+    function addMeasure() {
+        const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
+        const rem = currentTotal % 4;
+        const missingBeats = rem === 0 ? 4 : 4 - rem;
+        const silenceCell = rhythmicCells.find(c => c.id === "cell8_sil");
 
-            voice.draw(context, stave);
+        if (missingBeats === 4) {
+            for (let i = 0; i < 4; i++) composition.push({...silenceCell});
+        } else {
+            composition.push({
+                id: `dynamic-silence-${Date.now()}`,
+                name: "Silencio",
+                symbol: "𝄽",
+                duration: missingBeats,
+                subdivisions: 1,
+                pattern: [missingBeats],
+                type: "silences"
+            });
+        }
+        renderComposition();
+    }
 
-            // Resaltar la nota seleccionada DESPUÉS de dibujarla
-            if (highlightNote) {
-                notes.forEach(note => {
-                    if (note.getKeys()[0] === highlightNote) {
-                        // Ahora note.attrs.el debería existir
-                        if (note.attrs.el) {
-                            note.attrs.el.querySelectorAll('path').forEach(p => {
-                                p.classList.add('note-highlight');
-                            });
-                        }
-                    }
+    function clearComposition() {
+        composition = [];
+        renderComposition();
+    }
+
+    async function playRhythm() {
+        if (composition.length === 0) return;
+
+        initAudio();
+        isPlaying = true;
+        updatePlayButton();
+
+        let currentTime = audioContext.currentTime + 0.1;
+        const beatDuration = 60 / currentTempo;
+        let cumulativeBeats = 0;
+
+        for (let i = 0; i < composition.length; i++) {
+            if (!isPlaying) break;
+
+            const cell = composition[i];
+            const currentMeasureIndex = Math.floor(cumulativeBeats / 4);
+
+            let timeOffset = 0;
+
+            if(cell.type !== 'silences' && cell.name !== 'Silencio') {
+                cell.pattern.forEach((subDuration, j) => {
+                    const noteTime = currentTime + timeOffset;
+                    const freq = j === 0 ? 760 : (j % 2 === 0 ? 580 : 440);
+                    playTone(freq, noteTime, subDuration * beatDuration * 0.85, j === 0 ? 0.5 : 0.25);
+                    timeOffset += subDuration * beatDuration;
                 });
             }
 
-            // Guardar referencia a los elementos SVG de las notas para la interactividad
-            noteElements = notes.map((note, index) => ({
-                element: note.attrs.el,
-                noteName: note.getKeys()[0].replace('/', ''),
-                vexName: note.getKeys()[0],
-            }));
+            scheduleHighlight(currentMeasureIndex, (currentTime - audioContext.currentTime) * 1000);
+
+            currentTime += cell.duration * beatDuration;
+            cumulativeBeats += cell.duration;
+
+            await new Promise(resolve => {
+                const tid = setTimeout(resolve, cell.duration * beatDuration * 1000);
+                timeoutIds.push(tid);
+            });
         }
 
-        // --- PIANO: CREAR TECLADO ---
-        function createPiano() {
-            pianoContainer.innerHTML = '';
-            const whiteKeys = noteMapping.filter(n => n.type === 'white');
-            const keyWidth = 100 / whiteKeys.length;
+        stopPlayback();
+    }
 
-            noteMapping.forEach((note, i) => {
-                const key = document.createElement('div');
-                key.classList.add('piano-key', `${note.type}-key`);
-                key.dataset.note = note.tone;
-                key.dataset.vex = note.vex;
+    function playTone(freq, time, duration, gainValue = 0.4) {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
 
-                if(note.type === 'white') {
-                    key.style.width = `${keyWidth}%`;
-                    key.style.left = `${whiteKeys.findIndex(k => k.tone === note.tone) * keyWidth}%`;
-                    key.style.height = '100%';
-                    key.classList.add('absolute', 'bottom-0', 'rounded-b-lg');
+        oscillator.type = 'sine';
+        oscillator.frequency.value = freq;
+
+        gainNode.gain.setValueAtTime(gainValue, time);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.start(time);
+        oscillator.stop(time + duration);
+    }
+
+    function scheduleHighlight(measureIndex, delayMs) {
+        const tid = setTimeout(() => {
+            const measures = document.querySelectorAll('.staff-measure');
+            measures.forEach(m => {
+                if (parseInt(m.dataset.measureIndex) === measureIndex) {
+                    m.style.borderColor = '#2563eb';
+                    m.style.backgroundColor = '#eff6ff';
                 } else {
-                    const prevWhiteKeyIndex = whiteKeys.findIndex(k => k.tone > note.tone) -1;
-                    key.style.width = `${keyWidth * 0.6}%`;
-                    key.style.left = `${(prevWhiteKeyIndex * keyWidth) + (keyWidth * 0.7)}%`;
-                    key.style.height = '60%';
-                    key.classList.add('absolute', 'top-0', 'rounded-b-md');
+                    m.style.borderColor = '';
+                    m.style.backgroundColor = '';
                 }
-                pianoContainer.appendChild(key);
             });
+        }, Math.max(0, delayMs));
+        timeoutIds.push(tid);
+    }
+
+    function togglePlay() {
+        if (isPlaying) {
+            stopPlayback();
+        } else {
+            playRhythm();
         }
+    }
 
-        // --- INTERACTIVIDAD ---
+    function stopPlayback() {
+        isPlaying = false;
+        updatePlayButton();
+        timeoutIds.forEach(id => clearTimeout(id));
+        timeoutIds = [];
 
-        // Función unificada para tocar y resaltar una nota
-        function playAndHighlight(toneNote, vexNote) {
-            if (!synth) return;
+        document.querySelectorAll('.staff-measure').forEach(m => {
+            m.style.borderColor = '';
+            m.style.backgroundColor = '';
+        });
+    }
 
-            // 1. Tocar sonido
-            synth.triggerAttackRelease(toneNote, '8n');
+    function updatePlayButton() {
+        const btn = document.getElementById('play-btn');
+        const icon = document.getElementById('play-icon');
+        const text = document.getElementById('play-text');
 
-            // 2. Resaltar tecla del piano
-            const pianoKey = document.querySelector(`.piano-key[data-note="${toneNote}"]`);
-            if (pianoKey) {
-                pianoKey.classList.add('key-active');
-                setTimeout(() => pianoKey.classList.remove('key-active'), 200);
+        if (isPlaying) {
+            btn.className = "h-10 px-6 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-sm";
+            icon.className = "fa-solid fa-pause text-[10px]";
+            text.textContent = 'PAUSAR';
+        } else {
+            btn.className = "h-10 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-sm";
+            icon.className = "fa-solid fa-play text-[10px]";
+            text.textContent = 'REPRODUCIR';
+        }
+    }
+
+    function updateTempo(value) {
+        currentTempo = parseInt(value);
+        document.getElementById('tempo-value').textContent = currentTempo;
+    }
+
+    function init() {
+        renderPalette();
+        renderComposition();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === " ") {
+                e.preventDefault();
+                togglePlay();
             }
+        });
+    }
 
-            // 3. Resaltar nota en el pentagrama
-            drawStaff(vexNote);
-
-            // 4. Chequear ejercicio
-            checkExercise(toneNote);
-        }
-
-        function setupEventListeners() {
-            // Event listener para las teclas del piano
-            pianoContainer.addEventListener('click', (e) => {
-                const key = e.target.closest('.piano-key');
-                if (key) {
-                    const note = key.dataset.note;
-                    const vexNote = key.dataset.vex;
-                    playAndHighlight(note, vexNote);
-                }
-            });
-
-            // Event listener para las notas en el pentagrama (usando delegación de eventos)
-            staffContainer.addEventListener('click', e => {
-                const noteElement = e.target.closest('.vf-notehead, .vf-stem, .vf-flag');
-                if(noteElement) {
-                    const noteGroup = noteElement.closest('.vf-stavenote');
-                    if (noteGroup) {
-                        const foundNote = noteElements.find(ne => ne.element === noteGroup);
-                        if (foundNote) {
-                            const toneNote = foundNote.noteName.charAt(0).toUpperCase() + foundNote.noteName.slice(1);
-                            playAndHighlight(toneNote, foundNote.vexName);
-                        }
-                    }
-                }
-            });
-
-            // Event listener para las figuras rítmicas
-            document.querySelectorAll('.rhythm-figure').forEach(figure => {
-                figure.addEventListener('click', () => {
-                    const duration = figure.dataset.duration;
-                    if(synth) {
-                        synth.triggerAttackRelease('C4', duration);
-                        // Animación de click
-                        figure.classList.add('scale-95', 'transition-transform');
-                        setTimeout(() => figure.classList.remove('scale-95'), 200);
-                    }
-                });
-            });
-
-            // Event listener para el botón de nuevo ejercicio
-            newExerciseBtn.addEventListener('click', generateNewExercise);
-
-            // Redibujar en cambio de tamaño de ventana
-            window.addEventListener('resize', () => drawStaff());
-        }
-
-        // --- LÓGICA DE EJERCICIOS ---
-        function generateNewExercise() {
-            const notesForExercise = noteMapping.filter(n => n.type === 'white');
-            const randomIndex = Math.floor(Math.random() * notesForExercise.length);
-            currentExercise = notesForExercise[randomIndex];
-
-            exercisePrompt.textContent = `Haz clic en la nota ${currentExercise.tone.slice(0, -1)} en el piano o pentagrama.`;
-            exercisePrompt.className = 'text-xl mb-6 h-8'; // Reset class
-        }
-
-        function checkExercise(playedNote) {
-            if (!currentExercise) return;
-
-            const feedbackEl = newExerciseBtn.parentElement;
-            if (playedNote === currentExercise.tone) {
-                exercisePrompt.textContent = '¡Correcto! ¡Muy bien!';
-                feedbackEl.classList.add('feedback-correct');
-                currentExercise = null; // Terminar ejercicio
-            } else {
-                exercisePrompt.textContent = `¡Casi! Esa fue otra nota. Intenta de nuevo.`;
-                feedbackEl.classList.add('feedback-incorrect');
-            }
-
-            setTimeout(() => {
-                feedbackEl.classList.remove('feedback-correct', 'feedback-incorrect');
-                if(!currentExercise) { // Si ya se completó el ejercicio
-                    exercisePrompt.textContent = 'Haz clic en "Nuevo Ejercicio" para continuar.';
-                } else { // Si se equivocó, restaurar el prompt
-                    exercisePrompt.textContent = `Haz clic en la nota ${currentExercise.tone.slice(0, -1)} en el piano o pentagrama.`;
-                }
-            }, 1500);
-        }
-    });
+    window.onload = init;
 </script>
 </body>
     <footer id="footer">
