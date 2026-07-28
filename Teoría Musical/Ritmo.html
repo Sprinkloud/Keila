@@ -1,465 +1,537 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Células Rítmicas — Mínima</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Células Rítmicas — Sprinkloud</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            background-color: #f8fafc;
-        }
+  <!-- Fuentes Google: Inter para texto y Noto Music / Bravura para asegurar notas en Android e iOS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Music&display=swap" rel="stylesheet">
 
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: #cbd5e1;
-            height: 4px;
-            border-radius: 2px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #0f172a;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #f8fafc;
+      touch-action: manipulation;
+    }
 
-        .staff-measure {
-            transition: background-color 0.4s ease, border-color 0.4s ease;
-        }
+    /* Clase para renderizar símbolos musicales correctamente en cualquier S.O. */
+    .music-symbol {
+      font-family: 'Noto Music', 'Bravura Text', serif;
+      line-height: 1;
+    }
 
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+    /* Estilo del Botón Volver para móvil y desktop */
+    .btn-volver {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      min-height: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #0f172a;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .btn-volver:active {
+      transform: scale(0.96);
+      background-color: #f1f5f9;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #cbd5e1;
+      height: 4px;
+      border-radius: 2px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0f172a;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .staff-measure {
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </head>
-<body class="text-slate-700 min-h-screen overflow-hidden flex flex-col">
+<body class="text-slate-700 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
 
-<div class="flex h-screen w-full">
+<!-- Sidebar / Panel de Controles (Abajo/Arriba en Móvil, Izquierda en PC) -->
+<aside class="w-full md:w-80 bg-white border-b md:border-b-0 md:border-r border-slate-200 shadow-sm flex flex-col justify-between shrink-0">
+  <div class="p-4 md:p-6 flex-1 flex flex-col min-h-0">
 
-    <aside class="w-80 bg-white border-r border-slate-200 shadow-sm flex flex-col justify-between">
-        <div class="p-6 flex-1 flex flex-col min-h-0">
-            <header class="mb-6">
-                <span class="text-[10px] tracking-[0.2em] text-slate-400 font-medium block mb-1">ESTUDIO RÍTMICO</span>
-                <h1 class="text-lg font-normal tracking-tight text-slate-900">SPRINKLOUD<span class="text-slate-400 font-light text-sm"> 4/4</span></h1>
-            </header>
+    <!-- Encabezado con Botón Back -->
+    <header class="mb-4 md:mb-6 flex items-center justify-between">
+      <div>
+        <span class="text-[10px] tracking-[0.2em] text-slate-400 font-medium block mb-0.5">ESTUDIO RÍTMICO</span>
+        <h1 class="text-base md:text-lg font-normal tracking-tight text-slate-900">SPRINKLOUD<span class="text-slate-400 font-light text-xs md:text-sm"> 4/4</span></h1>
+      </div>
+      <a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
+        <i class="fa-solid fa-arrow-left mr-2 text-xs"></i> Back
+      </a>
+    </header>
 
-            <nav class="flex border-b border-slate-200 mb-6 text-[11px] font-medium tracking-wide">
-                <button onclick="switchTab('base')" id="tab-base" class="flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors">
-                    Rítmicas
-                </button>
-                <button onclick="switchTab('extended')" id="tab-extended" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
-                    Largas
-                </button>
-                <button onclick="switchTab('silences')" id="tab-silences" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
-                    Silencios
-                </button>
-            </nav>
+    <!-- Pestañas -->
+    <nav class="flex border-b border-slate-200 mb-4 text-[11px] font-medium tracking-wide">
+      <button onclick="switchTab('base')" id="tab-base" class="flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors">
+        Rítmicas
+      </button>
+      <button onclick="switchTab('extended')" id="tab-extended" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
+        Largas
+      </button>
+      <button onclick="switchTab('silences')" id="tab-silences" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
+        Silencios
+      </button>
+    </nav>
 
-            <div class="flex-1 overflow-y-auto pr-1 no-scrollbar">
-                <div id="cells-palette" class="grid grid-cols-1 gap-2.5"></div>
-            </div>
-        </div>
+    <!-- Paleta de Células (Scroll Horizontal en móvil si es necesario, Lista vertical en PC) -->
+    <div class="flex-1 overflow-y-auto max-h-48 md:max-h-none pr-1 no-scrollbar">
+      <div id="cells-palette" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2.5"></div>
+    </div>
+  </div>
 
-        <div class="p-6 border-t border-slate-200 grid grid-cols-2 gap-3 bg-slate-50/50">
-            <button onclick="clearComposition()" class="py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600 transition-colors shadow-sm">
-                Clear
-            </button>
-            <button onclick="addMeasure()" class="py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-800 transition-colors shadow-sm">
-                + Compás Mudo
-            </button>
-        </div>
-    </aside>
+  <!-- Acciones de Borrado -->
+  <div class="p-3 md:p-6 border-t border-slate-200 grid grid-cols-2 gap-2 md:gap-3 bg-slate-50/50">
+    <button onclick="clearComposition()" class="py-2 px-3 md:py-2.5 md:px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600 transition-colors shadow-xs">
+      Clear
+    </button>
+    <button onclick="addMeasure()" class="py-2 px-3 md:py-2.5 md:px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-800 transition-colors shadow-xs">
+      + Compás Mudo
+    </button>
+  </div>
+</aside>
 
-    <main class="flex-1 flex flex-col bg-slate-100/60">
+<!-- Área Principal del Lienzo -->
+<main class="flex-1 flex flex-col min-w-0 bg-slate-100/60 min-h-[calc(100vh-250px)]">
 
-        <header class="h-20 border-b border-slate-200 bg-white px-10 flex items-center justify-between shadow-xs">
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full px-4 py-2">
-                    <span class="text-xs text-slate-400 font-medium">BPM</span>
-                    <span id="tempo-value" class="text-sm font-medium font-mono text-slate-800 min-w-[28px]">60</span>
-                    <input type="range" id="tempo-slider" min="40" max="160" value="60" oninput="updateTempo(this.value)" class="w-32 accent-slate-800">
-                </div>
-            </div>
+  <!-- Topbar Controles de Reproducción -->
+  <header class="p-4 md:px-10 border-b border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3 shadow-xs">
+    <div class="flex items-center gap-3 md:gap-6 w-full sm:w-auto justify-between sm:justify-start">
 
-            <div class="flex items-center gap-3">
-                <button onclick="stopPlayback()" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors shadow-xs">
-                    <i class="fa-solid fa-stop text-xs"></i>
-                </button>
-                <button onclick="togglePlay()" id="play-btn" class="h-10 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-sm">
-                    <i id="play-icon" class="fa-solid fa-play text-[10px]"></i>
-                    <span id="play-text">PLAY</span>
-                </button>
-            </div>
-        </header>
+      <!-- BPM Slider -->
+      <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5">
+        <span class="text-[10px] md:text-xs text-slate-400 font-medium">BPM</span>
+        <span id="tempo-value" class="text-xs md:text-sm font-medium font-mono text-slate-800 min-w-[24px]">60</span>
+        <input type="range" id="tempo-slider" min="40" max="160" value="60" oninput="updateTempo(this.value)" class="w-20 md:w-28 accent-slate-800">
+      </div>
 
-        <div class="flex-1 p-12 overflow-y-auto" id="composition-area">
-            <div id="measures-container" class="grid grid-cols-1 gap-6 max-w-4xl mx-auto"></div>
-        </div>
+      <!-- Metrónomo Toggle -->
+      <button onclick="toggleMetronome()" id="metronome-btn" class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full text-xs font-medium transition-colors">
+        <i id="metronome-icon" class="fa-solid fa-bell-slash text-[10px] text-slate-400"></i>
+        <span>Metro: <strong id="metronome-status-text" class="font-normal text-slate-500">OFF</strong></span>
+      </button>
+    </div>
 
-        <footer class="h-14 border-t border-slate-200 bg-white px-10 flex items-center justify-between text-xs text-slate-400">
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span id="status-dot" class="w-1.5 h-1.5 bg-slate-400 rounded-full transition-colors duration-300"></span>
-                    <span id="status" class="text-slate-600 font-light">Listo</span>
-                </div>
-                <span class="text-slate-300">|</span>
-                <div>Total Pulsos: <span id="total-beats" class="font-mono text-slate-600">0</span></div>
-            </div>
-            <div class="font-light text-slate-400">
-                Espacio para reproducir • Click en la celda para remover
-            </div>
-        </footer>
-    </main>
-</div>
+    <!-- Play / Stop -->
+    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+      <button onclick="stopPlayback()" class="w-9 h-9 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors shadow-xs">
+        <i class="fa-solid fa-stop text-xs"></i>
+      </button>
+      <button onclick="togglePlay()" id="play-btn" class="h-9 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-xs">
+        <i id="play-icon" class="fa-solid fa-play text-[10px]"></i>
+        <span id="play-text">PLAY</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenedor de Compases -->
+  <div class="flex-1 p-4 md:p-8 overflow-y-auto" id="composition-area">
+    <div id="measures-container" class="grid grid-cols-1 gap-4 md:gap-6 max-w-4xl mx-auto"></div>
+  </div>
+
+  <!-- Barra de Estado Inferior -->
+  <footer class="p-3 md:px-10 border-t border-slate-200 bg-white flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span id="status-dot" class="w-1.5 h-1.5 bg-slate-400 rounded-full transition-colors duration-300"></span>
+        <span id="status" class="text-slate-600 font-light">Listo</span>
+      </div>
+      <span class="text-slate-300">|</span>
+      <div>Total Pulsos: <span id="total-beats" class="font-mono text-slate-600">0</span></div>
+    </div>
+    <div class="font-light text-[11px] text-slate-400 text-center sm:text-right">
+      Click o Toca una celda para removerla
+    </div>
+  </footer>
+</main>
 
 <script>
-    const rhythmicCells = [
-        { id: "cell1", name: "chocolate", symbol: "♬♬", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.25, 0.25], type: "base" },
-        { id: "cell2", name: "gránchico", symbol: "♪♬", duration: 1, subdivisions: 4, pattern: [0.5, 0.25, 0.25], type: "base" },
-        { id: "cell3", name: "camarón", symbol: "♬♪", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.5], type: "base" },
-        { id: "cell4", name: "valiente", symbol: "𝅘𝅥𝅯 ♪𝅘𝅥𝅯", duration: 1, subdivisions: 4, pattern: [0.25, 0.5, 0.25], type: "base" },
-        { id: "cell5", name: "blanco", symbol: "♩.♪", duration: 1, subdivisions: 4, pattern: [0.75, 0.25], type: "base" },
-        { id: "cell9", name: "queso", symbol: "♪♩.", duration: 1, subdivisions: 4, pattern: [0.25, 0.75], type: "base" },
-        { id: "cell6", name: "música", symbol: "𝅘𝅥𝅮𝅘𝅥𝅮𝅘𝅥𝅮", duration: 1, subdivisions: 3, pattern: [0.333, 0.333, 0.333], type: "base" },
-        { id: "cell7", name: "luna", symbol: "♫", duration: 1, subdivisions: 2, pattern: [0.5, 0.5], type: "base" },
-        { id: "cell8", name: "pan", symbol: "♩", duration: 1, subdivisions: 1, pattern: [1], type: "base" },
-        { id: "cell11", name: "y", symbol: "♪", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "base" },
+  const rhythmicCells = [
+    { id: "cell1", name: "chocolate", symbol: "♬♬", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.25, 0.25], type: "base" },
+    { id: "cell2", name: "gránchico", symbol: "♪♬", duration: 1, subdivisions: 4, pattern: [0.5, 0.25, 0.25], type: "base" },
+    { id: "cell3", name: "camarón", symbol: "♬♪", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.5], type: "base" },
+    { id: "cell4", name: "valiente", symbol: "𝅘𝅥𝅯 ♪𝅘𝅥𝅯", duration: 1, subdivisions: 4, pattern: [0.25, 0.5, 0.25], type: "base" },
+    { id: "cell5", name: "blanco", symbol: "♩.♪", duration: 1, subdivisions: 4, pattern: [0.75, 0.25], type: "base" },
+    { id: "cell9", name: "queso", symbol: "♪♩.", duration: 1, subdivisions: 4, pattern: [0.25, 0.75], type: "base" },
+    { id: "cell6", name: "música", symbol: "𝅘𝅥𝅮𝅘𝅥𝅮𝅘𝅥𝅮", duration: 1, subdivisions: 3, pattern: [0.333, 0.333, 0.333], type: "base" },
+    { id: "cell7", name: "luna", symbol: "♫", duration: 1, subdivisions: 2, pattern: [0.5, 0.5], type: "base" },
+    { id: "cell8", name: "pan", symbol: "♩", duration: 1, subdivisions: 1, pattern: [1], type: "base" },
+    { id: "cell11", name: "y", symbol: "♪", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "base" },
 
-        { id: "cell10", name: "Lee", symbol: "♩.", duration: 1.5, subdivisions: 1, pattern: [1.5], type: "extended" },
-        { id: "cell12", name: "1, 2", symbol: "𝅗𝅥", duration: 2, subdivisions: 1, pattern: [2], type: "extended" },
-        { id: "cell13", name: "1, 2, 3, 4", symbol: "𝅝", duration: 4, subdivisions: 1, pattern: [4], type: "extended" },
+    { id: "cell10", name: "Lee", symbol: "♩.", duration: 1.5, subdivisions: 1, pattern: [1.5], type: "extended" },
+    { id: "cell12", name: "1, 2", symbol: "𝅗𝅥", duration: 2, subdivisions: 1, pattern: [2], type: "extended" },
+    { id: "cell13", name: "1, 2, 3, 4", symbol: "𝅝", duration: 4, subdivisions: 1, pattern: [4], type: "extended" },
 
-        { id: "cell14_1", name: "Semicorchea (t)", symbol: "𝄿", duration: 0.25, subdivisions: 1, pattern: [0.25], type: "silences" },
-        { id: "cell14_2", name: "Corchea (y)", symbol: "𝄾", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "silences" },
-        { id: "cell8_sil", name: "Negra (pan)", symbol: "𝄽", duration: 1, subdivisions: 1, pattern: [1], type: "silences" },
-    ];
+    { id: "cell14_1", name: "Semicorchea (t)", symbol: "𝄿", duration: 0.25, subdivisions: 1, pattern: [0.25], type: "silences" },
+    { id: "cell14_2", name: "Corchea (y)", symbol: "𝄾", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "silences" },
+    { id: "cell8_sil", name: "Negra (pan)", symbol: "𝄽", duration: 1, subdivisions: 1, pattern: [1], type: "silences" },
+  ];
 
-    let currentTab = 'base';
-    let composition = [];
-    let isPlaying = false;
-    let currentTempo = 60;
-    let audioContext;
-    let timeoutIds = [];
+  let currentTab = 'base';
+  let composition = [];
+  let isPlaying = false;
+  let currentTempo = 60;
+  let audioContext;
+  let timeoutIds = [];
+  let metronomeActive = false;
 
-    function initAudio() {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
+  function initAudio() {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
+  }
 
-    function createCellElement(cell) {
-        const button = document.createElement('button');
-        button.className = "group w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 rounded-xl p-3.5 flex items-center justify-between transition-all duration-200 text-left shadow-xs";
-        button.innerHTML = `
+  function toggleMetronome() {
+    metronomeActive = !metronomeActive;
+    const btn = document.getElementById('metronome-btn');
+    const icon = document.getElementById('metronome-icon');
+    const text = document.getElementById('metronome-status-text');
+
+    if (metronomeActive) {
+      btn.className = "flex items-center gap-1.5 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium transition-colors";
+      icon.className = "fa-solid fa-bell text-[10px] text-blue-600";
+      text.textContent = "ON";
+      text.className = "font-medium text-blue-600";
+    } else {
+      btn.className = "flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full text-xs font-medium transition-colors";
+      icon.className = "fa-solid fa-bell-slash text-[10px] text-slate-400";
+      text.textContent = "OFF";
+      text.className = "font-normal text-slate-500";
+    }
+  }
+
+  function createCellElement(cell) {
+    const button = document.createElement('button');
+    button.className = "group w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 rounded-xl p-2.5 md:p-3.5 flex items-center justify-between transition-all duration-200 text-left shadow-xs";
+    button.innerHTML = `
             <div>
                 <div class="text-xs font-medium text-slate-700 capitalize group-hover:text-slate-900 transition-colors">${cell.name}</div>
-                <div class="text-[10px] text-slate-400 font-light mt-0.5">${cell.duration} ${cell.duration === 1 ? 'pulso' : 'pulsos'}</div>
+                <div class="text-[9px] md:text-[10px] text-slate-400 font-light mt-0.5">${cell.duration} ${cell.duration === 1 ? 'pulso' : 'pulsos'}</div>
             </div>
-            <div class="text-xl text-slate-600 group-hover:text-slate-900 transition-colors font-light">${cell.symbol}</div>
+            <div class="text-lg md:text-xl text-slate-600 group-hover:text-slate-900 transition-colors font-light music-symbol">${cell.symbol}</div>
         `;
-        button.onclick = () => addToComposition(cell);
-        return button;
-    }
+    button.onclick = () => addToComposition(cell);
+    return button;
+  }
 
-    function renderPalette() {
-        const container = document.getElementById('cells-palette');
-        container.innerHTML = '';
-        const filteredCells = rhythmicCells.filter(cell => cell.type === currentTab);
-        filteredCells.forEach(cell => container.appendChild(createCellElement(cell)));
-    }
+  function renderPalette() {
+    const container = document.getElementById('cells-palette');
+    container.innerHTML = '';
+    const filteredCells = rhythmicCells.filter(cell => cell.type === currentTab);
+    filteredCells.forEach(cell => container.appendChild(createCellElement(cell)));
+  }
 
-    function switchTab(tabName) {
-        currentTab = tabName;
-        ['base', 'extended', 'silences'].forEach(t => {
-            const el = document.getElementById(`tab-${t}`);
-            el.className = t === tabName
-                ? "flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors"
-                : "flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors";
-        });
-        renderPalette();
-    }
+  function switchTab(tabName) {
+    currentTab = tabName;
+    ['base', 'extended', 'silences'].forEach(t => {
+      const el = document.getElementById(`tab-${t}`);
+      el.className = t === tabName
+              ? "flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors"
+              : "flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors";
+    });
+    renderPalette();
+  }
 
-    function renderComposition() {
-        const container = document.getElementById('measures-container');
-        container.innerHTML = '';
+  function renderComposition() {
+    const container = document.getElementById('measures-container');
+    container.innerHTML = '';
 
-        let accumulatedBeats = 0;
-        let currentMeasure = [];
-        let measureIndex = 0;
+    let accumulatedBeats = 0;
+    let currentMeasure = [];
+    let measureIndex = 0;
 
-        if (composition.length === 0) {
-            container.innerHTML = `
-                <div class="border border-dashed border-slate-300 rounded-2xl h-40 flex items-center justify-center text-xs text-slate-400 font-light bg-white/50">
-                    El lienzo está vacío. Selecciona células en el panel izquierdo.
+    if (composition.length === 0) {
+      container.innerHTML = `
+                <div class="border border-dashed border-slate-300 rounded-2xl h-32 md:h-40 flex items-center justify-center text-xs text-slate-400 font-light bg-white/50 p-4 text-center">
+                    El lienzo está vacío. Selecciona células en el panel.
                 </div>`;
-            document.getElementById('total-beats').textContent = '0';
-            return;
-        }
+      document.getElementById('total-beats').textContent = '0';
+      return;
+    }
 
-        composition.forEach((cell, idx) => {
-            currentMeasure.push({ cell, originalIndex: idx });
-            accumulatedBeats += cell.duration;
+    composition.forEach((cell, idx) => {
+      currentMeasure.push({ cell, originalIndex: idx });
+      accumulatedBeats += cell.duration;
 
-            if (accumulatedBeats >= 4 || idx === composition.length - 1) {
-                const measureDiv = document.createElement('div');
-                measureDiv.className = `staff-measure bg-white border border-slate-200/90 shadow-xs rounded-2xl p-6 relative flex flex-col gap-4`;
-                measureDiv.dataset.measureIndex = measureIndex;
+      if (accumulatedBeats >= 4 || idx === composition.length - 1) {
+        const measureDiv = document.createElement('div');
+        measureDiv.className = `staff-measure bg-white border border-slate-200/90 shadow-xs rounded-2xl p-4 md:p-6 relative flex flex-col gap-3 md:gap-4`;
+        measureDiv.dataset.measureIndex = measureIndex;
 
-                measureDiv.innerHTML = `
+        measureDiv.innerHTML = `
                     <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                         <span class="text-[10px] font-mono tracking-wider text-slate-400">COMPÁS 0${measureIndex + 1}</span>
                         <span class="text-[10px] font-light text-slate-500">${accumulatedBeats} / 4 Pulsos</span>
                     </div>
-                    <div class="flex flex-wrap gap-3 items-center min-h-[60px]" id="measure-slots-${measureIndex}"></div>
+                    <div class="flex flex-wrap gap-2 md:gap-3 items-center min-h-[50px]" id="measure-slots-${measureIndex}"></div>
                 `;
 
-                const cellsContainer = measureDiv.querySelector(`#measure-slots-${measureIndex}`);
-                currentMeasure.forEach((item) => {
-                    const cellMini = document.createElement('div');
-                    cellMini.className = "group relative bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50/30 rounded-xl px-4 py-2.5 cursor-pointer flex flex-col items-center justify-center min-w-[64px] transition-all shadow-xs";
-                    cellMini.onclick = () => removeCell(item.originalIndex);
-                    cellMini.innerHTML = `
-                        <div class="text-lg text-slate-800 group-hover:text-red-600 transition-colors">${item.cell.symbol}</div>
-                        <div class="text-[9px] text-slate-400 uppercase tracking-tight group-hover:hidden">${item.cell.name.split(' ')[0]}</div>
-                        <div class="text-[9px] text-red-600 uppercase tracking-tight hidden group-hover:block font-medium">Quitar</div>
+        const cellsContainer = measureDiv.querySelector(`#measure-slots-${measureIndex}`);
+        currentMeasure.forEach((item) => {
+          const cellMini = document.createElement('div');
+          cellMini.className = "group relative bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50/30 rounded-xl px-3 md:px-4 py-2 cursor-pointer flex flex-col items-center justify-center min-w-[56px] md:min-w-[64px] transition-all shadow-xs";
+          cellMini.onclick = () => removeCell(item.originalIndex);
+          cellMini.innerHTML = `
+                        <div class="text-base md:text-lg text-slate-800 group-hover:text-red-600 transition-colors music-symbol">${item.cell.symbol}</div>
+                        <div class="text-[8px] md:text-[9px] text-slate-400 uppercase tracking-tight group-hover:hidden">${item.cell.name.split(' ')[0]}</div>
+                        <div class="text-[8px] md:text-[9px] text-red-600 uppercase tracking-tight hidden group-hover:block font-medium">Quitar</div>
                     `;
-                    cellsContainer.appendChild(cellMini);
-                });
-
-                container.appendChild(measureDiv);
-                currentMeasure = [];
-                measureIndex++;
-                accumulatedBeats = 0;
-            }
+          cellsContainer.appendChild(cellMini);
         });
 
-        const absoluteTotal = composition.reduce((acc, c) => acc + c.duration, 0);
-        document.getElementById('total-beats').textContent = Math.round(absoluteTotal * 100) / 100;
+        container.appendChild(measureDiv);
+        currentMeasure = [];
+        measureIndex++;
+        accumulatedBeats = 0;
+      }
+    });
+
+    const absoluteTotal = composition.reduce((acc, c) => acc + c.duration, 0);
+    document.getElementById('total-beats').textContent = Math.round(absoluteTotal * 100) / 100;
+  }
+
+  function addToComposition(cell) {
+    const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
+    const rem = currentTotal % 4;
+    const spaceLeftInMeasure = rem === 0 ? 4 : 4 - rem;
+
+    if (cell.duration > spaceLeftInMeasure) {
+      triggerStatusAlert(`No cabe en el compás (Disponible: ${spaceLeftInMeasure})`, true);
+      return;
     }
 
-    function addToComposition(cell) {
-        const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
-        const rem = currentTotal % 4;
-        const spaceLeftInMeasure = rem === 0 ? 4 : 4 - rem;
+    composition.push({...cell});
+    renderComposition();
+    triggerStatusAlert(`Añadido: ${cell.name}`, false);
+  }
 
-        if (cell.duration > spaceLeftInMeasure) {
-            triggerStatusAlert(`No cabe en el compás (Espacio disponible: ${spaceLeftInMeasure} pulso${spaceLeftInMeasure !== 1 ? 's' : ''})`, true);
-            return;
-        }
+  function triggerStatusAlert(message, isError) {
+    const status = document.getElementById('status');
+    const dot = document.getElementById('status-dot');
 
-        composition.push({...cell});
-        renderComposition();
-        triggerStatusAlert(`Añadido: ${cell.name}`, false);
+    status.textContent = message;
+    if (isError) {
+      status.className = "text-red-600 font-medium animate-pulse";
+      dot.className = "w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse";
+    } else {
+      status.className = "text-slate-800 font-normal";
+      dot.className = "w-1.5 h-1.5 bg-slate-600 rounded-full";
     }
 
-    function triggerStatusAlert(message, isError) {
-        const status = document.getElementById('status');
-        const dot = document.getElementById('status-dot');
+    setTimeout(() => {
+      status.textContent = 'Listo';
+      status.className = "text-slate-600 font-light";
+      dot.className = "w-1.5 h-1.5 bg-slate-400 rounded-full";
+    }, 1800);
+  }
 
-        status.textContent = message;
-        if (isError) {
-            status.className = "text-red-600 font-medium animate-pulse";
-            dot.className = "w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse";
-        } else {
-            status.className = "text-slate-800 font-normal";
-            dot.className = "w-1.5 h-1.5 bg-slate-600 rounded-full";
-        }
+  function removeCell(index) {
+    composition.splice(index, 1);
+    renderComposition();
+  }
 
-        setTimeout(() => {
-            status.textContent = 'Listo';
-            status.className = "text-slate-600 font-light";
-            dot.className = "w-1.5 h-1.5 bg-slate-400 rounded-full remove-animation";
-        }, 1800);
+  function addMeasure() {
+    const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
+    const rem = currentTotal % 4;
+    const missingBeats = rem === 0 ? 4 : 4 - rem;
+    const silenceCell = rhythmicCells.find(c => c.id === "cell8_sil");
+
+    if (missingBeats === 4) {
+      for (let i = 0; i < 4; i++) composition.push({...silenceCell});
+    } else {
+      composition.push({
+        id: `dynamic-silence-${Date.now()}`,
+        name: "Silencio",
+        symbol: "𝄽",
+        duration: missingBeats,
+        subdivisions: 1,
+        pattern: [missingBeats],
+        type: "silences"
+      });
+    }
+    renderComposition();
+  }
+
+  function clearComposition() {
+    composition = [];
+    renderComposition();
+  }
+
+  async function playRhythm() {
+    if (composition.length === 0) return;
+
+    initAudio();
+    isPlaying = true;
+    updatePlayButton();
+
+    let currentTime = audioContext.currentTime + 0.1;
+    const beatDuration = 60 / currentTempo;
+    let cumulativeBeats = 0;
+
+    if (metronomeActive) {
+      const totalDurationBeats = composition.reduce((sum, c) => sum + c.duration, 0);
+      let metronomeTime = currentTime;
+      for (let b = 0; b < totalDurationBeats; b++) {
+        const isDownbeat = (b % 4 === 0);
+        const clickFreq = isDownbeat ? 1000 : 700;
+        playTone(clickFreq, metronomeTime, 0.03, 0.3);
+        metronomeTime += beatDuration;
+      }
     }
 
-    function removeCell(index) {
-        composition.splice(index, 1);
-        renderComposition();
-    }
+    for (let i = 0; i < composition.length; i++) {
+      if (!isPlaying) break;
 
-    function addMeasure() {
-        const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
-        const rem = currentTotal % 4;
-        const missingBeats = rem === 0 ? 4 : 4 - rem;
-        const silenceCell = rhythmicCells.find(c => c.id === "cell8_sil");
+      const cell = composition[i];
+      const currentMeasureIndex = Math.floor(cumulativeBeats / 4);
 
-        if (missingBeats === 4) {
-            for (let i = 0; i < 4; i++) composition.push({...silenceCell});
-        } else {
-            composition.push({
-                id: `dynamic-silence-${Date.now()}`,
-                name: "Silencio",
-                symbol: "𝄽",
-                duration: missingBeats,
-                subdivisions: 1,
-                pattern: [missingBeats],
-                type: "silences"
-            });
-        }
-        renderComposition();
-    }
+      let timeOffset = 0;
 
-    function clearComposition() {
-        composition = [];
-        renderComposition();
-    }
+      if(cell.type !== 'silences' && cell.name !== 'Silencio') {
+        cell.pattern.forEach((subDuration, j) => {
+          const noteTime = currentTime + timeOffset;
+          const freq = j === 0 ? 760 : (j % 2 === 0 ? 580 : 440);
+          playTone(freq, noteTime, subDuration * beatDuration * 0.85, j === 0 ? 0.5 : 0.25);
+          timeOffset += subDuration * beatDuration;
+        });
+      }
 
-    async function playRhythm() {
-        if (composition.length === 0) return;
+      scheduleHighlight(currentMeasureIndex, (currentTime - audioContext.currentTime) * 1000);
 
-        initAudio();
-        isPlaying = true;
-        updatePlayButton();
+      currentTime += cell.duration * beatDuration;
+      cumulativeBeats += cell.duration;
 
-        let currentTime = audioContext.currentTime + 0.1;
-        const beatDuration = 60 / currentTempo;
-        let cumulativeBeats = 0;
-
-        for (let i = 0; i < composition.length; i++) {
-            if (!isPlaying) break;
-
-            const cell = composition[i];
-            const currentMeasureIndex = Math.floor(cumulativeBeats / 4);
-
-            let timeOffset = 0;
-
-            if(cell.type !== 'silences' && cell.name !== 'Silencio') {
-                cell.pattern.forEach((subDuration, j) => {
-                    const noteTime = currentTime + timeOffset;
-                    const freq = j === 0 ? 760 : (j % 2 === 0 ? 580 : 440);
-                    playTone(freq, noteTime, subDuration * beatDuration * 0.85, j === 0 ? 0.5 : 0.25);
-                    timeOffset += subDuration * beatDuration;
-                });
-            }
-
-            scheduleHighlight(currentMeasureIndex, (currentTime - audioContext.currentTime) * 1000);
-
-            currentTime += cell.duration * beatDuration;
-            cumulativeBeats += cell.duration;
-
-            await new Promise(resolve => {
-                const tid = setTimeout(resolve, cell.duration * beatDuration * 1000);
-                timeoutIds.push(tid);
-            });
-        }
-
-        stopPlayback();
-    }
-
-    function playTone(freq, time, duration, gainValue = 0.4) {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.type = 'sine';
-        oscillator.frequency.value = freq;
-
-        gainNode.gain.setValueAtTime(gainValue, time);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.start(time);
-        oscillator.stop(time + duration);
-    }
-
-    function scheduleHighlight(measureIndex, delayMs) {
-        const tid = setTimeout(() => {
-            const measures = document.querySelectorAll('.staff-measure');
-            measures.forEach(m => {
-                if (parseInt(m.dataset.measureIndex) === measureIndex) {
-                    m.style.borderColor = '#2563eb';
-                    m.style.backgroundColor = '#eff6ff';
-                } else {
-                    m.style.borderColor = '';
-                    m.style.backgroundColor = '';
-                }
-            });
-        }, Math.max(0, delayMs));
+      await new Promise(resolve => {
+        const tid = setTimeout(resolve, cell.duration * beatDuration * 1000);
         timeoutIds.push(tid);
+      });
     }
 
-    function togglePlay() {
-        if (isPlaying) {
-            stopPlayback();
+    stopPlayback();
+  }
+
+  function playTone(freq, time, duration, gainValue = 0.4) {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = 'sine';
+    oscillator.frequency.value = freq;
+
+    gainNode.gain.setValueAtTime(gainValue, time);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start(time);
+    oscillator.stop(time + duration);
+  }
+
+  function scheduleHighlight(measureIndex, delayMs) {
+    const tid = setTimeout(() => {
+      const measures = document.querySelectorAll('.staff-measure');
+      measures.forEach(m => {
+        if (parseInt(m.dataset.measureIndex) === measureIndex) {
+          m.style.borderColor = '#2563eb';
+          m.style.backgroundColor = '#eff6ff';
         } else {
-            playRhythm();
+          m.style.borderColor = '';
+          m.style.backgroundColor = '';
         }
+      });
+    }, Math.max(0, delayMs));
+    timeoutIds.push(tid);
+  }
+
+  function togglePlay() {
+    if (isPlaying) {
+      stopPlayback();
+    } else {
+      playRhythm();
     }
+  }
 
-    function stopPlayback() {
-        isPlaying = false;
-        updatePlayButton();
-        timeoutIds.forEach(id => clearTimeout(id));
-        timeoutIds = [];
+  function stopPlayback() {
+    isPlaying = false;
+    updatePlayButton();
+    timeoutIds.forEach(id => clearTimeout(id));
+    timeoutIds = [];
 
-        document.querySelectorAll('.staff-measure').forEach(m => {
-            m.style.borderColor = '';
-            m.style.backgroundColor = '';
-        });
+    document.querySelectorAll('.staff-measure').forEach(m => {
+      m.style.borderColor = '';
+      m.style.backgroundColor = '';
+    });
+  }
+
+  function updatePlayButton() {
+    const btn = document.getElementById('play-btn');
+    const icon = document.getElementById('play-icon');
+    const text = document.getElementById('play-text');
+
+    if (isPlaying) {
+      btn.className = "h-9 px-5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-xs";
+      icon.className = "fa-solid fa-pause text-[10px]";
+      text.textContent = 'PAUSAR';
+    } else {
+      btn.className = "h-9 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-xs";
+      icon.className = "fa-solid fa-play text-[10px]";
+      text.textContent = 'REPRODUCIR';
     }
+  }
 
-    function updatePlayButton() {
-        const btn = document.getElementById('play-btn');
-        const icon = document.getElementById('play-icon');
-        const text = document.getElementById('play-text');
+  function updateTempo(value) {
+    currentTempo = parseInt(value);
+    document.getElementById('tempo-value').textContent = currentTempo;
+  }
 
-        if (isPlaying) {
-            btn.className = "h-10 px-6 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-sm";
-            icon.className = "fa-solid fa-pause text-[10px]";
-            text.textContent = 'PAUSAR';
-        } else {
-            btn.className = "h-10 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-sm";
-            icon.className = "fa-solid fa-play text-[10px]";
-            text.textContent = 'REPRODUCIR';
-        }
-    }
+  function init() {
+    renderPalette();
+    renderComposition();
 
-    function updateTempo(value) {
-        currentTempo = parseInt(value);
-        document.getElementById('tempo-value').textContent = currentTempo;
-    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        togglePlay();
+      }
+    });
+  }
 
-    function init() {
-        renderPalette();
-        renderComposition();
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === " ") {
-                e.preventDefault();
-                togglePlay();
-            }
-        });
-    }
-
-    window.onload = init;
+  window.onload = init;
 </script>
+
 </body>
-    <footer id="footer">
-    <ul class="icons">
-        <li><a href="https://wa.me/593987999154" class="icon brands fa-whatsapp"><span class="label">WhatsApp</span></a></li>
-        <li><a href="mailto:sprinkloud@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-        <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-    </ul>
-    <ul class="copyright">
-        <li>&copy; 2026</li>
-        <li><a href="https://sprinkloud.vercel.app/">SPRINKLOUD</a></li>
-    </ul>
-</footer>
 </html>
