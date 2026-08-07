@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Simulador de Piano Interactivo de 5 Octavas | Claves de Sol y Fa - Sprinkloud</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta name="description" content="Practica las notas musicales y acordes en un piano virtual de 5 octavas con lectura simultánea en clave de fa y clave de sol. ¡Ideal para estudiantes de música!">
+  <meta name="keywords" content="piano virtual, notas piano, acordes piano, clave de sol, clave de fa, pentagrama, simulador piano, musica, sprinkloud">
+  <meta name="author" content="Sprinkloud Club Musical">
+  <meta name="robots" content="index, follow">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html">
+  <meta property="og:title" content="Simulador de Piano Interactivo - Sprinkloud">
+  <meta property="og:description" content="Toca las teclas del piano virtual, genera acordes y aprende a leer partituras en clave de fa y clave de sol con VexFlow.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/piano.png">
+
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html">
+  <meta property="twitter:title" content="Simulador de Piano Interactivo - Sprinkloud">
+  <meta property="twitter:description" content="Toca las teclas del piano virtual y aprende a leer partituras en clave de fa y clave de sol.">
+  <meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/piano.png">
+
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/piano.png">
+
+  <!-- VexFlow API para renderizado de partituras -->
+  <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
+
+  <style>
+    :root {
+      --fondo-oscuro: #1A1A2E;
+      --texto-claro: #F5F5F5;
+      --texto-debil: rgba(255, 255, 255, 0.6);
+      --dorado: #F0A500;
+      --contenedor-bg: #2D2D44;
+      --contenedor-borde: #4A4A6A;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-style: normal !important;
+    }
+
+    body {
+      background-color: var(--fondo-oscuro);
+      color: var(--texto-claro);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 12px 12px 90px 12px;
+    }
+
+    h1 {
+      color: var(--texto-claro);
+      font-size: 1.8rem;
+      margin-top: 5px;
+      margin-bottom: 3px;
+      letter-spacing: 2px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      color: var(--dorado);
+      font-size: 0.9rem;
+      margin-top: 0;
+      margin-bottom: 15px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .btn-volver {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      align-self: flex-start;
+      margin-bottom: 15px;
+      padding: 8px 16px;
+      background-color: var(--contenedor-bg);
+      color: var(--texto-claro);
+      border: 2px solid var(--contenedor-borde);
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .btn-volver:hover {
+      transform: translateY(-2px);
+      border-color: var(--dorado);
+      box-shadow: 0 6px 15px rgba(240, 165, 0, 0.2);
+    }
+
+    .panel-juego {
+      background: var(--contenedor-bg);
+      padding: 12px 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      margin-bottom: 15px;
+      text-align: center;
+      width: 100%;
+      max-width: 650px;
+      border: 2px solid var(--contenedor-borde);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-juego {
+      background-color: var(--dorado);
+      color: #1A1A2E;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-juego:hover {
+      transform: scale(1.04);
+      background-color: #ffb703;
+    }
+
+    .btn-juego.activo {
+      background-color: #e63946;
+      color: #ffffff;
+    }
+
+    .feedback-juego {
+      font-size: 0.95rem;
+      font-weight: bold;
+      min-height: 24px;
+      transition: color 0.2s ease;
+    }
+
+    /* Panel de Selección de Acordes */
+    .panel-acordes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .btn-acorde {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--texto-claro);
+      border: 1px solid var(--contenedor-borde);
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-acorde:hover {
+      border-color: var(--dorado);
+      color: var(--dorado);
+    }
+
+    .btn-acorde.seleccionado {
+      background-color: var(--dorado);
+      color: #1A1A2E;
+      border-color: var(--dorado);
+      box-shadow: 0 2px 8px rgba(240, 165, 0, 0.4);
+    }
+
+    .btn-acorde:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: var(--contenedor-borde);
+    }
+
+    /* Contenedor de partituras (Doble pentagrama: Fa y Sol) */
+    .contenedor-pentagrama-bloque {
+      background: #FFFFFF;
+      padding: 7px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 3px solid var(--contenedor-borde);
+      width: 100%;
+      max-width: 360px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #pentagrama {
+      width: 340px;
+      height: 210px;
+    }
+
+    /* Contenedor del Piano Virtual (5 Octavas) */
+    .piano-container {
+      background: #111;
+      padding: 10px;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      border: 4px solid #333;
+      width: 100%;
+      max-width: 920px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      justify-content: center;
+    }
+
+    .piano {
+      position: relative;
+      display: flex;
+      height: 200px;
+      background: #ffffff;
+    }
+
+    .tecla.blanca {
+      width: 26px;
+      height: 200px;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 0 0 4px 4px;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      font-size: 0.6rem;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .tecla.blanca:hover {
+      background: #f0f0f0;
+    }
+
+    .tecla.blanca.activa {
+      background: #90e0ef !important;
+    }
+
+    .tecla.negra {
+      position: absolute;
+      width: 16px;
+      height: 120px;
+      background: #222;
+      border-radius: 0 0 3px 3px;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6px;
+      font-size: 0.5rem;
+      color: #fff;
+    }
+
+    .tecla.negra:hover {
+      background: #444;
+    }
+
+    .tecla.negra.activa {
+      background: #00b4d8 !important;
+    }
+
+    #footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1em 1.5em;
+      background-color: rgba(26, 26, 46, 0.8);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      text-align: center;
+      color: var(--texto-debil);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 100;
+    }
+
+    #footer .icons {
+      list-style: none;
+      margin: 0 0 0.4em 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 1.5em;
+      font-size: 0.9em;
+    }
+
+    #footer .icons a {
+      color: var(--texto-debil);
+      transition: color 0.3s, transform 0.3s;
+      text-decoration: none;
+    }
+
+    #footer .icons a:hover {
+      color: var(--dorado);
+      transform: scale(1.15);
+    }
+
+    #footer .copyright {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.8rem;
+      letter-spacing: 0.10em;
+      display: flex;
+      justify-content: center;
+      gap: 0.5em;
+      flex-wrap: wrap;
+    }
+
+    #footer .copyright a {
+      color: var(--texto-debil);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    #footer .copyright a:hover {
+      color: var(--dorado);
+    }
+  </style>
+</head>
+<body>
+
+<a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
+  Back
+</a>
+
+<h1>SPRINKLOUD</h1>
+<div class="subtitle">CLUB MUSICAL - PIANO VIRTUAL</div>
+
+<div class="panel-juego">
+  <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">🎮 Iniciar Juego de Notas</button>
+  <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier tecla</div>
+
+  <div class="panel-acordes" id="panel-acordes">
+    <button class="btn-acorde seleccionado" onclick="seleccionarTipoAcorde('OFF', this)">OFF</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('M', this)">M</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('m', this)">m</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('7', this)">7</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('sus2', this)">sus2</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('sus4', this)">sus4</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('dim', this)">dim</button>
+    <button class="btn-acorde" onclick="seleccionarTipoAcorde('aug', this)">aug</button>
+  </div>
+</div>
+
+<div class="contenedor-pentagrama-bloque">
+  <div id="pentagrama"></div>
+</div>
+
+<div class="piano-container">
+  <div class="piano" id="teclado-piano"></div>
+</div>
+
+<script>
+  // Definición de las 5 octavas del piano (Desde C2 hasta C7)
+  // Octava 1 y 2 -> Clave de Fa (Bass Clef)
+  // Octava 3, 4 y 5 -> Clave de Sol (Treble Clef)
+  const notasPiano = [
+    // --- OCTAVA 1 (Clave de Fa) ---
+    { nota: "C", alt: "n", freq: 65.41, tipo: "blanca", octava: 1, vfKey: "c/2", clef: "bass", label: "C2" },
+    { nota: "C", alt: "#", freq: 69.30, tipo: "negra", octava: 1, vfKey: "c/2", clef: "bass", label: "C#2" },
+    { nota: "D", alt: "n", freq: 73.42, tipo: "blanca", octava: 1, vfKey: "d/2", clef: "bass", label: "D2" },
+    { nota: "D", alt: "#", freq: 77.78, tipo: "negra", octava: 1, vfKey: "d/2", clef: "bass", label: "D#2" },
+    { nota: "E", alt: "n", freq: 82.41, tipo: "blanca", octava: 1, vfKey: "e/2", clef: "bass", label: "E2" },
+    { nota: "F", alt: "n", freq: 87.31, tipo: "blanca", octava: 1, vfKey: "f/2", clef: "bass", label: "F2" },
+    { nota: "F", alt: "#", freq: 92.50, tipo: "negra", octava: 1, vfKey: "f/2", clef: "bass", label: "F#2" },
+    { nota: "G", alt: "n", freq: 98.00, tipo: "blanca", octava: 1, vfKey: "g/2", clef: "bass", label: "G2" },
+    { nota: "G", alt: "#", freq: 103.83, tipo: "negra", octava: 1, vfKey: "g/2", clef: "bass", label: "G#2" },
+    { nota: "A", alt: "n", freq: 110.00, tipo: "blanca", octava: 1, vfKey: "a/2", clef: "bass", label: "A2" },
+    { nota: "A", alt: "#", freq: 116.54, tipo: "negra", octava: 1, vfKey: "a/2", clef: "bass", label: "A#2" },
+    { nota: "B", alt: "n", freq: 123.47, tipo: "blanca", octava: 1, vfKey: "b/2", clef: "bass", label: "B2" },
+
+    // --- OCTAVA 2 (Clave de Fa) ---
+    { nota: "C", alt: "n", freq: 130.81, tipo: "blanca", octava: 2, vfKey: "c/3", clef: "bass", label: "C3" },
+    { nota: "C", alt: "#", freq: 138.59, tipo: "negra", octava: 2, vfKey: "c/3", clef: "bass", label: "C#3" },
+    { nota: "D", alt: "n", freq: 146.83, tipo: "blanca", octava: 2, vfKey: "d/3", clef: "bass", label: "D3" },
+    { nota: "D", alt: "#", freq: 155.56, tipo: "negra", octava: 2, vfKey: "d/3", clef: "bass", label: "D#3" },
+    { nota: "E", alt: "n", freq: 164.81, tipo: "blanca", octava: 2, vfKey: "e/3", clef: "bass", label: "E3" },
+    { nota: "F", alt: "n", freq: 174.61, tipo: "blanca", octava: 2, vfKey: "f/3", clef: "bass", label: "F3" },
+    { nota: "F", alt: "#", freq: 185.00, tipo: "negra", octava: 2, vfKey: "f/3", clef: "bass", label: "F#3" },
+    { nota: "G", alt: "n", freq: 196.00, tipo: "blanca", octava: 2, vfKey: "g/3", clef: "bass", label: "G3" },
+    { nota: "G", alt: "#", freq: 207.65, tipo: "negra", octava: 2, vfKey: "g/3", clef: "bass", label: "G#3" },
+    { nota: "A", alt: "n", freq: 220.00, tipo: "blanca", octava: 2, vfKey: "a/3", clef: "bass", label: "A3" },
+    { nota: "A", alt: "#", freq: 233.08, tipo: "negra", octava: 2, vfKey: "a/3", clef: "bass", label: "A#3" },
+    { nota: "B", alt: "n", freq: 246.94, tipo: "blanca", octava: 2, vfKey: "b/3", clef: "bass", label: "B3" },
+
+    // --- OCTAVA 3 (Clave de Sol) ---
+    { nota: "C", alt: "n", freq: 261.63, tipo: "blanca", octava: 3, vfKey: "c/4", clef: "treble", label: "C4" },
+    { nota: "C", alt: "#", freq: 277.18, tipo: "negra", octava: 3, vfKey: "c/4", clef: "treble", label: "C#4" },
+    { nota: "D", alt: "n", freq: 293.66, tipo: "blanca", octava: 3, vfKey: "d/4", clef: "treble", label: "D4" },
+    { nota: "D", alt: "#", freq: 311.13, tipo: "negra", octava: 3, vfKey: "d/4", clef: "treble", label: "D#4" },
+    { nota: "E", alt: "n", freq: 329.63, tipo: "blanca", octava: 3, vfKey: "e/4", clef: "treble", label: "E4" },
+    { nota: "F", alt: "n", freq: 349.23, tipo: "blanca", octava: 3, vfKey: "f/4", clef: "treble", label: "F4" },
+    { nota: "F", alt: "#", freq: 369.99, tipo: "negra", octava: 3, vfKey: "f/4", clef: "treble", label: "F#4" },
+    { nota: "G", alt: "n", freq: 392.00, tipo: "blanca", octava: 3, vfKey: "g/4", clef: "treble", label: "G4" },
+    { nota: "G", alt: "#", freq: 415.30, tipo: "negra", octava: 3, vfKey: "g/4", clef: "treble", label: "G#4" },
+    { nota: "A", alt: "n", freq: 440.00, tipo: "blanca", octava: 3, vfKey: "a/4", clef: "treble", label: "A4" },
+    { nota: "A", alt: "#", freq: 466.16, tipo: "negra", octava: 3, vfKey: "a/4", clef: "treble", label: "A#4" },
+    { nota: "B", alt: "n", freq: 493.88, tipo: "blanca", octava: 3, vfKey: "b/4", clef: "treble", label: "B4" },
+
+    // --- OCTAVA 4 (Clave de Sol) ---
+    { nota: "C", alt: "n", freq: 523.25, tipo: "blanca", octava: 4, vfKey: "c/5", clef: "treble", label: "C5" },
+    { nota: "C", alt: "#", freq: 554.37, tipo: "negra", octava: 4, vfKey: "c/5", clef: "treble", label: "C#5" },
+    { nota: "D", alt: "n", freq: 587.33, tipo: "blanca", octava: 4, vfKey: "d/5", clef: "treble", label: "D5" },
+    { nota: "D", alt: "#", freq: 622.25, tipo: "negra", octava: 4, vfKey: "d/5", clef: "treble", label: "D#5" },
+    { nota: "E", alt: "n", freq: 659.25, tipo: "blanca", octava: 4, vfKey: "e/5", clef: "treble", label: "E5" },
+    { nota: "F", alt: "n", freq: 698.46, tipo: "blanca", octava: 4, vfKey: "f/5", clef: "treble", label: "F5" },
+    { nota: "F", alt: "#", freq: 739.99, tipo: "negra", octava: 4, vfKey: "f/5", clef: "treble", label: "F#5" },
+    { nota: "G", alt: "n", freq: 783.99, tipo: "blanca", octava: 4, vfKey: "g/5", clef: "treble", label: "G5" },
+    { nota: "G", alt: "#", freq: 830.61, tipo: "negra", octava: 4, vfKey: "g/5", clef: "treble", label: "G#5" },
+    { nota: "A", alt: "n", freq: 880.00, tipo: "blanca", octava: 4, vfKey: "a/5", clef: "treble", label: "A5" },
+    { nota: "A", alt: "#", freq: 932.33, tipo: "negra", octava: 4, vfKey: "a/5", clef: "treble", label: "A#5" },
+    { nota: "B", alt: "n", freq: 987.77, tipo: "blanca", octava: 4, vfKey: "b/5", clef: "treble", label: "B5" },
+
+    // --- OCTAVA 5 (Clave de Sol) ---
+    { nota: "C", alt: "n", freq: 1046.50, tipo: "blanca", octava: 5, vfKey: "c/6", clef: "treble", label: "C6" },
+    { nota: "C", alt: "#", freq: 1108.73, tipo: "negra", octava: 5, vfKey: "c/6", clef: "treble", label: "C#6" },
+    { nota: "D", alt: "n", freq: 1174.66, tipo: "blanca", octava: 5, vfKey: "d/6", clef: "treble", label: "D6" },
+    { nota: "D", alt: "#", freq: 1244.51, tipo: "negra", octava: 5, vfKey: "d/6", clef: "treble", label: "D#6" },
+    { nota: "E", alt: "n", freq: 1318.51, tipo: "blanca", octava: 5, vfKey: "e/6", clef: "treble", label: "E6" },
+  ];
+
+  // Estructuras de intervalos en semitonos para cada tipo de acorde
+  const formulasAcordes = {
+    'M': [0, 4, 7],         // Mayor
+    'm': [0, 3, 7],         // Menor
+    '7': [0, 4, 7, 10],     // Dominante 7
+    'sus2': [0, 2, 7],      // Suspendido 2
+    'sus4': [0, 5, 7],      // Suspendido 4
+    'dim': [0, 3, 6],       // Disminuido
+    'aug': [0, 4, 8]        // Aumentado
+  };
+
+  let ctxAudio = null;
+  let juegoActivo = false;
+  let notaObjetivo = null;
+  let tipoAcordeActivo = 'OFF';
+
+  const poolNotasJuego = notasPiano.filter(n => n.alt === 'n');
+  const { Renderer, Stave, StaveNote, Accidental, Formatter } = Vex.Flow;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    construirTecladoPiano();
+    renderizarDoblePentagrama([{ vfKey: 'c/4', alt: 'n', clef: 'treble' }]);
+  });
+
+  function seleccionarTipoAcorde(tipo, boton) {
+    tipoAcordeActivo = tipo;
+    document.querySelectorAll('.btn-acorde').forEach(btn => btn.classList.remove('seleccionado'));
+    boton.classList.add('seleccionado');
+  }
+
+  function renderizarDoblePentagrama(listaNotas) {
+    const divPentagrama = document.getElementById('pentagrama');
+    divPentagrama.innerHTML = "";
+
+    const renderer = new Renderer(divPentagrama, Renderer.Backends.SVG);
+    renderer.resize(340, 200);
+    const context = renderer.getContext();
+
+    const staveTreble = new Stave(10, 10, 310);
+    staveTreble.addClef("treble");
+    staveTreble.setContext(context).draw();
+
+    const staveBass = new Stave(10, 100, 310);
+    staveBass.addClef("bass");
+    staveBass.setContext(context).draw();
+
+    const brace = new Vex.Flow.StaveConnector(staveTreble, staveBass).setType(3);
+    const lineLeft = new Vex.Flow.StaveConnector(staveTreble, staveBass).setType(1);
+    const lineRight = new Vex.Flow.StaveConnector(staveTreble, staveBass).setType(6);
+    brace.setContext(context).draw();
+    lineLeft.setContext(context).draw();
+    lineRight.setContext(context).draw();
+
+    // Agrupar notas por clave
+    const notasTreble = listaNotas.filter(n => n.clef === 'treble');
+    const notasBass = listaNotas.filter(n => n.clef === 'bass');
+
+    if (notasTreble.length > 0) {
+      const keysTreble = notasTreble.map(n => n.vfKey);
+      const notaStaveTreble = new StaveNote({
+        keys: keysTreble,
+        duration: "q",
+        clef: "treble"
+      });
+
+      notasTreble.forEach((n, idx) => {
+        if (n.alt === '#') {
+          notaStaveTreble.addModifier(new Accidental("#"), idx);
+        }
+      });
+
+      Formatter.FormatAndDraw(context, staveTreble, [notaStaveTreble]);
+    }
+
+    if (notasBass.length > 0) {
+      const keysBass = notasBass.map(n => n.vfKey);
+      const notaStaveBass = new StaveNote({
+        keys: keysBass,
+        duration: "q",
+        clef: "bass"
+      });
+
+      notasBass.forEach((n, idx) => {
+        if (n.alt === '#') {
+          notaStaveBass.addModifier(new Accidental("#"), idx);
+        }
+      });
+
+      Formatter.FormatAndDraw(context, staveBass, [notaStaveBass]);
+    }
+  }
+
+  function obtenerContextoAudio() {
+    if (!ctxAudio) {
+      ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return ctxAudio;
+  }
+
+  function emitirSonidoPiano(frecuencia) {
+    const ctx = obtenerContextoAudio();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(frecuencia, ctx.currentTime);
+
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.04);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 1.5);
+  }
+
+  function emitirSonidoError() {
+    const ctx = obtenerContextoAudio();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(130, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(70, ctx.currentTime + 0.3);
+
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.3);
+  }
+
+  function construirTecladoPiano() {
+    const contenedor = document.getElementById('teclado-piano');
+    contenedor.innerHTML = "";
+
+    let contadorBlancas = 0;
+    const anchoTeclaBlanca = 26;
+
+    notasPiano.forEach((item, index) => {
+      const teclaEl = document.createElement('div');
+      teclaEl.className = `tecla ${item.tipo}`;
+      teclaEl.innerText = (item.tipo === 'blanca') ? item.label : "";
+      teclaEl.dataset.index = index;
+
+      if (item.tipo === 'blanca') {
+        teclaEl.style.left = (contadorBlancas * anchoTeclaBlanca) + 'px';
+        contadorBlancas++;
+      } else {
+        const posicionNegra = ((contadorBlancas - 1) * anchoTeclaBlanca) + (anchoTeclaBlanca - 8);
+        teclaEl.style.left = posicionNegra + 'px';
+      }
+
+      teclaEl.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        manejarAccionTecla(index);
+      });
+
+      contenedor.appendChild(teclaEl);
+    });
+
+    contenedor.style.width = (contadorBlancas * anchoTeclaBlanca) + 'px';
+  }
+
+  function generarSiguienteNotaJuego() {
+    let nuevaNota;
+    do {
+      nuevaNota = poolNotasJuego[Math.floor(Math.random() * poolNotasJuego.length)];
+    } while (notaObjetivo && nuevaNota.vfKey === notaObjetivo.vfKey && nuevaNota.clef === notaObjetivo.clef);
+
+    notaObjetivo = nuevaNota;
+    renderizarDoblePentagrama([{ vfKey: notaObjetivo.vfKey, alt: notaObjetivo.alt, clef: notaObjetivo.clef }]);
+
+    const feedbackEl = document.getElementById('feedback-juego');
+    feedbackEl.textContent = `🎯 ¡Toca la nota ${notaObjetivo.label} en el piano!`;
+    feedbackEl.style.color = "var(--dorado)";
+  }
+
+  function toggleJuego() {
+    juegoActivo = !juegoActivo;
+    const btn = document.getElementById('btn-juego');
+    const feedbackEl = document.getElementById('feedback-juego');
+    const botonesAcorde = document.querySelectorAll('.btn-acorde');
+
+    if (juegoActivo) {
+      btn.textContent = "🛑 Detener Juego";
+      btn.classList.add('activo');
+      botonesAcorde.forEach(b => b.disabled = true);
+      generarSiguienteNotaJuego();
+    } else {
+      btn.textContent = "🎮 Iniciar Juego de Notas";
+      btn.classList.remove('activo');
+      botonesAcorde.forEach(b => b.disabled = false);
+      notaObjetivo = null;
+      feedbackEl.textContent = "Modo libre: Toca cualquier tecla";
+      feedbackEl.style.color = "var(--texto-debil)";
+      renderizarDoblePentagrama([{ vfKey: 'c/4', alt: 'n', clef: 'treble' }]);
+    }
+  }
+
+  function obtenerNotasAcorde(indexRaiz, tipo) {
+    const intervalos = formulasAcordes[tipo];
+    if (!intervalos) return [notasPiano[indexRaiz]];
+
+    const componentes = [];
+    intervalos.forEach(semitonos => {
+      const indexMapeado = indexRaiz + semitonos;
+      if (indexMapeado < notasPiano.length) {
+        componentes.push(notasPiano[indexMapeado]);
+      }
+    });
+    return componentes;
+  }
+
+  function manejarAccionTecla(indexNota) {
+    document.querySelectorAll('.tecla').forEach(el => el.classList.remove('activa'));
+    const notaPresionada = notasPiano[indexNota];
+
+    if (!juegoActivo) {
+      // Evaluar si aplica formación de acordes (Octavas 1 o 2)
+      const esOctavaGrave = notaPresionada.octava === 1 || notaPresionada.octava === 2;
+
+      if (tipoAcordeActivo !== 'OFF' && esOctavaGrave) {
+        const listaAcorde = obtenerNotasAcorde(indexNota, tipoAcordeActivo);
+
+        listaAcorde.forEach(n => {
+          emitirSonidoPiano(n.freq);
+          const elTecla = document.querySelector(`.tecla[data-index="${notasPiano.indexOf(n)}"]`);
+          if (elTecla) elTecla.classList.add('activa');
+        });
+
+        renderizarDoblePentagrama(listaAcorde);
+      } else {
+        emitirSonidoPiano(notaPresionada.freq);
+        const elTecla = document.querySelector(`.tecla[data-index="${indexNota}"]`);
+        if (elTecla) elTecla.classList.add('activa');
+        renderizarDoblePentagrama([notaPresionada]);
+      }
+      return;
+    }
+
+    // MODO JUEGO
+    const elTecla = document.querySelector(`.tecla[data-index="${indexNota}"]`);
+    if (elTecla) elTecla.classList.add('activa');
+
+    const feedbackEl = document.getElementById('feedback-juego');
+    const coincide = (notaPresionada.vfKey === notaObjetivo.vfKey && notaPresionada.clef === notaObjetivo.clef);
+
+    if (coincide) {
+      emitirSonidoPiano(notaPresionada.freq);
+      feedbackEl.textContent = "¡Correcto! 🎉";
+      feedbackEl.style.color = "#4ECA64";
+
+      setTimeout(() => {
+        if (juegoActivo) generarSiguienteNotaJuego();
+      }, 700);
+    } else {
+      emitirSonidoError();
+      feedbackEl.textContent = "¡Inténtalo de nuevo! ❌";
+      feedbackEl.style.color = "#FF4D4D";
+
+      setTimeout(() => {
+        if (juegoActivo) {
+          feedbackEl.textContent = `🎯 ¡Toca la nota ${notaObjetivo.label} en el piano!`;
+          feedbackEl.style.color = "var(--dorado)";
+        }
+      }, 900);
+    }
+  }
+</script>
+
+<footer id="footer">
+  <ul class="icons">
+    <li><a href="https://wa.me/593987999154" class="icon brands fa-whatsapp"><span class="label">WhatsApp</span></a></li>
+    <li><a href="mailto:sprinkloud@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+    <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+  </ul>
+  <ul class="copyright">
+    <li>&copy; 2026</li>
+    <li><a href="https://sprinkloud.vercel.app/">SPRINKLOUD</a></li>
+  </ul>
+</footer>
+</body>
+</html>
