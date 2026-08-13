@@ -53,6 +53,7 @@
       align-items: center;
       margin: 0;
       padding: 12px 12px 90px 12px;
+      min-height: 100vh;
     }
 
     h1 {
@@ -186,7 +187,7 @@
       border-color: var(--contenedor-borde);
     }
 
-    /* Contenedor de partituras (Doble pentagrama: Fa y Sol) */
+    /* Contenedor de partituras (Doble pentagrama) */
     .contenedor-pentagrama-bloque {
       background: #FFFFFF;
       padding: 7px;
@@ -208,42 +209,48 @@
       height: 210px;
     }
 
-    /* Contenedor del Piano Virtual (5 Octavas) */
+    /* Contenedor del Piano Virtual Maximizado */
     .piano-container {
       background: #111;
-      padding: 10px;
+      padding: 12px 8px;
       border-radius: 15px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border: 4px solid #333;
       width: 100%;
-      max-width: 920px;
+      max-width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       display: flex;
       justify-content: center;
+      box-sizing: border-border;
     }
 
     .piano {
       position: relative;
       display: flex;
-      height: 200px;
+      width: 100%;
+      min-width: 720px; /* Previene deformación extrema en pantallas ultra pequeñas */
+      height: clamp(180px, 30vh, 280px); /* Altura adaptativa según el alto de la pantalla */
       background: #ffffff;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .tecla.blanca {
-      width: 26px;
-      height: 200px;
+      position: absolute;
+      height: 100%;
       background: #ffffff;
       border: 1px solid #ccc;
-      border-radius: 0 0 4px 4px;
+      border-radius: 0 0 5px 5px;
       z-index: 1;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      padding-bottom: 8px;
-      font-size: 0.6rem;
+      padding-bottom: 10px;
+      font-size: clamp(0.5rem, 0.8vw, 0.75rem);
       color: #333;
       font-weight: bold;
+      touch-action: manipulation;
     }
 
     .tecla.blanca:hover {
@@ -252,21 +259,23 @@
 
     .tecla.blanca.activa {
       background: #90e0ef !important;
+      box-shadow: inset 0 -4px 10px rgba(0,0,0,0.2);
     }
 
     .tecla.negra {
       position: absolute;
-      width: 16px;
-      height: 120px;
+      height: 60%;
       background: #222;
-      border-radius: 0 0 3px 3px;
+      border-radius: 0 0 4px 4px;
       z-index: 2;
       display: flex;
       align-items: flex-end;
       justify-content: center;
       padding-bottom: 6px;
-      font-size: 0.5rem;
+      font-size: clamp(0.4rem, 0.6vw, 0.6rem);
       color: #fff;
+      box-shadow: 2px 3px 6px rgba(0,0,0,0.5);
+      touch-action: manipulation;
     }
 
     .tecla.negra:hover {
@@ -282,8 +291,8 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      padding: 1em 1.5em;
-      background-color: rgba(26, 26, 46, 0.8);
+      padding: 0.8em 1.5em;
+      background-color: rgba(26, 26, 46, 0.9);
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
       text-align: center;
@@ -370,9 +379,6 @@
 </div>
 
 <script>
-  // Definición de las 5 octavas del piano (Desde C2 hasta C7)
-  // Octava 1 y 2 -> Clave de Fa (Bass Clef)
-  // Octava 3, 4 y 5 -> Clave de Sol (Treble Clef)
   const notasPiano = [
     // --- OCTAVA 1 (Clave de Fa) ---
     { nota: "C", alt: "n", freq: 65.41, tipo: "blanca", octava: 1, vfKey: "c/2", clef: "bass", label: "C2" },
@@ -438,15 +444,14 @@
     { nota: "E", alt: "n", freq: 1318.51, tipo: "blanca", octava: 5, vfKey: "e/6", clef: "treble", label: "E6" },
   ];
 
-  // Estructuras de intervalos en semitonos para cada tipo de acorde
   const formulasAcordes = {
-    'M': [0, 4, 7],         // Mayor
-    'm': [0, 3, 7],         // Menor
-    '7': [0, 4, 7, 10],     // Dominante 7
-    'sus2': [0, 2, 7],      // Suspendido 2
-    'sus4': [0, 5, 7],      // Suspendido 4
-    'dim': [0, 3, 6],       // Disminuido
-    'aug': [0, 4, 8]        // Aumentado
+    'M': [0, 4, 7],
+    'm': [0, 3, 7],
+    '7': [0, 4, 7, 10],
+    'sus2': [0, 2, 7],
+    'sus4': [0, 5, 7],
+    'dim': [0, 3, 6],
+    'aug': [0, 4, 8]
   };
 
   let ctxAudio = null;
@@ -461,6 +466,9 @@
     construirTecladoPiano();
     renderizarDoblePentagrama([{ vfKey: 'c/4', alt: 'n', clef: 'treble' }]);
   });
+
+  // Recalcula el ancho de las teclas al cambiar el tamaño de la pantalla
+  window.addEventListener('resize', construirTecladoPiano);
 
   function seleccionarTipoAcorde(tipo, boton) {
     tipoAcordeActivo = tipo;
@@ -491,7 +499,6 @@
     lineLeft.setContext(context).draw();
     lineRight.setContext(context).draw();
 
-    // Agrupar notas por clave
     const notasTreble = listaNotas.filter(n => n.clef === 'treble');
     const notasBass = listaNotas.filter(n => n.clef === 'bass');
 
@@ -587,8 +594,12 @@
     const contenedor = document.getElementById('teclado-piano');
     contenedor.innerHTML = "";
 
+    const totalBlancas = notasPiano.filter(n => n.tipo === 'blanca').length;
+    const anchoContenedor = contenedor.clientWidth;
+    const anchoTeclaBlanca = anchoContenedor / totalBlancas;
+    const anchoTeclaNegra = anchoTeclaBlanca * 0.62;
+
     let contadorBlancas = 0;
-    const anchoTeclaBlanca = 26;
 
     notasPiano.forEach((item, index) => {
       const teclaEl = document.createElement('div');
@@ -597,11 +608,13 @@
       teclaEl.dataset.index = index;
 
       if (item.tipo === 'blanca') {
-        teclaEl.style.left = (contadorBlancas * anchoTeclaBlanca) + 'px';
+        teclaEl.style.width = `${anchoTeclaBlanca}px`;
+        teclaEl.style.left = `${contadorBlancas * anchoTeclaBlanca}px`;
         contadorBlancas++;
       } else {
-        const posicionNegra = ((contadorBlancas - 1) * anchoTeclaBlanca) + (anchoTeclaBlanca - 8);
-        teclaEl.style.left = posicionNegra + 'px';
+        teclaEl.style.width = `${anchoTeclaNegra}px`;
+        const posicionNegra = (contadorBlancas * anchoTeclaBlanca) - (anchoTeclaNegra / 2);
+        teclaEl.style.left = `${posicionNegra}px`;
       }
 
       teclaEl.addEventListener('pointerdown', (e) => {
@@ -611,8 +624,6 @@
 
       contenedor.appendChild(teclaEl);
     });
-
-    contenedor.style.width = (contadorBlancas * anchoTeclaBlanca) + 'px';
   }
 
   function generarSiguienteNotaJuego() {
@@ -670,7 +681,6 @@
     const notaPresionada = notasPiano[indexNota];
 
     if (!juegoActivo) {
-      // Evaluar si aplica formación de acordes (Octavas 1 o 2)
       const esOctavaGrave = notaPresionada.octava === 1 || notaPresionada.octava === 2;
 
       if (tipoAcordeActivo !== 'OFF' && esOctavaGrave) {
