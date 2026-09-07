@@ -1,584 +1,1116 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <title>Aprende Ritmo Musical Fácil — Entrena tu Oído y Lectura Rítmica | Sprinkloud</title>
+<title>Aprende Ritmo Musical Fácil — Entrena tu Oído y Lectura Rítmica | Sprinkloud</title>
 
-  <meta name="description" content="¿No sabes si estás leyendo bien tus figuras musicales? Crea tus propios ritmos, escucha el tiempo exacto y memoriza el pulso de corcheas y semicorcheas sin complicaciones. ¡Practica gratis aquí!">
-  <meta name="keywords" content="ritmo, musica, figuras musicales, tiempo, corchea, semicorchea, aprender ritmo musical, dictado ritmico, practica de ritmo, estudio ritmico, metronomo con figuras">
+<meta name="description" content="¿No sabes si estás leyendo bien tus figuras musicales? Crea tus propios ritmos, escucha el tiempo exacto y memoriza el pulso de corcheas y semicorcheas sin complicaciones. ¡Practica gratis aquí!">
+<meta name="keywords" content="ritmo, musica, figuras musicales, tiempo, corchea, semicorchea, aprender ritmo musical, dictado ritmico, practica de ritmo, estudio ritmico, metronomo con figuras, celulas ritmicas">
+<meta name="theme-color" content="#f4f3ef">
 
-  <!-- Open Graph para Redes Sociales / WhatsApp / Google Preview -->
-  <meta property="og:title" content="Aprende Ritmo Musical Fácil — Entrena tu Oído y Lectura Rítmica | Sprinkloud">
-  <meta property="og:description" content="¿Dudas si lees bien las figuras musicales? Crea secuencias rítmicas, escucha el tiempo exacto y memoriza la música sintiendo el pulso.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html">
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/ritmo1.png">
-  <meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/ritmo1.png">
+<meta property="og:title" content="Aprende Ritmo Musical Fácil — Entrena tu Oído y Lectura Rítmica | Sprinkloud">
+<meta property="og:description" content="¿Dudas si lees bien las figuras musicales? Crea secuencias rítmicas, escucha el tiempo exacto y memoriza la música sintiendo el pulso.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/ritmo1.png">
+<meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/ritmo1.png">
 
-  
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --paper:#f4f3ef;
+  --card:#ffffff;
+  --ink:#17181c;
+  --muted:#71727a;
+  --line:#e3e1da;
+  --line-soft:#efeee9;
+  --accent:#cf2e64;
+  --accent-soft:#fdeff4;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+  overscroll-behavior:none;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 
-  <!-- Fuentes Google: Inter para texto y Noto Music / Bravura para asegurar notas en Android e iOS -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Music&display=swap" rel="stylesheet">
+/* ---------- Estructura ---------- */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.stage{display:flex;flex-direction:column;min-height:0;flex:1}
+.work{display:flex;flex-direction:column;min-height:0;flex:1;order:1}
 
-  <style>
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      background-color: #f8fafc;
-      touch-action: manipulation;
-    }
+/* ---------- Cabecera ---------- */
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 16px;border-bottom:1px solid var(--line);background:var(--card);
+}
+.title{display:flex;align-items:baseline;gap:10px;min-width:0}
+.title h1{font-size:16px;font-weight:600;letter-spacing:-.01em;margin:0;white-space:nowrap}
+.title .meter{font-family:Newsreader,Georgia,serif;font-size:15px;color:var(--muted)}
+.back{
+  display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);
+  font-size:13px;font-weight:500;text-decoration:none;color:var(--ink);white-space:nowrap;
+}
+.back:active{background:var(--line-soft)}
 
-    /* Clase optimizada para destacar visualmente los símbolos musicales */
-    .music-symbol {
-      font-family: 'Noto Music', 'Bravura Text', serif;
-      line-height: 1;
-      display: inline-block;
-      vertical-align: middle;
-    }
+/* ---------- Transporte ---------- */
+.transport{background:var(--card);border-bottom:1px solid var(--line)}
+.tline{display:flex;align-items:center;gap:14px;padding:10px 16px}
+.tline+.tline{border-top:1px solid var(--line-soft)}
 
-    /* Estilo del Botón Volver para móvil y desktop */
-    .btn-volver {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 16px;
-      min-height: 40px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #0f172a;
-      background-color: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 9999px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    .btn-volver:active {
-      transform: scale(0.96);
-      background-color: #f1f5f9;
-    }
+.beats{display:flex;gap:7px;align-items:center}
+.beat{
+  width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:Newsreader,Georgia,serif;font-size:14px;color:var(--muted);
+  transition:background-color .06s linear,color .06s linear,border-color .06s linear;
+}
+.beat.lit{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.beat.lit.strong{background:var(--accent);border-color:var(--accent)}
 
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      background: #cbd5e1;
-      height: 4px;
-      border-radius: 2px;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #0f172a;
-      cursor: pointer;
-      transition: transform 0.1s ease;
-    }
+.now{
+  flex:1;min-width:0;font-family:Newsreader,Georgia,serif;font-size:24px;line-height:1.1;
+  color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.now.idle{color:var(--muted);font-size:14px;font-family:Inter,sans-serif}
 
-    .staff-measure {
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
+.play{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  height:44px;padding:0 22px;border-radius:999px;background:var(--ink);color:var(--paper);
+  font-size:14px;font-weight:500;min-width:132px;
+}
+.play:active{transform:scale(.98)}
+.play.on{background:var(--accent)}
+.icon-btn{
+  width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--card);
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.icon-btn:active{background:var(--line-soft)}
 
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+.opts{overflow-x:auto;scrollbar-width:none}
+.opts::-webkit-scrollbar{display:none}
+.opts{-ms-overflow-style:none}
+
+.tempo{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.tempo label{font-size:12px;color:var(--muted)}
+.tempo output{font-family:Newsreader,Georgia,serif;font-size:19px;min-width:34px;text-align:right}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:112px;height:24px;background:none;
+}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--line);border-radius:2px}
+input[type=range]::-moz-range-track{height:3px;background:var(--line);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;margin-top:-10px;border-radius:50%;
+  background:var(--ink);border:3px solid var(--card);box-shadow:0 0 0 1px var(--line);
+}
+input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;background:var(--ink);border:3px solid var(--card);
+}
+
+.chip{
+  display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;flex:0 0 auto;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);
+  font-size:13px;color:var(--muted);white-space:nowrap;
+}
+.chip:active{background:var(--line-soft)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--line);flex:0 0 auto}
+.chip[aria-pressed=true]{color:var(--ink);border-color:var(--ink)}
+.chip[aria-pressed=true] .dot{background:var(--accent)}
+
+/* ---------- Partitura ---------- */
+.score{flex:1;min-height:0;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+.score-inner{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+
+.bar{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:6px 10px 10px;transition:border-color .12s,background-color .12s;
+}
+.bar.playing{border-color:var(--accent);background:var(--accent-soft)}
+.bar-head{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:11px;color:var(--muted);padding:4px 4px 6px;
+}
+.bar-head .n{font-family:Newsreader,Georgia,serif;font-size:14px;color:var(--ink)}
+.bar-row{display:flex;align-items:stretch;gap:6px}
+
+.slot{
+  position:relative;border-radius:10px;padding:2px 0;
+  display:flex;align-items:center;justify-content:center;min-width:0;
+  border:1px solid transparent;
+}
+.slot:hover{border-color:var(--line);background:var(--line-soft)}
+.slot .rsvg{height:78px;width:auto;max-width:100%;color:var(--ink)}
+.slot .kill{
+  position:absolute;top:0;right:0;width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);
+  opacity:0;transition:opacity .12s;
+}
+.slot:hover .kill,.slot:focus-within .kill{opacity:1}
+.slot .kill:hover{color:var(--accent);background:var(--accent-soft)}
+.gap{
+  flex:1;min-width:40px;border:1px dashed var(--line);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--muted);text-align:center;padding:4px;
+}
+
+.nt{color:var(--ink);transition:color .05s linear}
+.nt.on{color:var(--accent)}
+.syl{font-family:Newsreader,Georgia,serif}
+
+.empty{
+  background:var(--card);border:1px dashed var(--line);border-radius:var(--radius);
+  padding:26px 20px;text-align:center;
+}
+.empty p{margin:0 0 4px;font-size:15px}
+.empty small{color:var(--muted);font-size:13px}
+.examples{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.example{
+  border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;background:var(--paper);
+}
+.example:active{background:var(--line-soft)}
+
+/* ---------- Barra de estado ---------- */
+.status{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 16px;border-top:1px solid var(--line);background:var(--card);
+  font-size:12px;color:var(--muted);
+}
+.status .keys{display:none}
+.status strong{font-weight:500;color:var(--ink)}
+.status.alert strong{color:var(--accent)}
+
+/* ---------- Paleta ---------- */
+.panel{
+  order:2;background:var(--card);border-top:1px solid var(--line);
+  display:flex;flex-direction:column;min-height:0;max-height:47vh;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.panel-top{display:flex;align-items:center;gap:8px;padding:8px 12px 0}
+.tabs{display:flex;gap:4px;flex:1;min-width:0}
+.tab{
+  flex:1;padding:9px 6px;border-radius:9px;font-size:13px;font-weight:500;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tab[aria-selected=true]{background:var(--ink);color:var(--paper)}
+.hint{margin:8px 12px 0;font-size:12px;color:var(--muted);line-height:1.4}
+
+.palette{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(126px,1fr));gap:8px;
+  padding:10px 12px 12px;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch;
+}
+.cell{
+  position:relative;border:1px solid var(--line);border-radius:12px;background:var(--card);
+  padding:6px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;
+  min-height:96px;justify-content:center;
+}
+.cell:active{background:var(--accent-soft);border-color:var(--accent)}
+.cell .rsvg{height:62px;width:auto;max-width:100%}
+.cell .len{font-size:11px;color:var(--muted)}
+.cell .cname{font-size:12px;color:var(--ink)}
+.cell .hear{
+  position:absolute;top:2px;right:2px;width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);
+}
+.cell .hear:hover{color:var(--accent);background:var(--accent-soft)}
+.cell .num{position:absolute;top:5px;left:7px;font-size:10px;color:var(--line);font-variant-numeric:tabular-nums}
+
+.panel-foot{
+  display:flex;gap:8px;padding:0 12px 12px;overflow-x:auto;scrollbar-width:none;
+}
+.panel-foot::-webkit-scrollbar{display:none}
+.tool{
+  flex:0 0 auto;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;
+  font-size:13px;background:var(--card);display:inline-flex;align-items:center;gap:7px;
+}
+.tool:active{background:var(--line-soft)}
+.tool.solid{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ---------- Dictado ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(23,24,28,.42);display:none;
+  align-items:flex-end;justify-content:center;z-index:40;
+}
+.overlay.open{display:flex}
+.sheet{
+  background:var(--card);width:100%;max-width:560px;border-radius:18px 18px 0 0;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;
+}
+.sheet h2{margin:0 0 2px;font-size:17px;font-weight:600}
+.sheet .sub{margin:0 0 16px;font-size:13px;color:var(--muted)}
+.sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.quiz-opt{
+  border:1px solid var(--line);border-radius:12px;padding:8px 4px;background:var(--card);
+  display:flex;align-items:center;justify-content:center;min-height:88px;
+}
+.quiz-opt .rsvg{height:64px;width:auto;max-width:100%}
+.quiz-opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.quiz-opt.wrong{opacity:.4}
+.quiz-actions{display:flex;gap:8px;align-items:center}
+.verdict{font-size:14px;min-height:22px;margin:0 0 10px}
+.verdict b{font-weight:500;color:var(--accent)}
+.score-line{font-size:13px;color:var(--muted)}
+
+/* ---------- Escritorio ---------- */
+@media (min-width:860px){
+  .stage{flex-direction:row}
+  .panel{
+    order:0;max-height:none;width:308px;flex:0 0 308px;
+    border-top:0;border-right:1px solid var(--line);
+  }
+  .palette{grid-template-columns:1fr 1fr}
+  .work{order:1;flex:1}
+  .score{padding:24px}
+  .status .keys{display:block}
+  .now{font-size:28px}
+  .tline{padding:12px 20px}
+  .top{padding:12px 20px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
 </head>
-<body class="text-slate-700 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<body>
 
-<!-- Sidebar / Panel de Controles -->
-<aside class="w-full md:w-80 bg-white border-b md:border-b-0 md:border-r border-slate-200 shadow-sm flex flex-col justify-between shrink-0">
-  <div class="p-4 md:p-6 flex-1 flex flex-col min-h-0">
-
-    <!-- Encabezado con Botón Back -->
-    <header class="mb-4 md:mb-6 flex items-center justify-between">
-      <div>
-        <span class="text-[10px] tracking-[0.2em] text-slate-400 font-medium block mb-0.5">ESTUDIO RÍTMICO</span>
-        <h1 class="text-base md:text-lg font-normal tracking-tight text-slate-900">SPRINKLOUD<span class="text-slate-400 font-light text-xs md:text-sm"> 4/4</span></h1>
-      </div>
-      <a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
-        <i class="fa-solid fa-arrow-left mr-2 text-xs"></i> Back
-      </a>
-    </header>
-
-    <!-- Pestañas -->
-    <nav class="flex border-b border-slate-200 mb-4 text-[11px] font-medium tracking-wide">
-      <button onclick="switchTab('base')" id="tab-base" class="flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors">
-        Rítmicas
-      </button>
-      <button onclick="switchTab('extended')" id="tab-extended" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
-        Largas
-      </button>
-      <button onclick="switchTab('silences')" id="tab-silences" class="flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors">
-        Silencios
-      </button>
-    </nav>
-
-    <!-- Paleta de Células -->
-    <div class="flex-1 overflow-y-auto max-h-48 md:max-h-none pr-1 no-scrollbar">
-      <div id="cells-palette" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2.5"></div>
+<div class="app">
+  <header class="top">
+    <div class="title">
+      <h1>Células rítmicas</h1>
+      <span class="meter">4/4</span>
     </div>
-  </div>
-
-  <!-- Acciones de Borrado -->
-  <div class="p-3 md:p-6 border-t border-slate-200 grid grid-cols-2 gap-2 md:gap-3 bg-slate-50/50">
-    <button onclick="clearComposition()" class="py-2 px-3 md:py-2.5 md:px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600 transition-colors shadow-xs">
-      Clear
-    </button>
-    <button onclick="addMeasure()" class="py-2 px-3 md:py-2.5 md:px-4 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-800 transition-colors shadow-xs">
-      + Compás Mudo
-    </button>
-  </div>
-</aside>
-
-<!-- Área Principal del Lienzo -->
-<main class="flex-1 flex flex-col min-w-0 bg-slate-100/60 min-h-[calc(100vh-250px)]">
-
-  <!-- Topbar Controles de Reproducción -->
-  <header class="p-4 md:px-10 border-b border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3 shadow-xs">
-    <div class="flex items-center gap-3 md:gap-6 w-full sm:w-auto justify-between sm:justify-start">
-
-      <!-- BPM Slider -->
-      <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5">
-        <span class="text-[10px] md:text-xs text-slate-400 font-medium">BPM</span>
-        <span id="tempo-value" class="text-xs md:text-sm font-medium font-mono text-slate-800 min-w-[24px]">60</span>
-        <input type="range" id="tempo-slider" min="40" max="160" value="60" oninput="updateTempo(this.value)" class="w-20 md:w-28 accent-slate-800">
-      </div>
-
-      <!-- Metrónomo Toggle -->
-      <button onclick="toggleMetronome()" id="metronome-btn" class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full text-xs font-medium transition-colors">
-        <i id="metronome-icon" class="fa-solid fa-bell-slash text-[10px] text-slate-400"></i>
-        <span>Metro: <strong id="metronome-status-text" class="font-normal text-slate-500">OFF</strong></span>
-      </button>
-    </div>
-
-    <!-- Play / Stop -->
-    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-      <button onclick="stopPlayback()" class="w-9 h-9 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors shadow-xs">
-        <i class="fa-solid fa-stop text-xs"></i>
-      </button>
-      <button onclick="togglePlay()" id="play-btn" class="h-9 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-xs">
-        <i id="play-icon" class="fa-solid fa-play text-[10px]"></i>
-        <span id="play-text">PLAY</span>
-      </button>
-    </div>
+    <a class="back" href="https://sprinkloud.vercel.app/material.html">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Volver
+    </a>
   </header>
 
-  <!-- Contenedor de Compases -->
-  <div class="flex-1 p-4 md:p-8 overflow-y-auto" id="composition-area">
-    <div id="measures-container" class="grid grid-cols-1 gap-4 md:gap-6 max-w-4xl mx-auto"></div>
-  </div>
+  <div class="stage">
 
-  <!-- Barra de Estado Inferior -->
-  <footer class="p-3 md:px-10 border-t border-slate-200 bg-white flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
-    <div class="flex items-center gap-4">
-      <div class="flex items-center gap-2">
-        <span id="status-dot" class="w-1.5 h-1.5 bg-slate-400 rounded-full transition-colors duration-300"></span>
-        <span id="status" class="text-slate-600 font-light">Listo</span>
+    <!-- Banco de células -->
+    <aside class="panel">
+      <div class="panel-top">
+        <div class="tabs" role="tablist" aria-label="Grupos de células">
+          <button class="tab" role="tab" id="tab-base" aria-selected="true" data-tab="base">Rítmicas</button>
+          <button class="tab" role="tab" id="tab-extended" aria-selected="false" data-tab="extended">Largas</button>
+          <button class="tab" role="tab" id="tab-silences" aria-selected="false" data-tab="silences">Silencios</button>
+        </div>
       </div>
-      <span class="text-slate-300">|</span>
-      <div>Total Pulsos: <span id="total-beats" class="font-mono text-slate-600">0</span></div>
+      <p class="hint" id="hint"></p>
+      <div class="palette" id="palette"></div>
+      <div class="panel-foot">
+        <button class="tool solid" id="btn-quiz">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H2v6h4l5 4zM19 5a10 10 0 0 1 0 14M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+          Dictado
+        </button>
+        <button class="tool" id="btn-fill">Rellenar con silencio</button>
+      </div>
+    </aside>
+
+    <!-- Área de trabajo -->
+    <div class="work">
+      <div class="transport">
+        <div class="tline">
+          <div class="beats" id="beats" aria-hidden="true"></div>
+          <div class="now idle" id="now">Pulsa reproducir y canta las sílabas</div>
+          <button class="icon-btn" id="btn-stop" title="Volver al inicio" aria-label="Volver al inicio">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+          </button>
+          <button class="play" id="btn-play">
+            <svg id="play-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>
+            <span id="play-text">Reproducir</span>
+          </button>
+        </div>
+        <div class="tline opts">
+          <div class="tempo">
+            <label for="tempo">Tempo</label>
+            <output id="tempo-out">60</output>
+            <input type="range" id="tempo" min="30" max="180" step="1" value="60" aria-label="Pulsos por minuto">
+          </div>
+          <button class="tool" id="btn-tap" style="height:36px">Marcar tempo</button>
+          <button class="chip" id="btn-metro" aria-pressed="false"><span class="dot"></span>Metrónomo</button>
+          <button class="chip" id="btn-count" aria-pressed="true"><span class="dot"></span>Cuenta previa</button>
+          <button class="chip" id="btn-loop" aria-pressed="false"><span class="dot"></span>Repetir</button>
+        </div>
+      </div>
+
+      <div class="score" id="score">
+        <div class="score-inner" id="score-inner"></div>
+      </div>
+
+      <div class="status" id="status">
+        <div id="status-msg">Listo</div>
+        <div style="display:flex;gap:14px;align-items:center">
+          <span class="keys">Espacio reproduce · 1-9 añade · Retroceso deshace</span>
+          <button class="tool" id="btn-undo" style="height:30px;font-size:12px;padding:0 11px">Deshacer</button>
+          <button class="tool" id="btn-clear" style="height:30px;font-size:12px;padding:0 11px">Vaciar</button>
+        </div>
+      </div>
     </div>
-    <div class="font-light text-[11px] text-slate-400 text-center sm:text-right">
-      Click o Toca una celda para removerla
+
+  </div>
+</div>
+
+<!-- Dictado rítmico -->
+<div class="overlay" id="quiz" role="dialog" aria-modal="true" aria-labelledby="quiz-title">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div>
+        <h2 id="quiz-title">Dictado rítmico</h2>
+        <p class="sub">Escucha y elige la célula que sonó.</p>
+      </div>
+      <button class="icon-btn" id="quiz-close" aria-label="Cerrar dictado">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
     </div>
-  </footer>
-</main>
+    <p class="verdict" id="quiz-verdict"></p>
+    <div class="quiz-opts" id="quiz-opts"></div>
+    <div class="quiz-actions">
+      <button class="tool" id="quiz-again">Escuchar otra vez</button>
+      <button class="tool solid" id="quiz-next">Siguiente</button>
+      <span class="score-line" id="quiz-score" style="margin-left:auto"></span>
+    </div>
+  </div>
+</div>
 
 <script>
-  const rhythmicCells = [
-    { id: "cell1", name: "chocolate", symbol: "♬♬", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.25, 0.25], type: "base" },
-    { id: "cell2", name: "gránchico", symbol: "♪♬", duration: 1, subdivisions: 4, pattern: [0.5, 0.25, 0.25], type: "base" },
-    { id: "cell3", name: "camarón", symbol: "♬♪", duration: 1, subdivisions: 4, pattern: [0.25, 0.25, 0.5], type: "base" },
-    { id: "cell4", name: "valiente", symbol: "𝅘𝅥𝅯 𝅘𝅥𝅮 𝅘𝅥𝅯", duration: 1, subdivisions: 4, pattern: [0.25, 0.5, 0.25], type: "base" },
-    { id: "cell5", name: "blanco", symbol: "♩.♪", duration: 1, subdivisions: 4, pattern: [0.75, 0.25], type: "base" },
-    { id: "cell9", name: "queso", symbol: "♪♩.", duration: 1, subdivisions: 4, pattern: [0.25, 0.75], type: "base" },
-    { id: "cell6", name: "música", symbol: "♪♪♪", duration: 1, subdivisions: 3, pattern: [0.333, 0.333, 0.333], type: "base" },
-    { id: "cell7", name: "luna", symbol: "♫", duration: 1, subdivisions: 2, pattern: [0.5, 0.5], type: "base" },
-    { id: "cell8", name: "pan", symbol: "♩", duration: 1, subdivisions: 1, pattern: [1], type: "base" },
-    { id: "cell11", name: "y", symbol: "♪", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "base" },
+"use strict";
 
-    { id: "cell10", name: "Lee", symbol: "♩.", duration: 1.5, subdivisions: 1, pattern: [1.5], type: "extended" },
-    { id: "cell12", name: "1, 2", symbol: "𝅗𝅥", duration: 2, subdivisions: 1, pattern: [2], type: "extended" },
-    { id: "cell13", name: "1, 2, 3, 4", symbol: "𝅝", duration: 4, subdivisions: 1, pattern: [4], type: "extended" },
+/* =========================================================
+   1. Células rítmicas
+   Cada nota es {b: figura base en pulsos, dot: con puntillo,
+   t: de tresillo, rest: silencio}
+   ========================================================= */
+const CELLS = [
+  {id:"pan",   tab:"base", name:"pan",       syl:["pan"],                    notes:[{b:1}]},
+  {id:"luna",  tab:"base", name:"luna",      syl:["lu","na"],                notes:[{b:.5},{b:.5}]},
+  {id:"choco", tab:"base", name:"chocolate", syl:["cho","co","la","te"],     notes:[{b:.25},{b:.25},{b:.25},{b:.25}]},
+  {id:"gran",  tab:"base", name:"gránchico", syl:["grán","chi","co"],        notes:[{b:.5},{b:.25},{b:.25}]},
+  {id:"cama",  tab:"base", name:"camarón",   syl:["ca","ma","rón"],          notes:[{b:.25},{b:.25},{b:.5}]},
+  {id:"vali",  tab:"base", name:"valiente",  syl:["va","lien","te"],         notes:[{b:.25},{b:.5},{b:.25}]},
+  {id:"blan",  tab:"base", name:"blanco",    syl:["blan","co"],              notes:[{b:.5,dot:1},{b:.25}]},
+  {id:"ques",  tab:"base", name:"queso",     syl:["que","so"],               notes:[{b:.25},{b:.5,dot:1}]},
+  {id:"musi",  tab:"base", name:"música",    syl:["mú","si","ca"],           notes:[{b:.5,t:1},{b:.5,t:1},{b:.5,t:1}]},
+  {id:"y",     tab:"base", name:"y",         syl:["y"],                      notes:[{b:.5}]},
 
-    { id: "cell14_1", name: "Semicorchea (t)", symbol: "𝄿", duration: 0.25, subdivisions: 1, pattern: [0.25], type: "silences" },
-    { id: "cell14_2", name: "Corchea (y)", symbol: "𝄾", duration: 0.5, subdivisions: 1, pattern: [0.5], type: "silences" },
-    { id: "cell8_sil", name: "Negra (pan)", symbol: "𝄽", duration: 1, subdivisions: 1, pattern: [1], type: "silences" },
-  ];
+  {id:"lee",   tab:"extended", name:"Lee",     syl:["Le-e"],          notes:[{b:1,dot:1}]},
+  {id:"bla2",  tab:"extended", name:"1, 2",    syl:["1 - 2"],         notes:[{b:2}]},
+  {id:"bla3",  tab:"extended", name:"1, 2, 3", syl:["1 - 2 - 3"],     notes:[{b:2,dot:1}]},
+  {id:"red",   tab:"extended", name:"1, 2, 3, 4", syl:["1 - 2 - 3 - 4"], notes:[{b:4}]},
 
-  let currentTab = 'base';
-  let composition = [];
-  let isPlaying = false;
-  let currentTempo = 60;
-  let audioContext;
-  let timeoutIds = [];
-  let metronomeActive = false;
+  {id:"s16",   tab:"silences", name:"silencio de semicorchea", syl:[""], notes:[{b:.25,rest:1}]},
+  {id:"s8",    tab:"silences", name:"silencio de corchea",     syl:[""], notes:[{b:.5,rest:1}]},
+  {id:"s4",    tab:"silences", name:"silencio de negra",       syl:[""], notes:[{b:1,rest:1}]},
+  {id:"s2",    tab:"silences", name:"silencio de blanca",      syl:[""], notes:[{b:2,rest:1}]},
+  {id:"ct",    tab:"silences", name:"contratiempo",  syl:["","pan"], notes:[{b:.5,rest:1},{b:.5}]},
+  {id:"pc",    tab:"silences", name:"pan cortado",   syl:["pan",""], notes:[{b:.5},{b:.5,rest:1}]}
+];
 
-  function initAudio() {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
+const HINTS = {
+  base:      "Cada célula dura un pulso. Empieza por pan y luna, y añade una nueva cuando ya la cantes sin dudar.",
+  extended:  "Figuras que ocupan más de un pulso: sostén la voz mientras cuentas.",
+  silences:  "Los silencios también se cuentan. Piensa la sílaba por dentro sin cantarla."
+};
+
+const EXAMPLES = [
+  {name:"Marcha",          ids:["pan","luna","pan","pan","luna","luna","pan","pan"]},
+  {name:"Corcheas y semis",ids:["luna","choco","luna","pan","choco","luna","choco","pan"]},
+  {name:"Con silencios",   ids:["pan","s4","luna","pan","luna","s4","choco","pan"]},
+  {name:"Puntillos",       ids:["blan","luna","ques","pan","blan","blan","luna","pan"]}
+];
+
+const byId = id => CELLS.find(c => c.id === id);
+
+/* =========================================================
+   2. Notación dibujada en SVG (sin depender de fuentes musicales)
+   ========================================================= */
+const G = {Y:50, TOP:16, RX:5.4, RY:4.1, SW:1.7, BEAM:4.6, GAP:6.6};
+const rd = (x,n) => { const p = Math.pow(10, n||6); return Math.round(x*p)/p; };
+const noteDur = n => rd(n.b * (n.dot ? 1.5 : 1) * (n.t ? 2/3 : 1));
+const cellDur = c => rd(c.notes.reduce((s,n) => s + noteDur(n), 0), 3);
+const flagsOf = n => (n.rest ? 0 : n.b === .25 ? 2 : n.b === .5 ? 1 : 0);
+
+function flagGlyph(sx, top, count){
+  let s = "";
+  for(let k=0;k<count;k++){
+    const y = top + k*7.6;
+    s += '<path d="M'+(sx+G.SW)+','+y+' c8,3.4 10.5,9 6.6,15.2 c1.6,-7.2 -1.6,-10.2 -6.6,-11.8 z"/>';
   }
+  return s;
+}
 
-  function toggleMetronome() {
-    metronomeActive = !metronomeActive;
-    const btn = document.getElementById('metronome-btn');
-    const icon = document.getElementById('metronome-icon');
-    const text = document.getElementById('metronome-status-text');
+function restGlyph(b, x){
+  const Y = G.Y;
+  if(b >= 4)
+    return '<rect x="'+(x-13)+'" y="'+(Y-9)+'" width="26" height="1.4" opacity=".5"/><rect x="'+(x-9)+'" y="'+(Y-9)+'" width="18" height="6.2" rx="1"/>';
+  if(b >= 2)
+    return '<rect x="'+(x-13)+'" y="'+(Y+1)+'" width="26" height="1.4" opacity=".5"/><rect x="'+(x-9)+'" y="'+(Y-5)+'" width="18" height="6.2" rx="1"/>';
+  if(b >= 1)
+    return '<path d="M'+(x-4)+','+(Y-18)+' L'+(x+4)+','+(Y-9)+' L'+(x-3)+','+(Y-1)+' L'+(x+4.5)+','+(Y+7)+'" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>'
+         + '<path d="M'+(x+4.5)+','+(Y+7)+' c-5.6,-3.6 -10.2,-0.4 -8.1,4.3 c1.2,2.9 3.9,4.7 6.7,5.7 c-3.7,-4.1 -2.4,-7.7 2.4,-6.5 z"/>';
+  if(b >= .5)
+    return '<path d="M'+(x+4)+','+(Y-11)+' L'+(x-3.6)+','+(Y+11)+'" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'
+         + '<circle cx="'+(x-.2)+'" cy="'+(Y-8.4)+'" r="3.4"/>';
+  return '<path d="M'+(x+4)+','+(Y-16)+' L'+(x-4.2)+','+(Y+12)+'" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'
+       + '<circle cx="'+(x+.2)+'" cy="'+(Y-13.4)+'" r="3.2"/><circle cx="'+(x-2.4)+'" cy="'+(Y-2.6)+'" r="3.2"/>';
+}
 
-    if (metronomeActive) {
-      btn.className = "flex items-center gap-1.5 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium transition-colors";
-      icon.className = "fa-solid fa-bell text-[10px] text-blue-600";
-      text.textContent = "ON";
-      text.className = "font-medium text-blue-600";
-    } else {
-      btn.className = "flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full text-xs font-medium transition-colors";
-      icon.className = "fa-solid fa-bell-slash text-[10px] text-slate-400";
-      text.textContent = "OFF";
-      text.className = "font-normal text-slate-500";
-    }
+function cellSVG(cell, opt){
+  opt = opt || {};
+  const showSyl = opt.showSyl !== false;
+  const prefix = opt.prefix;
+  const ns = cell.notes, dur = cellDur(cell);
+
+  let acc = 0;
+  const ts = ns.map(n => { const v = acc; acc += noteDur(n); return v; });
+
+  // El ancho respeta la proporción de las duraciones, pero nunca deja
+  // que dos sílabas se toquen.
+  const sw = i => (showSyl && cell.syl && cell.syl[i] ? 6.4*cell.syl[i].length : 12);
+  let span = 54*Math.pow(dur,.55) - 36;
+  for(let i=0;i<ns.length-1;i++){
+    const need = (sw(i)+sw(i+1))/2 + 7;
+    span = Math.max(span, need / (noteDur(ns[i])/dur));
   }
+  const W = Math.round(Math.min(320, Math.max(70, span + 36)));
+  const L = 18, R = W - 18;
+  const xs = ns.map((n,i) => ns.length === 1 ? W/2 : L + (ts[i]/dur)*(R-L));
+  const dx = G.RX - .6;
 
-  function createCellElement(cell) {
-    const button = document.createElement('button');
-    button.className = "group w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 rounded-xl p-3 md:p-4 flex items-center justify-between transition-all duration-200 text-left shadow-xs";
-    button.innerHTML = `
-            <div>
-                <div class="text-xs font-medium text-slate-700 capitalize group-hover:text-slate-900 transition-colors">${cell.name}</div>
-                <div class="text-[9px] md:text-[10px] text-slate-400 font-light mt-0.5">${cell.duration} ${cell.duration === 1 ? 'pulso' : 'pulsos'}</div>
-            </div>
-            <div class="text-3xl md:text-4xl text-slate-700 group-hover:text-slate-900 transition-colors music-symbol ml-2">${cell.symbol}</div>
-        `;
-    button.onclick = () => addToComposition(cell);
-    return button;
-  }
+  // Grupos unidos por barra
+  const groups = []; let cur = null;
+  ns.forEach((n,i) => {
+    if(flagsOf(n) > 0){ if(!cur){ cur = []; groups.push(cur); } cur.push(i); }
+    else cur = null;
+  });
 
-  function renderPalette() {
-    const container = document.getElementById('cells-palette');
-    container.innerHTML = '';
-    const filteredCells = rhythmicCells.filter(cell => cell.type === currentTab);
-    filteredCells.forEach(cell => container.appendChild(createCellElement(cell)));
-  }
-
-  function switchTab(tabName) {
-    currentTab = tabName;
-    ['base', 'extended', 'silences'].forEach(t => {
-      const el = document.getElementById(`tab-${t}`);
-      el.className = t === tabName
-              ? "flex-1 pb-2 border-b text-slate-900 border-slate-900 transition-colors"
-              : "flex-1 pb-2 border-b text-slate-400 border-transparent hover:text-slate-600 transition-colors";
-    });
-    renderPalette();
-  }
-
-  function renderComposition() {
-    const container = document.getElementById('measures-container');
-    container.innerHTML = '';
-
-    let accumulatedBeats = 0;
-    let currentMeasure = [];
-    let measureIndex = 0;
-
-    if (composition.length === 0) {
-      container.innerHTML = `
-                <div class="border border-dashed border-slate-300 rounded-2xl h-32 md:h-40 flex items-center justify-center text-xs text-slate-400 font-light bg-white/50 p-4 text-center">
-                    El lienzo está vacío. Selecciona células en el panel.
-                </div>`;
-      document.getElementById('total-beats').textContent = '0';
-      return;
-    }
-
-    composition.forEach((cell, idx) => {
-      currentMeasure.push({ cell, originalIndex: idx });
-      accumulatedBeats += cell.duration;
-
-      if (accumulatedBeats >= 4 || idx === composition.length - 1) {
-        const measureDiv = document.createElement('div');
-        measureDiv.className = `staff-measure bg-white border border-slate-200/90 shadow-xs rounded-2xl p-4 md:p-6 relative flex flex-col gap-3 md:gap-4`;
-        measureDiv.dataset.measureIndex = measureIndex;
-
-        measureDiv.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span class="text-[10px] font-mono tracking-wider text-slate-400">COMPÁS 0${measureIndex + 1}</span>
-                        <span class="text-[10px] font-light text-slate-500">${accumulatedBeats} / 4 Pulsos</span>
-                    </div>
-                    <div class="flex flex-wrap gap-3 md:gap-4 items-center min-h-[70px]" id="measure-slots-${measureIndex}"></div>
-                `;
-
-        const cellsContainer = measureDiv.querySelector(`#measure-slots-${measureIndex}`);
-        currentMeasure.forEach((item) => {
-          const cellMini = document.createElement('div');
-          cellMini.className = "group relative bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50/30 rounded-xl px-4 md:px-5 py-3 cursor-pointer flex flex-col items-center justify-center min-w-[72px] md:min-w-[84px] transition-all shadow-xs";
-          cellMini.onclick = () => removeCell(item.originalIndex);
-          cellMini.innerHTML = `
-                        <div class="text-4xl md:text-5xl text-slate-800 group-hover:text-red-600 transition-colors music-symbol my-1">${item.cell.symbol}</div>
-                        <div class="text-[9px] md:text-[10px] text-slate-400 uppercase tracking-tight group-hover:hidden mt-1">${item.cell.name.split(' ')[0]}</div>
-                        <div class="text-[9px] md:text-[10px] text-red-600 uppercase tracking-tight hidden group-hover:block font-medium mt-1">Quitar</div>
-                    `;
-          cellsContainer.appendChild(cellMini);
-        });
-
-        container.appendChild(measureDiv);
-        currentMeasure = [];
-        measureIndex++;
-        accumulatedBeats = 0;
-      }
-    });
-
-    const absoluteTotal = composition.reduce((acc, c) => acc + c.duration, 0);
-    document.getElementById('total-beats').textContent = Math.round(absoluteTotal * 100) / 100;
-  }
-
-  /* Reproduce el sonido individual de una célula */
-  function previewCellSound(cell) {
-    if (cell.type === 'silences' || cell.name === 'Silencio') return;
-
-    initAudio();
-    if (audioContext.state === 'suspended') {
-      audioContext.resume();
-    }
-
-    const startTime = audioContext.currentTime + 0.05;
-    const beatDuration = 60 / currentTempo;
-    let timeOffset = 0;
-
-    cell.pattern.forEach((subDuration, j) => {
-      const noteTime = startTime + timeOffset;
-      const freq = j === 0 ? 760 : (j % 2 === 0 ? 580 : 440);
-      playTone(freq, noteTime, subDuration * beatDuration * 0.85, j === 0 ? 0.5 : 0.25);
-      timeOffset += subDuration * beatDuration;
-    });
-  }
-
-  function addToComposition(cell) {
-    const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
-    const rem = currentTotal % 4;
-    const spaceLeftInMeasure = rem === 0 ? 4 : 4 - rem;
-
-    if (cell.duration > spaceLeftInMeasure) {
-      triggerStatusAlert(`No cabe en el compás (Disponible: ${spaceLeftInMeasure})`, true);
-      return;
-    }
-
-    /* Reproducir sonido instantáneo si la secuencia no está sonando en bucle */
-    if (!isPlaying) {
-      previewCellSound(cell);
-    }
-
-    composition.push({...cell});
-    renderComposition();
-    triggerStatusAlert(`Añadido: ${cell.name}`, false);
-  }
-
-  function triggerStatusAlert(message, isError) {
-    const status = document.getElementById('status');
-    const dot = document.getElementById('status-dot');
-
-    status.textContent = message;
-    if (isError) {
-      status.className = "text-red-600 font-medium animate-pulse";
-      dot.className = "w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse";
-    } else {
-      status.className = "text-slate-800 font-normal";
-      dot.className = "w-1.5 h-1.5 bg-slate-600 rounded-full";
-    }
-
-    setTimeout(() => {
-      status.textContent = 'Listo';
-      status.className = "text-slate-600 font-light";
-      dot.className = "w-1.5 h-1.5 bg-slate-400 rounded-full";
-    }, 1800);
-  }
-
-  function removeCell(index) {
-    composition.splice(index, 1);
-    renderComposition();
-  }
-
-  function addMeasure() {
-    const currentTotal = composition.reduce((sum, c) => sum + c.duration, 0);
-    const rem = currentTotal % 4;
-    const missingBeats = rem === 0 ? 4 : 4 - rem;
-    const silenceCell = rhythmicCells.find(c => c.id === "cell8_sil");
-
-    if (missingBeats === 4) {
-      for (let i = 0; i < 4; i++) composition.push({...silenceCell});
-    } else {
-      composition.push({
-        id: `dynamic-silence-${Date.now()}`,
-        name: "Silencio",
-        symbol: "𝄽",
-        duration: missingBeats,
-        subdivisions: 1,
-        pattern: [missingBeats],
-        type: "silences"
-      });
-    }
-    renderComposition();
-  }
-
-  function clearComposition() {
-    composition = [];
-    renderComposition();
-  }
-
-  async function playRhythm() {
-    if (composition.length === 0) return;
-
-    initAudio();
-    if (audioContext.state === 'suspended') {
-      await audioContext.resume();
-    }
-
-    isPlaying = true;
-    updatePlayButton();
-
-    let currentTime = audioContext.currentTime + 0.1;
-    const beatDuration = 60 / currentTempo;
-    let cumulativeBeats = 0;
-
-    if (metronomeActive) {
-      const totalDurationBeats = composition.reduce((sum, c) => sum + c.duration, 0);
-      let metronomeTime = currentTime;
-      for (let b = 0; b < totalDurationBeats; b++) {
-        const isDownbeat = (b % 4 === 0);
-        const clickFreq = isDownbeat ? 1000 : 700;
-        playTone(clickFreq, metronomeTime, 0.03, 0.3);
-        metronomeTime += beatDuration;
-      }
-    }
-
-    for (let i = 0; i < composition.length; i++) {
-      if (!isPlaying) break;
-
-      const cell = composition[i];
-      const currentMeasureIndex = Math.floor(cumulativeBeats / 4);
-
-      let timeOffset = 0;
-
-      if(cell.type !== 'silences' && cell.name !== 'Silencio') {
-        cell.pattern.forEach((subDuration, j) => {
-          const noteTime = currentTime + timeOffset;
-          const freq = j === 0 ? 760 : (j % 2 === 0 ? 580 : 440);
-          playTone(freq, noteTime, subDuration * beatDuration * 0.85, j === 0 ? 0.5 : 0.25);
-          timeOffset += subDuration * beatDuration;
-        });
-      }
-
-      scheduleHighlight(currentMeasureIndex, (currentTime - audioContext.currentTime) * 1000);
-
-      currentTime += cell.duration * beatDuration;
-      cumulativeBeats += cell.duration;
-
-      await new Promise(resolve => {
-        const tid = setTimeout(resolve, cell.duration * beatDuration * 1000);
-        timeoutIds.push(tid);
-      });
-    }
-
-    stopPlayback();
-  }
-
-  function playTone(freq, time, duration, gainValue = 0.4) {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    oscillator.type = 'sine';
-    oscillator.frequency.value = freq;
-
-    gainNode.gain.setValueAtTime(gainValue, time);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.start(time);
-    oscillator.stop(time + duration);
-  }
-
-  function scheduleHighlight(measureIndex, delayMs) {
-    const tid = setTimeout(() => {
-      const measures = document.querySelectorAll('.staff-measure');
-      measures.forEach(m => {
-        if (parseInt(m.dataset.measureIndex) === measureIndex) {
-          m.style.borderColor = '#2563eb';
-          m.style.backgroundColor = '#eff6ff';
+  const beamed = new Set();
+  const beams = [];
+  groups.forEach(gr => {
+    if(gr.length < 2) return;
+    gr.forEach(i => beamed.add(i));
+    const maxF = Math.max.apply(null, gr.map(i => flagsOf(ns[i])));
+    for(let lv=1; lv<=maxF; lv++){
+      let p = 0;
+      while(p < gr.length){
+        if(flagsOf(ns[gr[p]]) < lv){ p++; continue; }
+        let q = p;
+        while(q+1 < gr.length && flagsOf(ns[gr[q+1]]) >= lv) q++;
+        const y = G.TOP + (lv-1)*G.GAP;
+        if(q > p){
+          const x1 = xs[gr[p]]+dx-.5, x2 = xs[gr[q]]+dx+G.SW+.5;
+          beams.push('<rect x="'+x1.toFixed(1)+'" y="'+y+'" width="'+(x2-x1).toFixed(1)+'" height="'+G.BEAM+'" rx="0.7"/>');
         } else {
-          m.style.borderColor = '';
-          m.style.backgroundColor = '';
+          const w = 8.5, x0 = xs[gr[p]]+dx;
+          const x1 = p === 0 ? x0 : x0 - w + G.SW;   // barra corta hacia el lado del grupo
+          beams.push('<rect x="'+x1.toFixed(1)+'" y="'+y+'" width="'+w+'" height="'+G.BEAM+'" rx="0.7"/>');
         }
-      });
-    }, Math.max(0, delayMs));
-    timeoutIds.push(tid);
-  }
-
-  function togglePlay() {
-    if (isPlaying) {
-      stopPlayback();
-    } else {
-      playRhythm();
-    }
-  }
-
-  function stopPlayback() {
-    isPlaying = false;
-    updatePlayButton();
-    timeoutIds.forEach(id => clearTimeout(id));
-    timeoutIds = [];
-
-    document.querySelectorAll('.staff-measure').forEach(m => {
-      m.style.borderColor = '';
-      m.style.backgroundColor = '';
-    });
-  }
-
-  function updatePlayButton() {
-    const btn = document.getElementById('play-btn');
-    const icon = document.getElementById('play-icon');
-    const text = document.getElementById('play-text');
-
-    if (isPlaying) {
-      btn.className = "h-9 px-5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-xs";
-      icon.className = "fa-solid fa-pause text-[10px]";
-      text.textContent = 'PAUSAR';
-    } else {
-      btn.className = "h-9 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium tracking-wide flex items-center gap-2 transition-all shadow-xs";
-      icon.className = "fa-solid fa-play text-[10px]";
-      text.textContent = 'REPRODUCIR';
-    }
-  }
-
-  function updateTempo(value) {
-    currentTempo = parseInt(value);
-    document.getElementById('tempo-value').textContent = currentTempo;
-  }
-
-  function init() {
-    renderPalette();
-    renderComposition();
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === " ") {
-        e.preventDefault();
-        togglePlay();
+        p = q + 1;
       }
+    }
+    if(ns[gr[0]].t){
+      const cx = (xs[gr[0]] + xs[gr[gr.length-1]] + dx)/2;
+      beams.push('<text x="'+cx.toFixed(1)+'" y="'+(G.TOP-4)+'" text-anchor="middle" font-size="11.5" font-style="italic" font-weight="600">3</text>');
+    }
+  });
+
+  const parts = ns.map((n,i) => {
+    const x = xs[i];
+    const nid = prefix != null ? ' data-nid="'+prefix+'-'+i+'"' : "";
+    let s = "";
+    if(n.rest){
+      s += restGlyph(n.b, x);
+    } else {
+      const hollow = n.b >= 2;
+      s += '<ellipse cx="'+x.toFixed(1)+'" cy="'+G.Y+'" rx="'+(hollow?6.3:G.RX)+'" ry="'+(hollow?4.6:G.RY)+'" transform="rotate(-16 '+x.toFixed(1)+' '+G.Y+')" '+(hollow?'fill="none" stroke="currentColor" stroke-width="1.8"':"")+'/>';
+      if(n.b < 4){
+        const sx = x + dx, top = flagsOf(n) > 0 ? G.TOP : G.TOP+3;
+        s += '<rect x="'+sx.toFixed(1)+'" y="'+top+'" width="'+G.SW+'" height="'+(G.Y-top).toFixed(1)+'"/>';
+        if(!beamed.has(i) && flagsOf(n) > 0) s += flagGlyph(sx, G.TOP, flagsOf(n));
+      }
+      if(n.dot) s += '<circle cx="'+(x+10.5).toFixed(1)+'" cy="'+G.Y+'" r="1.9"/>';
+    }
+    if(showSyl && cell.syl && cell.syl[i])
+      s += '<text class="syl" x="'+x.toFixed(1)+'" y="73" text-anchor="middle" font-size="12">'+cell.syl[i]+'</text>';
+    return '<g class="nt"'+nid+'>'+s+'</g>';
+  }).join("");
+
+  return '<svg class="rsvg" viewBox="0 0 '+W+' 82" width="'+W+'" height="82" fill="currentColor" aria-hidden="true">'+beams.join("")+parts+'</svg>';
+}
+
+function beatsLabel(d){
+  const map = {0.25:"¼ de pulso", 0.5:"medio pulso", 0.75:"¾ de pulso",
+               1:"1 pulso", 1.5:"1½ pulsos", 2:"2 pulsos", 2.5:"2½ pulsos",
+               3:"3 pulsos", 3.5:"3½ pulsos", 4:"4 pulsos"};
+  return map[d] || d + " pulsos";
+}
+
+/* =========================================================
+   3. Estado
+   ========================================================= */
+const state = {
+  tab:"base",
+  comp:[],            // ids de células
+  tempo:60,
+  metro:false,
+  count:true,
+  loop:false
+};
+let history = [];
+const KEY = "sprinkloud-ritmo-v1";
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({comp:state.comp, tempo:state.tempo, metro:state.metro, count:state.count, loop:state.loop})); }catch(e){}
+}
+function load(){
+  try{
+    const d = JSON.parse(localStorage.getItem(KEY) || "null");
+    if(!d) return;
+    if(Array.isArray(d.comp)) state.comp = d.comp.filter(byId);
+    if(d.tempo) state.tempo = d.tempo;
+    state.metro = !!d.metro; state.count = d.count !== false; state.loop = !!d.loop;
+  }catch(e){}
+}
+
+const $ = s => document.querySelector(s);
+const totalBeats = () => rd(state.comp.reduce((s,id) => s + cellDur(byId(id)), 0), 3);
+const freeInBar = () => { const r = rd(totalBeats() % 4, 3); return r === 0 ? 4 : rd(4-r, 3); };
+
+/* =========================================================
+   4. Audio
+   ========================================================= */
+let ctx = null, session = null;
+
+function audio(){
+  if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if(ctx.state === "suspended") ctx.resume();
+  return ctx;
+}
+function tone(dest, t, freq, dur, gain, type){
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type || "triangle";
+  o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + .004);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(dest);
+  o.start(t); o.stop(t + dur + .02);
+}
+function noteVoice(dest, t, onBeat, len){
+  tone(dest, t, onBeat ? 740 : 560, Math.min(Math.max(len*.85,.06), .22), onBeat ? .34 : .24);
+}
+function clickVoice(dest, t, strong){
+  tone(dest, t, strong ? 1560 : 1040, .03, strong ? .3 : .18, "square");
+}
+
+/* Escucha suelta de una célula, sin tocar la reproducción */
+function previewCell(cell){
+  audio();
+  const t0 = ctx.currentTime + .05, beat = 60/state.tempo;
+  let t = 0;
+  cell.notes.forEach(n => {
+    const d = noteDur(n);
+    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, Math.abs(t % 1) < .01, d*beat);
+    t += d;
+  });
+}
+
+/* =========================================================
+   5. Reproducción
+   ========================================================= */
+const play = {on:false, start:0, beat:-1, idx:0, queued:false, ev:[], bars:0, raf:0, len:0};
+
+function buildEvents(){
+  const ev = []; let t = 0;
+  state.comp.forEach((id, ci) => {
+    byId(id).notes.forEach((n, ni) => {
+      const d = noteDur(n);
+      if(!n.rest) ev.push({t:t, d:d, ci:ci, ni:ni, syl:(byId(id).syl||[])[ni] || ""});
+      t += d;
     });
+  });
+  return ev;
+}
+
+function schedulePass(at){
+  const beat = 60/state.tempo;
+  play.ev.forEach(e => noteVoice(session, at + e.t*beat, Math.abs(e.t % 1) < .01, e.d*beat));
+  if(state.metro)
+    for(let b=0; b<play.len; b++) clickVoice(session, at + b*beat, b % 4 === 0);
+}
+
+function startPlay(skipCount){
+  if(!state.comp.length){ flash("Añade al menos una célula para escuchar", true); return; }
+  audio();
+  stopPlay(true);
+
+  const beat = 60/state.tempo;
+  play.ev = buildEvents();
+  play.len = Math.max(4, Math.ceil(totalBeats()/4)*4);   // termina siempre el compás
+  play.bars = play.len/4;
+
+  session = ctx.createGain();
+  session.gain.value = 1;
+  session.connect(ctx.destination);
+
+  const t0 = ctx.currentTime + .12;
+  if(state.count && !skipCount){
+    for(let b=0;b<4;b++) clickVoice(session, t0 + b*beat, b === 0);
+    play.start = t0 + 4*beat;
+  } else {
+    play.start = t0;
+  }
+  schedulePass(play.start);
+
+  play.on = true; play.beat = -1; play.idx = 0; play.queued = false;
+  paintPlay();
+  play.raf = requestAnimationFrame(tick);
+}
+
+function tick(){
+  if(!play.on) return;
+  const beat = 60/state.tempo;
+  const rel = (ctx.currentTime - play.start)/beat;
+
+  if(rel < 0){
+    const n = Math.ceil(-rel);                     // cuenta previa: 4 3 2 1
+    lampCount(5 - n);
+    setNow((n) + "…", true);
+  } else {
+    const b = Math.floor(rel);
+    if(b !== play.beat){
+      play.beat = b;
+      lampBeat(b % 4);
+      markBar(Math.floor(b/4));
+    }
+    while(play.idx < play.ev.length && play.ev[play.idx].t <= rel + .012){
+      activate(play.ev[play.idx]); play.idx++;
+    }
   }
 
-  window.onload = init;
-</script>
+  const end = play.start + play.len*beat;
+  if(state.loop && !play.queued && ctx.currentTime > end - .3){
+    schedulePass(end); play.queued = true;
+  }
+  if(ctx.currentTime >= end){
+    if(state.loop){
+      play.start = end; play.idx = 0; play.queued = false; play.beat = -1;
+    } else { stopPlay(); return; }
+  }
+  play.raf = requestAnimationFrame(tick);
+}
 
+function stopPlay(quiet){
+  play.on = false;
+  cancelAnimationFrame(play.raf);
+  if(session){
+    const g = session, t = ctx.currentTime;
+    try{
+      g.gain.cancelScheduledValues(t);
+      g.gain.setValueAtTime(g.gain.value, t);
+      g.gain.linearRampToValueAtTime(0.0001, t + .04);
+    }catch(e){}
+    setTimeout(() => { try{ g.disconnect(); }catch(e){} }, 300);
+    session = null;
+  }
+  document.querySelectorAll(".nt.on").forEach(el => el.classList.remove("on"));
+  document.querySelectorAll(".bar.playing").forEach(el => el.classList.remove("playing"));
+  lampBeat(-1);
+  if(!quiet){ paintPlay(); setNow(null); }
+}
+
+function togglePlay(){ play.on ? stopPlay() : startPlay(); }
+
+/* --- Realimentación visual --- */
+function lampBeat(i){
+  document.querySelectorAll(".beat").forEach((el,k) => {
+    el.classList.toggle("lit", k === i);
+    el.classList.toggle("strong", k === i && i === 0);
+  });
+}
+function lampCount(n){
+  document.querySelectorAll(".beat").forEach((el,k) => {
+    el.classList.toggle("lit", k < n);
+    el.classList.toggle("strong", k < n);
+  });
+}
+function setNow(text, small){
+  const el = $("#now");
+  if(text === null || text === undefined){
+    el.textContent = "Pulsa reproducir y canta las sílabas";
+    el.classList.add("idle");
+  } else {
+    el.textContent = text;
+    el.classList.toggle("idle", !!small);
+  }
+}
+let lastBar = -1;
+function markBar(i){
+  const bars = document.querySelectorAll(".bar");
+  bars.forEach(b => b.classList.toggle("playing", +b.dataset.bar === i));
+  if(i !== lastBar){
+    lastBar = i;
+    const el = bars[i];
+    if(el) el.scrollIntoView({block:"nearest", behavior:"smooth"});
+  }
+}
+function activate(e){
+  document.querySelectorAll(".nt.on").forEach(el => el.classList.remove("on"));
+  const el = document.querySelector('[data-nid="'+e.ci+'-'+e.ni+'"]');
+  if(el) el.classList.add("on");
+  const c = byId(state.comp[e.ci]);
+  setNow(e.syl || c.name, false);
+}
+
+/* =========================================================
+   6. Paleta
+   ========================================================= */
+function renderPalette(){
+  const box = $("#palette");
+  box.innerHTML = "";
+  $("#hint").textContent = HINTS[state.tab];
+  CELLS.filter(c => c.tab === state.tab).forEach((c,i) => {
+    const dur = cellDur(c);
+    const joined = (c.syl||[]).join("").toLowerCase();
+    const showName = joined !== c.name.replace(/[\s,]/g,"").toLowerCase();
+    const b = document.createElement("button");
+    b.className = "cell";
+    b.setAttribute("aria-label","Añadir " + c.name + ", " + beatsLabel(dur));
+    b.innerHTML =
+      (i < 9 ? '<span class="num">'+(i+1)+'</span>' : "") +
+      '<span class="hear" tabindex="-1" aria-hidden="true">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>' +
+      '</span>' +
+      cellSVG(c) +
+      (showName ? '<span class="cname">'+c.name+'</span>' : "") +
+      '<span class="len">'+beatsLabel(dur)+'</span>';
+    b.addEventListener("click", ev => {
+      if(ev.target.closest(".hear")){ previewCell(c); return; }
+      addCell(c.id);
+    });
+    box.appendChild(b);
+  });
+}
+
+function switchTab(t){
+  state.tab = t;
+  document.querySelectorAll(".tab").forEach(el => el.setAttribute("aria-selected", el.dataset.tab === t));
+  renderPalette();
+}
+
+/* =========================================================
+   7. Partitura
+   ========================================================= */
+function renderScore(){
+  const box = $("#score-inner");
+  box.innerHTML = "";
+  lastBar = -1;
+
+  if(!state.comp.length){
+    const d = document.createElement("div");
+    d.className = "empty";
+    d.innerHTML = '<p>Aquí se arma tu ritmo.</p>' +
+      '<small>Toca una célula del banco y se irá colocando en compases de cuatro tiempos.</small>' +
+      '<div class="examples"></div>';
+    const ex = d.querySelector(".examples");
+    EXAMPLES.forEach(p => {
+      const b = document.createElement("button");
+      b.className = "example"; b.textContent = p.name;
+      b.onclick = () => { pushHistory(); state.comp = p.ids.slice(); afterEdit("Ejemplo cargado: " + p.name); };
+      ex.appendChild(b);
+    });
+    box.appendChild(d);
+    updateStatus();
+    return;
+  }
+
+  // Repartir las células en compases de 4 pulsos
+  const bars = []; let cur = [], acc = 0;
+  state.comp.forEach((id,i) => {
+    cur.push(i); acc = rd(acc + cellDur(byId(id)), 3);
+    if(acc >= 3.999){ bars.push({items:cur, beats:acc}); cur = []; acc = 0; }
+  });
+  if(cur.length) bars.push({items:cur, beats:acc});
+
+  bars.forEach((bar, bi) => {
+    const el = document.createElement("section");
+    el.className = "bar";
+    el.dataset.bar = bi;
+    const free = rd(4 - bar.beats, 3);
+    el.innerHTML =
+      '<div class="bar-head"><span class="n">Compás ' + (bi+1) + '</span>' +
+      '<span>' + (free > 0 ? "faltan " + beatsLabel(free) : "completo") + '</span></div>' +
+      '<div class="bar-row"></div>';
+    const row = el.querySelector(".bar-row");
+
+    bar.items.forEach(idx => {
+      const c = byId(state.comp[idx]);
+      const d = document.createElement("div");
+      d.className = "slot";
+      d.style.flex = cellDur(c) + " 1 auto";
+      d.innerHTML = cellSVG(c, {prefix:idx}) +
+        '<button class="kill" aria-label="Quitar ' + c.name + '">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>';
+      d.querySelector(".kill").onclick = e => { e.stopPropagation(); removeAt(idx); };
+      d.onclick = () => previewCell(c);
+      row.appendChild(d);
+    });
+
+    if(free > 0){
+      const g = document.createElement("div");
+      g.className = "gap";
+      g.style.flex = free + " 1 auto";
+      g.textContent = beatsLabel(free);
+      row.appendChild(g);
+    }
+    box.appendChild(el);
+  });
+
+  updateStatus();
+}
+
+function updateStatus(){
+  const t = totalBeats();
+  const bars = Math.ceil(t/4);
+  $("#status-msg").textContent = t === 0
+    ? "Listo"
+    : bars + (bars === 1 ? " compás" : " compases") + " · " + beatsLabel(t) + " en total";
+  $("#status").classList.remove("alert");
+}
+
+let flashTimer;
+function flash(msg, alert){
+  const s = $("#status");
+  $("#status-msg").innerHTML = "<strong>" + msg + "</strong>";
+  s.classList.toggle("alert", !!alert);
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(updateStatus, 2200);
+}
+
+/* =========================================================
+   8. Edición
+   ========================================================= */
+function pushHistory(){
+  history.push(state.comp.slice());
+  if(history.length > 60) history.shift();
+}
+function afterEdit(msg){
+  renderScore(); save();
+  if(msg) flash(msg);
+}
+
+function addCell(id){
+  const c = byId(id), d = cellDur(c);
+  const free = freeInBar();
+  if(d > free + .001){
+    flash("No cabe: en este compás solo quedan " + beatsLabel(free), true);
+    return;
+  }
+  if(play.on) stopPlay();
+  pushHistory();
+  state.comp.push(id);
+  previewCell(c);
+  afterEdit();
+}
+function removeAt(i){
+  if(play.on) stopPlay();
+  pushHistory();
+  state.comp.splice(i,1);
+  afterEdit();
+}
+function undo(){
+  if(!history.length){ flash("No hay nada que deshacer"); return; }
+  if(play.on) stopPlay();
+  state.comp = history.pop();
+  afterEdit();
+}
+function clearAll(){
+  if(!state.comp.length) return;
+  if(play.on) stopPlay();
+  pushHistory();
+  state.comp = [];
+  afterEdit("Partitura vacía");
+}
+function fillWithRests(){
+  if(play.on) stopPlay();
+  pushHistory();
+  let free = freeInBar();
+  const rests = [["s2",2],["s4",1],["s8",.5],["s16",.25]];
+  while(free > .001){
+    const r = rests.find(x => x[1] <= free + .001);
+    if(!r) break;
+    state.comp.push(r[0]); free = rd(free - r[1], 3);
+  }
+  afterEdit("Compás completado con silencios");
+}
+
+/* =========================================================
+   9. Dictado rítmico
+   ========================================================= */
+const quiz = {target:null, opts:[], hits:0, tries:0, done:false};
+
+function openQuiz(){ $("#quiz").classList.add("open"); nextQuiz(); }
+function closeQuiz(){ $("#quiz").classList.remove("open"); }
+
+function nextQuiz(){
+  const pool = CELLS.filter(c => c.tab === state.tab && c.notes.some(n => !n.rest));
+  const src = pool.length >= 4 ? pool : CELLS.filter(c => c.tab === "base");
+  const shuffled = src.slice().sort(() => Math.random() - .5).slice(0,4);
+  quiz.opts = shuffled;
+  quiz.target = shuffled[Math.floor(Math.random()*shuffled.length)];
+  quiz.done = false;
+  $("#quiz-verdict").textContent = "";
+  const box = $("#quiz-opts");
+  box.innerHTML = "";
+  quiz.opts.forEach(c => {
+    const b = document.createElement("button");
+    b.className = "quiz-opt";
+    b.innerHTML = cellSVG(c, {showSyl:false});
+    b.onclick = () => answerQuiz(c, b);
+    box.appendChild(b);
+  });
+  updateQuizScore();
+  setTimeout(hearQuiz, 350);
+}
+
+function hearQuiz(){
+  audio();
+  const beat = 60/state.tempo, t0 = ctx.currentTime + .1;
+  clickVoice(ctx.destination, t0, true);
+  clickVoice(ctx.destination, t0 + beat, false);
+  let t = 2*beat;
+  quiz.target.notes.forEach(n => {
+    const d = noteDur(n);
+    if(!n.rest) noteVoice(ctx.destination, t0 + t, Math.abs((t/beat) % 1) < .01, d*beat);
+    t += d*beat;
+  });
+}
+
+function answerQuiz(c, btn){
+  if(quiz.done) return;
+  quiz.done = true; quiz.tries++;
+  const ok = c.id === quiz.target.id;
+  if(ok) quiz.hits++;
+  document.querySelectorAll(".quiz-opt").forEach((el,i) => {
+    if(quiz.opts[i].id === quiz.target.id) el.classList.add("right");
+    else el.classList.add("wrong");
+  });
+  $("#quiz-verdict").innerHTML = ok
+    ? 'Correcto: <b>' + quiz.target.name + '</b>'
+    : 'Sonó <b>' + quiz.target.name + '</b>. Escúchala otra vez y compara.';
+  updateQuizScore();
+}
+function updateQuizScore(){
+  $("#quiz-score").textContent = quiz.tries ? quiz.hits + " de " + quiz.tries : "";
+}
+
+/* =========================================================
+   10. Controles e inicio
+   ========================================================= */
+function paintPlay(){
+  const b = $("#btn-play");
+  b.classList.toggle("on", play.on);
+  $("#play-text").textContent = play.on ? "Detener" : "Reproducir";
+  $("#play-icon").innerHTML = play.on
+    ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'
+    : '<path d="M7 4l13 8-13 8z"/>';
+}
+function toggleChip(el, key){
+  state[key] = !state[key];
+  el.setAttribute("aria-pressed", state[key]);
+  save();
+}
+
+let taps = [];
+function tapTempo(){
+  const now = performance.now();
+  taps = taps.filter(t => now - t < 2400);
+  taps.push(now);
+  if(taps.length >= 2){
+    let sum = 0;
+    for(let i=1;i<taps.length;i++) sum += taps[i]-taps[i-1];
+    const bpm = Math.round(60000/(sum/(taps.length-1)));
+    if(bpm >= 30 && bpm <= 180) setTempo(bpm);
+  } else {
+    flash("Sigue marcando el pulso…");
+  }
+}
+function setTempo(v){
+  state.tempo = +v;
+  $("#tempo").value = v;
+  $("#tempo-out").textContent = v;
+  save();
+}
+
+function init(){
+  load();
+  setTempo(state.tempo);
+  $("#btn-metro").setAttribute("aria-pressed", state.metro);
+  $("#btn-count").setAttribute("aria-pressed", state.count);
+  $("#btn-loop").setAttribute("aria-pressed", state.loop);
+
+  const beats = $("#beats");
+  for(let i=0;i<4;i++){
+    const d = document.createElement("span");
+    d.className = "beat"; d.textContent = i+1;
+    beats.appendChild(d);
+  }
+
+  document.querySelectorAll(".tab").forEach(t => t.onclick = () => switchTab(t.dataset.tab));
+  $("#btn-play").onclick  = togglePlay;
+  $("#btn-stop").onclick  = () => { stopPlay(); setNow(null); };
+  $("#btn-undo").onclick  = undo;
+  $("#btn-clear").onclick = clearAll;
+  $("#btn-fill").onclick  = fillWithRests;
+  $("#btn-tap").onclick   = tapTempo;
+  $("#btn-metro").onclick = e => toggleChip(e.currentTarget, "metro");
+  $("#btn-count").onclick = e => toggleChip(e.currentTarget, "count");
+  $("#btn-loop").onclick  = e => toggleChip(e.currentTarget, "loop");
+  $("#tempo").oninput     = e => setTempo(e.target.value);
+  $("#tempo").onchange    = () => { if(play.on) startPlay(true); };
+
+  $("#btn-quiz").onclick   = openQuiz;
+  $("#quiz-close").onclick = closeQuiz;
+  $("#quiz-again").onclick = hearQuiz;
+  $("#quiz-next").onclick  = nextQuiz;
+  $("#quiz").onclick = e => { if(e.target.id === "quiz") closeQuiz(); };
+
+  document.addEventListener("keydown", e => {
+    if(e.target.matches("input,textarea")) return;
+    if(e.code === "Space"){
+      e.preventDefault();
+      if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      togglePlay();
+    } else if(e.key === "Backspace"){
+      e.preventDefault(); undo();
+    } else if(e.key === "Escape"){
+      if($("#quiz").classList.contains("open")) closeQuiz(); else stopPlay();
+    } else if(/^[1-9]$/.test(e.key)){
+      const list = CELLS.filter(c => c.tab === state.tab);
+      const c = list[+e.key - 1];
+      if(c) addCell(c.id);
+    }
+  });
+
+  switchTab(state.tab);
+  renderScore();
+  paintPlay();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
 </body>
 </html>
