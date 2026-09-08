@@ -406,10 +406,10 @@ const CELLS = [
   {id:"musi",  tab:"base", name:"música",    syl:["mú","si","ca"],           notes:[{b:.5,t:1},{b:.5,t:1},{b:.5,t:1}]},
   {id:"y",     tab:"base", name:"y",         syl:["y"],                      notes:[{b:.5}]},
 
-  {id:"lee",   tab:"extended", name:"Lee",     syl:["Le-e"],          notes:[{b:1,dot:1}]},
-  {id:"bla2",  tab:"extended", name:"1, 2",    syl:["1 - 2"],         notes:[{b:2}]},
-  {id:"bla3",  tab:"extended", name:"1, 2, 3", syl:["1 - 2 - 3"],     notes:[{b:2,dot:1}]},
-  {id:"red",   tab:"extended", name:"1, 2, 3, 4", syl:["1 - 2 - 3 - 4"], notes:[{b:4}]},
+  {id:"lee",   tab:"extended", name:"Lee",       full:"negra con puntillo",  syl:["Le-e"],      notes:[{b:1,dot:1}]},
+  {id:"bla2",  tab:"extended", name:"1, 2",     full:"blanca",              syl:["1 - 2"],     notes:[{b:2}]},
+  {id:"bla3",  tab:"extended", name:"1, 2, 3",  full:"blanca con puntillo", syl:["1 - 2 - 3"], notes:[{b:2,dot:1}]},
+  {id:"red",   tab:"extended", name:"1, 2, 3, 4", full:"redonda",          syl:["1 - 2 - 3 - 4"], notes:[{b:4}]},
 
   {id:"s16",   tab:"silences", name:"silencio de semicorchea", syl:[""], notes:[{b:.25,rest:1}]},
   {id:"s8",    tab:"silences", name:"silencio de corchea",     syl:[""], notes:[{b:.5,rest:1}]},
@@ -599,18 +599,31 @@ function audio(){
   if(ctx.state === "suspended") ctx.resume();
   return ctx;
 }
-function tone(dest, t, freq, dur, gain, type){
+function tone(dest, t, freq, dur, gain, type, sustain){
   const o = ctx.createOscillator(), g = ctx.createGain();
   o.type = type || "triangle";
   o.frequency.setValueAtTime(freq, t);
   g.gain.setValueAtTime(0.0001, t);
   g.gain.exponentialRampToValueAtTime(gain, t + .004);
-  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  if(sustain){
+    // Ataque, caída a un nivel estable y corte al final: así la nota
+    // dura de verdad lo que vale.
+    g.gain.exponentialRampToValueAtTime(gain*.32, t + .14);
+    g.gain.setValueAtTime(gain*.32, t + Math.max(dur - .09, .16));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  } else {
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  }
   o.connect(g); g.connect(dest);
   o.start(t); o.stop(t + dur + .02);
 }
-function noteVoice(dest, t, onBeat, len){
-  tone(dest, t, onBeat ? 740 : 560, Math.min(Math.max(len*.85,.06), .22), onBeat ? .34 : .24);
+/* beats = duración de la nota en pulsos; beatSec = cuánto dura un pulso */
+function noteVoice(dest, t, onBeat, beats, beatSec){
+  const long = beats >= .95;
+  const dur = long
+    ? beats*beatSec*.94                                   // se sostiene
+    : Math.min(Math.max(beats*beatSec*.85, .06), .24);    // percutida
+  tone(dest, t, onBeat ? 740 : 560, dur, onBeat ? .34 : .24, "triangle", long);
 }
 function clickVoice(dest, t, strong){
   tone(dest, t, strong ? 1560 : 1040, .03, strong ? .3 : .18, "square");
@@ -623,7 +636,7 @@ function previewCell(cell){
   let t = 0;
   cell.notes.forEach(n => {
     const d = noteDur(n);
-    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, Math.abs(t % 1) < .01, d*beat);
+    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, Math.abs(t % 1) < .01, d, beat);
     t += d;
   });
 }
@@ -647,7 +660,7 @@ function buildEvents(){
 
 function schedulePass(at){
   const beat = 60/state.tempo;
-  play.ev.forEach(e => noteVoice(session, at + e.t*beat, Math.abs(e.t % 1) < .01, e.d*beat));
+  play.ev.forEach(e => noteVoice(session, at + e.t*beat, Math.abs(e.t % 1) < .01, e.d, beat));
   if(state.metro)
     for(let b=0; b<play.len; b++) clickVoice(session, at + b*beat, b % 4 === 0);
 }
@@ -785,17 +798,17 @@ function renderPalette(){
   CELLS.filter(c => c.tab === state.tab).forEach((c,i) => {
     const dur = cellDur(c);
     const joined = (c.syl||[]).join("").toLowerCase();
-    const showName = joined !== c.name.replace(/[\s,]/g,"").toLowerCase();
+    const label = c.full || (joined !== c.name.replace(/[\s,]/g,"").toLowerCase() ? c.name : "");
     const b = document.createElement("button");
     b.className = "cell";
-    b.setAttribute("aria-label","Añadir " + c.name + ", " + beatsLabel(dur));
+    b.setAttribute("aria-label","Añadir " + (c.full || c.name) + ", " + beatsLabel(dur));
     b.innerHTML =
       (i < 9 ? '<span class="num">'+(i+1)+'</span>' : "") +
       '<span class="hear" tabindex="-1" aria-hidden="true">' +
         '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>' +
       '</span>' +
       cellSVG(c) +
-      (showName ? '<span class="cname">'+c.name+'</span>' : "") +
+      (label ? '<span class="cname">'+label+'</span>' : "") +
       '<span class="len">'+beatsLabel(dur)+'</span>';
     b.addEventListener("click", ev => {
       if(ev.target.closest(".hear")){ previewCell(c); return; }
@@ -973,6 +986,9 @@ function nextQuiz(){
   quiz.target = shuffled[Math.floor(Math.random()*shuffled.length)];
   quiz.done = false;
   $("#quiz-verdict").textContent = "";
+  $("#quiz .sub").textContent = state.tab === "extended"
+    ? "Cuenta los pulsos que dura la figura y elige cuál sonó."
+    : "Escucha y elige la célula que sonó.";
   const box = $("#quiz-opts");
   box.innerHTML = "";
   quiz.opts.forEach(c => {
@@ -988,14 +1004,19 @@ function nextQuiz(){
 
 function hearQuiz(){
   audio();
-  const beat = 60/state.tempo, t0 = ctx.currentTime + .1;
-  clickVoice(ctx.destination, t0, true);
-  clickVoice(ctx.destination, t0 + beat, false);
-  let t = 2*beat;
+  const beat = 60/state.tempo, t0 = ctx.currentTime + .12;
+  const largo = Math.max(1, Math.ceil(cellDur(quiz.target)));
+
+  // Dos pulsos de preparación y el pulso sigue marcándose bajo la célula:
+  // sin esa referencia no hay forma de contar si duró 2, 3 o 4 tiempos.
+  for(let b = 0; b <= 2 + largo; b++)
+    clickVoice(ctx.destination, t0 + b*beat, b === 0 || b === 2);
+
+  let t = 2;
   quiz.target.notes.forEach(n => {
     const d = noteDur(n);
-    if(!n.rest) noteVoice(ctx.destination, t0 + t, Math.abs((t/beat) % 1) < .01, d*beat);
-    t += d*beat;
+    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, Math.abs(t % 1) < .01, d, beat);
+    t += d;
   });
 }
 
@@ -1008,9 +1029,12 @@ function answerQuiz(c, btn){
     if(quiz.opts[i].id === quiz.target.id) el.classList.add("right");
     else el.classList.add("wrong");
   });
+  const qn = quiz.target.full
+    ? quiz.target.full + " (" + quiz.target.name + ")"
+    : quiz.target.name;
   $("#quiz-verdict").innerHTML = ok
-    ? 'Correcto: <b>' + quiz.target.name + '</b>'
-    : 'Sonó <b>' + quiz.target.name + '</b>. Escúchala otra vez y compara.';
+    ? 'Correcto: <b>' + qn + '</b>'
+    : 'Sonó <b>' + qn + '</b>. Escúchala otra vez y compara.';
   updateQuizScore();
 }
 function updateQuizScore(){
