@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /.idea/
+Disallow: /src/
+
+Sitemap: https://sprinkloud.vercel.app/sitemap.xml

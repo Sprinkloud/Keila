@@ -1,30 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Simulador de Piano Interactivo de 5 Octavas | Claves de Sol y Fa - Sprinkloud</title>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-  <meta name="description" content="Practica las notas musicales y acordes en un piano virtual de 5 octavas con lectura simultánea en clave de fa y clave de sol. ¡Ideal para estudiantes de música!">
-  <meta name="keywords" content="piano virtual, notas piano, acordes piano, clave de sol, clave de fa, pentagrama, simulador piano, musica, sprinkloud">
+  <title>Piano virtual: leer notas en clave de Sol y Fa | Sprinkloud</title>
+  <meta name="description" content="Piano virtual gratis para aprender a leer notas en clave de Sol y Fa: practica líneas, espacios y líneas adicionales. Funciona en celular y computadora.">
+  <meta name="keywords" content="leer notas musicales, juego de notas, piano virtual, clave de sol, clave de fa, líneas adicionales, pentagrama, lectura musical, acordes de piano, teoría musical para niños">
   <meta name="author" content="Sprinkloud Club Musical">
-  <meta name="robots" content="index, follow">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html">
+  <meta name="theme-color" content="#F6F0E2">
 
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Sprinkloud Club Musical">
   <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html">
-  <meta property="og:title" content="Simulador de Piano Interactivo - Sprinkloud">
-  <meta property="og:description" content="Toca las teclas del piano virtual, genera acordes y aprende a leer partituras en clave de fa y clave de sol con VexFlow.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/PIano1.png">
+  <meta property="og:title" content="Juego para leer notas en piano: clave de Sol y Fa">
+  <meta property="og:description" content="Practica la lectura de notas en clave de Sol y de Fa (líneas, espacios y líneas adicionales) con un piano virtual gratis.">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/PIano1.png">
+  <meta property="og:image:alt" content="Piano virtual de Sprinkloud con pentagrama en clave de Sol y Fa">
 
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html">
-  <meta property="twitter:title" content="Simulador de Piano Interactivo - Sprinkloud">
-  <meta property="twitter:description" content="Toca las teclas del piano virtual y aprende a leer partituras en clave de fa y clave de sol.">
-  <meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/PIano1.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Juego para leer notas en piano: clave de Sol y Fa">
+  <meta name="twitter:description" content="Practica la lectura de notas en clave de Sol y de Fa con un piano virtual gratis.">
+  <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/PIano1.png">
 
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/PIano1.png">
+  <link rel="icon" type="image/png" href="../images/PIano1.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Piano virtual y juego de notas en clave de Sol y Fa",
+        "url": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html",
+        "image": "https://sprinkloud.vercel.app/images/PIano1.png",
+        "description": "Piano virtual gratis para aprender a leer notas en clave de Sol y clave de Fa, con modos de práctica por líneas, espacios y líneas adicionales, y acordes.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Cualquiera (navegador web)",
+        "inLanguage": "es",
+        "isAccessibleForFree": true,
+        "educationalLevel": "Principiante",
+        "learningResourceType": "Juego educativo",
+        "teaches": ["Lectura de notas en clave de Sol", "Lectura de notas en clave de Fa", "Líneas adicionales", "Acordes de piano"],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "Sprinkloud Club Musical", "url": "https://sprinkloud.vercel.app/" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://sprinkloud.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material.html" },
+          { "@type": "ListItem", "position": 3, "name": "Piano y pentagrama", "item": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notaspiano.html" }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,7 +121,19 @@
       margin: 4px 0 0;
       text-align: center;
     }
-    h1 span { color: var(--gold); }
+
+    .cabecera { text-align: center; margin: 0 0 16px; }
+    .marca {
+      font-family: var(--f-display);
+      font-variation-settings: "SOFT" 100;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--pine);
+      margin: 0;
+    }
+    .marca span { color: var(--gold); }
+    .intro { color: var(--ink-2); margin: 6px auto 0; max-width: 40ch; }
+    .principal { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
     .subtitle {
       font: 600 1.5rem/1.2 var(--f-hand);
@@ -372,8 +417,13 @@
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg> Volver
 </a>
 
-<h1>Sprink<span>loud</span></h1>
-<div class="subtitle">Club musical · Piano virtual</div>
+<header class="cabecera">
+  <p class="marca">Sprink<span>loud</span></p>
+  <h1>Piano virtual para leer notas</h1>
+  <p class="intro">Practica en clave de Sol y de Fa: líneas, espacios y líneas adicionales.</p>
+</header>
+
+<main class="principal">
 
 <div class="panel-juego">
   <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
@@ -875,6 +925,8 @@
     }
   }
 </script>
+
+</main>
 
 <footer id="footer">
   <ul class="icons">
