@@ -284,8 +284,9 @@
       margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 0;
     }
+    .nav-piano { margin-bottom: 10px; }
 
     .nav-piano {
       display: flex;
@@ -337,7 +338,35 @@
       touch-action: manipulation;
       transition: background-color 80ms ease;
     }
-    @media (hover: hover) { .tecla.blanca:hover { background: #F6F0E2; } }
+    .tecla.blanca.oct-1 { background: #DDE6EC; }
+    .tecla.blanca.oct-2 { background: #E9EEEC; }
+    .tecla.blanca.oct-3 { background: #FBF7EE; }
+    .tecla.blanca.oct-4 { background: #F8EBE2; }
+    .tecla.blanca.oct-5 { background: #F3DDD4; }
+    @media (hover: hover) { .tecla.blanca:hover { filter: brightness(.96); } }
+
+    /* nombre de cada octava sobre el teclado */
+    .octavas { position: relative; height: 28px; }
+    .etiqueta-octava {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-radius: 10px 10px 0 0;
+      border: 1px solid #DCCFB5;
+      border-bottom: 0;
+      font-size: .74rem;
+      font-weight: 800;
+      color: #6D6152;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .etiqueta-octava.oct-1 { background: #DDE6EC; }
+    .etiqueta-octava.oct-2 { background: #E9EEEC; }
+    .etiqueta-octava.oct-3 { background: #FBF7EE; color: #48592F; }
+    .etiqueta-octava.oct-4 { background: #F8EBE2; }
+    .etiqueta-octava.oct-5 { background: #F3DDD4; }
     .tecla.blanca.activa { background: #E1E6CF !important; color: #48592F; box-shadow: inset 0 -5px 0 #647745; }
 
     .tecla.negra {
@@ -363,64 +392,27 @@
       margin: 24px -16px 0;
       margin-top: auto;
       align-self: stretch;
-      padding: 18px 1.5em max(18px, env(safe-area-inset-bottom));
+      padding: 6px 1.5em max(10px, env(safe-area-inset-bottom));
       background: var(--surface);
       border-top: 1px solid var(--line);
       text-align: center;
       color: var(--ink-2);
-      display: grid;
-      gap: 10px;
-      justify-items: center;
     }
     .principal { margin-bottom: 24px; }
-    .pie-marca {
-      margin: 0;
-      font: 700 1.05rem var(--f-display);
-      font-variation-settings: "SOFT" 100;
-      color: var(--pine);
+    .pie-enlaces { display: flex; justify-content: center; gap: 4px; }
+    /* ícono pequeño, pero con área de toque de 44 px */
+    .pie-enlaces a {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--ink-2);
+      transition: color 150ms ease;
     }
-    .pie-marca span { color: var(--gold); }
-    #footer .icons {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-    }
-    #footer .icons a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-height: 44px;
-      padding: 0 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface-2);
-      color: var(--ink);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .9rem;
-      transition: transform var(--dur-press) var(--ease-out), border-color 150ms ease;
-    }
-    #footer .icons a:active { transform: scale(.97); }
-    #footer .icons svg { width: 20px; height: 20px; fill: none; stroke: var(--pine); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    #footer .copyright {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      font-size: .85rem;
-      display: flex;
-      justify-content: center;
-      gap: .4em 1.2em;
-      flex-wrap: wrap;
-    }
-    #footer .copyright a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
-    @media (hover: hover) {
-      #footer .icons a:hover { border-color: var(--accent); }
-      #footer .copyright a:hover { color: var(--pine); }
-    }
+    .pie-enlaces svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    @media (hover: hover) { .pie-enlaces a:hover { color: var(--pine); } }
+    .pie-copy { margin: 0; font-size: .8rem; }
 
     @media (pointer: coarse), (max-width: 760px) {
       .btn-modo, .btn-acorde, .btn-juego { min-height: 44px; }
@@ -493,6 +485,7 @@
     <span id="rango-piano"></span>
     <button class="btn-octava" id="octava-aguda" onclick="moverVentana(1)" aria-label="Octava más aguda"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
   </div>
+  <div class="octavas" id="octavas-piano" aria-hidden="true"></div>
   <div class="piano" id="teclado-piano"></div>
 </div>
 
@@ -746,6 +739,15 @@
   const totalBlancas = notasPiano.filter(n => n.tipo === 'blanca').length;
   let inicioVentana = null;
 
+  // octava (campo "octava" de notasPiano) -> [nombre largo, nombre corto]
+  const NOMBRE_OCTAVA = {
+    1: ['2 octavas abajo', '2 abajo'],
+    2: ['1 octava abajo', '1 abajo'],
+    3: ['Octava central', 'Central'],
+    4: ['1 octava arriba', '1 arriba'],
+    5: ['2 octavas arriba', '2 arriba']
+  };
+
   function blancaDe(vfKey) {
     let k = 0;
     for (const n of notasPiano) {
@@ -778,19 +780,6 @@
     construirTecladoPiano();
   }
 
-  // Si la nota del juego quedó fuera del tramo visible, mueve el teclado por octavas hasta mostrarla
-  function asegurarVisible(vfKey) {
-    const k = blancaDe(vfKey), N = blancasVisibles();
-    let inicio = inicioVentana;
-    while (k < inicio) inicio -= 7;
-    while (k >= inicio + N) inicio += 7;
-    inicio = limitarVentana(inicio);
-    if (inicio !== inicioVentana) {
-      inicioVentana = inicio;
-      construirTecladoPiano();
-    }
-  }
-
   function construirTecladoPiano() {
     const contenedor = document.getElementById('teclado-piano');
     contenedor.innerHTML = "";
@@ -804,7 +793,7 @@
     const fin = inicioVentana + N;
 
     let contadorBlancas = 0;
-    let primera = null, ultima = null;
+    const octavasVisibles = {};
 
     notasPiano.forEach((item, index) => {
       let izquierda;
@@ -812,15 +801,15 @@
         const k = contadorBlancas++;
         if (k < inicioVentana || k >= fin) return;
         izquierda = (k - inicioVentana) * anchoTeclaBlanca;
-        if (primera === null) primera = item.label;
-        ultima = item.label;
+        const o = octavasVisibles[item.octava] ||= { desde: k, hasta: k };
+        o.hasta = k;
       } else {
         if (contadorBlancas - 1 < inicioVentana || contadorBlancas >= fin) return;
         izquierda = (contadorBlancas - inicioVentana) * anchoTeclaBlanca - anchoTeclaNegra / 2;
       }
 
       const teclaEl = document.createElement('div');
-      teclaEl.className = `tecla ${item.tipo}`;
+      teclaEl.className = `tecla ${item.tipo} oct-${item.octava}`;
       teclaEl.innerText = (item.tipo === 'blanca') ? item.label : "";
       teclaEl.dataset.index = index;
       teclaEl.style.width = `${item.tipo === 'blanca' ? anchoTeclaBlanca : anchoTeclaNegra}px`;
@@ -836,7 +825,22 @@
 
     const completo = N >= totalBlancas;
     document.getElementById('nav-piano').hidden = completo;
-    document.getElementById('rango-piano').textContent = `${primera} – ${ultima}`;
+    const etiquetas = document.getElementById('octavas-piano');
+    etiquetas.innerHTML = '';
+    Object.entries(octavasVisibles).forEach(([oct, { desde, hasta }]) => {
+      const ancho = (hasta - desde + 1) * anchoTeclaBlanca;
+      const et = document.createElement('div');
+      et.className = `etiqueta-octava oct-${oct}`;
+      et.style.left = `${(desde - inicioVentana) * anchoTeclaBlanca}px`;
+      et.style.width = `${ancho}px`;
+      et.textContent = ancho >= 120 ? NOMBRE_OCTAVA[oct][0] : ancho >= 58 ? NOMBRE_OCTAVA[oct][1] : '';
+      et.title = NOMBRE_OCTAVA[oct][0];
+      etiquetas.appendChild(et);
+    });
+    const octs = Object.keys(octavasVisibles);
+    document.getElementById('rango-piano').textContent = octs.length === 1
+      ? NOMBRE_OCTAVA[octs[0]][0]
+      : `${NOMBRE_OCTAVA[octs[0]][1]} – ${NOMBRE_OCTAVA[octs[octs.length - 1]][1]}`;
     document.getElementById('octava-grave').disabled = inicioVentana === 0;
     document.getElementById('octava-aguda').disabled = inicioVentana + N >= totalBlancas;
   }
@@ -849,7 +853,6 @@
     } while (notaObjetivo && nuevaNota.vfKey === notaObjetivo.vfKey && nuevaNota.clef === notaObjetivo.clef);
 
     notaObjetivo = nuevaNota;
-    asegurarVisible(notaObjetivo.vfKey);
     renderizarDoblePentagrama([{ vfKey: notaObjetivo.vfKey, alt: notaObjetivo.alt, clef: notaObjetivo.clef }]);
 
     const feedbackEl = document.getElementById('feedback-juego');
@@ -953,17 +956,12 @@
 </main>
 
 <footer id="footer">
-  <p class="pie-marca">Sprink<span>loud</span> · Club musical</p>
-  <ul class="icons">
-    <li><a href="https://wa.me/593987999154" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.3L3.2 20.8l4.4-1.2A8.8 8.8 0 1 0 12 3.2z"/><path d="M9.2 8.2c.3-.3.8-.3 1 .1l.7 1.5c.1.3 0 .6-.2.8l-.5.5a6 6 0 0 0 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7.1 1-.6.7-1.5 1-2.4.7a8.4 8.4 0 0 1-4.9-4.9c-.3-.9 0-1.8.6-2.5z"/></svg><span>WhatsApp</span></a></li>
-    <li><a href="https://instagram.com/sprinkloud" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg><span>Instagram</span></a></li>
-    <li><a href="mailto:sprinkloud@gmail.com" aria-label="Correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg><span>Correo</span></a></li>
-  </ul>
-  <ul class="copyright">
-    <li><a href="https://sprinkloud.vercel.app/">Inicio</a></li>
-    <li><a href="https://sprinkloud.vercel.app/material.html">Material</a></li>
-    <li>&copy; 2026 Sprinkloud</li>
-  </ul>
+  <nav class="pie-enlaces" aria-label="Contacto">
+    <a href="https://wa.me/593987999154" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.3L3.2 20.8l4.4-1.2A8.8 8.8 0 1 0 12 3.2z"/><path d="M9.2 8.2c.3-.3.8-.3 1 .1l.7 1.5c.1.3 0 .6-.2.8l-.5.5a6 6 0 0 0 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7.1 1-.6.7-1.5 1-2.4.7a8.4 8.4 0 0 1-4.9-4.9c-.3-.9 0-1.8.6-2.5z"/></svg></a>
+    <a href="https://instagram.com/sprinkloud" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg></a>
+    <a href="mailto:sprinkloud@gmail.com" aria-label="Correo" title="Correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg></a>
+  </nav>
+  <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
 </body>
 </html>
