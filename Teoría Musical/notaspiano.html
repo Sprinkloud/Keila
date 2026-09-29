@@ -360,42 +360,66 @@
     .tecla.negra.activa { background: #647745 !important; }
 
     #footer {
-      margin: auto -16px 0;
+      margin: 24px -16px 0;
+      margin-top: auto;
       align-self: stretch;
-      padding: .7em 1.5em max(.7em, env(safe-area-inset-bottom));
+      padding: 18px 1.5em max(18px, env(safe-area-inset-bottom));
       background: var(--surface);
       border-top: 1px solid var(--line);
       text-align: center;
       color: var(--ink-2);
+      display: grid;
+      gap: 10px;
+      justify-items: center;
     }
-
+    .principal { margin-bottom: 24px; }
+    .pie-marca {
+      margin: 0;
+      font: 700 1.05rem var(--f-display);
+      font-variation-settings: "SOFT" 100;
+      color: var(--pine);
+    }
+    .pie-marca span { color: var(--gold); }
     #footer .icons {
       list-style: none;
-      margin: 0 0 .3em;
+      margin: 0;
       padding: 0;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 1.5em;
-      font-size: .9em;
-      font-weight: 700;
+      gap: 8px;
     }
-
-    #footer .icons a, #footer .copyright a {
-      color: var(--ink-2);
+    #footer .icons a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--ink);
       text-decoration: none;
-      transition: color 150ms ease;
+      font-weight: 700;
+      font-size: .9rem;
+      transition: transform var(--dur-press) var(--ease-out), border-color 150ms ease;
     }
-    @media (hover: hover) { #footer .icons a:hover, #footer .copyright a:hover { color: var(--pine); } }
-
+    #footer .icons a:active { transform: scale(.97); }
+    #footer .icons svg { width: 20px; height: 20px; fill: none; stroke: var(--pine); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     #footer .copyright {
       list-style: none;
       margin: 0;
       padding: 0;
-      font-size: .8rem;
+      font-size: .85rem;
       display: flex;
       justify-content: center;
-      gap: .5em;
+      gap: .4em 1.2em;
       flex-wrap: wrap;
+    }
+    #footer .copyright a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+    @media (hover: hover) {
+      #footer .icons a:hover { border-color: var(--accent); }
+      #footer .copyright a:hover { color: var(--pine); }
     }
 
     @media (pointer: coarse), (max-width: 760px) {
@@ -929,14 +953,16 @@
 </main>
 
 <footer id="footer">
+  <p class="pie-marca">Sprink<span>loud</span> · Club musical</p>
   <ul class="icons">
-    <li><a href="https://wa.me/593987999154" class="icon brands fa-whatsapp"><span class="label">WhatsApp</span></a></li>
-    <li><a href="mailto:sprinkloud@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-    <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+    <li><a href="https://wa.me/593987999154" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.3L3.2 20.8l4.4-1.2A8.8 8.8 0 1 0 12 3.2z"/><path d="M9.2 8.2c.3-.3.8-.3 1 .1l.7 1.5c.1.3 0 .6-.2.8l-.5.5a6 6 0 0 0 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7.1 1-.6.7-1.5 1-2.4.7a8.4 8.4 0 0 1-4.9-4.9c-.3-.9 0-1.8.6-2.5z"/></svg><span>WhatsApp</span></a></li>
+    <li><a href="https://instagram.com/sprinkloud" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg><span>Instagram</span></a></li>
+    <li><a href="mailto:sprinkloud@gmail.com" aria-label="Correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg><span>Correo</span></a></li>
   </ul>
   <ul class="copyright">
-    <li>&copy; 2026</li>
-    <li><a href="https://sprinkloud.vercel.app/">SPRINKLOUD</a></li>
+    <li><a href="https://sprinkloud.vercel.app/">Inicio</a></li>
+    <li><a href="https://sprinkloud.vercel.app/material.html">Material</a></li>
+    <li>&copy; 2026 Sprinkloud</li>
   </ul>
 </footer>
 </body>

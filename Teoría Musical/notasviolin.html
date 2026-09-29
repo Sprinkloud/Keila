@@ -1,775 +1,874 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Simulador de Violín Interactivo | Aprende Notas y Pentagrama - Sprinkloud</title>
-
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-  <meta name="description" content="Aprende las notas en el violín con nuestro simulador interactivo horizontal. Visualiza la posición de los dedos en la mano y su relación exacta en el pentagrama. ¡Ideal para estudiantes de música!">
-  <meta name="keywords" content="violin, notas violin, pentagrama violin, posicion de dedos violin, aprender violin, simulador de violin, cuerdas violin, musica, sprinkloud">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Violín virtual: leer notas en el pentagrama | Sprinkloud</title>
+  <meta name="description" content="Violín virtual gratis para aprender a leer notas en clave de Sol y encontrarlas en las cuerdas: líneas, espacios y líneas adicionales. En celular o PC.">
+  <meta name="keywords" content="leer notas en violín, notas del violín, juego de notas, violín virtual, clave de sol, pentagrama, digitación violín, cuerdas del violín, líneas adicionales, teoría musical para niños">
   <meta name="author" content="Sprinkloud Club Musical">
-  <meta name="robots" content="index, follow">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
+  <meta name="theme-color" content="#F6F0E2">
 
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Sprinkloud Club Musical">
   <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
-  <meta property="og:title" content="Simulador de Violín Interactivo Horizontal - Sprinkloud">
-  <meta property="og:description" content="Toca las cuerdas, mira la postura real de la mano y aprende a leer partituras con nuestro simulador dinámico de violín con VexFlow.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/Violin1.png">
+  <meta property="og:title" content="Violín virtual: leer notas en el pentagrama">
+  <meta property="og:description" content="Aprende a leer notas en clave de Sol y a encontrarlas en las cuerdas del violín: líneas, espacios y líneas adicionales. Gratis.">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
+  <meta property="og:image:alt" content="Violín virtual de Sprinkloud con el pentagrama en clave de Sol">
 
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
-  <meta property="twitter:title" content="Simulador de Violín Interactivo Horizontal - Sprinkloud">
-  <meta property="twitter:description" content="Toca las cuerdas, mira la postura real de la mano y aprende a leer partituras con nuestro simulador dinámico de violín.">
-  <meta property="twitter:image" content="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/Violin1.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Violín virtual: leer notas en el pentagrama">
+  <meta name="twitter:description" content="Aprende a leer notas en clave de Sol y a encontrarlas en las cuerdas del violín. Gratis.">
+  <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
 
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Sprinkloud/Keila/main/images/Violin1.png">
+  <link rel="icon" type="image/png" href="../images/Violin1.png">
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Violín virtual y juego de notas en clave de Sol",
+        "url": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html",
+        "image": "https://sprinkloud.vercel.app/images/Violin1.png",
+        "description": "Violín virtual gratis para aprender a leer notas en clave de Sol y encontrarlas en las cuerdas, con modos de práctica por líneas, espacios y líneas adicionales.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Cualquiera (navegador web)",
+        "inLanguage": "es",
+        "isAccessibleForFree": true,
+        "educationalLevel": "Principiante",
+        "learningResourceType": "Juego educativo",
+        "teaches": ["Lectura de notas en clave de Sol", "Líneas adicionales", "Notas en las cuerdas del violín", "Digitación del violín"],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "Sprinkloud Club Musical", "url": "https://sprinkloud.vercel.app/" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://sprinkloud.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material.html" },
+          { "@type": "ListItem", "position": 3, "name": "Violín y pentagrama", "item": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+
+  <!-- VexFlow para dibujar el pentagrama -->
   <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
-    <style>
-        :root {
-            /* Paleta de colores Premium Oscuro */
-            --fondo-oscuro: #1A1A2E;
-            --texto-claro: #F5F5F5;
-            --texto-debil: rgba(255, 255, 255, 0.6);
-            --dorado: #F0A500;
-            --contenedor-bg: #2D2D44;
-            --contenedor-borde: #4A4A6A;
-            --madera-mastil: #3d2314;
-        }
 
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-style: normal !important;
-        }
+  <style>
+    /* Mismo sistema visual que la app de violín (App_Sprinkloud/DESIGN.md): libro ilustrado en acuarela */
+    :root {
+      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245;
+      --foto-papel: #FBF7EE;
+      /* colores de cada cuerda, los mismos de las partituras de la app */
+      --s-sol: #9C5B55; --s-re: #C4923A; --s-la: #647745; --s-mi: #567388;
+      --on-sol: #FBF7EE; --on-re: #3A3128; --on-la: #FBF7EE; --on-mi: #FBF7EE;
+      --ebano: #2A1F18; --madera: #B97A45; --madera-osc: #5A3A22; --cejilla: #E9DCC2; --cinta: rgb(242 238 228 / .8);
+      --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-hand: Caveat, "Segoe Print", cursive;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --dur-press: 140ms;
+      --papel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .19 0 0 0 0 .16 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23p)'/%3E%3C/svg%3E");
+      /* nombres que usa el código del juego */
+      --dorado: var(--gold-ink); --texto-debil: var(--ink-2); --acierto: var(--pine); --error: var(--danger);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
+        --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585;
+        color-scheme: dark;
+      }
+    }
 
-        body {
-            background-color: var(--fondo-oscuro);
-            color: var(--texto-claro);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            padding: 12px 12px 90px 12px; /* Espacio extra abajo para que el footer no tape nada */
-        }
+    * { box-sizing: border-box; }
 
-        h1, h2, h3 {
-            font-family: 'Poppins', -apple-system, sans-serif;
-            margin: 0;
-        }
+    body {
+      background: var(--papel) var(--bg);
+      color: var(--ink);
+      font: 400 16px/1.5 "Nunito Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
 
-        h1 {
-            color: var(--texto-claro);
-            font-size: 1.8rem;
-            margin-top: 5px;
-            margin-bottom: 3px;
-            letter-spacing: 2px;
-            text-align: center;
-            font-weight: 800;
-        }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--pine); outline-offset: 2px; border-radius: 6px; }
 
-        .subtitle {
-            color: var(--dorado);
-            font-size: 0.9rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-            font-weight: bold;
-            text-align: center;
-        }
+    .btn-volver {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      min-height: 44px;
+      padding: 9px 18px;
+      background: var(--surface);
+      color: var(--ink-2);
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: transform var(--dur-press) var(--ease-out), border-color 150ms ease;
+    }
+    @media (hover: hover) { .btn-volver:hover { border-color: var(--accent); color: var(--ink); } }
+    .btn-volver:active { transform: scale(.97); }
 
-        /* Botón de regreso con el estilo de la nueva interfaz */
-        .btn-volver {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            align-self: flex-start;
-            margin-bottom: 15px;
-            padding: 8px 16px;
-            background-color: var(--contenedor-bg);
-            color: var(--texto-claro);
-            border: 2px solid var(--contenedor-borde);
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-        }
+    .cabecera { text-align: center; margin: 0 0 16px; }
+    .marca {
+      font-family: var(--f-display);
+      font-variation-settings: "SOFT" 100;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--pine);
+      margin: 0;
+    }
+    .marca span { color: var(--gold); }
+    h1 {
+      font-family: var(--f-display);
+      font-variation-settings: "SOFT" 100;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      line-height: 1.1;
+      letter-spacing: -.01em;
+      text-wrap: balance;
+      color: var(--pine);
+      margin: 4px 0 0;
+    }
+    .intro { color: var(--ink-2); margin: 6px auto 0; max-width: 42ch; }
+    .principal { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-        .btn-volver:hover {
-            transform: translateY(-2px);
-            border-color: var(--dorado);
-            box-shadow: 0 6px 15px rgba(240, 165, 0, 0.2);
-        }
+    .panel-juego {
+      background: var(--surface);
+      padding: clamp(14px, 2.4vw, 22px);
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      margin-bottom: 16px;
+      text-align: center;
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .instrucciones {
-            background: var(--contenedor-bg);
-            padding: 12px 15px;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            margin-bottom: 15px;
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-            border: 2px dashed var(--contenedor-borde);
-            font-size: 0.85rem;
-            color: var(--texto-debil);
-        }
+    .btn-juego {
+      min-height: 48px;
+      background: var(--accent);
+      color: var(--on-accent);
+      border: 1.5px solid var(--accent);
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
+    }
+    .btn-juego:active { transform: scale(.97); }
+    .btn-juego.activo { background: var(--surface); color: var(--danger); border-color: var(--danger); }
 
-        .instrucciones strong, .instrucciones b {
-            color: var(--texto-claro);
-        }
+    .feedback-juego {
+      font-weight: 700;
+      font-size: 1.05rem;
+      min-height: 28px;
+      transition: color 150ms ease;
+    }
 
-        /* Panel del Juego integrado */
-        .panel-juego {
-            background: var(--contenedor-bg);
-            padding: 12px 20px;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-            border: 2px solid var(--contenedor-borde);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
+    /* Modos del juego */
+    .grupo-modo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+    .titulo-modo {
+      font: 600 1.25rem/1 var(--f-hand);
+      color: var(--gold-ink);
+      margin-right: 4px;
+    }
+    .btn-modo {
+      min-height: 40px;
+      background: var(--surface-2);
+      color: var(--ink-2);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .88rem;
+      font-weight: 700;
+      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+    }
+    @media (hover: hover) { .btn-modo:hover { border-color: var(--accent); color: var(--ink); } }
+    .btn-modo:active { transform: scale(.97); }
+    .btn-modo.seleccionado { background: var(--gold); border-color: var(--gold); color: #3A3128; }
 
-        .btn-juego {
-            background-color: var(--dorado);
-            color: #1A1A2E;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            transition: all 0.2s ease;
-        }
+    /* Pentagrama: siempre sobre papel claro para que la tinta de VexFlow se lea */
+    .contenedor-pentagrama-bloque {
+      background: var(--foto-papel);
+      padding: 8px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      margin-bottom: 18px;
+      width: 100%;
+      max-width: 360px;
+    }
+    #pentagrama { width: 100%; max-width: 320px; margin: 0 auto; aspect-ratio: 320 / 155; }
+    #pentagrama svg { display: block; width: 100%; height: auto; }
 
-        .btn-juego:hover {
-            transform: scale(1.04);
-            background-color: #ffb703;
-        }
+    /* ---- Violín ----
+       Horizontal en pantallas anchas; vertical (cuerdas en columnas) en celulares.
+       Cada nota se ubica con --p: la fracción del mástil donde cae ese semitono. */
+    .interactor-container {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      width: 100%;
+      max-width: 860px;
+      margin-bottom: 20px;
+    }
 
-        .btn-juego.activo {
-            background-color: #e63946;
-            color: #ffffff;
-        }
+    .interfaz-violin {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      width: 100%;
+    }
 
-        .feedback-juego {
-            font-size: 0.95rem;
-            font-weight: bold;
-            min-height: 24px;
-            transition: color 0.2s ease;
-        }
+    .cejilla {
+      width: 64px;
+      flex: none;
+      background: var(--madera);
+      border-radius: 14px 4px 4px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 6px;
+    }
 
-        /* Contenedor del pentagrama (Fondo blanco obligatorio para legibilidad de VexFlow) */
-        .contenedor-pentagrama-bloque {
-            background: #FFFFFF;
-            padding: 10px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 3px solid var(--contenedor-borde);
-            width: 100%;
-            max-width: 340px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+    .cuerda-aire {
+      width: 100%;
+      min-height: 44px;
+      font-size: .85rem;
+      font-weight: 800;
+      background: var(--foto-papel);
+      color: #6D6152;
+      border: 2px solid var(--c);
+      border-radius: 999px;
+      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
+    }
+    [data-cuerda="sol"] { --c: var(--s-sol); --on: var(--on-sol); }
+    [data-cuerda="re"] { --c: var(--s-re); --on: var(--on-re); }
+    [data-cuerda="la"] { --c: var(--s-la); --on: var(--on-la); }
+    [data-cuerda="mi"] { --c: var(--s-mi); --on: var(--on-mi); }
+    .cuerda-aire.on { background: var(--c); color: var(--on); border-color: var(--foto-papel); }
+    .cuerda-aire:active { transform: scale(.95); }
+    .cuerda-aire.activa { background: var(--gold); color: #3A3128; box-shadow: 0 0 0 3px var(--foto-papel), 0 0 0 5px var(--gold); }
 
-        #pentagrama {
-            width: 315px;
-            height: 120px;
-        }
+    .ver-notas { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 12px; }
+    .btn-ver {
+      min-height: 44px;
+      background: var(--surface-2);
+      color: var(--ink-2);
+      border: 1px solid var(--line);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: .9rem;
+      font-weight: 700;
+      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
+    }
+    .btn-ver:active { transform: scale(.97); }
+    .btn-ver.seleccionado { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 
-        /* Contenedor principal del diapasón */
-        .interactor-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            background: var(--contenedor-bg);
-            padding: 15px;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            border: 2px solid var(--contenedor-borde);
-            width: 100%;
-            max-width: 850px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+    .mastil {
+      position: relative;
+      flex: 1;
+      height: 250px;
+      background: var(--ebano);
+      border-radius: 0 16px 16px 0;
+      border-left: 8px solid var(--cejilla);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 10px 0;
+      touch-action: manipulation;
+    }
 
-        .interfaz-violin {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            position: relative;
-            padding: 10px 0;
-        }
+    /* cintas guía del ancho de una nota */
+    .cinta-guia {
+      position: absolute;
+      top: 0;
+      left: calc(var(--p) * 100%);
+      width: 42px;
+      height: 100%;
+      background: var(--cinta);
+      transform: translateX(-50%);
+      z-index: 1;
+      pointer-events: none;
+    }
 
-        /* Cejilla dorada/bronce satinada */
-        .cejilla {
-            width: 55px;
-            height: 240px;
-            background: rgb(128 74 27);
-            border-radius: 12px 4px 4px 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 4px;
-            box-shadow: -4px 0 10px rgba(0,0,0,0.4);
-            z-index: 15;
-            border-right: 2px solid #5A4530;
-        }
+    .cuerda {
+      position: relative;
+      height: 3px;
+      width: 100%;
+      z-index: 2;
+      background: var(--c);
+    }
+    .cuerda[data-cuerda="mi"] { height: 2px; }
+    .cuerda[data-cuerda="la"] { height: 2.5px; }
+    .cuerda[data-cuerda="re"] { height: 3px; }
+    .cuerda[data-cuerda="sol"] { height: 4px; }
 
-        .cuerda-aire {
-            width: 90%;
-            padding: 8px 0;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border: 1px solid rgba(0,0,0,0.2);
-            background: rgb(255 255 255 / 0.11);
-            color: #1A1A2E;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-transform: uppercase;
-            transition: all 0.1s ease;
-        }
+    .nota {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: calc(var(--p) * 100%);
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: .74rem;
+      font-weight: 800;
+      z-index: 3;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      cursor: pointer;
+      /* fuera de la escala: tenue, como en la app */
+      background: rgb(42 31 24);
+      background-image: linear-gradient(rgb(255 255 255 / .08), rgb(255 255 255 / .08));
+      border: 1.5px solid rgb(255 255 255 / .25);
+      color: rgb(255 255 255 / .75);
+      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
+    }
+    /* notas de la escala: rellenas con el color de su cuerda */
+    .nota.on { background: var(--c); background-image: none; border: 2px solid #fff; color: #fff; }
+    .cuerda[data-cuerda="re"] .nota.on { color: var(--on-re); }
 
-        .cuerda-aire:hover {
-            background: rgb(255 207 150 / 0.3);
-            color: #1A1A2E;
-        }
+    .nota:active { transform: translate(-50%, -50%) scale(.94); }
+    .nota.activa {
+      background: var(--gold) !important;
+      background-image: none !important;
+      color: #3A3128 !important;
+      border: 3px solid #fff !important;
+      transform: translate(-50%, -50%) scale(1.12);
+      z-index: 4;
+    }
 
-        .cuerda-aire:active {
-            transform: translate(-1px, 1px);
-            box-shadow: 0 2px 3px rgba(0,0,0,0.4);
-        }
+    .leyenda {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 16px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--ink-2);
+    }
+    .leyenda i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 6px; }
+    .leyenda .l-escala { background: var(--s-la); box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px var(--line); }
+    .leyenda .l-otra { background: var(--ebano); border: 1.5px solid rgb(255 255 255 / .25); }
+    .leyenda .l-cinta { background: #F2EEE4; border: 1px solid var(--line); border-radius: 3px; }
 
-        /* Mástil de madera */
-        .mastil {
-            background-color: var(--madera-mastil);
-            width: 680px;
-            height: 240px;
-            border-radius: 0 25px 25px 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 10px 0;
-            position: relative;
-            border-right: 15px solid #110905;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-        }
+    /* Celulares y pantallas angostas: el violín se pone vertical */
+    @media (max-width: 760px) {
+      .interactor-container { max-width: 420px; padding: 12px; }
+      .interfaz-violin { flex-direction: column; }
+      .cejilla {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 14px 14px 0 0;
+        border-right: 0;
+      }
+      .cuerda-aire { flex: 1; }
+      .btn-ver { padding: 6px 12px; font-size: .84rem; }
+      .mastil {
+        flex: none;
+        width: 100%;
+        height: 598px; /* 13 tramos de 46 px */
+        flex-direction: row;
+        padding: 0 8px;
+        border-left: 0;
+        border-top: 8px solid var(--cejilla);
+        border-radius: 0 0 16px 16px;
+      }
+      .cinta-guia { top: calc(var(--p) * 100%); left: 0; width: 100%; height: 42px; transform: translateY(-50%); }
+      .cuerda, .cuerda[data-cuerda] { height: 100%; }
+      .cuerda[data-cuerda="mi"] { width: 2px; }
+      .cuerda[data-cuerda="la"] { width: 2.5px; }
+      .cuerda[data-cuerda="re"] { width: 3px; }
+      .cuerda[data-cuerda="sol"] { width: 4px; }
+      .nota { top: calc(var(--p) * 100%); left: 50%; }
+    }
 
-        /* Cintas guía satinadas */
-        .cinta-guia {
-            position: absolute;
-            top: 0;
-            width: 45px;
-            height: 100%;
-            background-color: rgb(232 197 151 / 0.84);
-            border-left: 1px solid rgba(255, 255, 255, 0.4);
-            border-right: 1px solid rgba(255, 255, 255, 0.4);
-            transform: translateX(-50%);
-            z-index: 2;
-            pointer-events: none;
-        }
+    @media (pointer: coarse), (max-width: 760px) {
+      .btn-modo, .btn-juego { min-height: 44px; }
+    }
 
-        .cinta-1 { left: calc((2 / 13) * 100%); }
-        .cinta-2 { left: calc((3 / 13) * 100%); }
-        .cinta-3 { left: calc((5 / 13) * 100%); }
+    #footer {
+      margin: 24px -16px 0;
+      margin-top: auto;
+      align-self: stretch;
+      padding: 18px 1.5em max(18px, env(safe-area-inset-bottom));
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--ink-2);
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+    }
+    .principal { margin-bottom: 24px; }
+    .pie-marca {
+      margin: 0;
+      font: 700 1.05rem var(--f-display);
+      font-variation-settings: "SOFT" 100;
+      color: var(--pine);
+    }
+    .pie-marca span { color: var(--gold); }
+    #footer .icons {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    #footer .icons a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .9rem;
+      transition: transform var(--dur-press) var(--ease-out), border-color 150ms ease;
+    }
+    #footer .icons a:active { transform: scale(.97); }
+    #footer .icons svg { width: 20px; height: 20px; fill: none; stroke: var(--pine); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    #footer .copyright {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: .85rem;
+      display: flex;
+      justify-content: center;
+      gap: .4em 1.2em;
+      flex-wrap: wrap;
+    }
+    #footer .copyright a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+    @media (hover: hover) {
+      #footer .icons a:hover { border-color: var(--accent); }
+      #footer .copyright a:hover { color: var(--pine); }
+    }
 
-        /* Cuerdas metálicas */
-        .cuerda {
-            height: 5px;
-            background: linear-gradient(180deg, #888, #ddd, #555);
-            width: 100%;
-            position: relative;
-            z-index: 5;
-        }
-
-        /* Círculos de las Notas */
-        .nota {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: var(--texto-claro);
-            transition: transform 0.12s, background-color 0.3s;
-            z-index: 10;
-            user-select: none;
-            -webkit-user-select: none;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-        }
-
-        /* Notas naturales */
-        .nota.natural {
-            background-color: #0b2a7a;
-            border: 2px solid var(--contenedor-borde);
-        }
-
-        .nota.natural:hover {
-            border-color: #000f32
-        }
-
-        /* Notas alteradas */
-        .nota.alterada {
-            background-color: rgba(74, 74, 106, 0.4);
-            border: 2px dashed rgba(255,255,255,0.2);
-            color: var(--texto-debil);
-        }
-
-        /* Nota en ejecución: Resplandece en dorado */
-        .nota.activa {
-            background-color: #031e4a !important;
-            color: #ffffff !important;
-            border: 3px solid #001d45 !important;
-            transform: translate(-50%, -50%) scale(1.18);
-            box-shadow: 0 0 20px #81510a;
-            z-index: 12;
-        }
-
-        /* Footer moderno con efecto Glassmorphism */
-        #footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 1em 1.5em;
-            background-color: rgba(26, 26, 46, 0.8);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            text-align: center;
-            color: var(--texto-debil);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 100;
-        }
-
-        #footer .icons {
-            list-style: none;
-            margin: 0 0 0.4em 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: 1.5em;
-            font-size: 0.9em;
-        }
-
-        #footer .icons a {
-            color: var(--texto-debil);
-            transition: color 0.3s, transform 0.3s;
-            text-decoration: none;
-        }
-
-        #footer .icons a:hover {
-            color: var(--dorado);
-            transform: scale(1.15);
-        }
-
-        #footer .copyright {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            font-size: 0.8rem;
-            letter-spacing: 0.10em;
-            display: flex;
-            justify-content: center;
-            gap: 0.5em;
-            flex-wrap: wrap;
-        }
-
-        #footer .copyright a {
-            color: var(--texto-debil);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        #footer .copyright a:hover {
-            color: var(--dorado);
-        }
-
-        /* Ajustes de optimización para móviles */
-        @media (max-width: 640px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-            .subtitle {
-                font-size: 0.8rem;
-                margin-bottom: 15px;
-            }
-            .interactor-container {
-                padding: 10px;
-            }
-        }
-    </style>
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
 
 <a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
-    Back
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg> Volver
 </a>
 
-<h1>SPRINKLOUD</h1>
-<div class="subtitle">CLUB MUSICAL</div>
+<header class="cabecera">
+  <p class="marca">Sprink<span>loud</span></p>
+  <h1>Violín virtual para leer notas</h1>
+  <p class="intro">Lee la nota en el pentagrama y encuéntrala en las cuerdas: líneas, espacios y líneas adicionales.</p>
+</header>
 
-<div class="panel-juego">
-    <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">🎮 Iniciar Juego de Notas</button>
+<main class="principal">
+  <div class="panel-juego">
+    <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
     <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier nota</div>
-</div>
-<div class="contenedor-pentagrama-bloque">
-    <div id="pentagrama"></div>
-</div>
 
-<div class="interactor-container">
-    <div class="interfaz-violin">
-        <div class="cejilla">
-            <button class="cuerda-aire" onclick="alPresionarNota(196.00, 'sol', 'g/3', 'n', this)">Sol</button>
-            <button class="cuerda-aire" onclick="alPresionarNota(293.66, 're', 'd/4', 'n', this)">Re</button>
-            <button class="cuerda-aire" onclick="alPresionarNota(440.00, 'la', 'a/4', 'n', this)">La</button>
-            <button class="cuerda-aire" onclick="alPresionarNota(659.25, 'mi', 'e/5', 'n', this)">Mi</button>
-        </div>
-
-        <div class="mastil" id="mastil">
-            <div class="cinta-guia cinta-1"></div>
-            <div class="cinta-guia cinta-2"></div>
-            <div class="cinta-guia cinta-3"></div>
-        </div>
+    <div class="grupo-modo" role="group" aria-label="Qué notas practicar">
+      <span class="titulo-modo">Clave de Sol</span>
+      <button class="btn-modo" data-modo="lineas" onclick="seleccionarModo('lineas')">Líneas</button>
+      <button class="btn-modo" data-modo="espacios" onclick="seleccionarModo('espacios')">Espacios</button>
+      <button class="btn-modo" data-modo="adicionales" onclick="seleccionarModo('adicionales')">Líneas adicionales</button>
+      <button class="btn-modo seleccionado" data-modo="todas" onclick="seleccionarModo('todas')">Todas</button>
     </div>
-</div>
+  </div>
 
+  <div class="contenedor-pentagrama-bloque">
+    <div id="pentagrama"></div>
+  </div>
+
+  <div class="interactor-container">
+    <div class="ver-notas" role="group" aria-label="Qué notas marcar">
+      <button class="btn-ver seleccionado" data-ver="escala" onclick="marcarNotas('escala')">Escala de Do mayor</button>
+      <button class="btn-ver" data-ver="todas" onclick="marcarNotas('todas')">Todas las notas</button>
+    </div>
+    <div class="interfaz-violin">
+      <div class="cejilla" aria-label="Cuerdas al aire">
+        <button class="cuerda-aire" data-cuerda="mi" onclick="alPresionarNota(659.25, 'mi', 'e/5', 'n', this)">Mi</button>
+        <button class="cuerda-aire" data-cuerda="la" onclick="alPresionarNota(440.00, 'la', 'a/4', 'n', this)">La</button>
+        <button class="cuerda-aire" data-cuerda="re" onclick="alPresionarNota(293.66, 're', 'd/4', 'n', this)">Re</button>
+        <button class="cuerda-aire" data-cuerda="sol" onclick="alPresionarNota(196.00, 'sol', 'g/3', 'n', this)">Sol</button>
+      </div>
+
+      <div class="mastil" id="mastil">
+        <div class="cinta-guia" style="--p: calc(2 / 13)"></div>
+        <div class="cinta-guia" style="--p: calc(3 / 13)"></div>
+        <div class="cinta-guia" style="--p: calc(5 / 13)"></div>
+      </div>
+    </div>
+    <ul class="leyenda">
+      <li><i class="l-escala"></i>Escala de Do mayor</li>
+      <li><i class="l-otra"></i>Otras notas</li>
+      <li><i class="l-cinta"></i>Cinta guía</li>
+    </ul>
+  </div>
+</main>
 
 <script>
-    const mapaCuerdas = [
-        {
-            id: 'sol',
-            baseFreq: 196.00,
-            notas: [
-                { semitonos: 1, tipo: 'alterada', label: 'Sol#', vfKey: 'g/3', acc: '#' },
-                { semitonos: 2, tipo: 'natural', label: 'La', vfKey: 'a/3', acc: 'n' },
-                { semitonos: 3, tipo: 'alterada', label: 'La#', vfKey: 'a/3', acc: '#' },
-                { semitonos: 4, tipo: 'natural', label: 'Si', vfKey: 'b/3', acc: 'n' },
-                { semitonos: 5, tipo: 'natural', label: 'Do', vfKey: 'c/4', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: 'Do#', vfKey: 'c/4', acc: '#' },
-                { semitonos: 7, tipo: 'alterada', label: 'Re', vfKey: 'd/4', acc: 'n' },
-                { semitonos: 8, tipo: 'alterada', label: 'Re#', vfKey: 'd/4', acc: '#' },
-                { semitonos: 9, tipo: 'alterada', label: 'Mi', vfKey: 'e/4', acc: 'n' },
-                { semitonos: 10, tipo: 'alterada', label: 'Fa', vfKey: 'f/4', acc: 'n' },
-                { semitonos: 11, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' }
-            ]
-        },
-        {
-            id: 're',
-            baseFreq: 293.66,
-            notas: [
-                { semitonos: 1, tipo: 'alterada', label: 'Re#', vfKey: 'd/4', acc: '#' },
-                { semitonos: 2, tipo: 'natural', label: 'Mi', vfKey: 'e/4', acc: 'n' },
-                { semitonos: 3, tipo: 'natural', label: 'Fa', vfKey: 'f/4', acc: 'n' },
-                { semitonos: 4, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' },
-                { semitonos: 5, tipo: 'natural', label: 'Sol', vfKey: 'g/4', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: 'Sol#', vfKey: 'g/4', acc: '#' },
-                { semitonos: 7, tipo: 'alterada', label: 'La', vfKey: 'a/4', acc: 'n' },
-                { semitonos: 8, tipo: 'alterada', label: 'La#', vfKey: 'a/4', acc: '#' },
-                { semitonos: 9, tipo: 'alterada', label: 'Si', vfKey: 'b/4', acc: 'n' },
-                { semitonos: 10, tipo: 'alterada', label: 'Do', vfKey: 'c/5', acc: 'n' },
-                { semitonos: 11, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' }
-            ]
-        },
-        {
-            id: 'la',
-            baseFreq: 440.00,
-            notas: [
-                { semitonos: 1, tipo: 'alterada', label: 'La#', vfKey: 'a/4', acc: '#' },
-                { semitonos: 2, tipo: 'natural', label: 'Si', vfKey: 'b/4', acc: 'n' },
-                { semitonos: 3, tipo: 'natural', label: 'Do', vfKey: 'c/5', acc: 'n' },
-                { semitonos: 4, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' },
-                { semitonos: 5, tipo: 'natural', label: 'Re', vfKey: 'd/5', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: 'Re#', vfKey: 'd/5', acc: '#' },
-                { semitonos: 7, tipo: 'alterada', label: 'Mi', vfKey: 'e/5', acc: 'n' },
-                { semitonos: 8, tipo: 'alterada', label: 'Fa', vfKey: 'f/5', acc: 'n' },
-                { semitonos: 9, tipo: 'alterada', label: 'Fa#', vfKey: 'f/5', acc: '#' },
-                { semitonos: 10, tipo: 'alterada', label: 'Sol', vfKey: 'g/5', acc: 'n' },
-                { semitonos: 11, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' }
-            ]
-        },
-        {
-            id: 'mi',
-            baseFreq: 659.25,
-            notas: [
-                { semitonos: 1, tipo: 'natural', label: 'Fa', vfKey: 'f/5', acc: 'n' },
-                { semitonos: 2, tipo: 'alterada', label: 'Fa#', vfKey: 'f/5', acc: '#' },
-                { semitonos: 3, tipo: 'natural', label: 'Sol', vfKey: 'g/5', acc: 'n' },
-                { semitonos: 4, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' },
-                { semitonos: 5, tipo: 'natural', label: 'La', vfKey: 'a/5', acc: 'n' },
-                { semitonos: 6, tipo: 'alterada', label: 'La#', vfKey: 'a/5', acc: '#' },
-                { semitonos: 7, tipo: 'natural', label: 'Si', vfKey: 'b/5', acc: 'n' },
-                { semitonos: 8, tipo: 'natural', label: 'Do', vfKey: 'c/6', acc: 'n' },
-                { semitonos: 9, tipo: 'alterada', label: 'Do#', vfKey: 'c/6', acc: '#' },
-                { semitonos: 10, tipo: 'natural', label: 'Re', vfKey: 'd/6', acc: 'n' },
-                { semitonos: 11, tipo: 'alterada', label: 'Re#', vfKey: 'd/6', acc: '#' }
-            ]
-        }
-    ];
+  const mapaCuerdas = [
+    {
+      id: 'sol',
+      baseFreq: 196.00,
+      notas: [
+        { semitonos: 1, tipo: 'alterada', label: 'Sol#', vfKey: 'g/3', acc: '#' },
+        { semitonos: 2, tipo: 'natural', label: 'La', vfKey: 'a/3', acc: 'n' },
+        { semitonos: 3, tipo: 'alterada', label: 'La#', vfKey: 'a/3', acc: '#' },
+        { semitonos: 4, tipo: 'natural', label: 'Si', vfKey: 'b/3', acc: 'n' },
+        { semitonos: 5, tipo: 'natural', label: 'Do', vfKey: 'c/4', acc: 'n' },
+        { semitonos: 6, tipo: 'alterada', label: 'Do#', vfKey: 'c/4', acc: '#' },
+        { semitonos: 7, tipo: 'natural', label: 'Re', vfKey: 'd/4', acc: 'n' },
+        { semitonos: 8, tipo: 'alterada', label: 'Re#', vfKey: 'd/4', acc: '#' },
+        { semitonos: 9, tipo: 'natural', label: 'Mi', vfKey: 'e/4', acc: 'n' },
+        { semitonos: 10, tipo: 'natural', label: 'Fa', vfKey: 'f/4', acc: 'n' },
+        { semitonos: 11, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' }
+      ]
+    },
+    {
+      id: 're',
+      baseFreq: 293.66,
+      notas: [
+        { semitonos: 1, tipo: 'alterada', label: 'Re#', vfKey: 'd/4', acc: '#' },
+        { semitonos: 2, tipo: 'natural', label: 'Mi', vfKey: 'e/4', acc: 'n' },
+        { semitonos: 3, tipo: 'natural', label: 'Fa', vfKey: 'f/4', acc: 'n' },
+        { semitonos: 4, tipo: 'alterada', label: 'Fa#', vfKey: 'f/4', acc: '#' },
+        { semitonos: 5, tipo: 'natural', label: 'Sol', vfKey: 'g/4', acc: 'n' },
+        { semitonos: 6, tipo: 'alterada', label: 'Sol#', vfKey: 'g/4', acc: '#' },
+        { semitonos: 7, tipo: 'natural', label: 'La', vfKey: 'a/4', acc: 'n' },
+        { semitonos: 8, tipo: 'alterada', label: 'La#', vfKey: 'a/4', acc: '#' },
+        { semitonos: 9, tipo: 'natural', label: 'Si', vfKey: 'b/4', acc: 'n' },
+        { semitonos: 10, tipo: 'natural', label: 'Do', vfKey: 'c/5', acc: 'n' },
+        { semitonos: 11, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' }
+      ]
+    },
+    {
+      id: 'la',
+      baseFreq: 440.00,
+      notas: [
+        { semitonos: 1, tipo: 'alterada', label: 'La#', vfKey: 'a/4', acc: '#' },
+        { semitonos: 2, tipo: 'natural', label: 'Si', vfKey: 'b/4', acc: 'n' },
+        { semitonos: 3, tipo: 'natural', label: 'Do', vfKey: 'c/5', acc: 'n' },
+        { semitonos: 4, tipo: 'alterada', label: 'Do#', vfKey: 'c/5', acc: '#' },
+        { semitonos: 5, tipo: 'natural', label: 'Re', vfKey: 'd/5', acc: 'n' },
+        { semitonos: 6, tipo: 'alterada', label: 'Re#', vfKey: 'd/5', acc: '#' },
+        { semitonos: 7, tipo: 'natural', label: 'Mi', vfKey: 'e/5', acc: 'n' },
+        { semitonos: 8, tipo: 'natural', label: 'Fa', vfKey: 'f/5', acc: 'n' },
+        { semitonos: 9, tipo: 'alterada', label: 'Fa#', vfKey: 'f/5', acc: '#' },
+        { semitonos: 10, tipo: 'natural', label: 'Sol', vfKey: 'g/5', acc: 'n' },
+        { semitonos: 11, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' }
+      ]
+    },
+    {
+      id: 'mi',
+      baseFreq: 659.25,
+      notas: [
+        { semitonos: 1, tipo: 'natural', label: 'Fa', vfKey: 'f/5', acc: 'n' },
+        { semitonos: 2, tipo: 'alterada', label: 'Fa#', vfKey: 'f/5', acc: '#' },
+        { semitonos: 3, tipo: 'natural', label: 'Sol', vfKey: 'g/5', acc: 'n' },
+        { semitonos: 4, tipo: 'alterada', label: 'Sol#', vfKey: 'g/5', acc: '#' },
+        { semitonos: 5, tipo: 'natural', label: 'La', vfKey: 'a/5', acc: 'n' },
+        { semitonos: 6, tipo: 'alterada', label: 'La#', vfKey: 'a/5', acc: '#' },
+        { semitonos: 7, tipo: 'natural', label: 'Si', vfKey: 'b/5', acc: 'n' },
+        { semitonos: 8, tipo: 'natural', label: 'Do', vfKey: 'c/6', acc: 'n' },
+        { semitonos: 9, tipo: 'alterada', label: 'Do#', vfKey: 'c/6', acc: '#' },
+        { semitonos: 10, tipo: 'natural', label: 'Re', vfKey: 'd/6', acc: 'n' },
+        { semitonos: 11, tipo: 'alterada', label: 'Re#', vfKey: 'd/6', acc: '#' }
+      ]
+    }
+  ];
 
-    // --- CONSTRUCCIÓN DEL POOL DE NOTAS (SOLO NATURALES) ---
-    const poolNotasJuego = [];
-    mapaCuerdas.forEach(cuerda => {
-        // Cuerdas al aire son naturales
-        let airVfKey = 'g/3';
-        if (cuerda.id === 're') airVfKey = 'd/4';
-        if (cuerda.id === 'la') airVfKey = 'a/4';
-        if (cuerda.id === 'mi') airVfKey = 'e/5';
+  // Notas de cada modo del juego (todas en clave de Sol y dentro del registro del violín)
+  const modosJuego = {
+    lineas:      ['e/4', 'g/4', 'b/4', 'd/5', 'f/5'],
+    espacios:    ['f/4', 'a/4', 'c/5', 'e/5'],
+    adicionales: ['g/3', 'a/3', 'b/3', 'c/4', 'a/5', 'b/5', 'c/6', 'd/6'],
+    todas:       ['g/3', 'a/3', 'b/3', 'c/4', 'd/4', 'e/4', 'f/4', 'g/4', 'a/4', 'b/4', 'c/5', 'd/5', 'e/5', 'f/5', 'g/5', 'a/5', 'b/5', 'c/6', 'd/6']
+  };
+  let modoJuego = 'todas';
 
-        poolNotasJuego.push({
-            vfKey: airVfKey,
-            acc: 'n',
-            frec: cuerda.baseFreq
-        });
+  // Escala de Do mayor (Do4 a Do5) en primera posición: cuerda-semitono (0 = cuerda al aire)
+  const escalaDo = new Set(['sol-5', 're-0', 're-2', 're-3', 're-5', 'la-0', 'la-2', 'la-3']);
+  let verNotas = 'escala';
 
-        // Filtrar únicamente las notas de tipo 'natural'
-        cuerda.notas.forEach(n => {
-            if (n.tipo === 'natural') {
-                const frecFinal = cuerda.baseFreq * Math.pow(2, n.semitonos / 12);
-                poolNotasJuego.push({
-                    vfKey: n.vfKey,
-                    acc: n.acc,
-                    frec: frecFinal
-                });
-            }
-        });
+  function marcarNotas(ver) {
+    verNotas = ver;
+    document.querySelectorAll('.btn-ver').forEach(b => b.classList.toggle('seleccionado', b.dataset.ver === ver));
+    document.querySelectorAll('[data-pos]').forEach(el => el.classList.toggle('on', ver === 'todas' || escalaDo.has(el.dataset.pos)));
+  }
+
+  const mastil = document.getElementById('mastil');
+  let ctxAudio = null;
+  let juegoActivo = false;
+  let notaObjetivo = null;
+
+  const { Renderer, Stave, StaveNote, Accidental, Formatter } = Vex.Flow;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    renderizarPentagrama('b/4', 'n');
+  });
+
+  function seleccionarModo(modo) {
+    modoJuego = modo;
+    document.querySelectorAll('.btn-modo').forEach(btn => btn.classList.toggle('seleccionado', btn.dataset.modo === modo));
+    if (juegoActivo) {
+      notaObjetivo = null;
+      generarSiguienteNotaJuego();
+    }
+  }
+
+  function renderizarPentagrama(key, accidental) {
+    const divPentagrama = document.getElementById('pentagrama');
+    divPentagrama.innerHTML = "";
+
+    const renderer = new Renderer(divPentagrama, Renderer.Backends.SVG);
+    renderer.resize(320, 155);
+    const svg = divPentagrama.querySelector('svg');
+    svg.setAttribute('viewBox', '0 0 320 155');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    const context = renderer.getContext();
+
+    const stave = new Stave(10, 28, 290);
+    stave.addClef("treble");
+    stave.setContext(context).draw();
+
+    const notaStave = new StaveNote({
+      keys: [key],
+      duration: "q"
     });
 
-    const mastil = document.getElementById('mastil');
-    let ctxAudio = null;
-    let juegoActivo = false;
-    let notaObjetivo = null;
-
-    const { Renderer, Stave, StaveNote, Accidental, Formatter } = Vex.Flow;
-
-    window.addEventListener('DOMContentLoaded', () => {
-        renderizarPentagrama('b/4', 'n');
-    });
-
-    function renderizarPentagrama(key, accidental) {
-        const divPentagrama = document.getElementById('pentagrama');
-        divPentagrama.innerHTML = "";
-
-        const renderer = new Renderer(divPentagrama, Renderer.Backends.SVG);
-        renderer.resize(320, 120);
-        const context = renderer.getContext();
-
-        const stave = new Stave(10, 5, 290);
-        stave.addClef("treble");
-        stave.setContext(context).draw();
-
-        const notaStave = new StaveNote({
-            keys: [key],
-            duration: "q"
-        });
-
-        if (accidental === '#') {
-            notaStave.addModifier(new Accidental("#"), 0);
-        }
-
-        Formatter.FormatAndDraw(context, stave, [notaStave]);
+    if (accidental === '#') {
+      notaStave.addModifier(new Accidental("#"), 0);
     }
 
-    function obtenerContextoAudio() {
-        if (!ctxAudio) {
-            ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        return ctxAudio;
+    Formatter.FormatAndDraw(context, stave, [notaStave]);
+  }
+
+  function obtenerContextoAudio() {
+    if (!ctxAudio) {
+      ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return ctxAudio;
+  }
+
+  function emitirSonido(frecuencia) {
+    const ctx = obtenerContextoAudio();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
     }
 
-    function emitirSonido(frecuencia) {
-        const ctx = obtenerContextoAudio();
-        if (ctx.state === 'suspended') {
-            ctx.resume();
-        }
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
 
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(frecuencia, ctx.currentTime);
 
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(frecuencia, ctx.currentTime);
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.08);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
 
-        gainNode.gain.setValueAtTime(0, ctx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.08);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
 
-        osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 1.2);
+  }
 
-        osc.start();
-        osc.stop(ctx.currentTime + 1.2);
+  function emitirSonidoError() {
+    const ctx = obtenerContextoAudio();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
     }
 
-    function emitirSonidoError() {
-        const ctx = obtenerContextoAudio();
-        if (ctx.state === 'suspended') {
-            ctx.resume();
-        }
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
 
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(130, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(70, ctx.currentTime + 0.3);
 
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(130, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(70, ctx.currentTime + 0.3);
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
 
-        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
 
-        osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.3);
+  }
 
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
+  function calcularFrecuencia(base, semitonos) {
+    return base * Math.pow(2, semitonos / 12);
+  }
+
+  // --- JUEGO ---
+  function generarSiguienteNotaJuego() {
+    const pool = modosJuego[modoJuego];
+    let nuevaNota;
+    do {
+      nuevaNota = pool[Math.floor(Math.random() * pool.length)];
+    } while (notaObjetivo && nuevaNota === notaObjetivo.vfKey);
+
+    notaObjetivo = { vfKey: nuevaNota, acc: 'n' };
+    renderizarPentagrama(notaObjetivo.vfKey, notaObjetivo.acc);
+
+    const feedbackEl = document.getElementById('feedback-juego');
+    feedbackEl.textContent = "Toca esta nota en el violín";
+    feedbackEl.style.color = "var(--dorado)";
+  }
+
+  function toggleJuego() {
+    juegoActivo = !juegoActivo;
+    const btn = document.getElementById('btn-juego');
+    const feedbackEl = document.getElementById('feedback-juego');
+
+    if (juegoActivo) {
+      btn.textContent = "Detener juego";
+      btn.classList.add('activo');
+      generarSiguienteNotaJuego();
+    } else {
+      btn.textContent = "Iniciar juego de notas";
+      btn.classList.remove('activo');
+      notaObjetivo = null;
+      feedbackEl.textContent = "Modo libre: Toca cualquier nota";
+      feedbackEl.style.color = "var(--texto-debil)";
+      renderizarPentagrama('b/4', 'n');
+    }
+  }
+
+  function alPresionarNota(frec, cuerdaId, vfKey, acc, elementoNodo = null) {
+    document.querySelectorAll('.nota, .cuerda-aire').forEach(el => el.classList.remove('activa'));
+    if (elementoNodo) elementoNodo.classList.add('activa');
+
+    if (!juegoActivo) {
+      // MODO LIBRE
+      emitirSonido(frec);
+      renderizarPentagrama(vfKey, acc);
+      return;
     }
 
-    function calcularFrecuencia(base, semitonos) {
-        return base * Math.pow(2, semitonos / 12);
-    }
+    // MODO JUEGO: vale cualquier lugar del violín donde suene esa nota
+    const feedbackEl = document.getElementById('feedback-juego');
+    const coincideNota = (vfKey === notaObjetivo.vfKey && acc === notaObjetivo.acc);
 
-    // --- LÓGICA DEL JUEGO INTEGRADA ---
-    function generarSiguienteNotaJuego() {
-        let nuevaNota;
-        do {
-            nuevaNota = poolNotasJuego[Math.floor(Math.random() * poolNotasJuego.length)];
-        } while (notaObjetivo && nuevaNota.vfKey === notaObjetivo.vfKey && nuevaNota.acc === notaObjetivo.acc);
+    if (coincideNota) {
+      emitirSonido(frec);
+      feedbackEl.textContent = "¡Correcto!";
+      feedbackEl.style.color = "var(--acierto)";
 
-        notaObjetivo = nuevaNota;
-        renderizarPentagrama(notaObjetivo.vfKey, notaObjetivo.acc);
+      setTimeout(() => {
+        if (juegoActivo) generarSiguienteNotaJuego();
+      }, 700);
+    } else {
+      emitirSonidoError();
+      feedbackEl.textContent = "Inténtalo de nuevo";
+      feedbackEl.style.color = "var(--error)";
 
-        const feedbackEl = document.getElementById('feedback-juego');
-        feedbackEl.textContent = "🎯 ¡Toca la nota mostrada en el violín!";
-        feedbackEl.style.color = "var(--dorado)";
-    }
-
-    function toggleJuego() {
-        juegoActivo = !juegoActivo;
-        const btn = document.getElementById('btn-juego');
-        const feedbackEl = document.getElementById('feedback-juego');
-
+      setTimeout(() => {
         if (juegoActivo) {
-            btn.textContent = "🛑 Detener Juego";
-            btn.classList.add('activo');
-            generarSiguienteNotaJuego();
-        } else {
-            btn.textContent = "🎮 Iniciar Juego de Notas";
-            btn.classList.remove('activo');
-            notaObjetivo = null;
-            feedbackEl.textContent = "Modo libre: Toca cualquier nota";
-            feedbackEl.style.color = "var(--texto-debil)";
-            renderizarPentagrama('b/4', 'n');
+          feedbackEl.textContent = "Toca esta nota en el violín";
+          feedbackEl.style.color = "var(--dorado)";
         }
+      }, 900);
     }
+  }
 
-    function alPresionarNota(frec, cuerdaId, vfKey, acc, elementoNodo = null) {
-        // Remover estado activo previo
-        document.querySelectorAll('.nota').forEach(el => el.classList.remove('activa'));
+  // Mástil: una cuerda por fila (o por columna en celulares) con sus notas
+  const nombresCuerda = { sol: 'Sol', re: 'Re', la: 'La', mi: 'Mi' };
+  ['mi', 'la', 're', 'sol'].map(id => mapaCuerdas.find(c => c.id === id)).forEach(cuerda => {
+    const contenedorCuerda = document.createElement('div');
+    contenedorCuerda.className = 'cuerda';
+    contenedorCuerda.dataset.cuerda = cuerda.id;
 
-        if (elementoNodo && elementoNodo.classList.contains('nota')) {
-            elementoNodo.classList.add('activa');
-        }
+    cuerda.notas.forEach(n => {
+      const nodoNota = document.createElement('button');
+      nodoNota.type = 'button';
+      nodoNota.className = `nota ${n.tipo}`;
+      nodoNota.dataset.pos = `${cuerda.id}-${n.semitonos}`;
+      nodoNota.innerText = n.label;
+      nodoNota.setAttribute('aria-label', `${n.label} en la cuerda ${nombresCuerda[cuerda.id]}`);
+      nodoNota.style.setProperty('--p', n.semitonos / 13);
 
-        if (!juegoActivo) {
-            // MODO LIBRE
-            emitirSonido(frec);
-            renderizarPentagrama(vfKey, acc);
-            return;
-        }
+      nodoNota.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        const freqFinal = calcularFrecuencia(cuerda.baseFreq, n.semitonos);
+        alPresionarNota(freqFinal, cuerda.id, n.vfKey, n.acc, nodoNota);
+      });
 
-        // MODO JUEGO
-        const feedbackEl = document.getElementById('feedback-juego');
-        const toleranciaFrecuencia = Math.abs(frec - notaObjetivo.frec) < 1.0;
-        const coincideNota = (vfKey === notaObjetivo.vfKey && acc === notaObjetivo.acc);
-
-        if (coincideNota || toleranciaFrecuencia) {
-            // ¡ACIERTO!
-            emitirSonido(frec);
-            feedbackEl.textContent = "¡Correcto! 🎉";
-            feedbackEl.style.color = "#4ECA64";
-
-            setTimeout(() => {
-                if (juegoActivo) generarSiguienteNotaJuego();
-            }, 700);
-        } else {
-            // ¡ERROR!
-            emitirSonidoError();
-            feedbackEl.textContent = "¡Inténtalo de nuevo! ❌";
-            feedbackEl.style.color = "#FF4D4D";
-
-            setTimeout(() => {
-                if (juegoActivo) {
-                    feedbackEl.textContent = "🎯 ¡Toca la nota mostrada en el violín!";
-                    feedbackEl.style.color = "var(--dorado)";
-                }
-            }, 900);
-        }
-    }
-
-    // Mantener la firma original para botones de cuerda al aire
-    function tocarCuerdaAire(frec, cuerdaId, vfKey, acc) {
-        alPresionarNota(frec, cuerdaId, vfKey, acc, null);
-    }
-
-    // Renderizar mástil de notas con eventos integrados
-    mapaCuerdas.forEach(cuerda => {
-        const contenedorCuerda = document.createElement('div');
-        contenedorCuerda.className = 'cuerda';
-
-        cuerda.notas.forEach(n => {
-            const nodoNota = document.createElement('div');
-            nodoNota.className = `nota ${n.tipo}`;
-            nodoNota.innerText = n.label;
-
-            const distanciaLeft = (n.semitonos / 13) * 100;
-            nodoNota.style.left = `${distanciaLeft}%`;
-
-            nodoNota.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                const freqFinal = calcularFrecuencia(cuerda.baseFreq, n.semitonos);
-                alPresionarNota(freqFinal, cuerda.id, n.vfKey, n.acc, nodoNota);
-            });
-
-            contenedorCuerda.appendChild(nodoNota);
-        });
-
-        mastil.appendChild(contenedorCuerda);
+      contenedorCuerda.appendChild(nodoNota);
     });
+
+    mastil.appendChild(contenedorCuerda);
+  });
+  document.querySelectorAll('.cuerda-aire').forEach(b => b.dataset.pos = `${b.dataset.cuerda}-0`);
+  marcarNotas('escala');
 </script>
 
 <footer id="footer">
-    <ul class="icons">
-        <li><a href="https://wa.me/593987999154" class="icon brands fa-whatsapp"><span class="label">WhatsApp</span></a></li>
-        <li><a href="mailto:sprinkloud@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-        <li><a href="https://instagram.com/sprinkloud" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-    </ul>
-    <ul class="copyright">
-        <li>&copy; 2026</li>
-        <li><a href="https://sprinkloud.vercel.app/">SPRINKLOUD</a></li>
-    </ul>
+  <p class="pie-marca">Sprink<span>loud</span> · Club musical</p>
+  <ul class="icons">
+    <li><a href="https://wa.me/593987999154" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.3L3.2 20.8l4.4-1.2A8.8 8.8 0 1 0 12 3.2z"/><path d="M9.2 8.2c.3-.3.8-.3 1 .1l.7 1.5c.1.3 0 .6-.2.8l-.5.5a6 6 0 0 0 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7.1 1-.6.7-1.5 1-2.4.7a8.4 8.4 0 0 1-4.9-4.9c-.3-.9 0-1.8.6-2.5z"/></svg><span>WhatsApp</span></a></li>
+    <li><a href="https://instagram.com/sprinkloud" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg><span>Instagram</span></a></li>
+    <li><a href="mailto:sprinkloud@gmail.com" aria-label="Correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg><span>Correo</span></a></li>
+  </ul>
+  <ul class="copyright">
+    <li><a href="https://sprinkloud.vercel.app/">Inicio</a></li>
+    <li><a href="https://sprinkloud.vercel.app/material.html">Material</a></li>
+    <li>&copy; 2026 Sprinkloud</li>
+  </ul>
 </footer>
 </body>
 </html>
