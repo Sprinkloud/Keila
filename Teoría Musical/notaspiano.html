@@ -197,6 +197,15 @@
       transition: color 150ms ease;
     }
 
+    /* Estrellas del juego */
+    .estrellas-juego { display: grid; gap: 4px; justify-items: center; }
+    .estrellas-juego[hidden] { display: none; }
+    .estrellas { display: flex; gap: 8px; }
+    .estrella { width: 36px; height: 36px; fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; stroke-linejoin: round; }
+    .estrella.on { fill: var(--gold); stroke: var(--gold-ink); }
+    .marcador { margin: 0; font-weight: 700; color: var(--ink-2); font-size: .92rem; }
+    .metas { margin: 0; font-size: .78rem; color: var(--ink-2); }
+
     /* Panel de modos del juego */
     .panel-modos {
       display: flex;
@@ -444,6 +453,15 @@
 <div class="panel-juego">
   <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
   <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier tecla</div>
+    <div class="estrellas-juego" id="estrellas-juego" hidden>
+      <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 3">
+        <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+        <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+        <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+      </div>
+      <p class="marcador" id="marcador">Aciertos: 0 · Seguidos: 0</p>
+      <p class="metas">1 estrella: 5 aciertos · 2: 4 seguidos · 3: 6 seguidos</p>
+    </div>
 
   <div class="panel-modos" id="panel-modos">
     <div class="grupo-modo">
@@ -597,6 +615,7 @@
     centrarEnModo();
     if (juegoActivo) {
       notaObjetivo = null;
+      reiniciarEstrellas();
       generarSiguienteNotaJuego();
     }
   }
@@ -846,6 +865,7 @@
   }
 
   function generarSiguienteNotaJuego() {
+    esperandoSiguiente = false;
     const pool = poolDelModo();
     let nuevaNota;
     do {
@@ -860,6 +880,55 @@
     feedbackEl.style.color = "var(--dorado)";
   }
 
+  // --- ESTRELLAS: 1 con 5 aciertos, 2 con 4 aciertos seguidos, 3 con 6 aciertos seguidos ---
+  let aciertos = 0, racha = 0, mejorRacha = 0, estrellasGanadas = 0, esperandoSiguiente = false;
+
+  function contarEstrellas() {
+    return [aciertos >= 5, mejorRacha >= 4, mejorRacha >= 6].filter(Boolean).length;
+  }
+
+  function pintarEstrellas(nueva) {
+    document.querySelectorAll('.estrella').forEach((el, i) => el.classList.toggle('on', i < estrellasGanadas));
+    document.getElementById('estrellas').setAttribute('aria-label', `Estrellas ganadas: ${estrellasGanadas} de 3`);
+    document.getElementById('marcador').textContent = `Aciertos: ${aciertos} · Seguidos: ${racha}`;
+    const el = document.querySelectorAll('.estrella')[estrellasGanadas - 1];
+    if (nueva && el && el.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.animate([{ transform: 'scale(.6)', opacity: .4 }, { transform: 'scale(1.15)', opacity: 1, offset: .6 }, { transform: 'scale(1)' }],
+        { duration: 420, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+    }
+  }
+
+  function reiniciarEstrellas() {
+    aciertos = 0; racha = 0; mejorRacha = 0; estrellasGanadas = 0; esperandoSiguiente = false;
+    pintarEstrellas(false);
+  }
+
+  // Devuelve true si con este resultado se ganó una estrella nueva
+  function registrarResultado(acerto) {
+    if (acerto) { aciertos++; racha++; mejorRacha = Math.max(mejorRacha, racha); }
+    else racha = 0;
+    const antes = estrellasGanadas;
+    estrellasGanadas = contarEstrellas();
+    pintarEstrellas(estrellasGanadas > antes);
+    return estrellasGanadas > antes;
+  }
+
+  function sonidoEstrella() {
+    const ctx = obtenerContextoAudio();
+    if (ctx.state === 'suspended') ctx.resume();
+    [784, 988, 1319].forEach((f, i) => {
+      const t = ctx.currentTime + 0.25 + i * 0.09;
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, t);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.25, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      osc.connect(g); g.connect(ctx.destination);
+      osc.start(t); osc.stop(t + 0.5);
+    });
+  }
+
   function toggleJuego() {
     juegoActivo = !juegoActivo;
     const btn = document.getElementById('btn-juego');
@@ -869,6 +938,8 @@
     if (juegoActivo) {
       btn.textContent = "Detener juego";
       btn.classList.add('activo');
+      reiniciarEstrellas();
+      document.getElementById('estrellas-juego').hidden = false;
       botonesAcorde.forEach(b => b.disabled = true);
       generarSiguienteNotaJuego();
     } else {
@@ -930,16 +1001,23 @@
     // Se compara la altura: una nota con líneas adicionales puede mostrarse en la otra clave
     const coincide = (notaPresionada.alt === 'n' && notaPresionada.vfKey === notaObjetivo.vfKey);
 
+    // entre un acierto y la nota siguiente no se cuentan más toques
+    if (esperandoSiguiente) return;
+
     if (coincide) {
+      esperandoSiguiente = true;
+      const gano = registrarResultado(true);
       emitirSonidoPiano(notaPresionada.freq);
-      feedbackEl.textContent = "¡Correcto!";
-      feedbackEl.style.color = "var(--acierto)";
+      feedbackEl.textContent = gano ? (estrellasGanadas === 3 ? "¡Tres estrellas!" : "¡Ganaste una estrella!") : "¡Correcto!";
+      feedbackEl.style.color = gano ? "var(--dorado)" : "var(--acierto)";
+      if (gano) sonidoEstrella();
 
       setTimeout(() => {
         if (juegoActivo) generarSiguienteNotaJuego();
-      }, 700);
+      }, gano ? 1300 : 700);
     } else {
       emitirSonidoError();
+      registrarResultado(false);
       feedbackEl.textContent = "Inténtalo de nuevo";
       feedbackEl.style.color = "var(--error)";
 
