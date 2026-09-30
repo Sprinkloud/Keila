@@ -24,9 +24,11 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 
 - `mapaCuerdas`: las cuatro cuerdas con sus notas por semitono (1 a 11). Cada nota se ubica con la variable CSS `--p` (semitono / 13), así que la misma posición sirve en horizontal (`left`) y en vertical (`top`).
 - Orden de las cuerdas: Mi arriba, luego La, Re y Sol abajo (en celulares, vertical, al revés: Sol a la izquierda y Mi a la derecha, con `row-reverse`). En pantallas de 760 px o menos el violín se pone vertical, con la cejilla arriba, para que los círculos de 42 px no se enciman.
-- Colores de cuerda iguales a los de la app: Sol `#9C5B55`, Re `#C4923A`, La `#647745`, Mi `#567388`. Colores del diapasón de la app: mástil `#2A1F18`, cintas guía crema del ancho de una nota (semitonos 2, 3 y 5). Por defecto solo van en color las notas de la escala de Do mayor (Do4 a Do5) en primera posición (`escalaDo`); el resto se ve tenue. "Todas las notas" colorea solo las naturales de la primera posición (semitonos 0 a 5, de la cuerda al aire al 3.er dedo; sin el 4.º dedo); las alteradas y las posiciones más altas quedan tenues. La cejilla (cuerdas al aire) va en crema `#F6EEDC`.
+- Colores de cuerda iguales a los de la app: Sol `#9C5B55`, Re `#C4923A`, La `#647745`, Mi `#567388`. Diapasón café claro `#CDAE87` (la dueña no quiere el ébano oscuro de la app porque opaca todo); las notas fuera de la escala van en crema translúcido con texto café; la nota que se toca se agranda (1.35) con el color de su cuerda y un aro oscuro, sin usar el ocre (que es el color de la cuerda Re), cintas guía crema del ancho de una nota (semitonos 2, 3 y 5). Por defecto solo van en color las notas de la escala de Do mayor (Do4 a Do5) en primera posición (`escalaDo`); el resto se ve tenue. "Todas las notas" colorea solo las naturales de la primera posición (semitonos 0 a 5, de la cuerda al aire al 3.er dedo; sin el 4.º dedo); las alteradas y las posiciones más altas quedan tenues. La cejilla (cuerdas al aire) va en crema `#F6EEDC`.
 - `modosJuego`: Líneas, Espacios, Líneas adicionales (Sol3 a Do4 y La5 a Re6) y Todas, siempre en clave de Sol. El acierto vale en cualquier lugar del violín donde suene esa nota.
 - El pentagrama se dibuja en 320 × 155 para que entren Sol3 y Re6 con sus líneas adicionales.
+- En computadora (900 px o más), `.fila-superior` pone el pentagrama a la izquierda y el panel del juego a la derecha. El botón y el mensaje van en la misma línea, para que las estrellas no empujen nada. Debajo va el violín.
+- Violín horizontal (761 px o más) con **proporción real, nunca estirado** (pedido de la dueña): todo se mide con `--n`, el diámetro de la nota. Las notas van casi pegadas a lo largo de la cuerda (1.1 n) y las cuerdas separadas 1.3 n para que el dedo calce; el mástil mide 13 × 1.1 n de ancho y 4 × 1.3 n de alto. En computadora `--n = clamp(42px, min(4.8vw, 5.7vh), 64px)`: en pantallas grandes crecen las notas y el nombre (hasta 64 px y letra de 19 px) y el violín crece entero, sin scroll (probado en 1024×768, 1280×800 y 1920×1080). En celulares `.fila-superior` es `display: contents` y todo queda en una columna.
 
 ## Células rítmicas (`Ritmo.html`)
 
@@ -70,9 +72,9 @@ El repo tiene `images/Ritmo.jpg` e `images/ritmo.jpg`, que en Windows chocan (el
 
 ## Historial de cambios
 
-### 29 de septiembre de 2026: piano y violín renovados
+### 29 de septiembre de 2026: piano, violín y células rítmicas renovados
 
-Todo publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` a `99ffb85` en `main`).
+Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `main`).
 
 **Proyecto**
 - Se clonó el repo en `D:\Proyectos_Claude\página_Sprinkloud`, se creó este `CLAUDE.md` y se registró en el índice del workspace.
@@ -84,28 +86,44 @@ Todo publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` a `99ffb85` 
 - Funciona en cualquier dispositivo: el teclado muestra por tramos las teclas que caben, con flechas de octava; el pentagrama se achica con la pantalla.
 - Octavas con tinte crema (azulado en los graves, rosado en los agudos) y su nombre encima: "2 octavas abajo" … "Octava central" … "2 octavas arriba".
 - En el juego el teclado ya no se mueve solo hacia la nota: el alumno busca la octava.
+- Rango de F2 a C6 (26 teclas blancas).
+- Orden: "Volver" y la marca Sprinkloud en la misma fila; título corto; mensaje y estrellas; pentagrama y piano primero; al final el panel del juego (modos y acordes). Letras compactas para no hacer scroll.
 - SEO: título, descripción, URL canónica, Open Graph, datos estructurados y un `h1` que describe la herramienta.
 
 **Violín (`notasviolin.html`)**
-- Aspecto de la app, con los colores de cuerda y del diapasón del violín interactivo de la app.
+- Aspecto de la app, con los colores de cuerda de la app.
 - Modos de juego en clave de Sol: Líneas, Espacios, Líneas adicionales y Todas.
 - En celulares el violín se pone vertical (Sol, Re, La, Mi de izquierda a derecha); en computadora es horizontal (Mi arriba, Sol abajo).
 - Por defecto solo van en color las notas de la escala de Do mayor en primera posición. "Todas las notas" marca las naturales de la primera posición hasta el 3.er dedo.
 - Cintas guía del ancho de una nota y cejilla (cuerdas al aire) en crema.
 - Se corrigieron 9 notas naturales que estaban marcadas como alteradas en `mapaCuerdas`.
+- Marca Sprinkloud en la esquina, junto a "Volver", y encabezado compacto.
+- Diapasón café claro (`#CDAE87`) en lugar del ébano oscuro; las notas sin marcar van en crema translúcido.
+- La nota que se toca se agranda con el color de su cuerda y un aro oscuro (ya no se pinta de ocre, que se confundía con la cuerda Re); igual en las cuerdas al aire.
+- En computadora: pentagrama y juego lado a lado; el violín mantiene su proporción real y en pantallas grandes crecen las notas y sus nombres.
 - SEO igual que el piano.
 
-**Los dos juegos**
+**Piano y violín**
 - Estrellas: 1 con 5 aciertos, 2 con 4 aciertos seguidos y 3 con 6 aciertos seguidos, con sonido y animación al ganar cada una.
 - Tocar dos veces la misma tecla ya no cuenta doble.
 - Pie de página con tres íconos pequeños (WhatsApp, Instagram, correo) y el copyright.
 
+**Células rítmicas (`Ritmo.html`)**
+- Estilo de la app, marca Sprinkloud en la esquina y pie de página en una línea; la página cabe en la pantalla sin scroll (solo el lienzo se desplaza).
+- Células sin nombre: sin sílabas ni etiquetas ni números; las tarjetas solo muestran la figura y su duración, sin flecha (al tocarlas se añade la célula y suena).
+- Figuras en negro; la que suena cambia a ocre y el compás toma un tinte ocre muy suave. Sin el rótulo "Compás N".
+- Metrónomo y cuenta de 4 tiempos siempre, en cada play y en el dictado. Un solo círculo: reloj en reposo, cuenta 1-2-3-4 y después el pulso.
+- Sonido tipo piano para las figuras.
+- Controles mínimos: tempo, Repetir y Pastel; basurero en cada compás. Se quitaron Marcar tempo, Metrónomo, Cuenta previa, Deshacer, Vaciar, el basurero general, la barra de estado y las frases de ayuda.
+- Más aire junto a los silencios (silencio de corchea + corchea se lee como medio pulso y medio pulso).
+- Panel de tarjetas plegable en computadora y en celular.
+- Modo pastel (botón celeste): solo las células de un pulso; al elegir una, el lienzo muestra un pastel con sus partes y con play se pinta en ocre la parte que suena.
+- SEO enfocado en "aprender figuras musicales y ritmo", con descripción oculta de las figuras de cada tarjeta para buscadores y lectores de pantalla.
+
 **Sitio**
 - Nuevos `robots.txt` y `sitemap.xml` en la raíz.
 
-**Células rítmicas (`Ritmo.html`)**
-- Estilo de la app con marca y pie de página; células sin nombre y figuras en negro; metrónomo y cuenta de 4 siempre, con un solo círculo (reloj en reposo); sonido tipo piano; basurero por compás; panel de tarjetas plegable; modo pastel para ver cómo se divide un pulso; SEO enfocado en "figuras musicales y ritmo".
-
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
+- En `material.html` el botón que lleva a `Ritmo.html` dice solo "Ritmo"; decir "Figuras musicales y ritmo" ayudaría al SEO.
 - Las otras herramientas (`Pentagrama.html`, `sonidosynotas.html`) y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.

@@ -76,7 +76,7 @@
       /* colores de cada cuerda, los mismos de las partituras de la app */
       --s-sol: #9C5B55; --s-re: #C4923A; --s-la: #647745; --s-mi: #567388;
       --on-sol: #FBF7EE; --on-re: #3A3128; --on-la: #FBF7EE; --on-mi: #FBF7EE;
-      --ebano: #2A1F18; --madera: #B97A45; --madera-osc: #5A3A22; --cejilla: #E9DCC2; --crema-cejilla: #F6EEDC; --cinta: rgb(242 238 228 / .8);
+      --ebano: #CDAE87; /* diapasón café claro */ --madera: #B97A45; --madera-osc: #5A3A22; --cejilla: #E9DCC2; --crema-cejilla: #F6EEDC; --cinta: rgb(242 238 228 / .8);
       --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-hand: Caveat, "Segoe Print", cursive;
       --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --dur-press: 140ms;
       --papel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .19 0 0 0 0 .16 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23p)'/%3E%3C/svg%3E");
@@ -298,7 +298,8 @@
     [data-cuerda="mi"] { --c: var(--s-mi); --on: var(--on-mi); }
     .cuerda-aire.on { background: var(--c); color: var(--on); border-color: var(--foto-papel); }
     .cuerda-aire:active { transform: scale(.95); }
-    .cuerda-aire.activa { background: var(--gold); color: #3A3128; box-shadow: 0 0 0 3px var(--foto-papel), 0 0 0 5px var(--gold); }
+    /* cuerda al aire que se tocó: su propio color, con un aro oscuro */
+    .cuerda-aire.activa { background: var(--c); color: var(--on); border-color: #fff; box-shadow: 0 0 0 3px #3A3128; }
 
     .ver-notas { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 12px; }
     .btn-ver {
@@ -374,10 +375,9 @@
       touch-action: manipulation;
       cursor: pointer;
       /* fuera de la escala: tenue, como en la app */
-      background: rgb(42 31 24);
-      background-image: linear-gradient(rgb(255 255 255 / .08), rgb(255 255 255 / .08));
-      border: 1.5px solid rgb(255 255 255 / .25);
-      color: rgb(255 255 255 / .75);
+      background: rgb(251 247 238 / .55);
+      border: 1.5px solid rgb(90 58 34 / .3);
+      color: #5A3A22;
       transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
     }
     /* notas de la escala: rellenas con el color de su cuerda */
@@ -385,12 +385,13 @@
     .cuerda[data-cuerda="re"] .nota.on { color: var(--on-re); }
 
     .nota:active { transform: translate(-50%, -50%) scale(.94); }
+    /* nota que se tocó: la misma nota, más grande, con el color de su cuerda y un aro oscuro */
     .nota.activa {
-      background: var(--gold) !important;
-      background-image: none !important;
-      color: #3A3128 !important;
+      background: var(--c) !important;
+      color: var(--on) !important;
       border: 3px solid #fff !important;
-      transform: translate(-50%, -50%) scale(1.12);
+      box-shadow: 0 0 0 3px #3A3128;
+      transform: translate(-50%, -50%) scale(1.35);
       z-index: 4;
     }
 
@@ -408,10 +409,50 @@
     }
     .leyenda i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 6px; }
     .leyenda .l-escala { background: var(--s-la); box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px var(--line); }
-    .leyenda .l-otra { background: var(--ebano); border: 1.5px solid rgb(255 255 255 / .25); }
+    .leyenda .l-otra { background: #E6D5BE; border: 1.5px solid rgb(90 58 34 / .3); }
     .leyenda .l-cinta { background: #F2EEE4; border: 1px solid var(--line); border-radius: 3px; }
 
     /* Celulares y pantallas angostas: el violín se pone vertical */
+    /* celulares y tabletas: todo en una columna, como antes */
+    .fila-superior { display: contents; }
+
+    /* Violín horizontal con proporción real: todo se mide con --n (diámetro de la nota).
+       Las notas van casi pegadas a lo largo de la cuerda (1.1 n entre una y otra) y las
+       cuerdas separadas 1.3 n, para que el dedo calce. Si hay espacio, crece todo junto. */
+    @media (min-width: 761px) {
+      .interfaz-violin { --n: 42px; width: max-content; max-width: 100%; margin: 0 auto; }
+      .mastil { flex: none; width: calc(var(--n) * 1.1 * 13); height: calc(var(--n) * 1.3 * 4); padding: 0; }
+      .nota { width: var(--n); height: var(--n); font-size: calc(var(--n) * .3); }
+      .cinta-guia { width: var(--n); }
+      .cejilla { width: calc(var(--n) * 1.5); }
+      .cuerda-aire { min-height: calc(var(--n) * .95); font-size: calc(var(--n) * .3); }
+    }
+
+    /* computadora: pentagrama y juego lado a lado; el violín crece según la pantalla, sin deformarse */
+    @media (min-width: 900px) {
+      .barra-superior { max-width: 1100px; }
+      .intro { max-width: 80ch; }
+      .interfaz-violin { --n: clamp(42px, min(4.8vw, 5.7vh), 64px); }
+      .fila-superior {
+        display: grid;
+        grid-template-columns: minmax(300px, 380px) 1fr;
+        gap: 16px;
+        width: 100%;
+        max-width: 1100px;
+        margin-bottom: 14px;
+      }
+      .fila-superior .contenedor-pentagrama-bloque { order: -1; margin: 0; max-width: none; display: grid; place-items: center; }
+      /* botón y mensaje en la misma línea: el panel queda más bajo que el pentagrama y las estrellas no empujan el violín */
+      .fila-superior .panel-juego { margin: 0; max-width: none; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; column-gap: 16px; row-gap: 10px; padding: 12px 16px; }
+      .fila-superior .panel-juego > .estrellas-juego, .fila-superior .panel-juego > .grupo-modo { flex-basis: 100%; }
+      .estrellas-juego { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; column-gap: 12px; }
+      .principal { margin-bottom: 0; }
+      .interactor-container { max-width: 1100px; margin-bottom: 10px; padding: 12px 16px; }
+      .ver-notas { margin-bottom: 8px; }
+      .btn-ver { min-height: 38px; }
+      .leyenda { margin-top: 8px; }
+    }
+
     @media (max-width: 760px) {
       .interactor-container { max-width: 420px; padding: 12px; }
       .interfaz-violin { flex-direction: column; }
@@ -495,6 +536,7 @@
 </header>
 
 <main class="principal">
+  <div class="fila-superior">
   <div class="panel-juego">
     <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
     <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier nota</div>
@@ -519,6 +561,7 @@
 
   <div class="contenedor-pentagrama-bloque">
     <div id="pentagrama"></div>
+  </div>
   </div>
 
   <div class="interactor-container">
