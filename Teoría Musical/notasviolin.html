@@ -725,7 +725,8 @@
 
     const notaStave = new StaveNote({
       keys: [key],
-      duration: "q"
+      duration: "q",
+      auto_stem: true   // desde la línea del medio (Si) la plica va hacia abajo
     });
 
     if (accidental === '#') {

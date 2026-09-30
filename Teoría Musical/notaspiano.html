@@ -281,13 +281,13 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 360px;
+      max-width: 460px;
     }
 
     #pentagrama {
       width: 100%;
-      max-width: 340px;
-      aspect-ratio: 340 / 255;
+      max-width: 440px;
+      aspect-ratio: 340 / 196;
     }
     #pentagrama svg { display: block; width: 100%; height: auto; }
     /* Piano */
@@ -647,7 +647,9 @@
     const renderer = new Renderer(divPentagrama, Renderer.Backends.SVG);
     renderer.resize(340, 255);
     const svgPentagrama = divPentagrama.querySelector('svg');
-    svgPentagrama.setAttribute('viewBox', '0 0 340 255');
+    // se recorta el espacio vacío: de F2 a C6 basta con esta franja
+    svgPentagrama.setAttribute('viewBox', '0 28 340 196');
+    svgPentagrama.setAttribute('height', '196');
     svgPentagrama.style.width = '100%';
     svgPentagrama.style.height = 'auto';
     const context = renderer.getContext();
@@ -675,7 +677,8 @@
       const notaStaveTreble = new StaveNote({
         keys: keysTreble,
         duration: "q",
-        clef: "treble"
+        clef: "treble",
+        auto_stem: true   // desde la línea del medio (Si) la plica va hacia abajo
       });
 
       notasTreble.forEach((n, idx) => {
@@ -692,7 +695,8 @@
       const notaStaveBass = new StaveNote({
         keys: keysBass,
         duration: "q",
-        clef: "bass"
+        clef: "bass",
+        auto_stem: true   // desde la línea del medio (Re) la plica va hacia abajo
       });
 
       notasBass.forEach((n, idx) => {
