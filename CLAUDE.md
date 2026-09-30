@@ -28,6 +28,18 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 - `modosJuego`: Líneas, Espacios, Líneas adicionales (Sol3 a Do4 y La5 a Re6) y Todas, siempre en clave de Sol. El acierto vale en cualquier lugar del violín donde suene esa nota.
 - El pentagrama se dibuja en 320 × 155 para que entren Sol3 y Re6 con sus líneas adicionales.
 
+## Células rítmicas (`Ritmo.html`)
+
+- App de pantalla completa: el `body` mide 100dvh (flex en columna, sin scroll de página) y reparte el alto entre `.app` y el pie de página, que es una sola línea delgada con los íconos y el copyright. Solo el lienzo tiene scroll propio cuando hay muchos compases. Incluye banco de células (Rítmicas, Largas, Silencios), partitura en compases de 4/4, reproducción con metrónomo y cuenta previa, y dictado rítmico.
+- Estilo de la app con modo oscuro; cabecera con Volver, el título y la marca Sprinkloud.
+- Las células **no tienen nombre**: sin sílabas ni etiquetas (en `CELLS` solo quedan `id`, `tab` y `notes`). Mientras suena, el círculo marca el pulso y la línea de texto queda vacía.
+- Figuras en negro (`--figura`; en modo oscuro, blanco). El resaltado de lo que suena es suave: el compás toma un tinte ocre muy leve y la figura que suena cambia a ocre (sin brillo). Junto a un silencio se deja más aire (`need` 34) para que se lea cada medio pulso. Los compases no llevan el rótulo "Compás N": solo "faltan X" cuando están incompletos y su basurero. Las tarjetas de la paleta no tienen número ni flecha: al tocarlas se añade la célula y suena.
+- Pocas opciones: metrónomo siempre activo y cuenta de 4 tiempos en cada play, también en el dictado (sin botones); un solo círculo (`#pulso`) muestra un reloj en reposo, la cuenta previa 1-2-3-4 y después el pulso. Sin frases de ayuda ni "Pulsa reproducir…". Controles: tempo, Repetir y el botón "Pastel"; cada compás tiene su basurero (`removeBar`). Ya no hay botón para borrar todo. Sin Deshacer, Vaciar, Marcar tempo ni barra de estado: los avisos salen en la línea de arriba (`flash`). Retroceso quita la última célula.
+- Panel de tarjetas plegable (`plegarPanel`, asa "Tarjetas"): en computadora se pliega a una franja de 40 px a la izquierda; en celulares baja y queda solo el asa. El estado se guarda en `localStorage` (`sprinkloud-ritmo-v1-panel`) y el contenido plegado queda `inert`.
+- **Modo pastel** (botón "Pastel"): la paleta muestra solo las células de un pulso (`esDeUnPulso`: 9 rítmicas y 3 de silencios) y oculta pestañas, ayuda y dictado. Al tocar una tarjeta, el lienzo muestra un pastel (`pastelHTML`) con una parte por figura, proporcional a su duración, empezando arriba y en el sentido del reloj; los silencios van en gris claro. Con play, tras la cuenta de 4, la célula suena 4 veces (un compás) y se pinta en ocre la parte que suena y su figura. El botón "Pastel" es siempre celeste (`--celeste`; más oscuro cuando está activo) para que se note que es importante (`activate` con `data-sl`). En celulares el pastel y la figura van lado a lado.
+- Las figuras suenan con un tono tipo piano sintetizado (`pianoVoice`): Do5 en el pulso y Sol4 a contratiempo.
+- En celulares la paleta ocupa como máximo 38vh y la frase de ayuda se oculta, para que el lienzo sea lo más amplio posible.
+
 ## Estrellas del juego (piano y violín)
 
 Mismo código en las dos páginas: 1 estrella con 5 aciertos, 2 con 4 aciertos seguidos y 3 con 6 aciertos seguidos (`contarEstrellas`). Un error corta la racha pero no quita estrellas. Se reinician al iniciar el juego o al cambiar de modo. Entre un acierto y la nota siguiente se ignoran los toques (`esperandoSiguiente`), para que tocar dos veces no cuente doble.
@@ -40,6 +52,7 @@ El mismo en todas las herramientas: solo tres íconos pequeños (18 px, con áre
 
 - `robots.txt` y `sitemap.xml` en la raíz. Al agregar o cambiar una página, se suma o se actualiza su `<url>` con su `lastmod` en el sitemap (con la URL codificada: `Teor%C3%ADa%20Musical/...`).
 - Cada herramienta lleva: `<title>` de 60 caracteres como máximo que diga qué es, `description` de 155 como máximo, `link rel="canonical"`, Open Graph y Twitter (`name="twitter:..."`), imagen del mismo dominio, un solo `h1` que describa la herramienta (la marca va aparte) y datos estructurados JSON-LD (`WebApplication` y `BreadcrumbList`). Modelo: `notaspiano.html`.
+- Enfocar título, descripción, `h1` y JSON-LD en lo que la gente busca (por ejemplo "aprender figuras musicales y ritmo", no "células rítmicas"). En `Ritmo.html` las tarjetas no muestran nombres, pero su `aria-label` describe las figuras (`describirCelula`: "dos corcheas", "negra con puntillo"…) para lectores de pantalla y buscadores.
 - El sitio debe estar dado de alta en Google Search Console con el sitemap enviado.
 
 ## Probar en local
@@ -90,6 +103,9 @@ Todo publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` a `99ffb85` 
 **Sitio**
 - Nuevos `robots.txt` y `sitemap.xml` en la raíz.
 
+**Células rítmicas (`Ritmo.html`)**
+- Estilo de la app con marca y pie de página; células sin nombre y figuras en negro; metrónomo y cuenta de 4 siempre, con un solo círculo (reloj en reposo); sonido tipo piano; basurero por compás; panel de tarjetas plegable; modo pastel para ver cómo se divide un pulso; SEO enfocado en "figuras musicales y ritmo".
+
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
-- Las otras herramientas (`Pentagrama.html`, `Ritmo.html`, `sonidosynotas.html`) y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
+- Las otras herramientas (`Pentagrama.html`, `sonidosynotas.html`) y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
