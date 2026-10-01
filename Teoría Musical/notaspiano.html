@@ -654,11 +654,12 @@
     svgPentagrama.style.height = 'auto';
     const context = renderer.getContext();
 
-    const staveTreble = new Stave(10, 30, 310);
+    // margen a la izquierda para que la llave que une los dos pentagramas no quede cortada
+    const staveTreble = new Stave(28, 30, 300);
     staveTreble.addClef("treble");
     staveTreble.setContext(context).draw();
 
-    const staveBass = new Stave(10, 120, 310);
+    const staveBass = new Stave(28, 120, 300);
     staveBass.addClef("bass");
     staveBass.setContext(context).draw();
 
@@ -687,7 +688,7 @@
         }
       });
 
-      Formatter.FormatAndDraw(context, staveTreble, [notaStaveTreble]);
+      dibujarCentrada(context, staveTreble, notaStaveTreble);
     }
 
     if (notasBass.length > 0) {
@@ -705,8 +706,18 @@
         }
       });
 
-      Formatter.FormatAndDraw(context, staveBass, [notaStaveBass]);
+      dibujarCentrada(context, staveBass, notaStaveBass);
     }
+  }
+
+  // dibuja la nota en su propio grupo y la mueve al centro del pentagrama (después de la clave), como en la app
+  function dibujarCentrada(context, stave, nota) {
+    const g = context.openGroup('nota-centrada');
+    Formatter.FormatAndDraw(context, stave, [nota]);
+    context.closeGroup();
+    const centro = (stave.getNoteStartX() + stave.getNoteEndX()) / 2;
+    const cabeza = (nota.getNoteHeadBeginX() + nota.getNoteHeadEndX()) / 2;
+    g.setAttribute('transform', `translate(${(centro - cabeza).toFixed(1)} 0)`);
   }
 
   function obtenerContextoAudio() {

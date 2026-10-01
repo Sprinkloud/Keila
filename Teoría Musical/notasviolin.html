@@ -588,7 +588,17 @@
       notaStave.addModifier(new Accidental("#"), 0);
     }
 
-    Formatter.FormatAndDraw(context, stave, [notaStave]);
+    dibujarCentrada(context, stave, notaStave);
+  }
+
+  // dibuja la nota en su propio grupo y la mueve al centro del pentagrama (después de la clave), como en la app
+  function dibujarCentrada(context, stave, nota) {
+    const g = context.openGroup('nota-centrada');
+    Formatter.FormatAndDraw(context, stave, [nota]);
+    context.closeGroup();
+    const centro = (stave.getNoteStartX() + stave.getNoteEndX()) / 2;
+    const cabeza = (nota.getNoteHeadBeginX() + nota.getNoteHeadEndX()) / 2;
+    g.setAttribute('transform', `translate(${(centro - cabeza).toFixed(1)} 0)`);
   }
 
   function obtenerContextoAudio() {
