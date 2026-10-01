@@ -268,39 +268,10 @@
       width: 100%;
     }
 
-    .cejilla {
-      width: 64px;
-      flex: none;
-      background: var(--crema-cejilla);
-      border: 1px solid var(--cejilla);
-      border-radius: 14px 4px 4px 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 6px;
-    }
-
-    .cuerda-aire {
-      width: 100%;
-      min-height: 44px;
-      font-size: .85rem;
-      font-weight: 800;
-      background: var(--foto-papel);
-      color: #6D6152;
-      border: 2px solid var(--c);
-      border-radius: 999px;
-      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
-    }
     [data-cuerda="sol"] { --c: var(--s-sol); --on: var(--on-sol); }
     [data-cuerda="re"] { --c: var(--s-re); --on: var(--on-re); }
     [data-cuerda="la"] { --c: var(--s-la); --on: var(--on-la); }
     [data-cuerda="mi"] { --c: var(--s-mi); --on: var(--on-mi); }
-    .cuerda-aire.on { background: var(--c); color: var(--on); border-color: var(--foto-papel); }
-    .cuerda-aire:active { transform: scale(.95); }
-    /* cuerda al aire que se tocó: su propio color, con un aro oscuro */
-    .cuerda-aire.activa { background: var(--c); color: var(--on); border-color: #fff; box-shadow: 0 0 0 3px #3A3128; }
-
     .ver-notas { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 12px; }
     .btn-ver {
       min-height: 44px;
@@ -316,84 +287,19 @@
     .btn-ver:active { transform: scale(.97); }
     .btn-ver.seleccionado { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 
-    .mastil {
-      position: relative;
-      flex: 1;
-      height: 250px;
-      background: var(--ebano);
-      border-radius: 0 16px 16px 0;
-      border-left: 8px solid var(--cejilla);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      padding: 10px 0;
-      touch-action: manipulation;
-    }
-
-    /* cintas guía del ancho de una nota */
-    .cinta-guia {
-      position: absolute;
-      top: 0;
-      left: calc(var(--p) * 100%);
-      width: 42px;
-      height: 100%;
-      background: var(--cinta);
-      transform: translateX(-50%);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .cuerda {
-      position: relative;
-      height: 3px;
-      width: 100%;
-      z-index: 2;
-      background: var(--c);
-    }
-    .cuerda[data-cuerda="mi"] { height: 2px; }
-    .cuerda[data-cuerda="la"] { height: 2.5px; }
-    .cuerda[data-cuerda="re"] { height: 3px; }
-    .cuerda[data-cuerda="sol"] { height: 4px; }
-
-    .nota {
-      width: 42px;
-      height: 42px;
-      padding: 0;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: calc(var(--p) * 100%);
-      transform: translate(-50%, -50%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: .74rem;
-      font-weight: 800;
-      z-index: 3;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-      cursor: pointer;
-      /* fuera de la escala: tenue, como en la app */
-      background: rgb(251 247 238 / .55);
-      border: 1.5px solid rgb(90 58 34 / .3);
-      color: #5A3A22;
-      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
-    }
-    /* notas de la escala: rellenas con el color de su cuerda */
-    .nota.on { background: var(--c); background-image: none; border: 2px solid #fff; color: #fff; }
-    .cuerda[data-cuerda="re"] .nota.on { color: var(--on-re); }
-
-    .nota:active { transform: translate(-50%, -50%) scale(.94); }
-    /* nota que se tocó: la misma nota, más grande, con el color de su cuerda y un aro oscuro */
-    .nota.activa {
-      background: var(--c) !important;
-      color: var(--on) !important;
-      border: 3px solid #fff !important;
-      box-shadow: 0 0 0 3px #3A3128;
-      transform: translate(-50%, -50%) scale(1.35);
-      z-index: 4;
-    }
+    /* el violín del club: la imagen del mástil (../images/violin-mastil.webp) con las notas encima,
+       pegadas una a la otra a lo largo de cada cuerda, igual que en la app */
+    .lv { display: block; width: 100%; height: auto; touch-action: manipulation; user-select: none; -webkit-user-select: none; border-radius: 16px; }
+    .lv-cinta { stroke: #FBF7EE; opacity: .16; pointer-events: none; }
+    .lv-n { cursor: pointer; }
+    .lv-in { transform: scale(.96); transition: transform 160ms var(--ease-out); }
+    .lv-n circle { fill: #FBF7EE; fill-opacity: .72; stroke: #3A3128; stroke-opacity: .3; stroke-width: .5; }
+    .lv-n text { fill: #3A3128; font-family: inherit; font-weight: 800; opacity: .55; pointer-events: none; }
+    .lv-n.on .lv-in { transform: scale(1); }
+    .lv-n.on circle { fill: var(--c); fill-opacity: 1; stroke: #FBF7EE; stroke-opacity: .9; stroke-width: .8; }
+    .lv-n.on text, .lv-n.activa text { fill: var(--on); opacity: 1; }
+    .lv-n.activa .lv-in { transform: scale(1.3); }
+    .lv-n.activa circle { fill: var(--c); fill-opacity: 1; stroke: #3A3128; stroke-opacity: 1; stroke-width: 1.2; }
 
     .leyenda {
       display: flex;
@@ -409,30 +315,20 @@
     }
     .leyenda i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 6px; }
     .leyenda .l-escala { background: var(--s-la); box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px var(--line); }
-    .leyenda .l-otra { background: #E6D5BE; border: 1.5px solid rgb(90 58 34 / .3); }
-    .leyenda .l-cinta { background: #F2EEE4; border: 1px solid var(--line); border-radius: 3px; }
+    .leyenda .l-otra { background: #F4EEE2; border: 1px solid rgb(58 49 40 / .3); }
 
     /* Celulares y pantallas angostas: el violín se pone vertical */
     /* celulares y tabletas: todo en una columna, como antes */
     .fila-superior { display: contents; }
 
-    /* Violín horizontal con proporción real: todo se mide con --n (diámetro de la nota).
-       Las notas van casi pegadas a lo largo de la cuerda (1.1 n entre una y otra) y las
-       cuerdas separadas 1.3 n, para que el dedo calce. Si hay espacio, crece todo junto. */
-    @media (min-width: 761px) {
-      .interfaz-violin { --n: 42px; width: max-content; max-width: 100%; margin: 0 auto; }
-      .mastil { flex: none; width: calc(var(--n) * 1.1 * 13); height: calc(var(--n) * 1.3 * 4); padding: 0; }
-      .nota { width: var(--n); height: var(--n); font-size: calc(var(--n) * .3); }
-      .cinta-guia { width: var(--n); }
-      .cejilla { width: calc(var(--n) * 1.5); }
-      .cuerda-aire { min-height: calc(var(--n) * .95); font-size: calc(var(--n) * .3); }
-    }
+    /* El violín se escala sin deformarse: horizontal en computadora (alto según la pantalla), vertical en celulares */
+    .interfaz-violin { display: flex; justify-content: center; width: 100%; }
+    .interfaz-violin .lv { max-width: min(860px, calc((100dvh - 520px) * 194 / 100)); }
 
     /* computadora: pentagrama y juego lado a lado; el violín crece según la pantalla, sin deformarse */
     @media (min-width: 900px) {
       .barra-superior { max-width: 1100px; }
       .intro { max-width: 80ch; }
-      .interfaz-violin { --n: clamp(42px, min(4.8vw, 5.7vh), 64px); }
       .fila-superior {
         display: grid;
         grid-template-columns: minmax(300px, 380px) 1fr;
@@ -455,35 +351,8 @@
 
     @media (max-width: 760px) {
       .interactor-container { max-width: 420px; padding: 12px; }
-      .interfaz-violin { flex-direction: column; }
-      .cejilla {
-        width: 100%;
-        height: auto;
-        flex-direction: row-reverse; /* en vertical: Sol a la izquierda, Mi a la derecha */
-        gap: 6px;
-        padding: 8px;
-        border-radius: 14px 14px 0 0;
-        border-right: 0;
-      }
-      .cuerda-aire { flex: 1; }
+      .interfaz-violin .lv { max-width: min(340px, 100%); }
       .btn-ver { padding: 6px 12px; font-size: .84rem; }
-      .mastil {
-        flex: none;
-        width: 100%;
-        height: 598px; /* 13 tramos de 46 px */
-        flex-direction: row-reverse;
-        padding: 0 8px;
-        border-left: 0;
-        border-top: 8px solid var(--cejilla);
-        border-radius: 0 0 16px 16px;
-      }
-      .cinta-guia { top: calc(var(--p) * 100%); left: 0; width: 100%; height: 42px; transform: translateY(-50%); }
-      .cuerda, .cuerda[data-cuerda] { height: 100%; }
-      .cuerda[data-cuerda="mi"] { width: 2px; }
-      .cuerda[data-cuerda="la"] { width: 2.5px; }
-      .cuerda[data-cuerda="re"] { width: 3px; }
-      .cuerda[data-cuerda="sol"] { width: 4px; }
-      .nota { top: calc(var(--p) * 100%); left: 50%; }
     }
 
     @media (pointer: coarse), (max-width: 760px) {
@@ -569,24 +438,10 @@
       <button class="btn-ver seleccionado" data-ver="escala" onclick="marcarNotas('escala')">Escala de Do mayor</button>
       <button class="btn-ver" data-ver="todas" onclick="marcarNotas('todas')">Todas las notas</button>
     </div>
-    <div class="interfaz-violin">
-      <div class="cejilla" aria-label="Cuerdas al aire">
-        <button class="cuerda-aire" data-cuerda="mi" onclick="alPresionarNota(659.25, 'mi', 'e/5', 'n', this)">Mi</button>
-        <button class="cuerda-aire" data-cuerda="la" onclick="alPresionarNota(440.00, 'la', 'a/4', 'n', this)">La</button>
-        <button class="cuerda-aire" data-cuerda="re" onclick="alPresionarNota(293.66, 're', 'd/4', 'n', this)">Re</button>
-        <button class="cuerda-aire" data-cuerda="sol" onclick="alPresionarNota(196.00, 'sol', 'g/3', 'n', this)">Sol</button>
-      </div>
-
-      <div class="mastil" id="mastil">
-        <div class="cinta-guia" style="--p: calc(2 / 13)"></div>
-        <div class="cinta-guia" style="--p: calc(3 / 13)"></div>
-        <div class="cinta-guia" style="--p: calc(5 / 13)"></div>
-      </div>
-    </div>
+    <div class="interfaz-violin" id="violin"></div>
     <ul class="leyenda">
       <li><i class="l-escala"></i>Notas marcadas</li>
       <li><i class="l-otra"></i>Otras notas</li>
-      <li><i class="l-cinta"></i>Cinta guía</li>
     </ul>
   </div>
 </main>
@@ -881,7 +736,7 @@
   }
 
   function alPresionarNota(frec, cuerdaId, vfKey, acc, elementoNodo = null) {
-    document.querySelectorAll('.nota, .cuerda-aire').forEach(el => el.classList.remove('activa'));
+    document.querySelectorAll('.lv-n.activa').forEach(el => el.classList.remove('activa'));
     if (elementoNodo) elementoNodo.classList.add('activa');
 
     if (!juegoActivo) {
@@ -924,35 +779,51 @@
     }
   }
 
-  // Mástil: una cuerda por fila (o por columna en celulares) con sus notas
+  // El violín del club: recorte del mástil de 100×194 (cejilla arriba). Las notas siguen las cuerdas
+  // de la imagen y van pegadas una a la otra; la misma geometría que la app (MASTIL, POS_LEER).
   const nombresCuerda = { sol: 'Sol', re: 'Re', la: 'La', mi: 'Mi' };
-  ['mi', 'la', 're', 'sol'].map(id => mapaCuerdas.find(c => c.id === id)).forEach(cuerda => {
-    const contenedorCuerda = document.createElement('div');
-    contenedorCuerda.className = 'cuerda';
-    contenedorCuerda.dataset.cuerda = cuerda.id;
-
-    cuerda.notas.forEach(n => {
-      const nodoNota = document.createElement('button');
-      nodoNota.type = 'button';
-      nodoNota.className = `nota ${n.tipo}`;
-      nodoNota.dataset.pos = `${cuerda.id}-${n.semitonos}`;
-      nodoNota.innerText = n.label;
-      nodoNota.setAttribute('aria-label', `${n.label} en la cuerda ${nombresCuerda[cuerda.id]}`);
-      nodoNota.style.setProperty('--p', n.semitonos / 13);
-
-      nodoNota.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-        const freqFinal = calcularFrecuencia(cuerda.baseFreq, n.semitonos);
-        alPresionarNota(freqFinal, cuerda.id, n.vfKey, n.acc, nodoNota);
+  const aire = { sol: { vfKey: 'g/3' }, re: { vfKey: 'd/4' }, la: { vfKey: 'a/4' }, mi: { vfKey: 'e/5' } };
+  const MASTIL = { W: 100, H: 194, x0: 508, y0: 286, cejilla: 328 };
+  const sepMastil = y => 13 + .02333 * (y - 350);
+  const posiciones = (() => {
+    const ys = [[312, .48 * sepMastil(312)]]; let r = .48 * sepMastil(MASTIL.cejilla + 7); ys.push([MASTIL.cejilla + r + 1, r]);
+    for (let k = 2; k <= 10; k++) { const [py, pr] = ys[k - 1]; r = .48 * sepMastil(py + 2 * pr); ys.push([py + pr + r + .8, r]); }
+    return ['sol', 're', 'la', 'mi'].flatMap((id, i) => {
+      const cuerda = mapaCuerdas.find(c => c.id === id);
+      return ys.map(([y, r], k) => {
+        const n = k ? cuerda.notas.find(x => x.semitonos === k) : { label: nombresCuerda[id], vfKey: aire[id].vfKey, acc: 'n', tipo: 'natural' };
+        return { id, k, n, freq: calcularFrecuencia(cuerda.baseFreq, k), x: 557.5 + .00111 * (y - 350) + (i - 1.5) * sepMastil(y) - MASTIL.x0, y: y - MASTIL.y0, r };
       });
-
-      contenedorCuerda.appendChild(nodoNota);
     });
-
-    mastil.appendChild(contenedorCuerda);
+  })();
+  const violinHorizontal = () => !matchMedia('(max-width: 760px)').matches;
+  function dibujarViolin() {
+    const h = violinHorizontal(), W = h ? MASTIL.H : MASTIL.W, H = h ? MASTIL.W : MASTIL.H;
+    const xy = p => h ? [p.y, MASTIL.W - p.x] : [p.x, p.y];
+    const cintas = [2, 3, 5].map(k => { const a = xy(posiciones.find(p => p.id === 'sol' && p.k === k)), b = xy(posiciones.find(p => p.id === 'mi' && p.k === k)), r = posiciones.find(p => p.k === k).r;
+      return `<line class="lv-cinta" x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke-width="${(2 * r).toFixed(1)}"/>`; }).join('');
+    const notas = posiciones.map((p, i) => { const [x, y] = xy(p), nom = p.n.label;
+      return `<g class="lv-n${p.n.tipo === 'alterada' ? ' alterada' : ''}" data-i="${i}" data-cuerda="${p.id}" data-pos="${p.id}-${p.k}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})" role="button" aria-label="${nom} en la cuerda ${nombresCuerda[p.id]}"><g class="lv-in"><circle r="${p.r.toFixed(1)}"/><text y="${(p.r * .3).toFixed(1)}" text-anchor="middle" style="font-size:${(p.r * (nom.length > 3 ? .62 : .8)).toFixed(1)}px">${nom}</text></g></g>`; }).join('');
+    const caja = document.getElementById('violin');
+    caja.dataset.h = String(h);
+    caja.innerHTML = `<svg class="lv" viewBox="0 0 ${W} ${H}" role="group" aria-label="Violín: toca una nota"><image href="../images/violin-mastil${h ? '-h' : ''}.webp" width="${W}" height="${H}"/>${cintas}${notas}</svg>`;
+    marcarNotas(verNotas);
+  }
+  // se toca la nota más cercana al dedo (no hace falta caer exacto en el círculo)
+  document.getElementById('violin').addEventListener('pointerdown', e => {
+    const svg = e.target.closest('.lv'); if (!svg) return;
+    const ctm = svg.getScreenCTM(); if (!ctm) return;
+    const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+    let mejor = null, dist = Infinity;
+    svg.querySelectorAll('.lv-n').forEach(g => { const m = g.transform.baseVal.consolidate()?.matrix; if (!m) return; const d = Math.hypot(m.e - pt.x, m.f - pt.y); if (d < dist) { dist = d; mejor = g; } });
+    if (!mejor) return;
+    const p = posiciones[+mejor.dataset.i];
+    if (dist > p.r * 2.2) return;
+    e.preventDefault();
+    alPresionarNota(p.freq, p.id, p.n.vfKey, p.n.acc, mejor);
   });
-  document.querySelectorAll('.cuerda-aire').forEach(b => b.dataset.pos = `${b.dataset.cuerda}-0`);
-  marcarNotas('escala');
+  matchMedia('(max-width: 760px)').addEventListener('change', dibujarViolin);
+  dibujarViolin();
 </script>
 
 <footer id="footer">

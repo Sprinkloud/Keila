@@ -23,13 +23,13 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 
 ## Violín virtual (`notasviolin.html`)
 
-- `mapaCuerdas`: las cuatro cuerdas con sus notas por semitono (1 a 11). Cada nota se ubica con la variable CSS `--p` (semitono / 13), así que la misma posición sirve en horizontal (`left`) y en vertical (`top`).
-- Orden de las cuerdas: Mi arriba, luego La, Re y Sol abajo (en celulares, vertical, al revés: Sol a la izquierda y Mi a la derecha, con `row-reverse`). En pantallas de 760 px o menos el violín se pone vertical, con la cejilla arriba, para que los círculos de 42 px no se enciman.
-- Colores de cuerda iguales a los de la app: Sol `#9C5B55`, Re `#C4923A`, La `#647745`, Mi `#567388`. Diapasón café claro `#CDAE87` (la dueña no quiere el ébano oscuro de la app porque opaca todo); las notas fuera de la escala van en crema translúcido con texto café; la nota que se toca se agranda (1.35) con el color de su cuerda y un aro oscuro, sin usar el ocre (que es el color de la cuerda Re), cintas guía crema del ancho de una nota (semitonos 2, 3 y 5). Por defecto solo van en color las notas de la escala de Do mayor (Do4 a Do5) en primera posición (`escalaDo`); el resto se ve tenue. "Todas las notas" colorea solo las naturales de la primera posición (semitonos 0 a 5, de la cuerda al aire al 3.er dedo; sin el 4.º dedo); las alteradas y las posiciones más altas quedan tenues. La cejilla (cuerdas al aire) va en crema `#F6EEDC`.
+- **El mismo violín que la app** (pedido de la dueña): la imagen del mástil (`images/violin-mastil.webp` horizontal: `-h.webp`; copias de `App_Sprinkloud/assets/ilustraciones/`) y las notas en un SVG encima (`dibujarViolin`). Misma geometría que la app (`MASTIL`, `posiciones`): las notas siguen las cuerdas de la imagen y van pegadas una a la otra, de la cuerda al aire (encima de la cejilla) al semitono 10. Se toca la nota más cercana al dedo. La imagen nunca se deforma: solo se escala.
+- Horizontal en pantallas de más de 760 px (voluta a la izquierda, Mi arriba y Sol abajo); vertical en celulares (Sol a la izquierda, Mi a la derecha). Al cruzar los 760 px se vuelve a dibujar.
+- `mapaCuerdas`: las notas de cada cuerda por semitono (nombre, `vfKey`, alteración). Colores de cuerda iguales a los de la app: Sol `#9C5B55`, Re `#C4923A`, La `#647745`, Mi `#567388`.
+- Marcas: por defecto solo van en color las notas de la escala de Do mayor (Do4 a Do5) en primera posición (`escalaDo`). "Todas las notas" colorea las naturales de la cuerda al aire al 3.er dedo (semitonos 0 a 5). Las demás van en crema pálido con su nombre. La nota tocada crece (1.3) con el color de su cuerda y un aro oscuro.
 - `modosJuego`: Líneas, Espacios, Líneas adicionales (Sol3 a Do4 y La5 a Re6) y Todas, siempre en clave de Sol. El acierto vale en cualquier lugar del violín donde suene esa nota.
 - El pentagrama se dibuja en 320 × 155 para que entren Sol3 y Re6 con sus líneas adicionales.
-- En computadora (900 px o más), `.fila-superior` pone el pentagrama a la izquierda y el panel del juego a la derecha. El botón y el mensaje van en la misma línea, para que las estrellas no empujen nada. Debajo va el violín.
-- Violín horizontal (761 px o más) con **proporción real, nunca estirado** (pedido de la dueña): todo se mide con `--n`, el diámetro de la nota. Las notas van casi pegadas a lo largo de la cuerda (1.1 n) y las cuerdas separadas 1.3 n para que el dedo calce; el mástil mide 13 × 1.1 n de ancho y 4 × 1.3 n de alto. En computadora `--n = clamp(42px, min(4.8vw, 5.7vh), 64px)`: en pantallas grandes crecen las notas y el nombre (hasta 64 px y letra de 19 px) y el violín crece entero, sin scroll (probado en 1024×768, 1280×800 y 1920×1080). En celulares `.fila-superior` es `display: contents` y todo queda en una columna.
+- En computadora (900 px o más), `.fila-superior` pone el pentagrama a la izquierda y el panel del juego a la derecha; debajo va el violín, con un ancho según el alto de la pantalla (`100dvh - 520px`) para que todo entre sin scroll (probado en 1280×800). En celulares `.fila-superior` es `display: contents` y todo queda en una columna.
 
 ## Células rítmicas (`Ritmo.html`)
 
@@ -96,10 +96,9 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Modos de juego en clave de Sol: Líneas, Espacios, Líneas adicionales y Todas.
 - En celulares el violín se pone vertical (Sol, Re, La, Mi de izquierda a derecha); en computadora es horizontal (Mi arriba, Sol abajo).
 - Por defecto solo van en color las notas de la escala de Do mayor en primera posición. "Todas las notas" marca las naturales de la primera posición hasta el 3.er dedo.
-- Cintas guía del ancho de una nota y cejilla (cuerdas al aire) en crema.
+- Violín: la misma imagen y las mismas notas pegadas que la app.
 - Se corrigieron 9 notas naturales que estaban marcadas como alteradas en `mapaCuerdas`.
 - Marca Sprinkloud en la esquina, junto a "Volver", y encabezado compacto.
-- Diapasón café claro (`#CDAE87`) en lugar del ébano oscuro; las notas sin marcar van en crema translúcido.
 - La nota que se toca se agranda con el color de su cuerda y un aro oscuro (ya no se pinta de ocre, que se confundía con la cuerda Re); igual en las cuerdas al aire.
 - En computadora: pentagrama y juego lado a lado; el violín mantiene su proporción real y en pantallas grandes crecen las notas y sus nombres.
 - SEO igual que el piano.
