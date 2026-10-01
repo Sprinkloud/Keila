@@ -152,10 +152,13 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .cell.sel{border-color:var(--musgo);box-shadow:inset 0 0 0 1.5px var(--musgo)}
 .pastel-vista{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:8px}
 .pastel{width:min(56vmin,340px);height:auto;overflow:visible}
-.rebanada{fill:var(--card);stroke:var(--figura);stroke-width:2.2;stroke-linejoin:round;transition:fill .05s linear}
-.rebanada.silencio{fill:var(--line-soft)}
-.rebanada.on{fill:var(--gold)}
-.rebanada.silencio.on{fill:var(--gold-soft)}
+/* la pizza del club: el pedazo que suena se pinta de ocre */
+.pz-plato{fill:var(--card);stroke:var(--line);stroke-width:2}
+.pz-vacio{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:4 5;opacity:.55}
+.pz-corte-luz{stroke:#FBF7EE;stroke-width:3.4;opacity:.75}
+.pz-corte{stroke:#3A3128;stroke-width:1.4;opacity:.6}
+.rebanada{fill:var(--gold);opacity:0;mix-blend-mode:multiply;transition:opacity 180ms ease}
+.rebanada.on{opacity:.55;transition-duration:80ms}
 .pastel-figura .rsvg{height:84px;width:auto}
 .beat{
   width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
@@ -495,7 +498,7 @@ input[type=range]::-moz-range-thumb{
           <button class="chip" id="btn-loop" aria-pressed="false"><span class="dot"></span>Repetir</button>
           <button class="chip pastel-btn" id="btn-pastel" aria-pressed="false" title="Ver cómo se divide un pulso">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.4 6.4M12 12H3"/></svg>
-            Pastel
+            Pizza
           </button>
         </div>
       </div>
@@ -991,7 +994,7 @@ function renderPalette(){
       '<span class="len">'+beatsLabel(dur)+'</span>';
     if(state.pastel){
       b.classList.toggle("sel", c.id === state.pastelCell);
-      b.setAttribute("aria-label", "Ver en el pastel: " + describirCelula(c));
+      b.setAttribute("aria-label", "Ver en la pizza: " + describirCelula(c));
       b.addEventListener("click", () => elegirPastel(c.id));
     } else b.addEventListener("click", () => addCell(c.id));
     box.appendChild(b);
@@ -1002,21 +1005,24 @@ function renderPalette(){
    6b. Modo pastel
    ========================================================= */
 function sector(cx, cy, r, a0, a1){
-  // a0 y a1 en fracciones de vuelta, empezando arriba y en el sentido del reloj
-  const p = a => (cx + r*Math.sin(2*Math.PI*a)).toFixed(2) + " " + (cy - r*Math.cos(2*Math.PI*a)).toFixed(2);
+  // a0 y a1 en fracciones de vuelta, empezando a la izquierda y en el sentido del reloj
+  const p = a => (cx - r*Math.cos(2*Math.PI*a)).toFixed(2) + " " + (cy - r*Math.sin(2*Math.PI*a)).toFixed(2);
   return "M" + cx + " " + cy + " L" + p(a0) + " A" + r + " " + r + " 0 " + (a1 - a0 > .5 ? 1 : 0) + " 1 " + p(a1) + " Z";
 }
+let pastelN = 0;
 function pastelHTML(cell){
-  const total = cellDur(cell);
-  let acc = 0, partes = "";
-  cell.notes.forEach((n, i) => {
-    const d = noteDur(n)/total, clase = "rebanada" + (n.rest ? " silencio" : "");
-    partes += d >= .9999
-      ? '<circle class="'+clase+'" data-sl="'+i+'" cx="120" cy="120" r="108"/>'
-      : '<path class="'+clase+'" data-sl="'+i+'" d="'+sector(120, 120, 108, acc, acc + d)+'"/>';
-    acc += d;
-  });
-  return '<div class="pastel-vista"><svg class="pastel" viewBox="0 0 240 240" role="img" aria-label="Un pulso dividido en ' + cell.notes.length + (cell.notes.length === 1 ? ' parte' : ' partes') + '">' + partes + '</svg>' +
+  // la pizza del club: cada parte del pulso es un pedazo; los silencios dejan el plato vacío
+  const total = cellDur(cell), C = 120, R = 108, lado = R*410/395, id = "pz" + (++pastelN);
+  let acc = 0;
+  const partes = cell.notes.map((n, i) => { const d = noteDur(n)/total, p = {i:i, a:acc, b:acc + d, rest:!!n.rest}; acc += d; return p; });
+  const forma = (p, r, extra) => p.b - p.a >= .9999 ? '<circle '+extra+' cx="'+C+'" cy="'+C+'" r="'+r+'"/>' : '<path '+extra+' d="'+sector(C, C, r, p.a, p.b)+'"/>';
+  let o = '<defs><clipPath id="'+id+'">' + (partes.filter(p => !p.rest).map(p => forma(p, R, "")).join("") || '<rect width="0" height="0"/>') + '</clipPath></defs>';
+  o += '<circle class="pz-plato" cx="'+C+'" cy="'+C+'" r="'+(R + 5)+'"/>';
+  o += '<image href="../images/pizza.webp" x="'+(C - lado)+'" y="'+(C - lado)+'" width="'+(2*lado)+'" height="'+(2*lado)+'" clip-path="url(#'+id+')"/>';
+  partes.forEach(p => { if(p.rest) o += forma(p, R - 4, 'class="pz-vacio"'); });
+  if(partes.length > 1) partes.forEach(p => { const x = C - R*Math.cos(2*Math.PI*p.a), y = C - R*Math.sin(2*Math.PI*p.a); o += '<line class="pz-corte-luz" x1="'+C+'" y1="'+C+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'"/><line class="pz-corte" x1="'+C+'" y1="'+C+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'"/>'; });
+  partes.forEach(p => { o += forma(p, R, 'class="rebanada" data-sl="'+p.i+'"'); });
+  return '<div class="pastel-vista"><svg class="pastel" viewBox="0 0 240 240" role="img" aria-label="Un pulso dividido en ' + cell.notes.length + (cell.notes.length === 1 ? ' parte' : ' partes') + '">' + o + '</svg>' +
     '<div class="pastel-figura">' + cellSVG(cell, {prefix:"p"}) + '</div></div>';
 }
 function elegirPastel(id){
