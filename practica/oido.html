@@ -5,16 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Entrenador de oído musical gratis | Sprinkloud</title>
   <meta name="description" content="Entrena tu oído musical gratis: reconoce si una nota sube o baja, intervalos, acordes mayores y menores, y tensión o reposo. Para clases y práctica.">
-  <link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/oido.html">
-  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/oido">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Sprinkloud">
   <meta property="og:title" content="Entrenador de oído musical gratis">
   <meta property="og:description" content="Reconoce de oído intervalos, acordes mayores y menores, y tensión o reposo. Gratis.">
-  <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/oido.html">
-  <meta property="og:image" content="https://sprinkloud.vercel.app/images/PIano1.png">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/oido">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo del Club musical Sprinkloud">
   <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Entrenador de oído musical","url":"https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/oido.html","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"teaches":["Entrenamiento auditivo","Intervalos musicales","Acordes mayores y menores","Triadas aumentadas y disminuidas","Tensión y reposo"],"publisher":{"@type":"Organization","name":"Club musical Sprinkloud","url":"https://sprinkloud.vercel.app/"}}</script>
+  <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Entrenador de oído musical","url":"https://sprinkloud.vercel.app/practica/oido","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"teaches":["Entrenamiento auditivo","Intervalos musicales","Acordes mayores y menores","Triadas aumentadas y disminuidas","Tensión y reposo"],"publisher":{"@type":"Organization","name":"Club musical Sprinkloud","url":"https://sprinkloud.vercel.app/"}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
@@ -85,7 +89,7 @@
 </head>
 <body>
   <div class="barra">
-    <a href="../material.html">← Volver</a>
+    <a href="/material">← Volver</a>
     <span class="marca">Sprinkloud</span>
   </div>
   <main>
@@ -240,6 +244,17 @@ function teclado(notas) {
 const $ = s => document.querySelector(s);
 const estado = { modo: 'sube', op: {}, actual: null, respondida: false, aciertos: 0, intentos: 0, racha: 0 };
 const params = new URLSearchParams(location.search);
+/* Enlace directo a cada ejercicio: /practica/oido/segundas-y-terceras (los enlaces viejos ?modo=…&nivel=… también sirven) */
+const EJERCICIOS = {
+  'sube-o-baja': { modo: 'sube' },
+  'intervalos': { modo: 'intervalos', nivel: 'todos' },
+  'segundas-y-terceras': { modo: 'intervalos', nivel: 'segundas y terceras' },
+  'cuartas-quintas-y-octavas': { modo: 'intervalos', nivel: 'cuartas, quintas y octavas' },
+  'mayor-o-menor': { modo: 'mayorMenor' },
+  'triadas': { modo: 'triadas' },
+  'tension-o-reposo': { modo: 'reposo' }
+};
+const pedido = EJERCICIOS[(location.pathname.match(/\/oido\/([a-z-]+)$/) || [])[1]] || { modo: params.get('modo'), nivel: params.get('nivel') };
 
 function pintarModos() {
   const box = $('#modos');
@@ -315,8 +330,10 @@ function responder(op, boton) {
 
 function iniciar() {
   try { const g = JSON.parse(localStorage.getItem('sprinkloud-oido') || 'null'); if (g && MODOS[g.modo]) { estado.modo = g.modo; estado.op = g.op || {}; } } catch (e) {}
-  if (MODOS[params.get('modo')]) estado.modo = params.get('modo');
-  if (params.get('nivel') && NIVELES_INT[params.get('nivel')]) estado.op.nivel = params.get('nivel');
+  if (MODOS[pedido.modo]) estado.modo = pedido.modo;
+  if (pedido.nivel && NIVELES_INT[pedido.nivel]) estado.op.nivel = pedido.nivel;
+  const limpio = Object.keys(EJERCICIOS).find(k => EJERCICIOS[k].modo === pedido.modo && (EJERCICIOS[k].nivel || '') === (pedido.nivel || (pedido.modo === 'intervalos' ? 'todos' : '')));
+  if (params.get('modo') && limpio) history.replaceState(null, '', '/practica/oido/' + limpio);
   $('#escuchar').addEventListener('click', escuchar);
   $('#otra-vez').addEventListener('click', escuchar);
   $('#siguiente').addEventListener('click', () => { nueva(); escuchar(); });
@@ -330,6 +347,6 @@ function iniciar() {
 iniciar();
 </script>
 <script>window.SprinkloudPractica = { app: 'Entrenador de oído', detalle: function () { return MODOS[estado.modo].nombre + (estado.intentos ? ': ' + estado.aciertos + ' de ' + estado.intentos + ' aciertos' : ''); } };</script>
-<script src="practica.js"></script>
+<script src="/practica/comprobante.js"></script>
 </body>
 </html>

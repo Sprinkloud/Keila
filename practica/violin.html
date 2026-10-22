@@ -8,13 +8,13 @@
   <meta name="keywords" content="leer notas en violín, notas del violín, juego de notas, violín virtual, clave de sol, pentagrama, digitación violín, cuerdas del violín, líneas adicionales, teoría musical para niños">
   <meta name="author" content="Sprinkloud Club Musical">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/violin">
   <meta name="theme-color" content="#F6F0E2">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
   <meta property="og:site_name" content="Sprinkloud Club Musical">
-  <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/violin">
   <meta property="og:title" content="Violín virtual: leer notas en el pentagrama">
   <meta property="og:description" content="Aprende a leer notas en clave de Sol y a encontrarlas en las cuerdas del violín: líneas, espacios y líneas adicionales. Gratis.">
   <meta property="og:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
@@ -25,7 +25,7 @@
   <meta name="twitter:description" content="Aprende a leer notas en clave de Sol y a encontrarlas en las cuerdas del violín. Gratis.">
   <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
 
-  <link rel="icon" type="image/png" href="../images/Violin1.png">
+  <link rel="icon" type="image/png" href="/images/Violin1.png">
 
   <script type="application/ld+json">
   {
@@ -34,7 +34,7 @@
       {
         "@type": "WebApplication",
         "name": "Violín virtual y juego de notas en clave de Sol",
-        "url": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html",
+        "url": "https://sprinkloud.vercel.app/practica/violin",
         "image": "https://sprinkloud.vercel.app/images/Violin1.png",
         "description": "Violín virtual gratis para aprender a leer notas en clave de Sol y encontrarlas en las cuerdas, con modos de práctica por líneas, espacios y líneas adicionales.",
         "applicationCategory": "EducationalApplication",
@@ -51,8 +51,8 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://sprinkloud.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material.html" },
-          { "@type": "ListItem", "position": 3, "name": "Violín y pentagrama", "item": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/notasviolin.html" }
+          { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material" },
+          { "@type": "ListItem", "position": 3, "name": "Violín y pentagrama", "item": "https://sprinkloud.vercel.app/practica/violin" }
         ]
       }
     ]
@@ -287,7 +287,7 @@
     .btn-ver:active { transform: scale(.97); }
     .btn-ver.seleccionado { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 
-    /* el violín del club: la imagen del mástil (../images/violin-mastil.webp) con las notas encima,
+    /* el violín del club: la imagen del mástil (/images/violin-mastil.webp) con las notas encima,
        pegadas una a la otra a lo largo de cada cuerda, igual que en la app */
     .lv { display: block; width: 100%; height: auto; touch-action: manipulation; user-select: none; -webkit-user-select: none; border-radius: 16px; }
     .lv-cinta { stroke: #FBF7EE; opacity: .16; pointer-events: none; }
@@ -393,7 +393,7 @@
 <body>
 
 <div class="barra-superior">
-  <a href="https://sprinkloud.vercel.app/material.html" class="btn-volver">
+  <a href="https://sprinkloud.vercel.app/material" class="btn-volver">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg> Volver
   </a>
   <p class="marca">Sprink<span>loud</span></p>
@@ -816,7 +816,7 @@
       return `<g class="lv-n${p.n.tipo === 'alterada' ? ' alterada' : ''}" data-i="${i}" data-cuerda="${p.id}" data-pos="${p.id}-${p.k}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})" role="button" aria-label="${nom} en la cuerda ${nombresCuerda[p.id]}"><g class="lv-in"><circle r="${p.r.toFixed(1)}"/><text y="${(p.r * .3).toFixed(1)}" text-anchor="middle" style="font-size:${(p.r * (nom.length > 3 ? .62 : .8)).toFixed(1)}px">${nom}</text></g></g>`; }).join('');
     const caja = document.getElementById('violin');
     caja.dataset.h = String(h);
-    caja.innerHTML = `<svg class="lv" viewBox="0 0 ${W} ${H}" role="group" aria-label="Violín: toca una nota"><image href="../images/violin-mastil${h ? '-h' : ''}.webp" width="${W}" height="${H}"/>${cintas}${notas}</svg>`;
+    caja.innerHTML = `<svg class="lv" viewBox="0 0 ${W} ${H}" role="group" aria-label="Violín: toca una nota"><image href="/images/violin-mastil${h ? '-h' : ''}.webp" width="${W}" height="${H}"/>${cintas}${notas}</svg>`;
     marcarNotas(verNotas);
   }
   // se toca la nota más cercana al dedo (no hace falta caer exacto en el círculo)
@@ -845,6 +845,6 @@
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
 <script>window.SprinkloudPractica = { app: 'Violín virtual', detalle: function () { return aciertos ? 'Juego de notas: ' + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el violín'; } };</script>
-<script src="practica.js"></script>
+<script src="/practica/comprobante.js"></script>
 </body>
 </html>

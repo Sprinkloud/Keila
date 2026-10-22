@@ -6,12 +6,30 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 
 | Ruta | Qué es |
 |---|---|
-| `index.html`, `material.html`, `metodología.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
-| `Teoría Musical/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `notaspiano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `notasviolin.html`, `Ritmo.html`, `hojas.html`, `oido.html` y `sonidosynotas.html`. |
-| `images/` | Fotos y logos. |
-| `vercel.json` | Encabezados de seguridad que Vercel envía con cada página (ver "Seguridad"). |
+| `index.html`, `material.html`, `metodologia.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
+| `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html`, `practica/oido.html` y `practica/sonidos-y-notas.html`. |
+| `images/` | Fotos y logos. `logo-sprinkloud.png` (1200×630, fondo blanco) es la imagen para compartir de las páginas que no tienen una propia. |
+| `vercel.json` | Rutas limpias, redirecciones de las rutas viejas y encabezados de seguridad (ver "Rutas" y "Seguridad"). |
+| `servidor-local.js` | Servidor para probar el sitio como en Vercel. No se publica (`.vercelignore`, igual que este archivo). |
 
-## Juego de notas del piano (`notaspiano.html`)
+## Rutas
+
+Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`cleanUrls`), porque van en los mensajes de WhatsApp:
+
+| Ruta | Archivo |
+|---|---|
+| `/`, `/material`, `/metodologia`, `/musicband` | páginas del sitio |
+| `/practica/piano`, `/practica/violin`, `/practica/ritmo`, `/practica/oido`, `/practica/hojas`, `/practica/sonidos-y-notas` | herramientas |
+| `/practica/hojas/violin/semana-2` | hoja de una semana (rewrite a `hojas.html`, que lee la ruta) |
+| `/practica/ritmo/3-4` | app de ritmo en un compás (rewrite a `ritmo.html`) |
+| `/practica/oido/segundas-y-terceras` | entrenador en un ejercicio (rewrite a `oido.html`; los nombres están en `EJERCICIOS`) |
+
+- Las páginas que se abren en rutas largas usan rutas absolutas para sus archivos (`/images/...`, `/practica/comprobante.js`). Una ruta relativa se rompería en `/practica/hojas/violin/semana-2`.
+- Las rutas viejas (`/Teoría Musical/Ritmo.html`, `/metodología.html`, etc.) redirigen con 308 a las nuevas. Los parámetros viejos (`?semana=2&i=violin`, `?compas=3/4`, `?modo=…&nivel=…`) siguen sirviendo, y cada página cambia la barra de direcciones por la ruta limpia.
+- `ritmo.html` tiene su propia variable `history` (el historial de ritmos), así que ahí se usa `window.history.replaceState`.
+- El panel del maestro y el reporte de la familia (`Registro_Sprinkloud/maestros/`) arman estas mismas rutas. Si cambian aquí, hay que cambiarlas allá.
+
+## Juego de notas del piano (`practica/piano.html`)
 
 - `notasPiano`: las teclas de F2 a C6 (26 blancas). Las octavas 1 y 2 se muestran en clave de Fa y las 3 a 5 en clave de Sol. Con este rango, las líneas adicionales de la clave de Fa son solo las de arriba (Do4, Re4, Mi4) y las de Sol llegan hasta Do6.
 - Orden de la página: barra con "Volver" y la marca en la otra esquina, título e intro cortos, mensaje y estrellas del juego, pentagrama, piano, y al final el panel del juego (iniciar, modos y acordes). Letras compactas; el pentagrama y el piano mantienen su tamaño.
@@ -22,7 +40,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 - Aspecto: el mismo sistema visual que la app de violín (tokens de `App_Sprinkloud/DESIGN.md`: papel, musgo, ocre, Fraunces, Caveat y Nunito Sans, con tema oscuro). El pentagrama y las teclas quedan siempre sobre papel claro.
 - Tiene que funcionar en cualquier dispositivo. El teclado muestra tantas teclas blancas como quepan (unos 34 px cada una, de 7 a 31) y las flechas mueven una octava. Al elegir un modo se centra en sus notas; en el juego NO se mueve solo: el alumno busca la octava. Cada octava tiene un tinte crema (azulado en los graves, rosado en los agudos: `oct-1` a `oct-5`) y su nombre encima (`NOMBRE_OCTAVA`: 2 octavas abajo, 1 octava abajo, Octava central, 1 octava arriba, 2 octavas arriba). En computadora se ve completo y las flechas se ocultan. El pie de página no es fijo, los toques miden 44 px y el zoom está permitido.
 
-## Violín virtual (`notasviolin.html`)
+## Violín virtual (`practica/violin.html`)
 
 - **El mismo violín que la app** (pedido de la dueña): la imagen del mástil (`images/violin-mastil.webp` horizontal: `-h.webp`; copias de `App_Sprinkloud/assets/ilustraciones/`) y las notas en un SVG encima (`dibujarViolin`). Misma geometría que la app (`MASTIL`, `posiciones`): las notas siguen las cuerdas de la imagen y van pegadas una a la otra, de la cuerda al aire (encima de la cejilla) al semitono 10. Se toca la nota más cercana al dedo. La imagen nunca se deforma: solo se escala.
 - Horizontal en pantallas de más de 760 px (voluta a la izquierda, Mi arriba y Sol abajo); vertical en celulares (Sol a la izquierda, Mi a la derecha). Al cruzar los 760 px se vuelve a dibujar.
@@ -32,7 +50,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 - El pentagrama se dibuja en 320 × 155 para que entren Sol3 y Re6 con sus líneas adicionales. La nota va centrada en el pentagrama, como en la app (`dibujarCentrada`: se dibuja en su propio grupo y se mueve al centro, entre la clave y el final).
 - En computadora (900 px o más), `.fila-superior` pone el pentagrama a la izquierda y el panel del juego a la derecha; debajo va el violín, con un ancho según el alto de la pantalla (`100dvh - 520px`) para que todo entre sin scroll (probado en 1280×800). En celulares `.fila-superior` es `display: contents` y todo queda en una columna.
 
-## Células rítmicas (`Ritmo.html`)
+## Células rítmicas (`practica/ritmo.html`)
 
 - App de pantalla completa: el `body` mide 100dvh (flex en columna, sin scroll de página) y reparte el alto entre `.app` y el pie de página, que es una sola línea delgada con los íconos y el copyright. Solo el lienzo tiene scroll propio cuando hay muchos compases. Incluye banco de células (Rítmicas, Largas, Silencios), partitura en compases de 4/4, reproducción con metrónomo y cuenta previa, y dictado rítmico.
 - Estilo de la app con modo oscuro; cabecera con Volver, el título y la marca Sprinkloud.
@@ -44,7 +62,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 - Las figuras suenan con un tono tipo piano sintetizado (`pianoVoice`): Do5 en el pulso y Sol4 a contratiempo.
 - En celulares la paleta ocupa como máximo 38vh y la frase de ayuda se oculta, para que el lienzo sea lo más amplio posible.
 
-## Hojas de práctica (`hojas.html`)
+## Hojas de práctica (`practica/hojas.html`)
 
 Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (48 semanas, ver `Registro_Sprinkloud/guia-teoria-musical.md`). Sirven para resolver en el dispositivo o para imprimir en A4.
 
@@ -90,9 +108,9 @@ Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (4
 
 VexFlow le pone ancho en línea al SVG. `pentagrama()` lo quita para que el CSS lo escale.
 
-## Entrenador de oído (`oido.html`)
+## Entrenador de oído (`practica/oido.html`)
 
-Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte en pantalla, con botones grandes y sin librerías externas: el piano está sintetizado con WebAudio, la misma voz de `Ritmo.html`.
+Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte en pantalla, con botones grandes y sin librerías externas: el piano está sintetizado con WebAudio, la misma voz de `practica/ritmo.html`.
 
 **Ejercicios** (`MODOS`). Cada uno dice en qué semanas de la guía se usa:
 - ¿Sube o baja? (semana 4).
@@ -113,7 +131,7 @@ Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte 
 - Sin errores de consola con la CSP.
 - Sin desborde a 320, 390 y 1280 px.
 
-## Comprobante de práctica (`practica.js`)
+## Comprobante de práctica (`practica/comprobante.js`)
 
 Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuales.
 
@@ -130,13 +148,13 @@ Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuale
 - En el celular se comparte con `navigator.share` (WhatsApp). Si no se puede, se guarda la imagen.
 
 **Para que una página lo use**
-- Define `window.SprinkloudPractica = { app, detalle(), subir? }` antes de cargar `practica.js`.
-- `subir` levanta el botón para que no tape controles; `Ritmo.html` lo usa en pantallas de 900 px o menos.
+- Define `window.SprinkloudPractica = { app, detalle(), subir? }` antes de cargar `practica/comprobante.js`.
+- `subir` levanta el botón para que no tape controles; `practica/ritmo.html` lo usa en pantallas de 900 px o menos.
 - Nada sale del dispositivo.
 
-**Enlaces que abren cada app en su ejercicio:** `Ritmo.html?compas=3/4`, `oido.html?modo=…&nivel=…`.
+**Enlaces que abren cada app en su ejercicio:** `/practica/ritmo/3-4` y `/practica/oido/<ejercicio>` (ver "Rutas").
 
-**Ritmos latinos** (`LATINOS` en `Ritmo.html`):
+**Ritmos latinos** (`LATINOS` en `practica/ritmo.html`):
 - salsa (clave 3-2), son (clave 2-3), reggaetón (dembow), cumbia, bachata, bolero;
 - habanera y tango, sanjuanito;
 - pasillo, vals criollo;
@@ -144,7 +162,7 @@ Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuale
 
 Están en la pantalla vacía y en la lista "Ritmos latinos…" del banco de tarjetas. Al elegir uno, la app cambia sola al compás que usa.
 
-## Compases en la app de ritmo (`Ritmo.html`)
+## Compases en la app de ritmo (`practica/ritmo.html`)
 
 **Compases** (`COMPASES`): el selector "Compás", junto al tempo, ofrece 4/4, 3/4, 2/4 y 6/8.
 - Cada compás define su largo y su pulso en negras.
@@ -189,14 +207,14 @@ El sitio es público y estático: no tiene servidor, formularios, llaves ni cone
 
 ## SEO
 
-- `robots.txt` y `sitemap.xml` en la raíz. Al agregar o cambiar una página, se suma o se actualiza su `<url>` con su `lastmod` en el sitemap (con la URL codificada: `Teor%C3%ADa%20Musical/...`).
-- Cada herramienta lleva: `<title>` de 60 caracteres como máximo que diga qué es, `description` de 155 como máximo, `link rel="canonical"`, Open Graph y Twitter (`name="twitter:..."`), imagen del mismo dominio, un solo `h1` que describa la herramienta (la marca va aparte) y datos estructurados JSON-LD (`WebApplication` y `BreadcrumbList`). Modelo: `notaspiano.html`.
-- Enfocar título, descripción, `h1` y JSON-LD en lo que la gente busca (por ejemplo "aprender figuras musicales y ritmo", no "células rítmicas"). En `Ritmo.html` las tarjetas no muestran nombres, pero su `aria-label` describe las figuras (`describirCelula`: "dos corcheas", "negra con puntillo"…) para lectores de pantalla y buscadores.
+- `robots.txt` y `sitemap.xml` en la raíz. Al agregar o cambiar una página, se suma o se actualiza su `<url>` con su `lastmod` en el sitemap (con la ruta limpia, por ejemplo `/practica/ritmo`).
+- Cada herramienta lleva: `<title>` de 60 caracteres como máximo que diga qué es, `description` de 155 como máximo, `link rel="canonical"`, Open Graph y Twitter (`name="twitter:..."`), imagen del mismo dominio, un solo `h1` que describa la herramienta (la marca va aparte) y datos estructurados JSON-LD (`WebApplication` y `BreadcrumbList`). Modelo: `practica/piano.html`.
+- Enfocar título, descripción, `h1` y JSON-LD en lo que la gente busca (por ejemplo "aprender figuras musicales y ritmo", no "células rítmicas"). En `practica/ritmo.html` las tarjetas no muestran nombres, pero su `aria-label` describe las figuras (`describirCelula`: "dos corcheas", "negra con puntillo"…) para lectores de pantalla y buscadores.
 - El sitio debe estar dado de alta en Google Search Console con el sitemap enviado.
 
 ## Probar en local
 
-`python -m http.server` desde la raíz del repo y abrir `http://localhost:8000/Teor%C3%ADa%20Musical/notaspiano.html`.
+`node servidor-local.js` desde la raíz del repo y abrir `http://localhost:8010/practica/piano`. Aplica las mismas rutas y encabezados que Vercel; `python -m http.server` no entiende las rutas limpias.
 
 ## Cuidado en Windows
 
@@ -211,7 +229,7 @@ El repo tiene `images/Ritmo.jpg` e `images/ritmo.jpg`, que en Windows chocan (el
 
 ### 22 de octubre de 2026: hojas de práctica, seguridad y SEO
 
-- **Nueva:** `Teoría Musical/hojas.html`, con las hojas de práctica de las 48 semanas de la guía.
+- **Nueva:** `practica/hojas.html`, con las hojas de práctica de las 48 semanas de la guía.
 - **Se eliminó `Pentagrama.html`,** por pedido de la dueña. Además estaba rota: sus dos copias de VexFlow daban 404 y usaba `vexflow.Flow`.
 - **Seguridad:** `vercel.json`, librerías con versión fija y SRI, y `.gitignore`. Se quitaron `.idea/` y `src/` del repo.
 - **Portada:** "Empieza ahora" y "Habla con un asesor" van directo a WhatsApp con el mensaje "Hola, quiero información sobre las clases de música 🎶". Antes iban a beacons.ai, donde estaba el cuestionario.
@@ -227,7 +245,7 @@ El repo tiene `images/Ritmo.jpg` e `images/ritmo.jpg`, que en Windows chocan (el
   - título y descripción enfocados en "clases de piano y violín online";
   - canónica, Open Graph y Twitter con una imagen que existe;
   - JSON-LD: `EducationalOrganization` con los cursos de piano y violín, y `WebSite`.
-- **`sonidosynotas.html`:** su canónica apuntaba a `tusonidoynotas.com`, así que Google no la mostraba como página del sitio. Además mencionaba guitarra.
+- **`practica/sonidos-y-notas.html`:** su canónica apuntaba a `tusonidoynotas.com`, así que Google no la mostraba como página del sitio. Además mencionaba guitarra.
 - **Probado** con los encabezados de `vercel.json` en un servidor local: las 9 páginas a 1280 y 390 px, sin errores de consola ni desbordes.
 
 ### 29 de septiembre de 2026: piano, violín y células rítmicas renovados
@@ -237,7 +255,7 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 **Proyecto**
 - Se clonó el repo en `D:\Proyectos_Claude\página_Sprinkloud`, se creó este `CLAUDE.md` y se registró en el índice del workspace.
 
-**Piano (`notaspiano.html`)**
+**Piano (`practica/piano.html`)**
 - Modos de juego: clave de Sol (líneas, espacios, líneas adicionales), clave de Fa (lo mismo) y ambas claves.
 - El mensaje del juego ya no dice el nombre de la nota: "Toca esta nota en el piano".
 - Aspecto de la app de violín: papel crema, musgo y ocre, Fraunces, Caveat y Nunito Sans, tema oscuro y sin emojis.
@@ -248,7 +266,7 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Orden: "Volver" y la marca Sprinkloud en la misma fila; título corto; mensaje y estrellas; pentagrama y piano primero; al final el panel del juego (modos y acordes). Letras compactas para no hacer scroll.
 - SEO: título, descripción, URL canónica, Open Graph, datos estructurados y un `h1` que describe la herramienta.
 
-**Violín (`notasviolin.html`)**
+**Violín (`practica/violin.html`)**
 - Aspecto de la app, con los colores de cuerda de la app.
 - Modos de juego en clave de Sol: Líneas, Espacios, Líneas adicionales y Todas.
 - En celulares el violín se pone vertical (Sol, Re, La, Mi de izquierda a derecha); en computadora es horizontal (Mi arriba, Sol abajo).
@@ -265,7 +283,7 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Tocar dos veces la misma tecla ya no cuenta doble.
 - Pie de página con tres íconos pequeños (WhatsApp, Instagram, correo) y el copyright.
 
-**Células rítmicas (`Ritmo.html`)**
+**Células rítmicas (`practica/ritmo.html`)**
 - Estilo de la app, marca Sprinkloud en la esquina y pie de página en una línea; la página cabe en la pantalla sin scroll (solo el lienzo se desplaza).
 - Células sin nombre: sin sílabas ni etiquetas ni números; las tarjetas solo muestran la figura y su duración, sin flecha (al tocarlas se añade la célula y suena).
 - Figuras en negro; la que suena cambia a ocre y el compás toma un tinte ocre muy suave. Sin el rótulo "Compás N".
@@ -282,5 +300,5 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
-- En `material.html` el botón que lleva a `Ritmo.html` dice solo "Ritmo"; decir "Figuras musicales y ritmo" ayudaría al SEO.
-- `sonidosynotas.html` y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
+- En `material.html` el botón que lleva a `practica/ritmo.html` dice solo "Ritmo"; decir "Figuras musicales y ritmo" ayudaría al SEO.
+- `practica/sonidos-y-notas.html` y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.

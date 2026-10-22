@@ -1,6 +1,62 @@
 {
-  "cleanUrls": false,
+  "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/Teor(.*)Musical/notaspiano.html",
+      "destination": "/practica/piano",
+      "permanent": true
+    },
+    {
+      "source": "/Teor(.*)Musical/notasviolin.html",
+      "destination": "/practica/violin",
+      "permanent": true
+    },
+    {
+      "source": "/Teor(.*)Musical/Ritmo.html",
+      "destination": "/practica/ritmo",
+      "permanent": true
+    },
+    {
+      "source": "/Teor(.*)Musical/sonidosynotas.html",
+      "destination": "/practica/sonidos-y-notas",
+      "permanent": true
+    },
+    {
+      "source": "/Teor(.*)Musical/hojas.html",
+      "destination": "/practica/hojas",
+      "permanent": true
+    },
+    {
+      "source": "/Teor(.*)Musical/oido.html",
+      "destination": "/practica/oido",
+      "permanent": true
+    },
+    {
+      "source": "/Teor(.*)Musical/practica.js",
+      "destination": "/practica/comprobante.js",
+      "permanent": true
+    },
+    {
+      "source": "/metodolog(.*)a.html",
+      "destination": "/metodologia",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/practica/hojas/:instrumento/:semana",
+      "destination": "/practica/hojas.html"
+    },
+    {
+      "source": "/practica/ritmo/:compas",
+      "destination": "/practica/ritmo.html"
+    },
+    {
+      "source": "/practica/oido/:ejercicio",
+      "destination": "/practica/oido.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

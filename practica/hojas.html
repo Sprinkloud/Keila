@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hojas de práctica de teoría musical | Sprinkloud</title>
   <meta name="description" content="Hojas de práctica de teoría musical por semana: notas, ritmo, intervalos, escalas y acordes. Para resolver en el celular o imprimir.">
-  <link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/hojas.html">
-  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/hojas">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Hojas de práctica de teoría musical">
   <meta property="og:description" content="Ejercicios semanales de teoría musical para escribir: en el celular o impresos.">
-  <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/hojas.html">
-  <meta property="og:image" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/LOGO_Sprinkloud__6_-removebg-preview.png">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/hojas">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo del Club musical Sprinkloud">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
@@ -118,7 +122,7 @@
 </head>
 <body>
   <div class="barra">
-    <a href="../material.html">← Volver</a>
+    <a href="/material">← Volver</a>
     <span class="marca">Sprinkloud</span>
   </div>
   <main>
@@ -582,6 +586,8 @@ function ejerciciosDe(s, ins) {
 /* ---------- Armar, revisar e imprimir ---------- */
 const $ = s => document.querySelector(s);
 const params = new URLSearchParams(location.search);
+/* Enlace de cada semana: /practica/hojas/violin/semana-2 (los enlaces viejos ?semana=2&i=violin también sirven) */
+const ruta = location.pathname.match(/\/hojas\/(piano|violin)\/semana-(\d+)/);
 let variante = Number(params.get('v')) || 1;
 function armar() {
   const s = Number($('#semana').value), ins = $('#instrumento').value, g = GUIA.find(x => x[0] === s);
@@ -595,9 +601,7 @@ function armar() {
     el('div', { class: 'datos-alumno' }, el('span', { text: 'Nombre:' }), el('span', { text: 'Fecha:' }))));
   ejerciciosDe(s, ins).forEach(e => hoja.append(e));
   $('#resultado').hidden = true;
-  const u = new URL(location.href);
-  u.searchParams.set('semana', s); u.searchParams.set('i', ins); u.searchParams.set('v', variante);
-  history.replaceState(null, '', u);
+  history.replaceState(null, '', '/practica/hojas/' + ins + '/semana-' + s + (variante > 1 ? '?v=' + variante : ''));
 }
 function revisar() {
   let bien = 0, total = 0;
@@ -625,8 +629,8 @@ function iniciar() {
     if (et !== etapa) { etapa = et; sel.append(el('optgroup', { label: 'Etapa ' + et })); }
     sel.lastChild.append(el('option', { value: s, text: s + '. ' + tema }));
   });
-  sel.value = String(Math.min(Math.max(Number(params.get('semana')) || 1, 1), GUIA.length));
-  $('#instrumento').value = params.get('i') === 'violin' ? 'violin' : 'piano';
+  sel.value = String(Math.min(Math.max(Number(ruta ? ruta[2] : params.get('semana')) || 1, 1), GUIA.length));
+  $('#instrumento').value = (ruta ? ruta[1] : params.get('i')) === 'violin' ? 'violin' : 'piano';
   sel.addEventListener('change', () => { variante = 1; armar(); });
   $('#instrumento').addEventListener('change', armar);
   $('#otra').addEventListener('click', () => { variante++; armar(); });
@@ -638,6 +642,6 @@ function iniciar() {
 iniciar();
 </script>
 <script>window.SprinkloudPractica = { app: 'Hojas de práctica', detalle: function () { var s = Number(document.querySelector('#semana').value), g = GUIA.find(function (x) { return x[0] === s; }), r = document.querySelector('#resultado'); return 'Semana ' + s + ': ' + g[2] + (r && !r.hidden ? ' · ' + r.textContent : ''); } };</script>
-<script src="practica.js"></script>
+<script src="/practica/comprobante.js"></script>
 </body>
 </html>

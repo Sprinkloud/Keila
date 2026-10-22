@@ -9,13 +9,13 @@
 <meta name="keywords" content="figuras musicales, aprender ritmo, ritmo musical, figuras rítmicas, negra, corchea, semicorchea, blanca, redonda, silencios musicales, puntillo, tresillo, células rítmicas, lectura rítmica, dictado rítmico, compás 4/4, pulso, metrónomo, teoría musical para niños, solfeo rítmico">
 <meta name="author" content="Sprinkloud Club Musical">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html">
+<link rel="canonical" href="https://sprinkloud.vercel.app/practica/ritmo">
 <meta name="theme-color" content="#F6F0E2">
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="Sprinkloud Club Musical">
-<meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html">
+<meta property="og:url" content="https://sprinkloud.vercel.app/practica/ritmo">
 <meta property="og:title" content="Aprende figuras musicales y ritmo">
 <meta property="og:description" content="Negra, corchea, semicorchea, blanca y silencios: arma ritmos en 4/4, 3/4, 2/4 y 6/8, escúchalos con metrónomo y haz dictado rítmico. Gratis.">
 <meta property="og:image" content="https://sprinkloud.vercel.app/images/ritmo1.png">
@@ -26,7 +26,7 @@
 <meta name="twitter:description" content="Arma ritmos en 4/4, 3/4, 2/4 y 6/8 con las figuras musicales y practica el dictado rítmico. Gratis.">
 <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/ritmo1.png">
 
-<link rel="icon" type="image/png" href="../images/ritmo1.png">
+<link rel="icon" type="image/png" href="/images/ritmo1.png">
 
 <script type="application/ld+json">
 {
@@ -36,7 +36,7 @@
       "@type": "WebApplication",
       "name": "Figuras musicales y ritmo",
       "alternateName": ["Células rítmicas", "Aprender ritmo musical", "Lectura rítmica"],
-      "url": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html",
+      "url": "https://sprinkloud.vercel.app/practica/ritmo",
       "image": "https://sprinkloud.vercel.app/images/ritmo1.png",
       "description": "Herramienta gratis para aprender las figuras musicales y el ritmo: negra, corchea, semicorchea, blanca, redonda y silencios, con puntillo y tresillo. Arma ritmos en compás de 4/4, escúchalos con metrónomo, mira cómo se divide un pulso y practica el dictado rítmico.",
       "applicationCategory": "EducationalApplication",
@@ -54,8 +54,8 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://sprinkloud.vercel.app/" },
-        { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material.html" },
-        { "@type": "ListItem", "position": 3, "name": "Figuras musicales y ritmo", "item": "https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html" }
+        { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material" },
+        { "@type": "ListItem", "position": 3, "name": "Figuras musicales y ritmo", "item": "https://sprinkloud.vercel.app/practica/ritmo" }
       ]
     }
   ]
@@ -445,7 +445,7 @@ select.tool{max-width:190px}
 
 <div class="app">
   <header class="top">
-    <a class="back" href="https://sprinkloud.vercel.app/material.html">
+    <a class="back" href="https://sprinkloud.vercel.app/material">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
       Volver
     </a>
@@ -1093,7 +1093,7 @@ function pastelHTML(cell){
   const forma = (p, r, extra) => p.b - p.a >= .9999 ? '<circle '+extra+' cx="'+C+'" cy="'+C+'" r="'+r+'"/>' : '<path '+extra+' d="'+sector(C, C, r, p.a, p.b)+'"/>';
   let o = '<defs><clipPath id="'+id+'">' + (partes.filter(p => !p.rest).map(p => forma(p, R, "")).join("") || '<rect width="0" height="0"/>') + '</clipPath></defs>';
   o += '<circle class="pz-plato" cx="'+C+'" cy="'+C+'" r="'+(R + 5)+'"/>';
-  o += '<image href="../images/pizza.webp" x="'+(C - lado)+'" y="'+(C - lado)+'" width="'+(2*lado)+'" height="'+(2*lado)+'" clip-path="url(#'+id+')"/>';
+  o += '<image href="/images/pizza.webp" x="'+(C - lado)+'" y="'+(C - lado)+'" width="'+(2*lado)+'" height="'+(2*lado)+'" clip-path="url(#'+id+')"/>';
   partes.forEach(p => { if(p.rest) o += forma(p, R - 4, 'class="pz-vacio"'); });
   if(partes.length > 1) partes.forEach(p => { const x = C - R*Math.cos(2*Math.PI*p.a), y = C - R*Math.sin(2*Math.PI*p.a); o += '<line class="pz-corte-luz" x1="'+C+'" y1="'+C+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'"/><line class="pz-corte" x1="'+C+'" y1="'+C+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'"/>'; });
   partes.forEach(p => { o += forma(p, R, 'class="rebanada" data-sl="'+p.i+'"'); });
@@ -1400,9 +1400,12 @@ function setTempo(v){
 
 function init(){
   load();
-  /* el enlace puede pedir un compás (?compas=3/4), por ejemplo desde el mensaje de tareas del maestro */
-  const pedido = new URLSearchParams(location.search).get("compas");
+  /* el enlace puede pedir un compás (/practica/ritmo/3-4), por ejemplo desde el mensaje de tareas del maestro;
+     los enlaces viejos ?compas=3/4 también sirven */
+  const enRuta = location.pathname.match(/\/ritmo\/(\d)-(\d)$/);
+  const pedido = enRuta ? enRuta[1] + "/" + enRuta[2] : new URLSearchParams(location.search).get("compas");
   if(COMPASES[pedido] && pedido !== state.compas){ state.compas = pedido; state.comp = []; }
+  if(!enRuta && COMPASES[pedido]) window.history.replaceState(null, "", "/practica/ritmo/" + pedido.replace("/", "-"));
   setTempo(state.tempo);
   setCompas(state.compas, true);
   LATINOS.forEach((r, i) => { const o = document.createElement("option"); o.value = i; o.textContent = r.name + " · " + r.compas; $("#latinos").appendChild(o); });
@@ -1453,6 +1456,6 @@ function init(){
 document.addEventListener("DOMContentLoaded", init);
 </script>
 <script>window.SprinkloudPractica = { app: 'App de ritmo', subir: matchMedia('(max-width: 900px)').matches ? 104 : 0, detalle: function () { var c = state.comp.length ? Math.ceil(totalBeats() / cmp().bar - 0.001) : 0; return (state.latino ? state.latino + ' · ' : '') + 'Compás ' + state.compas + ' · tempo ' + state.tempo + (c ? ' · armó ' + c + (c === 1 ? ' compás' : ' compases') : '') + (quiz.tries ? ' · dictado: ' + quiz.hits + ' de ' + quiz.tries : ''); } };</script>
-<script src="practica.js"></script>
+<script src="/practica/comprobante.js"></script>
 </body>
 </html>
