@@ -113,6 +113,37 @@ Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte 
 - Sin errores de consola con la CSP.
 - Sin desborde a 320, 390 y 1280 px.
 
+## Comprobante de práctica (`practica.js`)
+
+Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuales.
+
+**Minutos de práctica**
+- Cuenta los minutos del día solo mientras la persona usa la app: pestaña visible y algún toque, tecla o cambio en el último minuto.
+- Se guardan en el dispositivo (`sprinkloud-practica`).
+
+**La camarita**
+- Es un botón flotante que arma una imagen PNG de 1080×1350:
+  - el nombre del alumno, que se pide una vez y se guarda en `sprinkloud-alumno`;
+  - la fecha;
+  - los minutos de hoy con una barra hacia la meta de 15;
+  - la app y lo que hizo.
+- En el celular se comparte con `navigator.share` (WhatsApp). Si no se puede, se guarda la imagen.
+
+**Para que una página lo use**
+- Define `window.SprinkloudPractica = { app, detalle(), subir? }` antes de cargar `practica.js`.
+- `subir` levanta el botón para que no tape controles; `Ritmo.html` lo usa en pantallas de 900 px o menos.
+- Nada sale del dispositivo.
+
+**Enlaces que abren cada app en su ejercicio:** `Ritmo.html?compas=3/4`, `oido.html?modo=…&nivel=…`.
+
+**Ritmos latinos** (`LATINOS` en `Ritmo.html`):
+- salsa (clave 3-2), son (clave 2-3), reggaetón (dembow), cumbia, bachata, bolero;
+- habanera y tango, sanjuanito;
+- pasillo, vals criollo;
+- huapango, son jarocho, joropo.
+
+Están en la pantalla vacía y en la lista "Ritmos latinos…" del banco de tarjetas. Al elegir uno, la app cambia sola al compás que usa.
+
 ## Compases en la app de ritmo (`Ritmo.html`)
 
 **Compases** (`COMPASES`): el selector "Compás", junto al tempo, ofrece 4/4, 3/4, 2/4 y 6/8.

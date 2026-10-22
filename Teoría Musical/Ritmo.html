@@ -273,6 +273,10 @@ input[type=range]::-moz-range-thumb{
 .empty p{margin:0 0 4px;font-size:15px}
 .empty small{color:var(--muted);font-size:13px}
 .examples{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.latinos{margin-top:22px}
+.latinos p{margin:0;font-family:Fraunces,Georgia,serif;font-size:17px;color:var(--ink)}
+.latinos .examples{margin-top:10px}
+select.tool{max-width:190px}
 .example{
   border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;background:var(--paper);
 }
@@ -474,6 +478,7 @@ input[type=range]::-moz-range-thumb{
           Dictado
         </button>
         <button class="tool" id="btn-fill">Rellenar con silencio</button>
+        <select class="tool" id="latinos" aria-label="Cargar un ritmo latino"><option value="">Ritmos latinos…</option></select>
       </div>
       </div>
     </aside>
@@ -615,6 +620,23 @@ const EXAMPLES = [
   {compas:"2/4", name:"Polca",           ids:["luna","choco","pan","s4","luna","luna","bla2"]},
   {compas:"6/8", name:"Barcarola",       ids:["negp6","negp6","tres8","negp6","neg8","neg8","blap6"]},
   {compas:"6/8", name:"Tarantela",       ids:["tres8","tres8","neg8","tres8","tres8","neg8","negp6","s4p6"]}
+];
+
+/* Ritmos latinos populares (patrón básico de cada uno, dos o cuatro compases). Al elegir uno se cambia al compás que usa */
+const LATINOS = [
+  {compas:"4/4", name:"Salsa (clave 3-2)",     pais:"Cuba y el Caribe", ids:["lee","lee","pan","s4","pan","bla2"]},
+  {compas:"4/4", name:"Son cubano (clave 2-3)", pais:"Cuba",            ids:["s4","pan","bla2","lee","lee","pan"]},
+  {compas:"4/4", name:"Reggaetón (dembow)",    pais:"Puerto Rico y Panamá", ids:["blan","luna","blan","luna","blan","luna","blan","luna"]},
+  {compas:"4/4", name:"Cumbia",                pais:"Colombia y México", ids:["pan","ct","pan","ct","pan","ct","pan","ct"]},
+  {compas:"4/4", name:"Bachata",               pais:"República Dominicana", ids:["pan","pan","pan","luna","pan","pan","pan","luna"]},
+  {compas:"4/4", name:"Bolero",                pais:"Cuba y México",    ids:["pan","luna","pan","pan","pan","luna","pan","pan"]},
+  {compas:"2/4", name:"Habanera y tango",      pais:"Cuba y Argentina", ids:["blan","luna","blan","luna","blan","luna","bla2"]},
+  {compas:"2/4", name:"Sanjuanito",            pais:"Ecuador",          ids:["gran","gran","gran","gran","gran","gran","pan","pan"]},
+  {compas:"3/4", name:"Pasillo",               pais:"Ecuador y Colombia", ids:["pan","ct","pan","pan","ct","pan","pan","ct","pan","bla3"]},
+  {compas:"3/4", name:"Vals criollo",          pais:"Perú",             ids:["pan","luna","luna","pan","luna","luna","pan","luna","luna","bla3"]},
+  {compas:"6/8", name:"Huapango",              pais:"México",           ids:["tres8","neg8","tres8","neg8","tres8","neg8","blap6"]},
+  {compas:"6/8", name:"Son jarocho",           pais:"México",           ids:["neg8","neg8","neg8","neg8","neg8","tres8","blap6"]},
+  {compas:"6/8", name:"Joropo",                pais:"Venezuela y Colombia", ids:["tres8","tres8","tres8","tres8","neg8","tres8","blap6"]}
 ];
 
 const byId = id => CELLS.find(c => c.id === id);
@@ -1130,6 +1152,17 @@ function renderScore(){
       b.onclick = () => { pushHistory(); state.comp = p.ids.slice(); afterEdit("Ejemplo cargado: " + p.name); };
       ex.appendChild(b);
     });
+    const lat = document.createElement("div");
+    lat.className = "latinos";
+    lat.innerHTML = '<p>Ritmos latinos</p><div class="examples"></div>';
+    LATINOS.forEach((r, i) => {
+      const b = document.createElement("button");
+      b.className = "example"; b.textContent = r.name + " · " + r.compas;
+      b.title = r.pais;
+      b.onclick = () => cargarLatino(i);
+      lat.querySelector(".examples").appendChild(b);
+    });
+    d.appendChild(lat);
     box.appendChild(d);
     updateStatus();
     return;
@@ -1332,6 +1365,19 @@ function toggleChip(el, key){
   save();
 }
 
+/* Carga un ritmo latino: cambia al compás que usa y reemplaza lo que había */
+function cargarLatino(i){
+  const r = LATINOS[i];
+  if(!r) return;
+  if(play.on) stopPlay();
+  if(r.compas !== state.compas) setCompas(r.compas);
+  pushHistory();
+  state.comp = r.ids.slice();
+  state.latino = r.name;
+  $("#latinos").value = "";
+  afterEdit(r.name + " (" + r.pais + ")");
+}
+
 /* Cambiar de compás vacía el ritmo (las células no siempre caben en el compás nuevo) */
 function setCompas(v, inicial){
   if(!COMPASES[v]) return;
@@ -1354,8 +1400,13 @@ function setTempo(v){
 
 function init(){
   load();
+  /* el enlace puede pedir un compás (?compas=3/4), por ejemplo desde el mensaje de tareas del maestro */
+  const pedido = new URLSearchParams(location.search).get("compas");
+  if(COMPASES[pedido] && pedido !== state.compas){ state.compas = pedido; state.comp = []; }
   setTempo(state.tempo);
   setCompas(state.compas, true);
+  LATINOS.forEach((r, i) => { const o = document.createElement("option"); o.value = i; o.textContent = r.name + " · " + r.compas; $("#latinos").appendChild(o); });
+  $("#latinos").onchange = e => { if(e.target.value !== "") cargarLatino(+e.target.value); };
   $("#compas").onchange = e => setCompas(e.target.value);
   $("#btn-loop").setAttribute("aria-pressed", state.loop);
 
@@ -1401,5 +1452,7 @@ function init(){
 
 document.addEventListener("DOMContentLoaded", init);
 </script>
+<script>window.SprinkloudPractica = { app: 'App de ritmo', subir: matchMedia('(max-width: 900px)').matches ? 104 : 0, detalle: function () { var c = state.comp.length ? Math.ceil(totalBeats() / cmp().bar - 0.001) : 0; return (state.latino ? state.latino + ' · ' : '') + 'Compás ' + state.compas + ' · tempo ' + state.tempo + (c ? ' · armó ' + c + (c === 1 ? ' compás' : ' compases') : '') + (quiz.tries ? ' · dictado: ' + quiz.hits + ' de ' + quiz.tries : ''); } };</script>
+<script src="practica.js"></script>
 </body>
 </html>

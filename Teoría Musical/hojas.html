@@ -637,5 +637,7 @@ function iniciar() {
 }
 iniciar();
 </script>
+<script>window.SprinkloudPractica = { app: 'Hojas de práctica', detalle: function () { var s = Number(document.querySelector('#semana').value), g = GUIA.find(function (x) { return x[0] === s; }), r = document.querySelector('#resultado'); return 'Semana ' + s + ': ' + g[2] + (r && !r.hidden ? ' · ' + r.textContent : ''); } };</script>
+<script src="practica.js"></script>
 </body>
 </html>
