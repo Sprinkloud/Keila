@@ -3,32 +3,32 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/Teor(.*)Musical/notaspiano.html",
+      "source": "/Teor(.*)Musical/notaspiano",
       "destination": "/practica/piano",
       "permanent": true
     },
     {
-      "source": "/Teor(.*)Musical/notasviolin.html",
+      "source": "/Teor(.*)Musical/notasviolin",
       "destination": "/practica/violin",
       "permanent": true
     },
     {
-      "source": "/Teor(.*)Musical/Ritmo.html",
+      "source": "/Teor(.*)Musical/Ritmo",
       "destination": "/practica/ritmo",
       "permanent": true
     },
     {
-      "source": "/Teor(.*)Musical/sonidosynotas.html",
+      "source": "/Teor(.*)Musical/sonidosynotas",
       "destination": "/practica/sonidos-y-notas",
       "permanent": true
     },
     {
-      "source": "/Teor(.*)Musical/hojas.html",
+      "source": "/Teor(.*)Musical/hojas",
       "destination": "/practica/hojas",
       "permanent": true
     },
     {
-      "source": "/Teor(.*)Musical/oido.html",
+      "source": "/Teor(.*)Musical/oido",
       "destination": "/practica/oido",
       "permanent": true
     },
@@ -38,7 +38,7 @@
       "permanent": true
     },
     {
-      "source": "/metodolog(.*)a.html",
+      "source": "/metodolog([^i].*)a",
       "destination": "/metodologia",
       "permanent": true
     }
@@ -46,15 +46,15 @@
   "rewrites": [
     {
       "source": "/practica/hojas/:instrumento/:semana",
-      "destination": "/practica/hojas.html"
+      "destination": "/practica/hojas"
     },
     {
       "source": "/practica/ritmo/:compas",
-      "destination": "/practica/ritmo.html"
+      "destination": "/practica/ritmo"
     },
     {
       "source": "/practica/oido/:ejercicio",
-      "destination": "/practica/oido.html"
+      "destination": "/practica/oido"
     }
   ],
   "headers": [
