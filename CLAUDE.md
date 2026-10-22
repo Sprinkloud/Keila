@@ -26,6 +26,7 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 | `/practica/piano`, `/practica/violin`, `/practica/ritmo`, `/practica/oido`, `/practica/hojas` | herramientas |
 | `/practica/hojas/violin/semana-2` | hoja de una semana (rewrite a `hojas.html`, que lee la ruta) |
 | `/practica/ritmo/3-4` | app de ritmo en un compás (rewrite a `ritmo.html`) |
+| `/practica/ritmo/latinos` | app de ritmo con la cumbia cargada a tempo 90, lista para dar play. Es el enlace que se manda a quien pide información (respuesta rápida `VApp` y agente de IA) |
 | `/practica/oido/segundas-y-terceras` | entrenador en un ejercicio (rewrite a `oido.html`; los nombres están en `EJERCICIOS`) |
 
 - Las páginas que se abren en rutas largas usan rutas absolutas para sus archivos (`/images/...`, `/practica/comprobante.js`). Una ruta relativa se rompería en `/practica/hojas/violin/semana-2`.

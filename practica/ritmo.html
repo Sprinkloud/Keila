@@ -1451,6 +1451,8 @@ function init(){
   switchTab(state.tab);
   renderScore();
   paintPlay();
+  /* /practica/ritmo/latinos (el enlace que se manda a quien pide información): abre con la cumbia lista para dar play */
+  if(/\/ritmo\/latinos$/.test(location.pathname)){ setTempo(90); cargarLatino(LATINOS.findIndex(r => r.name === "Cumbia")); }
 }
 
 document.addEventListener("DOMContentLoaded", init);
