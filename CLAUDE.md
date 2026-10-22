@@ -7,10 +7,14 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 | Ruta | Qué es |
 |---|---|
 | `index.html`, `material.html`, `metodologia.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
-| `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html`, `practica/oido.html` y `practica/sonidos-y-notas.html`. |
+| `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html` y `practica/oido.html`. |
 | `images/` | Fotos y logos. `logo-sprinkloud.png` (1200×630, fondo blanco) es la imagen para compartir de las páginas que no tienen una propia. |
 | `vercel.json` | Rutas limpias, redirecciones de las rutas viejas y encabezados de seguridad (ver "Rutas" y "Seguridad"). |
 | `servidor-local.js` | Servidor para probar el sitio como en Vercel. No se publica (`.vercelignore`, igual que este archivo). |
+
+## Material (`material.html`)
+
+Dos columnas (en celular, una debajo de otra): **Práctico**, con las herramientas del sitio por instrumento (piano, violín, y piano y violín), y **Libros**, con los PDF de Google Drive. Por pedido de la dueña (22 de octubre de 2026) se quitaron "Sujetar el violín" y "Notas en el violín" (Genially) y se borró la página "Sonido & Notas"; su ruta redirige a `/material`. Era la única que usaba Tailwind, así que `cdn.tailwindcss.com` salió de la CSP.
 
 ## Rutas
 
@@ -19,7 +23,7 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 | Ruta | Archivo |
 |---|---|
 | `/`, `/material`, `/metodologia`, `/musicband` | páginas del sitio |
-| `/practica/piano`, `/practica/violin`, `/practica/ritmo`, `/practica/oido`, `/practica/hojas`, `/practica/sonidos-y-notas` | herramientas |
+| `/practica/piano`, `/practica/violin`, `/practica/ritmo`, `/practica/oido`, `/practica/hojas` | herramientas |
 | `/practica/hojas/violin/semana-2` | hoja de una semana (rewrite a `hojas.html`, que lee la ruta) |
 | `/practica/ritmo/3-4` | app de ritmo en un compás (rewrite a `ritmo.html`) |
 | `/practica/oido/segundas-y-terceras` | entrenador en un ejercicio (rewrite a `oido.html`; los nombres están en `EJERCICIOS`) |
@@ -300,5 +304,4 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
-- En `material.html` el botón que lleva a `practica/ritmo.html` dice solo "Ritmo"; decir "Figuras musicales y ritmo" ayudaría al SEO.
-- `practica/sonidos-y-notas.html` y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
+- Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
