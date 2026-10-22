@@ -1,0 +1,7 @@
+# Configuración local de editores y restos que no son parte del sitio
+.idea/
+.vscode/
+src/
+*.iml
+.DS_Store
+Thumbs.db

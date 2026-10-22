@@ -7,9 +7,9 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 | Ruta | Qué es |
 |---|---|
 | `index.html`, `material.html`, `metodología.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
-| `Teoría Musical/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `notaspiano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `notasviolin.html`, `Pentagrama.html`, `Ritmo.html` y `sonidosynotas.html`. |
+| `Teoría Musical/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `notaspiano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `notasviolin.html`, `Ritmo.html`, `hojas.html` y `sonidosynotas.html`. |
 | `images/` | Fotos y logos. |
-| `src/Main.java`, `.idea/` | Restos de un proyecto de IntelliJ; no forman parte del sitio. |
+| `vercel.json` | Encabezados de seguridad que Vercel envía con cada página (ver "Seguridad"). |
 
 ## Juego de notas del piano (`notaspiano.html`)
 
@@ -44,6 +44,52 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 - Las figuras suenan con un tono tipo piano sintetizado (`pianoVoice`): Do5 en el pulso y Sol4 a contratiempo.
 - En celulares la paleta ocupa como máximo 38vh y la frase de ayuda se oculta, para que el lienzo sea lo más amplio posible.
 
+## Hojas de práctica (`hojas.html`)
+
+Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (48 semanas, ver `Registro_Sprinkloud/guia-teoria-musical.md`). Sirven para resolver en el dispositivo o para imprimir en A4.
+
+**Datos y parámetros**
+- `GUIA`: semana, etapa, tema y objetivo. Se copia de `Registro_Sprinkloud/Guia.js`, reemplazando el arreglo que sigue a `/*GUIA*/`. Si cambia la guía, hay que volver a copiarlo.
+- Parámetros de la URL:
+  - `?semana=N`;
+  - `&i=piano|violin`: en piano se agrega la clave de fa;
+  - `&v=N`: variante. "Otra hoja" suma 1 y genera otros ejercicios con la misma semilla, así que el mismo enlace muestra siempre la misma hoja.
+
+**Ejercicios**
+- Los tipos están en `T`:
+  - notas: nombrar, dibujar (se toca el pentagrama), línea o espacio, sube o baja;
+  - ritmo: sílabas (Kodály, Takadimi), duración, pulsos que faltan;
+  - secuencias de notas, tono o semitono, intervalos;
+  - escalas mayor y menor, armaduras, círculo de quintas;
+  - triadas, qué acorde es, armonizar, grados, relativas, pentatónica, V7, inversiones;
+  - términos, preguntas con renglones y pentagramas libres (dictado, composición).
+- `ejerciciosDe(semana, instrumento)` dice qué lleva cada semana.
+- La teoría se calcula; no hay respuestas escritas a mano:
+  - `arriba(nota, pasos de letra, semitonos)` deletrea bien cada nota;
+  - `escala`, `triada` y `tipoGrado` salen de ahí.
+- `distintos()` evita repetir preguntas dentro de una hoja.
+
+**Revisar y mostrar respuestas**
+- "Revisar" corrige cada respuesta:
+  - `leerNota` acepta "re bemol", "Reb", "D♭" y "C#";
+  - `leerAcorde` acepta "Rem", "re menor", "Si°" y "Si dim";
+  - `leerNumero` acepta "0,5" y "1/2";
+  - las sílabas se comparan sin espacios ni guiones.
+- "Ver respuestas" muestra las soluciones, para el maestro o la familia.
+
+**Impresión**
+- Oculta los controles y muestra "Nombre" y "Fecha".
+- Cada ejercicio indica si se escribe en hoja pautada o rayada.
+- Los pentagramas y renglones quedan vacíos para escribir a mano.
+
+**Probado (22 de octubre de 2026)**
+- Las 48 semanas × 2 instrumentos × 3 variantes se arman sin errores.
+- Las 938 soluciones se aceptan y "zzz" se rechaza.
+- Sin desborde horizontal a 375 px en ninguna semana.
+- El dibujo acierta en la línea o el espacio correcto.
+
+VexFlow le pone ancho en línea al SVG. `pentagrama()` lo quita para que el CSS lo escale.
+
 ## Estrellas del juego (piano y violín)
 
 Mismo código en las dos páginas: 1 estrella con 5 aciertos, 2 con 4 aciertos seguidos y 3 con 6 aciertos seguidos (`contarEstrellas`). Un error corta la racha pero no quita estrellas. Se reinician al iniciar el juego o al cambiar de modo. Entre un acierto y la nota siguiente se ignoran los toques (`esperandoSiguiente`), para que tocar dos veces no cuente doble.
@@ -51,6 +97,24 @@ Mismo código en las dos páginas: 1 estrella con 5 aciertos, 2 con 4 aciertos s
 ## Pie de página
 
 El mismo en todas las herramientas: solo tres íconos pequeños (18 px, con área de toque de 44 px) de WhatsApp, Instagram y correo, y el copyright. Sin botones grandes ni más enlaces.
+
+## Seguridad
+
+El sitio es público y estático: no tiene servidor, formularios, llaves ni conexión con los sistemas internos (registro, panel de maestros, Meta). Así se mantiene.
+- **`vercel.json` envía estos encabezados en cada página:**
+  - **CSP:**
+    - el código solo puede venir del sitio y de `cdn.jsdelivr.net`, `cdnjs.cloudflare.com` y `cdn.tailwindcss.com`;
+    - los estilos, del sitio, de Google Fonts y de cdnjs;
+    - la página no puede conectarse a ningún otro servidor (`connect-src 'self'`);
+    - no se permiten formularios (`form-action 'none'`), marcos ni que otra página la meta en un marco.
+  - HSTS, `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy` y `Permissions-Policy` (sin cámara, micrófono ni ubicación).
+- **Si una herramienta nueva necesita otro CDN, una imagen externa o el micrófono,** hay que agregarlo a la CSP o a `Permissions-Policy`. Si no, el navegador lo bloquea sin avisar.
+- **Librerías externas:** siempre con versión fija (nunca `@latest` ni sin versión) y con `integrity` (SRI) y `crossorigin="anonymous"`.
+  - El CDN de Tailwind no envía CORS, así que lleva la versión fija pero sin SRI.
+  - Para calcular el sello: `curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A`.
+- **Enlaces externos:** con `target="_blank" rel="noopener noreferrer"`.
+- **Archivos fuera del repo:** `.gitignore` deja fuera `.idea/`, `.vscode/` y `src/`. Se quitaron del repo el 22 de octubre de 2026, porque `workspace.xml` tenía rutas de la computadora.
+- **Historial revisado el 22 de octubre de 2026:** sin llaves, tokens ni contraseñas.
 
 ## SEO
 
@@ -73,6 +137,27 @@ El repo tiene `images/Ritmo.jpg` e `images/ritmo.jpg`, que en Windows chocan (el
 - Commit y push solo cuando la dueña lo pida.
 
 ## Historial de cambios
+
+### 22 de octubre de 2026: hojas de práctica, seguridad y SEO
+
+- **Nueva:** `Teoría Musical/hojas.html`, con las hojas de práctica de las 48 semanas de la guía.
+- **Se eliminó `Pentagrama.html`,** por pedido de la dueña. Además estaba rota: sus dos copias de VexFlow daban 404 y usaba `vexflow.Flow`.
+- **Seguridad:** `vercel.json`, librerías con versión fija y SRI, y `.gitignore`. Se quitaron `.idea/` y `src/` del repo.
+- **Portada:** "Empieza ahora" y "Habla con un asesor" van directo a WhatsApp con el mensaje "Hola, quiero información sobre las clases de música 🎶". Antes iban a beacons.ai, donde estaba el cuestionario.
+- **Pie de página:**
+  - se arreglaron los enlaces `https://https://wa.me` (tenían el ícono de Twitter);
+  - quedaron WhatsApp, Instagram y correo;
+  - el copyright dice "Club musical Sprinkloud".
+- **Se quitaron:**
+  - `fbq('track','Contact')`, que daba error porque el píxel de Meta no está instalado;
+  - el formulario comentado de `material.html` (`send.php` no funciona en Vercel).
+- **SEO en index, material, metodología y music band:**
+  - `lang="es"`;
+  - título y descripción enfocados en "clases de piano y violín online";
+  - canónica, Open Graph y Twitter con una imagen que existe;
+  - JSON-LD: `EducationalOrganization` con los cursos de piano y violín, y `WebSite`.
+- **`sonidosynotas.html`:** su canónica apuntaba a `tusonidoynotas.com`, así que Google no la mostraba como página del sitio. Además mencionaba guitarra.
+- **Probado** con los encabezados de `vercel.json` en un servidor local: las 9 páginas a 1280 y 390 px, sin errores de consola ni desbordes.
 
 ### 29 de septiembre de 2026: piano, violín y células rítmicas renovados
 
@@ -127,4 +212,4 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - En `material.html` el botón que lleva a `Ritmo.html` dice solo "Ritmo"; decir "Figuras musicales y ritmo" ayudaría al SEO.
-- Las otras herramientas (`Pentagrama.html`, `sonidosynotas.html`) y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
+- `sonidosynotas.html` y las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
