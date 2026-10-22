@@ -7,7 +7,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 | Ruta | Qué es |
 |---|---|
 | `index.html`, `material.html`, `metodología.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
-| `Teoría Musical/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `notaspiano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `notasviolin.html`, `Ritmo.html`, `hojas.html` y `sonidosynotas.html`. |
+| `Teoría Musical/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `notaspiano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `notasviolin.html`, `Ritmo.html`, `hojas.html`, `oido.html` y `sonidosynotas.html`. |
 | `images/` | Fotos y logos. |
 | `vercel.json` | Encabezados de seguridad que Vercel envía con cada página (ver "Seguridad"). |
 
@@ -89,6 +89,46 @@ Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (4
 - El dibujo acierta en la línea o el espacio correcto.
 
 VexFlow le pone ancho en línea al SVG. `pentagrama()` lo quita para que el CSS lo escale.
+
+## Entrenador de oído (`oido.html`)
+
+Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte en pantalla, con botones grandes y sin librerías externas: el piano está sintetizado con WebAudio, la misma voz de `Ritmo.html`.
+
+**Ejercicios** (`MODOS`). Cada uno dice en qué semanas de la guía se usa:
+- ¿Sube o baja? (semana 4).
+- Intervalos (24 a 26), con nivel "segundas y terceras", "cuartas, quintas y octavas" o "todos", y forma melódica o armónica.
+- ¿Mayor o menor? (30 y 35).
+- Las 4 triadas (31).
+- ¿Tensión o reposo? (33 y 46): una progresión I, IV o vi, V7 que termina en I (reposo) o en V (tensión).
+
+**Cómo funciona**
+- Después de responder, un teclado (`teclado()`) muestra qué notas sonaron, con su nombre.
+- El marcador lleva aciertos, intentos y racha.
+- Se puede abrir en un ejercicio con `?modo=intervalos&nivel=todos`.
+- Atajos: espacio = escuchar, Enter = siguiente.
+- Guarda el último ejercicio en `localStorage` (`sprinkloud-oido`).
+
+**Probado (22 de octubre de 2026)**
+- 75 preguntas: la respuesta correcta coincide con las notas que suenan.
+- Sin errores de consola con la CSP.
+- Sin desborde a 320, 390 y 1280 px.
+
+## Compases en la app de ritmo (`Ritmo.html`)
+
+**Compases** (`COMPASES`): el selector "Compás", junto al tempo, ofrece 4/4, 3/4, 2/4 y 6/8.
+- Cada compás define su largo y su pulso en negras.
+- En 6/8 el pulso es la negra con puntillo: el tempo cuenta esos pulsos y la luz marca 1-2.
+- `negraSeg()` convierte el tempo a segundos por negra.
+- La cuenta previa es de un compás si tiene 3 o 4 pulsos, y de dos compases si tiene 2.
+- Cambiar de compás vacía el ritmo.
+
+**Tarjetas**
+- En 6/8 se ven solo las tarjetas de la pestaña `seis`, sin pestañas: tres corcheas, negra con puntillo, negra y corchea, corchea y negra, blanca con puntillo, silencio de negra con puntillo, y silencio de corchea con negra.
+- En los demás compases se ocultan las tarjetas más largas que el compás (`visibles()`).
+- `beatsLabel` nombra las duraciones en pulsos del compás: en 6/8 la corchea es "⅓ de pulso".
+- Los silencios con puntillo dibujan su punto.
+- `EXAMPLES` tiene ejemplos por compás.
+- El modo Pizza sigue siendo en negras.
 
 ## Estrellas del juego (piano y violín)
 

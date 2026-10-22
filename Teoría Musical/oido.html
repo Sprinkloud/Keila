@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrenador de oído musical gratis | Sprinkloud</title>
+  <meta name="description" content="Entrena tu oído musical gratis: reconoce si una nota sube o baja, intervalos, acordes mayores y menores, y tensión o reposo. Para clases y práctica.">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/oido.html">
+  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sprinkloud">
+  <meta property="og:title" content="Entrenador de oído musical gratis">
+  <meta property="og:description" content="Reconoce de oído intervalos, acordes mayores y menores, y tensión o reposo. Gratis.">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/oido.html">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/PIano1.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Entrenador de oído musical","url":"https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/oido.html","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"teaches":["Entrenamiento auditivo","Intervalos musicales","Acordes mayores y menores","Triadas aumentadas y disminuidas","Tensión y reposo"],"publisher":{"@type":"Organization","name":"Club musical Sprinkloud","url":"https://sprinkloud.vercel.app/"}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <style>
+    /* Mismo sistema visual que las otras herramientas (App_Sprinkloud/DESIGN.md). Pensada para compartir en pantalla en la clase. */
+    :root {
+      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F3DED8;
+      --tecla: #FFFDF8; --tecla-negra: #3A3128;
+      --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
+        --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585; --danger-soft: #45302B;
+        --tecla-negra: #1E2521;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5; min-height: 100dvh; display: flex; flex-direction: column; }
+    button, select { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px max(16px, env(safe-area-inset-left)); max-width: 980px; width: 100%; margin: 0 auto; }
+    .barra a { font-weight: 700; text-decoration: none; color: var(--accent); }
+    .marca { font-family: var(--f-display); font-weight: 700; color: var(--pine); }
+    main { flex: 1; width: 100%; max-width: 980px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left)) 32px; display: grid; gap: 16px; align-content: start; grid-template-columns: minmax(0, 1fr); }
+    h1 { font-family: var(--f-display); font-size: clamp(24px, 4.5vw, 34px); color: var(--pine); margin: 0; line-height: 1.15; }
+    .modos { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+    .modo { flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
+    .modo[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .opciones { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; color: var(--ink-2); font-size: 14px; font-weight: 700; }
+    .opciones select { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--surface); min-height: 44px; }
+    .tablero { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; justify-items: center; text-align: center; }
+    @media (max-width: 560px) { .tablero { padding: 16px 12px; } .resp { font-size: 16px; padding: 12px 6px; } }
+    .pregunta { font-family: var(--f-display); font-size: clamp(20px, 3.5vw, 28px); margin: 0; }
+    .escuchar { width: 120px; height: 120px; border-radius: 50%; border: 0; background: var(--accent); color: var(--on-accent); cursor: pointer; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(72, 89, 47, .25); }
+    .escuchar svg { width: 46px; height: 46px; }
+    .escuchar.sonando { background: var(--gold); }
+    .respuestas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr)); gap: 10px; width: 100%; max-width: 760px; }
+    .resp { border: 2px solid var(--line); background: var(--bg); border-radius: 14px; padding: 14px 10px; min-height: 64px; font-size: 19px; font-weight: 800; cursor: pointer; }
+    .resp small { display: block; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+    .resp:hover:not([disabled]) { border-color: var(--accent); }
+    .resp.bien { border-color: var(--pine); background: var(--accent-soft); }
+    .resp.mal { border-color: var(--danger); background: var(--danger-soft); }
+    .resp[disabled] { cursor: default; }
+    .veredicto { min-height: 28px; font-weight: 800; font-size: 18px; margin: 0; }
+    .veredicto.bien { color: var(--pine); } .veredicto.mal { color: var(--danger); }
+    .teclado { width: 100%; max-width: 560px; }
+    .teclado svg { width: 100%; height: auto; display: block; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
+    .btn.principal { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .marcador { display: flex; gap: 18px; justify-content: center; color: var(--ink-2); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .marcador b { color: var(--ink); font-family: var(--f-display); font-size: 22px; }
+    .guia { font-size: 14px; color: var(--ink-2); margin: 0; }
+    footer { text-align: center; color: var(--ink-2); font-size: 13px; padding: 14px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .resp, .modo, .btn { transition: border-color .15s ease, background-color .15s ease; }
+      .escuchar { transition: transform .12s ease, background-color .15s ease; }
+      .escuchar:active { transform: scale(.96); }
+    }
+  </style>
+</head>
+<body>
+  <div class="barra">
+    <a href="../material.html">← Volver</a>
+    <span class="marca">Sprinkloud</span>
+  </div>
+  <main>
+    <h1>Entrenador de oído</h1>
+    <div class="modos" role="group" aria-label="Ejercicio" id="modos"></div>
+    <div class="opciones" id="opciones"></div>
+    <section class="tablero" aria-live="polite">
+      <p class="pregunta" id="pregunta"></p>
+      <button class="escuchar" id="escuchar" type="button" aria-label="Escuchar">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div class="respuestas" id="respuestas"></div>
+      <p class="veredicto" id="veredicto"></p>
+      <div class="teclado" id="teclado" hidden></div>
+      <div class="acciones">
+        <button class="btn" type="button" id="otra-vez">Escuchar otra vez</button>
+        <button class="btn principal" type="button" id="siguiente">Siguiente</button>
+      </div>
+      <div class="marcador"><span>Aciertos <b id="aciertos">0</b></span><span>Intentos <b id="intentos">0</b></span><span>Racha <b id="racha">0</b></span></div>
+      <p class="guia" id="guia"></p>
+    </section>
+  </main>
+  <footer>© Club musical Sprinkloud</footer>
+
+<script>
+"use strict";
+/* ---------- Notas (MIDI) y nombres ---------- */
+const NOMBRES = ['Do', 'Do♯', 'Re', 'Mi♭', 'Mi', 'Fa', 'Fa♯', 'Sol', 'La♭', 'La', 'Si♭', 'Si'];
+const nombre = m => NOMBRES[((m % 12) + 12) % 12];
+const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+const azar = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const uno = arr => arr[Math.floor(Math.random() * arr.length)];
+
+/* ---------- Sonido de piano sintetizado (el mismo de la app de ritmo) ---------- */
+let ctx = null;
+function audio() {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+  return ctx;
+}
+function piano(t, midi, dur, gain) {
+  const out = ctx.createGain(), lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 3200;
+  out.gain.setValueAtTime(0.0001, t);
+  out.gain.exponentialRampToValueAtTime(gain, t + .006);
+  out.gain.setTargetAtTime(gain * .35, t + .006, .25);
+  out.gain.setTargetAtTime(0.0001, t + Math.max(dur - .05, .08), .06);
+  [[1, 1], [2, .42], [3, .2], [4, .1], [5, .05]].forEach(([h, a], k) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(hz(midi) * h * (1 + (k ? .0009 * k : 0)), t);
+    g.gain.value = a;
+    o.connect(g); g.connect(lp);
+    o.start(t); o.stop(t + dur + .4);
+  });
+  lp.connect(out); out.connect(ctx.destination);
+}
+/* pasos: [[notas que suenan juntas], duración en segundos] */
+function tocar(pasos) {
+  audio();
+  let t = ctx.currentTime + .08;
+  pasos.forEach(([notas, dur]) => { notas.forEach(m => piano(t, m, dur, .32 / Math.sqrt(notas.length))); t += dur; });
+  return t - ctx.currentTime;
+}
+
+/* ---------- Ejercicios (cada uno dice en qué semanas de la guía se usa) ---------- */
+const INTERVALOS = [
+  { n: '2ª menor', st: 1 }, { n: '2ª mayor', st: 2 }, { n: '3ª menor', st: 3 }, { n: '3ª mayor', st: 4 },
+  { n: '4ª justa', st: 5 }, { n: 'Tritono', st: 6 }, { n: '5ª justa', st: 7 }, { n: '6ª menor', st: 8 },
+  { n: '6ª mayor', st: 9 }, { n: '7ª menor', st: 10 }, { n: '7ª mayor', st: 11 }, { n: '8ª justa', st: 12 }
+];
+const NIVELES_INT = {
+  'segundas y terceras': [1, 2, 3, 4],
+  'cuartas, quintas y octavas': [5, 6, 7, 12],
+  'todos': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+};
+const TRIADAS = { Mayor: [0, 4, 7], Menor: [0, 3, 7], Aumentada: [0, 4, 8], Disminuida: [0, 3, 6] };
+
+const MODOS = {
+  sube: {
+    nombre: '¿Sube o baja?', guia: 'Semana 4 de la guía: agudo y grave.',
+    pregunta: () => '¿La segunda nota sube o baja?',
+    crear() {
+      const a = azar(55, 72); let b; do { b = azar(55, 76); } while (Math.abs(b - a) < 2);
+      return { pasos: [[[a], .8], [[b], 1.1]], notas: [a, b], correcta: b > a ? 'Sube' : 'Baja', opciones: ['Sube', 'Baja'] };
+    }
+  },
+  intervalos: {
+    nombre: 'Intervalos', guia: 'Semanas 24, 25 y 26 de la guía.',
+    opciones: { nivel: Object.keys(NIVELES_INT), forma: ['Melódico (una y otra)', 'Armónico (juntas)'] },
+    pregunta: () => '¿Qué intervalo sonó?',
+    crear(o) {
+      const lista = INTERVALOS.filter(i => NIVELES_INT[o.nivel].includes(i.st));
+      const iv = uno(lista), a = azar(55, 67), b = a + iv.st;
+      const pasos = /Arm/.test(o.forma) ? [[[a, b], 1.6]] : [[[a], .8], [[b], 1.2]];
+      return { pasos, notas: [a, b], correcta: iv.n, opciones: lista.map(i => i.n), detalle: iv.st + (iv.st === 1 ? ' semitono' : ' semitonos') };
+    }
+  },
+  mayorMenor: {
+    nombre: '¿Mayor o menor?', guia: 'Semanas 30 y 35 de la guía.',
+    opciones: { forma: ['Acorde y luego arpegio', 'Solo el acorde', 'Solo el arpegio'] },
+    pregunta: () => '¿El acorde es mayor o menor?',
+    crear(o) { return acorde(['Mayor', 'Menor'], o.forma); }
+  },
+  triadas: {
+    nombre: 'Las 4 triadas', guia: 'Semana 31 de la guía.',
+    opciones: { forma: ['Acorde y luego arpegio', 'Solo el acorde', 'Solo el arpegio'] },
+    pregunta: () => '¿Qué tipo de triada sonó?',
+    crear(o) { return acorde(Object.keys(TRIADAS), o.forma); }
+  },
+  reposo: {
+    nombre: '¿Tensión o reposo?', guia: 'Semanas 33 y 46 de la guía.',
+    pregunta: () => '¿El final suena a reposo (llegó a casa) o a tensión (pide seguir)?',
+    crear() {
+      const t = azar(55, 62), I = [t, t + 4, t + 7], IV = [t + 5, t + 9, t + 12], V = [t + 7, t + 11, t + 14], V7 = [t + 7, t + 11, t + 14, t + 17], vi = [t + 9, t + 12, t + 16];
+      const reposo = Math.random() < .5;
+      const final = reposo ? I : uno([V, V7]);
+      const pasos = [[I, .8], [uno([IV, vi]), .8], [V7, .8], [final, 1.6]].map(([n, d]) => [n.concat([n[0] - 12]), d]);
+      return { pasos, notas: final, correcta: reposo ? 'Reposo' : 'Tensión', opciones: ['Reposo', 'Tensión'], detalle: reposo ? 'termina en el acorde I' : 'termina en el acorde V' };
+    }
+  }
+};
+function acorde(tipos, forma) {
+  const tipo = uno(tipos), r = azar(55, 64), notas = TRIADAS[tipo].map(x => r + x);
+  const pasos = forma === 'Solo el arpegio' ? notas.map(m => [[m], .55]) : forma === 'Solo el acorde' ? [[notas, 1.6]] : [[notas, 1.3]].concat(notas.map(m => [[m], .5]));
+  return { pasos, notas, correcta: tipo, opciones: tipos, detalle: nombre(r) + ' ' + tipo.toLowerCase() };
+}
+
+/* ---------- Teclado que muestra lo que sonó (después de responder) ---------- */
+function teclado(notas) {
+  const desde = Math.min(...notas) - (Math.min(...notas) % 12), hasta = Math.max(desde + 23, Math.max(...notas) - (Math.max(...notas) % 12) + 11);
+  const blancas = [], negras = [];
+  for (let m = desde; m <= hasta; m++) ([1, 3, 6, 8, 10].includes(m % 12) ? negras : blancas).push(m);
+  const W = 28, H = 110, ancho = blancas.length * W;
+  let svg = '<svg viewBox="0 0 ' + ancho + ' ' + (H + 24) + '" role="img" aria-label="Notas que sonaron: ' + notas.map(nombre).join(', ') + '">';
+  const x = {};
+  blancas.forEach((m, i) => {
+    x[m] = i * W;
+    const on = notas.includes(m);
+    svg += '<rect x="' + (i * W + .5) + '" y=".5" width="' + (W - 1) + '" height="' + H + '" rx="3" fill="' + (on ? 'var(--gold)' : 'var(--tecla)') + '" stroke="var(--line)"/>';
+    if (on) svg += '<text x="' + (i * W + W / 2) + '" y="' + (H + 18) + '" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">' + nombre(m) + '</text>';
+  });
+  negras.forEach(m => {
+    const cx = x[m - 1] + W, on = notas.includes(m);
+    svg += '<rect x="' + (cx - 9) + '" y=".5" width="18" height="' + (H * .62) + '" rx="2" fill="' + (on ? 'var(--gold)' : 'var(--tecla-negra)') + '"/>';
+    if (on) svg += '<text x="' + cx + '" y="' + (H + 18) + '" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">' + nombre(m) + '</text>';
+  });
+  return svg + '</svg>';
+}
+
+/* ---------- Estado y pantalla ---------- */
+const $ = s => document.querySelector(s);
+const estado = { modo: 'sube', op: {}, actual: null, respondida: false, aciertos: 0, intentos: 0, racha: 0 };
+const params = new URLSearchParams(location.search);
+
+function pintarModos() {
+  const box = $('#modos');
+  box.replaceChildren();
+  Object.entries(MODOS).forEach(([k, m]) => {
+    const b = document.createElement('button');
+    b.className = 'modo'; b.type = 'button'; b.textContent = m.nombre;
+    b.setAttribute('aria-pressed', k === estado.modo);
+    b.addEventListener('click', () => elegirModo(k));
+    box.append(b);
+  });
+}
+function pintarOpciones() {
+  const box = $('#opciones'), m = MODOS[estado.modo];
+  box.replaceChildren();
+  Object.entries(m.opciones || {}).forEach(([k, valores]) => {
+    if (!valores.includes(estado.op[k])) estado.op[k] = valores[0];
+    const id = 'op-' + k;
+    const l = document.createElement('label'); l.htmlFor = id; l.textContent = k === 'nivel' ? 'Nivel ' : 'Cómo suena ';
+    const s = document.createElement('select'); s.id = id;
+    valores.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v[0].toUpperCase() + v.slice(1); s.append(o); });
+    s.value = estado.op[k];
+    s.addEventListener('change', () => { estado.op[k] = s.value; nueva(); });
+    l.append(s); box.append(l);
+  });
+}
+function elegirModo(k) {
+  estado.modo = k;
+  try { localStorage.setItem('sprinkloud-oido', JSON.stringify({ modo: k, op: estado.op })); } catch (e) {}
+  pintarModos(); pintarOpciones(); nueva();
+}
+function nueva() {
+  const m = MODOS[estado.modo];
+  estado.actual = m.crear(estado.op);
+  estado.respondida = false;
+  $('#pregunta').textContent = m.pregunta();
+  $('#guia').textContent = m.guia;
+  $('#veredicto').textContent = ''; $('#veredicto').className = 'veredicto';
+  $('#teclado').hidden = true;
+  const box = $('#respuestas');
+  box.replaceChildren();
+  estado.actual.opciones.forEach(op => {
+    const b = document.createElement('button');
+    b.className = 'resp'; b.type = 'button'; b.textContent = op;
+    b.addEventListener('click', () => responder(op, b));
+    box.append(b);
+  });
+}
+function escuchar() {
+  if (!estado.actual) return;
+  const boton = $('#escuchar');
+  boton.classList.add('sonando');
+  const dur = tocar(estado.actual.pasos);
+  setTimeout(() => boton.classList.remove('sonando'), dur * 1000);
+}
+function responder(op, boton) {
+  if (estado.respondida) return;
+  estado.respondida = true;
+  const ok = op === estado.actual.correcta;
+  estado.intentos++; if (ok) { estado.aciertos++; estado.racha++; } else estado.racha = 0;
+  document.querySelectorAll('.resp').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === estado.actual.correcta) b.classList.add('bien');
+  });
+  if (!ok) boton.classList.add('mal');
+  const v = $('#veredicto');
+  v.className = 'veredicto ' + (ok ? 'bien' : 'mal');
+  v.textContent = (ok ? '¡Muy bien! ' : 'Era: ' + estado.actual.correcta + '. ') + (estado.actual.detalle ? '(' + estado.actual.detalle + ')' : '');
+  $('#teclado').innerHTML = teclado(estado.actual.notas);
+  $('#teclado').hidden = false;
+  $('#aciertos').textContent = estado.aciertos; $('#intentos').textContent = estado.intentos; $('#racha').textContent = estado.racha;
+}
+
+function iniciar() {
+  try { const g = JSON.parse(localStorage.getItem('sprinkloud-oido') || 'null'); if (g && MODOS[g.modo]) { estado.modo = g.modo; estado.op = g.op || {}; } } catch (e) {}
+  if (MODOS[params.get('modo')]) estado.modo = params.get('modo');
+  if (params.get('nivel') && NIVELES_INT[params.get('nivel')]) estado.op.nivel = params.get('nivel');
+  $('#escuchar').addEventListener('click', escuchar);
+  $('#otra-vez').addEventListener('click', escuchar);
+  $('#siguiente').addEventListener('click', () => { nueva(); escuchar(); });
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('select')) return;
+    if (e.code === 'Space') { e.preventDefault(); escuchar(); }
+    else if (e.key === 'Enter' && estado.respondida) { nueva(); escuchar(); }
+  });
+  pintarModos(); pintarOpciones(); nueva();
+}
+iniciar();
+</script>
+</body>
+</html>

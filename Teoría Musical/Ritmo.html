@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Aprende figuras musicales y ritmo gratis | Sprinkloud</title>
-<meta name="description" content="Aprende las figuras musicales y el ritmo: negra, corchea, semicorchea, blanca y silencios. Arma ritmos en 4/4, escúchalos y haz dictado rítmico. Gratis.">
+<meta name="description" content="Aprende figuras musicales y ritmo: negra, corchea, semicorchea y silencios. Arma ritmos en 4/4, 3/4, 2/4 y 6/8, escúchalos y haz dictados. Gratis.">
 <meta name="keywords" content="figuras musicales, aprender ritmo, ritmo musical, figuras rítmicas, negra, corchea, semicorchea, blanca, redonda, silencios musicales, puntillo, tresillo, células rítmicas, lectura rítmica, dictado rítmico, compás 4/4, pulso, metrónomo, teoría musical para niños, solfeo rítmico">
 <meta name="author" content="Sprinkloud Club Musical">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="Sprinkloud Club Musical">
 <meta property="og:url" content="https://sprinkloud.vercel.app/Teor%C3%ADa%20Musical/Ritmo.html">
 <meta property="og:title" content="Aprende figuras musicales y ritmo">
-<meta property="og:description" content="Negra, corchea, semicorchea, blanca y silencios: arma ritmos en 4/4, escúchalos con metrónomo y haz dictado rítmico. Gratis.">
+<meta property="og:description" content="Negra, corchea, semicorchea, blanca y silencios: arma ritmos en 4/4, 3/4, 2/4 y 6/8, escúchalos con metrónomo y haz dictado rítmico. Gratis.">
 <meta property="og:image" content="https://sprinkloud.vercel.app/images/ritmo1.png">
-<meta property="og:image:alt" content="Figuras musicales y ritmo en compás de 4/4 en Sprinkloud">
+<meta property="og:image:alt" content="Figuras musicales y ritmo en compases de 4/4, 3/4, 2/4 y 6/8 en Sprinkloud">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Aprende figuras musicales y ritmo">
-<meta name="twitter:description" content="Arma ritmos en 4/4 con las figuras musicales y practica el dictado rítmico. Gratis.">
+<meta name="twitter:description" content="Arma ritmos en 4/4, 3/4, 2/4 y 6/8 con las figuras musicales y practica el dictado rítmico. Gratis.">
 <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/ritmo1.png">
 
 <link rel="icon" type="image/png" href="../images/ritmo1.png">
@@ -192,6 +192,10 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .opts::-webkit-scrollbar{display:none}
 .opts{-ms-overflow-style:none}
 
+.compas{display:flex;align-items:center;gap:6px;flex:0 0 auto;font-size:12px;color:var(--muted)}
+.compas select{font-family:Fraunces,Georgia,serif;font-size:17px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px 8px;min-height:40px}
+/* en 6/8 el banco muestra sus propias tarjetas: no hay pestañas */
+.compas-68 .tabs{display:none}
 .tempo{display:flex;align-items:center;gap:10px;flex:0 0 auto}
 .tempo label{font-size:12px;color:var(--muted)}
 .tempo output{font-family:Fraunces,Georgia,serif;font-size:19px;min-width:34px;text-align:right}
@@ -443,7 +447,6 @@ input[type=range]::-moz-range-thumb{
     </a>
     <div class="title">
       <h1>Figuras musicales y ritmo</h1>
-      <span class="meter">4/4</span>
     </div>
     <p class="marca">Sprink<span>loud</span></p>
   </header>
@@ -490,6 +493,14 @@ input[type=range]::-moz-range-thumb{
           </button>
         </div>
         <div class="tline opts">
+          <label class="compas" for="compas">Compás
+            <select id="compas">
+              <option value="4/4">4/4</option>
+              <option value="3/4">3/4</option>
+              <option value="2/4">2/4</option>
+              <option value="6/8">6/8</option>
+            </select>
+          </label>
           <div class="tempo">
             <label for="tempo">Tempo</label>
             <output id="tempo-out">60</output>
@@ -573,14 +584,37 @@ const CELLS = [
   {id:"s4",    tab:"silences", notes:[{b:1,rest:1}]},
   {id:"s2",    tab:"silences", notes:[{b:2,rest:1}]},
   {id:"ct",    tab:"silences", notes:[{b:.5,rest:1},{b:.5}]},
-  {id:"pc",    tab:"silences", notes:[{b:.5},{b:.5,rest:1}]}
+  {id:"pc",    tab:"silences", notes:[{b:.5},{b:.5,rest:1}]},
+
+  /* 6/8: el pulso es la negra con puntillo (tres corcheas) */
+  {id:"tres8", tab:"seis", notes:[{b:.5},{b:.5},{b:.5}]},
+  {id:"negp6", tab:"seis", notes:[{b:1,dot:1}]},
+  {id:"neg8",  tab:"seis", notes:[{b:1},{b:.5}]},
+  {id:"och4",  tab:"seis", notes:[{b:.5},{b:1}]},
+  {id:"blap6", tab:"seis", notes:[{b:2,dot:1}]},
+  {id:"s4p6",  tab:"seis", notes:[{b:1,dot:1,rest:1}]},
+  {id:"s8n6",  tab:"seis", notes:[{b:.5,rest:1},{b:1}]}
 ];
 
+/* Compases: largo del compás y del pulso en negras (6/8 se siente "en dos": dos pulsos de negra con puntillo) */
+const COMPASES = {
+  "4/4": {bar:4, pulso:1},
+  "3/4": {bar:3, pulso:1},
+  "2/4": {bar:2, pulso:1},
+  "6/8": {bar:3, pulso:1.5}
+};
+
 const EXAMPLES = [
-  {name:"Marcha",          ids:["pan","luna","pan","pan","luna","luna","pan","pan"]},
-  {name:"Corcheas y semis",ids:["luna","choco","luna","pan","choco","luna","choco","pan"]},
-  {name:"Con silencios",   ids:["pan","s4","luna","pan","luna","s4","choco","pan"]},
-  {name:"Puntillos",       ids:["blan","luna","ques","pan","blan","blan","luna","pan"]}
+  {compas:"4/4", name:"Marcha",          ids:["pan","luna","pan","pan","luna","luna","pan","pan"]},
+  {compas:"4/4", name:"Corcheas y semis",ids:["luna","choco","luna","pan","choco","luna","choco","pan"]},
+  {compas:"4/4", name:"Con silencios",   ids:["pan","s4","luna","pan","luna","s4","choco","pan"]},
+  {compas:"4/4", name:"Puntillos",       ids:["blan","luna","ques","pan","blan","blan","luna","pan"]},
+  {compas:"3/4", name:"Vals",            ids:["pan","pan","pan","bla2","pan","pan","luna","pan","bla3"]},
+  {compas:"3/4", name:"Con puntillo",    ids:["lee","y","pan","pan","luna","luna","bla3"]},
+  {compas:"2/4", name:"Marcha en dos",   ids:["pan","pan","luna","pan","luna","luna","bla2"]},
+  {compas:"2/4", name:"Polca",           ids:["luna","choco","pan","s4","luna","luna","bla2"]},
+  {compas:"6/8", name:"Barcarola",       ids:["negp6","negp6","tres8","negp6","neg8","neg8","blap6"]},
+  {compas:"6/8", name:"Tarantela",       ids:["tres8","tres8","neg8","tres8","tres8","neg8","negp6","s4p6"]}
 ];
 
 const byId = id => CELLS.find(c => c.id === id);
@@ -683,6 +717,7 @@ function cellSVG(cell, opt){
     let s = "";
     if(n.rest){
       s += restGlyph(n.b, x);
+      if(n.dot) s += '<circle cx="'+(x+9.5).toFixed(1)+'" cy="'+(G.Y-4)+'" r="1.9"/>';
     } else {
       const hollow = n.b >= 2;
       s += '<ellipse cx="'+x.toFixed(1)+'" cy="'+G.Y+'" rx="'+(hollow?6.3:G.RX)+'" ry="'+(hollow?4.6:G.RY)+'" transform="rotate(-16 '+x.toFixed(1)+' '+G.Y+')" '+(hollow?'fill="none" stroke="currentColor" stroke-width="1.8"':"")+'/>';
@@ -715,11 +750,13 @@ function describirCelula(c){
   return partes.length > 1 ? partes.slice(0, -1).join(", ") + " y " + partes[partes.length - 1] : partes[0];
 }
 
+/* d en negras; se nombra en pulsos del compás (en 6/8 el pulso es la negra con puntillo) */
 function beatsLabel(d){
-  const map = {0.25:"¼ de pulso", 0.5:"medio pulso", 0.75:"¾ de pulso",
-               1:"1 pulso", 1.5:"1½ pulsos", 2:"2 pulsos", 2.5:"2½ pulsos",
+  const p = rd(d / (state.pastel ? 1 : COMPASES[state.compas].pulso), 3);
+  const map = {0.25:"¼ de pulso", 0.333:"⅓ de pulso", 0.5:"medio pulso", 0.667:"⅔ de pulso", 0.75:"¾ de pulso",
+               1:"1 pulso", 1.333:"1⅓ pulsos", 1.5:"1½ pulsos", 1.667:"1⅔ pulsos", 2:"2 pulsos", 2.5:"2½ pulsos",
                3:"3 pulsos", 3.5:"3½ pulsos", 4:"4 pulsos"};
-  return map[d] || d + " pulsos";
+  return map[p] || p + " pulsos";
 }
 
 /* =========================================================
@@ -727,6 +764,7 @@ function beatsLabel(d){
    ========================================================= */
 const state = {
   tab:"base",
+  compas:"4/4",
   comp:[],            // ids de células
   tempo:60,
   metro:true,          // siempre suena
@@ -740,13 +778,14 @@ let history = [];
 const KEY = "sprinkloud-ritmo-v1";
 
 function save(){
-  try{ localStorage.setItem(KEY, JSON.stringify({comp:state.comp, tempo:state.tempo, metro:state.metro, count:state.count, loop:state.loop})); }catch(e){}
+  try{ localStorage.setItem(KEY, JSON.stringify({comp:state.comp, compas:state.compas, tempo:state.tempo, metro:state.metro, count:state.count, loop:state.loop})); }catch(e){}
 }
 function load(){
   try{
     const d = JSON.parse(localStorage.getItem(KEY) || "null");
     if(!d) return;
-    if(Array.isArray(d.comp)) state.comp = d.comp.filter(byId);
+    if(COMPASES[d.compas]) state.compas = d.compas;
+    if(Array.isArray(d.comp)) state.comp = d.comp.filter(byId).filter(id => cellDur(byId(id)) <= COMPASES[state.compas].bar);
     if(d.tempo) state.tempo = d.tempo;
     state.loop = !!d.loop;
   }catch(e){}
@@ -754,7 +793,14 @@ function load(){
 
 const $ = s => document.querySelector(s);
 const totalBeats = () => rd(state.comp.reduce((s,id) => s + cellDur(byId(id)), 0), 3);
-const freeInBar = () => { const r = rd(totalBeats() % 4, 3); return r === 0 ? 4 : rd(4-r, 3); };
+const cmp = () => COMPASES[state.compas];
+const pulsosPorCompas = () => Math.round(cmp().bar / cmp().pulso);
+/* segundos de una negra: el tempo cuenta pulsos (en 6/8, negras con puntillo) */
+const negraSeg = () => 60 / state.tempo / cmp().pulso;
+const enPulso = t => Math.abs(rd(t % cmp().pulso, 3)) < .01;
+const freeInBar = () => { const bar = cmp().bar, r = rd(totalBeats() % bar, 3); return r === 0 ? bar : rd(bar-r, 3); };
+/* qué tarjetas se ven: en 6/8 las propias del compás; en los demás, las de la pestaña */
+const visibles = () => CELLS.filter(c => state.pastel ? esDeUnPulso(c) : state.compas === "6/8" ? c.tab === "seis" : c.tab === state.tab && cellDur(c) <= cmp().bar);
 
 /* =========================================================
    4. Audio
@@ -814,11 +860,11 @@ function clickVoice(dest, t, strong){
 /* Escucha suelta de una célula, sin tocar la reproducción */
 function previewCell(cell){
   audio();
-  const t0 = ctx.currentTime + .05, beat = 60/state.tempo;
+  const t0 = ctx.currentTime + .05, beat = negraSeg();
   let t = 0;
   cell.notes.forEach(n => {
     const d = noteDur(n);
-    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, Math.abs(t % 1) < .01, d, beat);
+    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, enPulso(t), d, beat);
     t += d;
   });
 }
@@ -841,11 +887,18 @@ function buildEvents(){
   return ev;
 }
 
+/* El modo pizza siempre es en negras: un pulso de 4/4 */
+const pulsoActual = () => state.pastel ? 1 : cmp().pulso;
+const compasActual = () => state.pastel ? 4 : cmp().bar;
+const segNegra = () => state.pastel ? 60/state.tempo : negraSeg();
+/* Cuenta previa: un compás si tiene 3 o 4 pulsos; dos compases si tiene 2 (2/4 y 6/8). Siempre 3 o 4 golpes */
+const pulsosCuenta = () => { const p = Math.round(compasActual()/pulsoActual()); return p >= 3 ? p : p*2; };
+
 function schedulePass(at){
-  const beat = 60/state.tempo;
-  play.ev.forEach(e => { if(!e.rest) noteVoice(session, at + e.t*beat, Math.abs(e.t % 1) < .01, e.d, beat); });
+  const beat = segNegra(), pulso = pulsoActual(), bar = compasActual();
+  play.ev.forEach(e => { if(!e.rest) noteVoice(session, at + e.t*beat, Math.abs(rd(e.t % pulso, 3)) < .01, e.d, beat); });
   if(state.metro)
-    for(let b=0; b<play.len; b++) clickVoice(session, at + b*beat, b % 4 === 0);
+    for(let p=0; p*pulso < play.len - .001; p++) clickVoice(session, at + p*pulso*beat, Math.abs(rd((p*pulso) % bar, 3)) < .01);
 }
 
 function startPlay(skipCount){
@@ -853,19 +906,19 @@ function startPlay(skipCount){
   audio();
   stopPlay(true);
 
-  const beat = 60/state.tempo;
+  const beat = segNegra(), bar = compasActual(), pulso = pulsoActual();
   play.ev = buildEvents();
-  play.len = state.pastel ? 4 : Math.max(4, Math.ceil(totalBeats()/4)*4);   // termina siempre el compás
-  play.bars = play.len/4;
+  play.len = state.pastel ? 4 : Math.max(bar, Math.ceil(rd(totalBeats()/bar, 3))*bar);   // termina siempre el compás
+  play.bars = play.len/bar;
 
   session = ctx.createGain();
   session.gain.value = 1;
   session.connect(ctx.destination);
 
-  const t0 = ctx.currentTime + .12;
-  if(!skipCount){                                   // cuenta de 4 tiempos en cada play
-    for(let b=0;b<4;b++) clickVoice(session, t0 + b*beat, b === 0);
-    play.start = t0 + 4*beat;
+  const t0 = ctx.currentTime + .12, cuenta = pulsosCuenta();
+  if(!skipCount){                                   // cuenta previa en cada play
+    for(let b=0;b<cuenta;b++) clickVoice(session, t0 + b*pulso*beat, b === 0);
+    play.start = t0 + cuenta*pulso*beat;
   } else {
     play.start = t0;
   }
@@ -878,19 +931,19 @@ function startPlay(skipCount){
 
 function tick(){
   if(!play.on) return;
-  const beat = 60/state.tempo;
-  const rel = (ctx.currentTime - play.start)/beat;
+  const beat = segNegra(), pulso = pulsoActual(), ppc = Math.round(compasActual()/pulso), cuenta = pulsosCuenta();
+  const rel = (ctx.currentTime - play.start)/beat;   // en negras
 
   if(rel < 0){
-    const n = Math.ceil(-rel);                     // cuenta previa: 1 2 3 4 en el círculo
-    lampCount(Math.min(4, Math.max(1, 5 - n)));
+    const n = Math.ceil(-rel/pulso);               // cuenta previa: 1 2 3 4 en el círculo
+    lampCount(Math.min(cuenta, Math.max(1, cuenta + 1 - n)));
     setNow("Prepárate…", true);
   } else {
-    const b = Math.floor(rel);
+    const b = Math.floor(rel/pulso + 1e-6);         // número de pulso
     if(b !== play.beat){
       play.beat = b;
-      lampBeat(b % 4);
-      markBar(Math.floor(b/4));
+      lampBeat(b % ppc);
+      markBar(Math.floor(b/ppc));
       setNow("", false);
     }
     while(play.idx < play.ev.length && play.ev[play.idx].t <= rel + .012){
@@ -984,7 +1037,7 @@ function activate(e){
 function renderPalette(){
   const box = $("#palette");
   box.innerHTML = "";
-  CELLS.filter(c => state.pastel ? esDeUnPulso(c) : c.tab === state.tab).forEach((c,i) => {
+  visibles().forEach((c,i) => {
     const dur = cellDur(c);
     const b = document.createElement("button");
     b.className = "cell";
@@ -1068,10 +1121,10 @@ function renderScore(){
     const d = document.createElement("div");
     d.className = "empty";
     d.innerHTML = '<p>Aquí se arma tu ritmo.</p>' +
-      '<small>Toca una célula del banco y se irá colocando en compases de cuatro tiempos.</small>' +
+      '<small>Toca una célula del banco y se irá colocando en compases de ' + state.compas + '.</small>' +
       '<div class="examples"></div>';
     const ex = d.querySelector(".examples");
-    EXAMPLES.forEach(p => {
+    EXAMPLES.filter(p => p.compas === state.compas).forEach(p => {
       const b = document.createElement("button");
       b.className = "example"; b.textContent = p.name;
       b.onclick = () => { pushHistory(); state.comp = p.ids.slice(); afterEdit("Ejemplo cargado: " + p.name); };
@@ -1082,11 +1135,12 @@ function renderScore(){
     return;
   }
 
-  // Repartir las células en compases de 4 pulsos
+  // Repartir las células en compases del compás elegido
+  const largo = cmp().bar;
   const bars = []; let cur = [], acc = 0;
   state.comp.forEach((id,i) => {
     cur.push(i); acc = rd(acc + cellDur(byId(id)), 3);
-    if(acc >= 3.999){ bars.push({items:cur, beats:acc}); cur = []; acc = 0; }
+    if(acc >= largo - .001){ bars.push({items:cur, beats:acc}); cur = []; acc = 0; }
   });
   if(cur.length) bars.push({items:cur, beats:acc});
 
@@ -1094,10 +1148,10 @@ function renderScore(){
     const el = document.createElement("section");
     el.className = "bar";
     el.dataset.bar = bi;
-    const free = rd(4 - bar.beats, 3);
+    const free = rd(largo - bar.beats, 3);
     el.innerHTML =
       '<div class="bar-head">' +
-      '<span class="falta">' + (free > 0 ? "faltan " + beatsLabel(free) : "") + '</span>' +
+      '<span class="falta">' + (free > 0 ? (/^(1 pulso|medio|\D+ de pulso)/.test(beatsLabel(free)) ? "falta " : "faltan ") + beatsLabel(free) : "") + '</span>' +
       '<button class="borrar-compas" aria-label="Borrar el compás ' + (bi+1) + '" title="Borrar este compás"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>' +
       '<div class="bar-row"></div>';
     const row = el.querySelector(".bar-row");
@@ -1184,7 +1238,7 @@ function fillWithRests(){
   if(play.on) stopPlay();
   pushHistory();
   let free = freeInBar();
-  const rests = [["s2",2],["s4",1],["s8",.5],["s16",.25]];
+  const rests = state.compas === "6/8" ? [["s4p6",1.5],["s4",1],["s8",.5],["s16",.25]] : [["s2",2],["s4",1],["s8",.5],["s16",.25]];
   while(free > .001){
     const r = rests.find(x => x[1] <= free + .001);
     if(!r) break;
@@ -1202,7 +1256,7 @@ function openQuiz(){ $("#quiz").classList.add("open"); nextQuiz(); }
 function closeQuiz(){ $("#quiz").classList.remove("open"); }
 
 function nextQuiz(){
-  const pool = CELLS.filter(c => c.tab === state.tab && c.notes.some(n => !n.rest));
+  const pool = visibles().filter(c => c.notes.some(n => !n.rest));
   const src = pool.length >= 4 ? pool : CELLS.filter(c => c.tab === "base");
   const shuffled = src.slice().sort(() => Math.random() - .5).slice(0,4);
   quiz.opts = shuffled;
@@ -1227,18 +1281,18 @@ function nextQuiz(){
 
 function hearQuiz(){
   audio();
-  const beat = 60/state.tempo, t0 = ctx.currentTime + .12;
-  const largo = Math.max(1, Math.ceil(cellDur(quiz.target)));
+  const beat = negraSeg(), pulso = cmp().pulso, t0 = ctx.currentTime + .12;
+  const largo = Math.max(1, Math.ceil(rd(cellDur(quiz.target)/pulso, 3)));   // en pulsos
 
   // Cuatro pulsos de preparación y el pulso sigue marcándose bajo la célula:
   // sin esa referencia no hay forma de contar si duró 2, 3 o 4 tiempos.
   for(let b = 0; b <= 4 + largo; b++)
-    clickVoice(ctx.destination, t0 + b*beat, b === 0 || b === 4);
+    clickVoice(ctx.destination, t0 + b*pulso*beat, b === 0 || b === 4);
 
-  let t = 4;
+  let t = 4*pulso;
   quiz.target.notes.forEach(n => {
     const d = noteDur(n);
-    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, Math.abs(t % 1) < .01, d, beat);
+    if(!n.rest) noteVoice(ctx.destination, t0 + t*beat, enPulso(t), d, beat);
     t += d;
   });
 }
@@ -1278,6 +1332,19 @@ function toggleChip(el, key){
   save();
 }
 
+/* Cambiar de compás vacía el ritmo (las células no siempre caben en el compás nuevo) */
+function setCompas(v, inicial){
+  if(!COMPASES[v]) return;
+  if(!inicial){
+    if(play.on) stopPlay();
+    if(state.comp.length){ pushHistory(); state.comp = []; }
+  }
+  state.compas = v;
+  $("#compas").value = v;
+  document.body.classList.toggle("compas-68", v === "6/8");
+  if(!inicial){ save(); renderPalette(); renderScore(); flash("Compás de " + v + (v === "6/8" ? ": se cuenta en dos" : "")); }
+}
+
 function setTempo(v){
   state.tempo = +v;
   $("#tempo").value = v;
@@ -1288,6 +1355,8 @@ function setTempo(v){
 function init(){
   load();
   setTempo(state.tempo);
+  setCompas(state.compas, true);
+  $("#compas").onchange = e => setCompas(e.target.value);
   $("#btn-loop").setAttribute("aria-pressed", state.loop);
 
 
@@ -1320,8 +1389,7 @@ function init(){
     } else if(e.key === "Escape"){
       if($("#quiz").classList.contains("open")) closeQuiz(); else stopPlay();
     } else if(/^[1-9]$/.test(e.key)){
-      const list = CELLS.filter(c => state.pastel ? esDeUnPulso(c) : c.tab === state.tab);
-      const c = list[+e.key - 1];
+      const c = visibles()[+e.key - 1];
       if(c) state.pastel ? elegirPastel(c.id) : addCell(c.id);
     }
   });
