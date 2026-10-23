@@ -190,6 +190,9 @@
     }
     .btn-juego:active { transform: scale(.97); }
     .btn-juego.activo { background: var(--surface); color: var(--danger); border-color: var(--danger); }
+    /* Lectura hablada (Dandelot): segundo botón, de borde, junto a "Iniciar juego de notas" */
+    .btn-juego.btn-lectura { background: var(--surface); color: var(--ink); border-color: var(--line); }
+    @media (hover: hover) { .btn-juego.btn-lectura:hover { border-color: var(--accent); } }
 
     .feedback-juego {
       font-weight: 700;
@@ -408,6 +411,7 @@
   <div class="fila-superior">
   <div class="panel-juego">
     <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
+    <button class="btn-juego btn-lectura" type="button" onclick="abrirLectura()" title="Método Dandelot: decir los nombres de las notas en ritmo, sin parar">Lectura hablada</button>
     <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier nota</div>
     <div class="estrellas-juego" id="estrellas-juego" hidden>
       <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 3">
@@ -845,6 +849,11 @@
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
 <script>window.SprinkloudPractica = { app: 'Violín virtual', detalle: function () { return aciertos ? 'Juego de notas: ' + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el violín'; } };</script>
+<script src="/practica/lectura.js"></script>
+<script>
+  /* Lectura hablada (Dandelot) con las notas del modo elegido */
+  function abrirLectura() { SprinkloudLectura.abrir({ clave: 'treble', notas: modosJuego[modoJuego] }); }
+</script>
 <script src="/practica/comprobante.js"></script>
 </body>
 </html>

@@ -195,6 +195,9 @@
     }
     .btn-juego:active { transform: scale(.97); }
     .btn-juego.activo { background: var(--surface); color: var(--danger); border-color: var(--danger); }
+    /* Lectura hablada (Dandelot): segundo botón, de borde, junto a "Iniciar juego de notas" */
+    .btn-juego.btn-lectura { background: var(--surface); color: var(--ink); border-color: var(--line); }
+    @media (hover: hover) { .btn-juego.btn-lectura:hover { border-color: var(--accent); } }
 
     .feedback-juego {
       font-weight: 700;
@@ -490,6 +493,7 @@
 
 <div class="panel-juego">
   <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
+  <button class="btn-juego btn-lectura" type="button" onclick="abrirLectura()" title="Método Dandelot: decir los nombres de las notas en ritmo, sin parar">Lectura hablada</button>
   <div class="panel-modos" id="panel-modos">
     <div class="grupo-modo">
       <span class="titulo-modo">Clave de Sol</span>
@@ -1061,6 +1065,15 @@
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
 <script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? 'Juego de notas: ' + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el piano'; } };</script>
+<script src="/practica/lectura.js"></script>
+<script>
+  /* Lectura hablada (Dandelot) con las notas del modo elegido; con "Ambas claves" se alterna entre sol y fa */
+  function abrirLectura() {
+    const pool = poolDelModo(), claves = [...new Set(pool.map(n => n.clef))];
+    const clave = claves.length > 1 ? claves[Math.floor(Math.random() * claves.length)] : claves[0];
+    SprinkloudLectura.abrir({ clave, notas: pool.filter(n => n.clef === clave).map(n => n.vfKey) });
+  }
+</script>
 <script src="/practica/comprobante.js"></script>
 </body>
 </html>

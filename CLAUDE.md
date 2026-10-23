@@ -147,6 +147,15 @@ App pública (pedido de la dueña, 23 de octubre de 2026) para escribir cancione
 
 
 
+## Las apps van a juego con la guía (23 de octubre de 2026)
+
+Pedido de la dueña: lo que se enseña en la guía tiene que verse igual en las apps.
+- **Sílabas en la app de ritmo** (`SILABAS` en `practica/ritmo.html`): cada célula muestra debajo su sílaba, la misma de la guía y de las hojas (`C` en `practica/hojas.html`). Kodály para lo básico (ta = negra, ti-ti = dos corcheas, sh = silencio, ta-a = blanca, ta-i = negra con puntillo) y Takadimi para semicorcheas, tresillos y 6/8 (ta-ka-di-mi, ta di-mi, ta-ka di, ta-ki-da). Se ven en las tarjetas y en la partitura, también en los ritmos latinos. El botón "Sílabas" las oculta y se recuerda en `localStorage`. Si se agrega una célula, hay que darle su sílaba.
+- En la app de ritmo, en pantallas anchas, las opciones pasan a una segunda fila si no entran (`.transport` con `flex-wrap`); antes se salían de la pantalla.
+- **Lectura hablada (Dandelot)** en el piano y el violín virtuales (`practica/lectura.js`, compartido): 8 notas del modo elegido, cuenta de 4, un marcador avanza una nota por pulso y el alumno dice los nombres sin parar; "Ver nombres" los muestra en una fila debajo del pentagrama. En el piano, con "Ambas claves" se elige al azar clave de sol o de fa. Se abre con `SprinkloudLectura.abrir({ clave, notas })`.
+
+## Entrenador de oído (`practica/oido.html`)
+
 Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte en pantalla, con botones grandes y sin librerías externas: el piano está sintetizado con WebAudio, la misma voz de `practica/ritmo.html`.
 
 **Ejercicios** (`MODOS`). Cada uno dice en qué semanas de la guía se usa:
