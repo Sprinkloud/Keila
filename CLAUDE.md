@@ -7,7 +7,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 | Ruta | Qué es |
 |---|---|
 | `index.html`, `material.html`, `metodologia.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
-| `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html` y `practica/oido.html`. |
+| `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html`, `practica/oido.html` y `practica/partituras.html`. |
 | `images/` | Fotos y logos. `logo-sprinkloud.png` (1200×630, fondo blanco) es la imagen para compartir de las páginas que no tienen una propia. |
 | `vercel.json` | Rutas limpias, redirecciones de las rutas viejas y encabezados de seguridad (ver "Rutas" y "Seguridad"). |
 | `servidor-local.js` | Servidor para probar el sitio como en Vercel. No se publica (`.vercelignore`, igual que este archivo). |
@@ -28,6 +28,7 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 | `/practica/ritmo/3-4` | app de ritmo en un compás (rewrite a `ritmo.html`) |
 | `/practica/ritmo/latinos` | app de ritmo con la cumbia cargada a tempo 90, lista para dar play. Es el enlace que se manda a quien pide información (respuesta rápida `VApp` y agente de IA) |
 | `/practica/oido/segundas-y-terceras` | entrenador en un ejercicio (rewrite a `oido.html`; los nombres están en `EJERCICIOS`) |
+| `/practica/partituras/<id>` | una partitura de la biblioteca (rewrite a `partituras.html`, que lee el id de la ruta) |
 
 - Las páginas que se abren en rutas largas usan rutas absolutas para sus archivos (`/images/...`, `/practica/comprobante.js`). Una ruta relativa se rompería en `/practica/hojas/violin/semana-2`.
 - Las rutas viejas (`/Teoría Musical/Ritmo.html`, `/metodología.html`, etc.) redirigen con 308 a las nuevas. Los parámetros viejos (`?semana=2&i=violin`, `?compas=3/4`, `?modo=…&nivel=…`) siguen sirviendo, y cada página cambia la barra de direcciones por la ruta limpia.
@@ -116,7 +117,35 @@ Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (4
 
 VexFlow le pone ancho en línea al SVG. `pentagrama()` lo quita para que el CSS lo escale.
 
-## Entrenador de oído (`practica/oido.html`)
+## Partituras con acordes (`practica/partituras.html`)
+
+App pública (pedido de la dueña, 23 de octubre de 2026) para escribir canciones y verlas de dos formas: **solo notas** (los nombres Do, Re, Mi en recuadros por compás, cada uno del ancho de lo que dura) o **partitura** (pentagrama con VexFlow, clave de sol y armadura). Para piano y violín.
+
+**Ver**
+- Tonalidad: se transpone desde la tonalidad original con `mover(nota, pasos de letra, semitonos)`, la misma idea que `arriba()` de las hojas, así que cada nota queda bien deletreada; `simplificar()` evita dobles alteraciones. Se mueve hacia el lado más cercano (máximo 6 semitonos).
+- Con o sin acordes: los acordes van en letras (C, Am, G7) sobre la nota donde cambian; en el pentagrama son `VF.Annotation`.
+- Las alteraciones se dibujan según la armadura y lo que ya se alteró en el compás (`armadura()`, becuadro cuando hace falta).
+- Escuchar: WebAudio, melodía en triángulo y el acorde suave por debajo; en la vista de notas se ilumina la que suena.
+
+**Escribir** (panel "Escribir o editar la partitura")
+- Se escribe en la tonalidad original: título, instrumento, compás (4/4, 3/4, 2/4, 6/8), tonalidad, duración, puntillo, silencio y un teclado de 1 octava en el celular (teclas de 44 px) o 2 en pantallas anchas, con botones de octava.
+- Las teclas negras se nombran con bemoles si la tonalidad lleva bemoles y con sostenidos si lleva sostenidos; sin armadura: Do♯, Mi♭, Fa♯, La♭, Si♭.
+- Cada nota escrita es un botón en la lista: al tocarlo se cambia su duración o puntillo, se le pone un acorde (raíz y tipo) o se borra. Las nuevas notas entran después de la elegida.
+- Lo que se escribe queda en `localStorage` (`sprinkloud-partitura`). Sin nada guardado se muestra el ejemplo "Estrellita" con C, F y G.
+
+**Canciones del club** (`CANCIONES`, 23 de octubre de 2026): 10 en Do mayor y 10 en Sol mayor, todas tradicionales o clásicas (dominio público), porque la app es pública. Las comerciales (Feliz Navidad, Mi burrito sabanero…) tienen derechos de autor y no van.
+- Van en el código, en un formato corto: `[Acorde]Nota+octava:duración` (por ejemplo `[G7]B4:8.`), `r` = silencio, `.` = puntillo, `|` separa compases. `leerCancion()` las convierte. `ana` = anacrusa en negras (Cumpleaños feliz, Oh Susana, Cuando los santos…).
+- Se abren por su nombre (`/practica/partituras/noche-de-paz`) y salen primero en la biblioteca, aunque la hoja esté vacía o sin conexión. Si un maestro guarda una, queda como copia suya en la hoja.
+- Al agregar una, revisar que cada compás sume lo que pide el compás (el primero suma la anacrusa) y que el rango no baje de Sol3, la nota más grave del violín.
+
+**Biblioteca** (hoja "Partituras" de la planilla del sistema)
+- La API es el proyecto de maestros de Apps Script (`Registro_Sprinkloud/maestros`, sección 8): `?api=partituras` (lista pública), `?api=partitura&id=` (una) y `POST` con `{accion: "guardarPartitura", clave, partitura}`. El POST va como `text/plain` para no disparar el permiso CORS.
+- Guardar exige la clave de un maestro: el maestro pega el enlace de su panel (`?m=...`) una vez y queda en `localStorage` (`sprinkloud-maestro-clave`). Si la clave deja de valer, se borra y se vuelve a pedir.
+- Si un maestro guarda una partitura de otro, se guarda como copia suya; la original no cambia.
+- El servidor valida todo (listas cerradas de compases, duraciones y tipos de acorde, notas de 0 a 6 con octava 2 a 7, máximo 800 notas) y descarta cualquier campo que no conozca.
+- La CSP permite `connect-src` a `script.google.com` y `script.googleusercontent.com` solo por esta app.
+
+
 
 Herramienta para el "minuto de oído" de la clase por videollamada. Se comparte en pantalla, con botones grandes y sin librerías externas: el piano está sintetizado con WebAudio, la misma voz de `practica/ritmo.html`.
 
