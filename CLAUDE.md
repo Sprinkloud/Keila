@@ -85,8 +85,11 @@ Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (4
   - secuencias de notas, tono o semitono, intervalos;
   - escalas mayor y menor, armaduras, círculo de quintas;
   - triadas, qué acorde es, armonizar, grados, relativas, pentatónica, V7, inversiones;
-  - términos, preguntas con renglones y pentagramas libres (dictado, composición).
+  - términos.
 - `ejerciciosDe(semana, instrumento)` dice qué lleva cada semana.
+- **Solo ejercicios que se pueden resolver aquí y revisar** (pedido de la dueña, 23 de octubre de 2026). Se quitaron las preguntas abiertas con renglones ("dibuja un círculo…" en un cuadro de texto) y los pentagramas en blanco, que en el celular no se podían usar.
+- **Semanas sin hoja:** `SIN_HOJA = [1, 38, 40, 43, 45, 48]` (pulso con el cuerpo, improvisar, dictado melódico, la forma, dos contra tres, componer). No tienen un ejercicio escrito lógico, así que la página muestra un aviso, el selector dice "(sin hoja)" y se ocultan Otra hoja, Imprimir y Revisar. Esas semanas se practican solo con su app. La misma lista está en `Registro_Sprinkloud/maestros/Maestro.html` y `Reporte.html`, que no mandan el enlace de la hoja en esas semanas.
+- `el()` aplana los hijos con `flat(Infinity)`. Antes aplanaba un solo nivel, y las secuencias y escalas (semanas 9, 10, 22, 27, 28, 29 y 35) mostraban "[object HTMLSpanElement]" en vez de las notas y los campos.
 - La teoría se calcula; no hay respuestas escritas a mano:
   - `arriba(nota, pasos de letra, semitonos)` deletrea bien cada nota;
   - `escala`, `triada` y `tipoGrado` salen de ahí.

@@ -77,26 +77,24 @@
     .item svg { width: 100%; max-width: 230px; height: auto; display: block; }
     .items.medianos { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
     .items.medianos .item svg { max-width: 380px; }
-    .pentagrama-libre svg { max-width: none; }
     .respuestas { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; max-width: 100%; }
     .items.anchos .respuestas { justify-content: flex-start; }
     .respuestas input, .respuestas select { width: 7.5em; min-height: 40px; border: 0; border-bottom: 2px solid #2B241C; border-radius: 0; background: transparent; padding: 4px 6px; text-align: center; color: #2B241C; font-family: var(--f-hand); font-size: 24px; }
     .respuestas select { font-family: var(--f-body); font-size: 15px; width: auto; max-width: 100%; border: 1px solid #CDBF9F; border-radius: 8px; }
     .respuestas input.corto { width: 3.6em; }
+    .respuestas input.nota { width: 3.4em; }
     .respuestas input.largo { width: min(14em, 100%); }
     .respuestas .sep { color: #8F6A2A; font-weight: 800; }
     .ok input, .ok select, input.ok, select.ok { border-color: #48592F !important; background: #E1E6CF !important; }
     input.mal, select.mal { border-color: #9A5245 !important; background: #F3DED8 !important; }
     .solucion { font-size: 14px; color: #48592F; font-weight: 700; }
-    .renglones { display: grid; gap: 0; width: 100%; }
-    .renglones div { height: 34px; border-bottom: 1px solid #B9AC90; }
-    .renglones textarea { width: 100%; min-height: 102px; border: 0; resize: vertical; padding: 4px 2px; font-family: var(--f-hand); font-size: 24px; line-height: 34px; color: #2B241C;
-      background: repeating-linear-gradient(transparent, transparent 33px, #B9AC90 33px, #B9AC90 34px); }
-    .pentagrama-libre { width: 100%; }
     .dibujable { cursor: pointer; touch-action: manipulation; }
+    .sin-hoja { text-align: center; padding: 28px 12px; }
+    .sin-hoja p { margin: 8px auto 0; max-width: 34em; color: var(--ink-2); }
     .resultado { font-weight: 800; padding: 10px 14px; border-radius: 10px; background: var(--accent-soft); color: var(--pine); }
     .resultado.medio { background: var(--gold-soft); color: var(--gold-ink); }
     .acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+    [hidden] { display: none !important; }
     footer { text-align: center; color: var(--ink-2); font-size: 13px; padding: 16px; }
     @media (max-width: 560px) {
       .hoja { padding: 16px 14px; border-radius: 12px; }
@@ -277,7 +275,7 @@ function el(tag, attrs = {}, ...hijos) {
     if (v == null || v === false) continue;
     if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v === true ? '' : v);
   }
-  for (const h of hijos.flat()) if (h != null && h !== false) e.append(h);
+  for (const h of hijos.flat(Infinity)) if (h != null && h !== false) e.append(h);
   return e;
 }
 let campos = [];   /* cada campo: { el, ok(valor), solucion } */
@@ -292,18 +290,9 @@ function eleccion(opciones, correcta, etiqueta) {
   campos.push({ el: s, ok: v => v === correcta, solucion: correcta });
   return s;
 }
-const campoNota = n => campo(v => mismaNota(v, n), nombre(n), '', 'Nombre de la nota');
+const campoNota = n => campo(v => mismaNota(v, n), nombre(n), 'nota', 'Nombre de la nota');
 const campoAcorde = (r, tipo) => campo(v => { const x = leerAcorde(v); return !!x && x.r.l === r.l && x.r.a === r.a && x.tipo === tipo; }, nombreAcorde(r, tipo) + ' (' + nombre(r) + ' ' + tipo + ')', '', 'Acorde');
 const campoNumero = (n, sol) => campo(v => Math.abs(leerNumero(v) - n) < 1e-9, sol || String(n).replace('.', ','), 'corto', 'Número');
-function renglones(n) {
-  const t = el('textarea', { rows: n, 'aria-label': 'Escribe aquí' });
-  return el('div', { class: 'renglones' }, t);
-}
-function pentagramasLibres(n, clave) {
-  const c = el('div', { class: 'pentagrama-libre' });
-  for (let i = 0; i < n; i++) { const d = el('div'); c.append(d); pentagrama(d, { ancho: 900, alto: 100, clave }); }
-  return c;
-}
 function ejercicio(titulo, consigna, items, { anchos = false, medianos = false, papel = '' } = {}) {
   return el('section', { class: 'ejercicio' },
     el('h3', {}, titulo, papel ? el('small', { text: papel }) : null),
@@ -503,12 +492,6 @@ const T = {
     const opciones = lista.map(x => x[1]);
     return ejercicio(titulo, 'Elige el significado.', mezclar(lista).map(([t, s], i) =>
       item(i, el('div', { class: 'enunciado', text: t }), el('div', { class: 'respuestas' }, eleccion(opciones, s)))), { medianos: true, papel: 'Hoja rayada' });
-  },
-  preguntas({ titulo = 'Piensa y escribe', lista }) {
-    return ejercicio(titulo, null, lista.map((p, i) => item(i, el('div', { class: 'enunciado', text: p }), renglones(3))), { anchos: true, papel: 'Hoja rayada' });
-  },
-  libre({ titulo, consigna, n = 4, clave = 'treble' }) {
-    return ejercicio(titulo, consigna, [el('div', { class: 'item' }, pentagramasLibres(n, clave))], { anchos: true, papel: 'Hoja pautada' });
   }
 };
 
@@ -526,29 +509,31 @@ const K1 = [C.ta, C.titi], K2 = [C.ta, C.titi, C.sh], K3 = [C.ta, C.titi, C.sh, 
 const N = (...ls) => ls;
 const SOL_BASICO = RANGO.sol.notas, SOL_TODAS = RANGO.solAmplio.notas;
 
-/* ---------- Qué ejercicios lleva cada semana ---------- */
+/* ---------- Qué ejercicios lleva cada semana ----------
+   Solo ejercicios que el alumno puede resolver aquí y que la hoja puede revisar. Una semana sin un ejercicio así
+   (pulso con el cuerpo, dictados, improvisar, la forma, dos contra tres, componer) no tiene hoja: se practica con su app.
+   Si cambia esta lista, actualizar SIN_HOJA en Registro_Sprinkloud/maestros (Maestro.html y Reporte.html). */
 function ejerciciosDe(s, ins) {
   const fa = ins === 'piano';
   const M = {
-    1: () => [T.preguntas({ lista: ['Escribe el nombre de 2 canciones que te gusten. ¿Son rápidas o lentas?', 'Dibuja un círculo por cada pulso que palmeaste en tu canción favorita (8 pulsos).', '¿Qué parte de tu cuerpo usaste para marcar el pulso?'] })],
-    2: () => [T.silabas({ celdas: K1 }), T.preguntas({ titulo: 'Crea tus ritmos', lista: ['Inventa 3 ritmos de 4 pulsos con ta y ti-ti. Escribe las sílabas.'] })],
+    2: () => [T.silabas({ celdas: K1 })],
     3: () => [T.silabas({ celdas: K2 }), T.completar({ celdas: K2 })],
     4: () => [T.subeBaja({})],
     5: () => [T.nombrar({ notas: N([4, 4], [2, 4]), cant: 6, titulo: '¿Sol o mi?' }), T.dibujar({ notas: N([4, 4], [2, 4]), cant: 4 })],
-    6: () => [T.silabas({ celdas: K2 }), T.preguntas({ lista: ['Escribe con sílabas el ostinato que creaste en clase.'] })],
+    6: () => [T.silabas({ celdas: K2 })],
     7: () => [T.lineaEspacio({}), T.dibujar({ notas: N([2, 4], [4, 4], [6, 4], [1, 5], [3, 5], [3, 4], [5, 4], [0, 5], [2, 5]) })],
     8: () => [T.nombrar({ notas: N([4, 4], [2, 4], [5, 4]) }), T.dibujar({ notas: N([4, 4], [2, 4], [5, 4]) })],
     9: () => [T.nombrar({ notas: N([0, 4], [1, 4], [2, 4], [4, 4], [5, 4]) }), T.secuencia({ titulo: 'Escribe la nota que falta', consigna: 'Las notas van en orden: do, re, mi, fa, sol, la, si.', series: [escala(nota(0), MAYOR), escala(nota(4), [0, 2, 4, 5, 7, 9, 10]), escala(nota(2), [0, 1, 3, 5, 7, 8, 10])] })],
     10: () => [T.secuencia({ titulo: 'Completa la escala de Do', consigna: 'Subiendo y bajando.', series: [escala(nota(0), MAYOR).concat([nota(0, 0, 5)]), escala(nota(0), MAYOR).concat([nota(0, 0, 5)]).reverse()], cant: 2 }), T.nombrar({ notas: SOL_BASICO.slice(0, 8) })],
     11: () => [T.duracion({ figuras: [{ d: 'w', p: 4 }, { d: 'h', p: 2 }, { d: 'q', p: 1 }, { d: '8', p: 0.5 }] }), T.silabas({ celdas: K3 })],
-    12: () => [T.completar({ celdas: K3, compases: ['2/4', '3/4', '4/4'] }), T.preguntas({ lista: ['Escribe 3 canciones que conozcas y si van en 2, 3 o 4.'] })],
+    12: () => [T.completar({ celdas: K3, compases: ['2/4', '3/4', '4/4'] })],
     13: () => [T.nombrar({ notas: SOL_BASICO }), T.silabas({ celdas: K3 })],
-    14: () => [T.libre({ titulo: 'Dictado rítmico', consigna: 'Escribe los ritmos que toca tu maestro.', n: 3 }), T.silabas({ celdas: K3 })],
+    14: () => [T.silabas({ celdas: K3 })],
     15: () => [T.duracion({ figuras: [{ d: 'hd', p: 3 }, { d: 'qd', p: 1.5 }, { d: 'h', p: 2 }, { d: 'q', p: 1 }] }), T.completar({ celdas: K4, compases: ['3/4', '4/4'] })],
     16: () => [T.silabas({ celdas: TK, metodo: 'Takadimi' }), T.duracion({ figuras: [{ d: '16', p: 0.25 }, { d: '8', p: 0.5 }, { d: 'q', p: 1 }, { d: 'h', p: 2 }] })],
     17: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' }), T.completar({ celdas: TK2.concat([C.taa]) })],
     18: () => [T.silabas({ celdas: TK3, metodo: 'Takadimi' })],
-    19: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' }), T.preguntas({ lista: ['¿Qué parte del cuerpo marcó el pulso y cuál el ritmo? ¿Qué fue lo más difícil?'] })],
+    19: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' })],
     20: () => [T.nombrar({ notas: SOL_TODAS, titulo: 'Notas en clave de sol (con líneas adicionales)' })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', titulo: 'Notas en clave de fa' })] : []),
     21: () => [T.nombrar({ notas: SOL_TODAS, cant: 6 }), T.dibujar({ notas: SOL_TODAS.slice(2, 16) })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', cant: 4, titulo: 'Notas en clave de fa' })] : []),
     22: () => [T.nombrar({ notas: N([3, 4, 1], [0, 5, 1], [6, 4, -1], [2, 4, -1], [4, 4, 1], [5, 4, -1], [1, 4, 1]), titulo: 'Notas con alteraciones' }),
@@ -561,27 +546,25 @@ function ejerciciosDe(s, ins) {
     28: () => [T.armaduras({ tonalidades: TONALIDADES.filter(x => [0, 1, 2, -1].includes(x.n)) }), T.escalaMayor({ tonicas: [nota(4), nota(3)] })],
     29: () => [T.circulo(), T.armaduras({ tonalidades: mezclar(TONALIDADES.filter(x => Math.abs(x.n) <= 3)).slice(0, 5) })],
     30: () => [T.triadas({ tipos: ['mayor', 'menor'] }), T.queTriada({ tipos: ['mayor', 'menor'] })],
-    31: () => [T.triadas({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] }), T.queTriada({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] }), T.preguntas({ lista: ['Escribe los acordes de tu canción y di qué tipo es cada uno.'] })],
+    31: () => [T.triadas({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] }), T.queTriada({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] })],
     32: () => [T.armonizar({ tonicas: [nota(0), nota(4)] })],
-    33: () => [T.grados({ tonicas: [nota(0), nota(4), nota(3)], preguntas: [0, 3, 4, 5] }), T.preguntas({ lista: ['¿En qué acorde reposa tu canción? ¿Cómo lo sentiste?'] })],
-    34: () => [T.grados({ tonicas: [nota(0), nota(4), nota(1), nota(3)], preguntas: [0, 3, 4, 5] }), T.preguntas({ titulo: 'Crea tu progresión', lista: ['Escribe una progresión de 4 acordes en Do mayor que termine en reposo.'] })],
+    33: () => [T.grados({ tonicas: [nota(0), nota(4), nota(3)], preguntas: [0, 3, 4, 5] })],
+    34: () => [T.grados({ tonicas: [nota(0), nota(4), nota(1), nota(3)], preguntas: [0, 3, 4, 5] })],
     35: () => [T.relativas({ tonicas: [nota(0), nota(4), nota(3), nota(1)] }), T.escalaMayor({ tonicas: [nota(5), nota(2)], menor: true })],
     36: () => [T.grados({ tonicas: [nota(5), nota(2)], preguntas: [0, 3, 4], menor: true }), T.armonizar({ tonicas: [nota(5)], menor: true })],
     37: () => [T.pentatonica({ tonicas: [[nota(0), false], [nota(4), false], [nota(5), true], [nota(2), true]] })],
-    38: () => [T.libre({ titulo: 'Escribe tu improvisación', consigna: 'Escribe 4 compases con la pentatónica que usaste. Termina en la nota de reposo.', n: 2 })],
     39: () => [T.silabas({ celdas: SEIS, compas: '6/8', metodo: 'Takadimi en 6/8' }), T.completar({ celdas: SEIS, compases: ['6/8'] })],
-    40: () => [T.libre({ titulo: 'Dictado melódico', consigna: 'Escribe la melodía que toca tu maestro.', n: 3 })],
     41: () => [T.terminos({ titulo: 'Dinámicas y articulaciones', lista: [['p', 'Suave'], ['f', 'Fuerte'], ['mf', 'Medio fuerte'], ['cresc.', 'Cada vez más fuerte'], ['dim.', 'Cada vez más suave'], ['Staccato', 'Notas cortas y separadas'], ['Legato', 'Notas ligadas']] })],
     42: () => [T.terminos({ titulo: 'Tempo', lista: [['Lento', 'Muy despacio'], ['Andante', 'Al paso, tranquilo'], ['Moderato', 'Moderado'], ['Allegro', 'Rápido y alegre'], ['Presto', 'Muy rápido'], ['Ritardando', 'Ir más despacio']] })],
-    43: () => [T.preguntas({ titulo: 'La forma', lista: ['Escribe la forma de tu canción (por ejemplo A A B A).', 'Escucha otra canción y escribe su forma.'] })],
     44: () => [T.nombrar({ notas: SOL_TODAS, cant: 12, titulo: 'Lectura rápida: escribe el nombre de cada nota' })],
-    45: () => [T.preguntas({ lista: ['¿Cuántas notas toca cada mano en "dos contra tres"? Dibuja dónde coinciden.'] }), T.silabas({ celdas: K4 })],
     46: () => [T.septima({ tonicas: [nota(0), nota(4), nota(3), nota(1)] })],
-    47: () => [T.inversiones({})],
-    48: () => [T.libre({ titulo: 'Mi composición', consigna: 'Escribe tus 8 compases: compás, tonalidad, melodía y los acordes encima.', n: 4 })]
+    47: () => [T.inversiones({})]
   };
   return (M[s] || (() => []))();
 }
+/** Semanas sin hoja (no tienen entrada en ejerciciosDe). */
+const SIN_HOJA = [1, 38, 40, 43, 45, 48];
+const tieneHoja = s => !SIN_HOJA.includes(s);
 
 /* ---------- Armar, revisar e imprimir ---------- */
 const $ = s => document.querySelector(s);
@@ -594,14 +577,23 @@ function armar() {
   semilla = s * 9973 + variante * 131;
   campos = []; idCampo = 0;
   const hoja = $('#hoja');
+  const conHoja = tieneHoja(s);
+  ['#otra', '#imprimir', '.acciones'].forEach(x => { $(x).hidden = !conHoja; });
+  $('#resultado').hidden = true;
+  history.replaceState(null, '', '/practica/hojas/' + ins + '/semana-' + s + (variante > 1 ? '?v=' + variante : ''));
+  if (!conHoja) {
+    hoja.replaceChildren(el('div', { class: 'sin-hoja' },
+      el('span', { class: 'etapa', text: 'Semana ' + s + ' · Etapa ' + g[1] }),
+      el('h2', { text: g[2] }),
+      el('p', { text: 'Esta semana no tiene hoja de práctica: lo que se aprende se practica tocando, en clase y con la app de la semana.' })));
+    return;
+  }
   hoja.replaceChildren(el('div', { class: 'hoja-cabeza' },
     el('span', { class: 'etapa', text: 'Semana ' + s + ' · Etapa ' + g[1] }),
     el('h2', { text: g[2] }),
     el('p', { text: g[3] }),
     el('div', { class: 'datos-alumno' }, el('span', { text: 'Nombre:' }), el('span', { text: 'Fecha:' }))));
   ejerciciosDe(s, ins).forEach(e => hoja.append(e));
-  $('#resultado').hidden = true;
-  history.replaceState(null, '', '/practica/hojas/' + ins + '/semana-' + s + (variante > 1 ? '?v=' + variante : ''));
 }
 function revisar() {
   let bien = 0, total = 0;
@@ -616,7 +608,7 @@ function revisar() {
   const r = $('#resultado');
   r.hidden = false;
   r.className = 'resultado' + (bien / Math.max(total, 1) < 0.8 ? ' medio' : '');
-  r.textContent = total ? bien + ' de ' + total + ' correctas' + (bien === total ? ' 🎉 ¡Hoja perfecta!' : '. Revisa las marcadas y vuelve a intentar.') : 'Esta hoja es para escribir en tu cuaderno.';
+  r.textContent = bien + ' de ' + total + ' correctas' + (bien === total ? ' 🎉 ¡Hoja perfecta!' : '. Revisa las marcadas y vuelve a intentar.');
 }
 function verSoluciones() {
   document.querySelectorAll('.solucion').forEach(x => x.remove());
@@ -627,7 +619,7 @@ function iniciar() {
   let etapa = '';
   GUIA.forEach(([s, et, tema]) => {
     if (et !== etapa) { etapa = et; sel.append(el('optgroup', { label: 'Etapa ' + et })); }
-    sel.lastChild.append(el('option', { value: s, text: s + '. ' + tema }));
+    sel.lastChild.append(el('option', { value: s, text: s + '. ' + tema + (tieneHoja(s) ? '' : ' (sin hoja)') }));
   });
   sel.value = String(Math.min(Math.max(Number(ruta ? ruta[2] : params.get('semana')) || 1, 1), GUIA.length));
   $('#instrumento').value = (ruta ? ruta[1] : params.get('i')) === 'violin' ? 'violin' : 'piano';
