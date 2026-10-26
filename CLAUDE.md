@@ -140,6 +140,8 @@ App pública (pedido de la dueña, 23 de octubre de 2026) para ver canciones de 
 - Solo se agregan melodías que se puedan escribir con seguridad; mejor menos y correctas.
 - **Todas son covers** (pedido de la dueña, 25 de octubre de 2026): `AUTORES` da el autor original de cada una (`[texto, es una persona]`). La hoja dice "Cover · original de Ludwig van Beethoven" o "Cover · canción tradicional francesa"; las tarjetas de la biblioteca también. Decir "cover" da crédito, pero no da permiso para publicar canciones con derechos de autor: la regla de dominio público sigue.
 
+**Pendiente: covers con derechos de autor en MuseScore** (acordado el 25 de octubre de 2026, por probar). Las canciones con derechos (cumbias, Disney, bachatas, bandas sonoras) no van en esta app. Se arreglan a partir de un audio, se escriben en MusicXML, la dueña los revisa y los sube a una cuenta del club en MuseScore, que tiene licencia con las editoriales. Aquí solo va una sección "Covers del club en MuseScore" con enlaces; para incrustarlos hay que permitir `frame-src` de musescore.com en la CSP.
+
 **SEO de las canciones** (25 de octubre de 2026)
 - Cada canción es una página para Google: `seo()` pone título ("Para Elisa – cover fácil para piano y violín | Sprinkloud"; sin "| Sprinkloud" si pasa de 65 caracteres), descripción, canónica, Open Graph y una ficha `MusicComposition` (JSON-LD, con `composer` si el autor es una persona).
 - La portada `/practica/partituras` muestra la primera canción pero conserva su dirección y su SEO.
