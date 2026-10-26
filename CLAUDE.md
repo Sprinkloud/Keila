@@ -170,7 +170,8 @@ Pedido de la dueña: lo que se enseña en la guía tiene que verse igual en las 
 - **Micrófono** (25 de octubre de 2026): botón "🎤 Micrófono" en la lectura hablada, solo si el navegador tiene reconocimiento de voz (`SpeechRecognition`: Chrome, Edge y Safari; en Firefox no aparece). Al encenderlo se pide el permiso. Durante la lectura escucha en español (el idioma del navegador si es español) y al final marca cada nota con ✓ o ✗.
   - `notasDichas()` pasa lo que oyó a nombres de notas: entiende variantes del dictado ("rey" = re, "me" = mi, "sí" = si) y sílabas pegadas ("domi"). Ignora las demás palabras.
   - `comparar()` busca la subsecuencia común más larga: cuenta las notas dichas en orden, aunque sobre o falte alguna. No mide el momento exacto de cada nota, solo el orden.
-  - Si el reconocedor se corta en un silencio, se vuelve a encender hasta que termina la lectura.
+  - Si el reconocedor se corta en un silencio, se vuelve a encender (con 250 ms de respiro) hasta que termina la lectura.
+  - **Arreglo del 25 de octubre de 2026** (la dueña probó y "no te escuché"): el reconocedor no acepta `es-419` (español de Latinoamérica, común en Chrome) y fallaba en silencio. `idioma()` usa un código con país (`es-EC`, `es-MX`…) o `es-MX`. Cada error tiene su aviso (`AVISOS`: micrófono bloqueado, navegador sin reconocimiento como Brave u Opera, sin micrófono, idioma). Mientras se lee, "Escucho: «…»" muestra lo que oye tal cual, para saber si llega algo. Si oyó palabras pero ninguna nota, lo dice.
   - El reconocimiento lo hace el navegador (en Chrome, con los servidores de Google); la página no guarda ni envía el audio.
 
 ## Entrenador de oído (`practica/oido.html`)

@@ -113,42 +113,67 @@
     }
     return bien;
   }
+  /* El reconocedor no acepta "es-419" (español de Latinoamérica, común en Chrome): se usa el país si lo tiene, si no es-MX */
+  var PAISES = /^es-(EC|MX|ES|US|AR|CO|CL|PE|VE|BO|UY|PY|CR|DO|GT|HN|NI|PA|PR|SV)$/i;
+  function idioma() {
+    var lista = [].concat(navigator.languages || [], navigator.language || []);
+    for (var i = 0; i < lista.length; i++) if (PAISES.test(lista[i])) return lista[i];
+    return 'es-MX';
+  }
+  var AVISOS = {
+    'not-allowed': 'El micrófono está bloqueado. Permítelo en el candado de la barra de direcciones y vuelve a intentar.',
+    'service-not-allowed': 'Este navegador no deja usar el reconocimiento de voz. Prueba en Google Chrome, Edge o Safari.',
+    'network': 'Este navegador no tiene reconocimiento de voz (pasa en Brave u Opera). Prueba en Google Chrome, Edge o Safari.',
+    'audio-capture': 'No encuentro un micrófono. Revisa que esté conectado.',
+    'language-not-supported': 'El reconocimiento de voz no acepta el idioma de este navegador. Prueba en Google Chrome.'
+  };
   function escuchar() {
     rec = new Reconocedor();
-    rec.lang = /^es/i.test(navigator.language || '') ? navigator.language : 'es-ES';
+    rec.lang = idioma();
     rec.continuous = true; rec.interimResults = true;
-    oido = { activo: true, texto: '', partes: [] };
+    oido = { activo: true, texto: '', partes: [], corriendo: false, error: '' };
+    var escucho = dlg.querySelector('.lh-escucho');
+    rec.onstart = function () { oido.corriendo = true; };
     rec.onresult = function (e) {
       var t = [];
       for (var i = 0; i < e.results.length; i++) t.push(e.results[i][0].transcript);
       oido.texto = (oido.partes.join(' ') + ' ' + t.join(' ')).trim();
-      dlg.querySelector('.lh-escucho').textContent = 'Escucho: ' + notasDichas(oido.texto).join(' ');
+      /* lo que oye, tal cual: así se sabe si al micrófono le llega algo */
+      escucho.textContent = 'Escucho: «' + oido.texto.slice(-80) + '»';
     };
     rec.onerror = function (e) {
-      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-        oido.activo = false;
-        dlg.querySelector('.lh-escucho').textContent = 'El micrófono está bloqueado. Permítelo en el candado de la barra de direcciones.';
-      }
+      if (AVISOS[e.error]) { oido.activo = false; oido.error = e.error; escucho.textContent = AVISOS[e.error]; }
+      /* "no-speech" y "aborted" no son fallas: el reconocedor se vuelve a encender en onend */
     };
-    /* el reconocedor a veces se corta en un silencio: mientras dure la lectura, se vuelve a encender */
+    /* el reconocedor a veces se corta en un silencio: mientras dure la lectura, se vuelve a encender (con un respiro) */
     rec.onend = function () {
-      if (oido.activo) { oido.partes = [oido.texto]; try { rec.start(); } catch (x) {} return; }
+      oido.corriendo = false;
+      if (oido.activo) { oido.partes = [oido.texto]; setTimeout(function () { if (oido.activo) try { rec.start(); } catch (x) {} }, 250); return; }
       evaluar();
     };
-    try { rec.start(); } catch (x) {}
+    try { rec.start(); } catch (x) { escucho.textContent = 'No se pudo encender el micrófono: ' + x.message; }
   }
   function evaluar() {
+    if (oido.evaluado) return;
+    oido.evaluado = true;
     var dichas = notasDichas(oido.texto), cuenta = dlg.querySelector('.lh-cuenta');
-    if (!dichas.length) { cuenta.textContent = 'No te escuché. Revisa que el micrófono esté permitido y habla un poco más fuerte.'; return; }
+    if (oido.error) { cuenta.textContent = ''; return; }   /* el aviso del error ya está en pantalla */
+    if (!oido.texto) { cuenta.textContent = 'No me llegó nada por el micrófono. Revisa que sea el micrófono correcto y habla cerca.'; return; }
+    if (!dichas.length) { cuenta.textContent = 'Escuché «' + oido.texto.slice(0, 60) + '», pero ningún nombre de nota. Di solo los nombres: do, re, mi…'; return; }
     est.resultado = comparar(est.notas.map(nota), dichas);
     var ok = est.resultado.filter(Boolean).length;
     cuenta.textContent = ok === 8 ? '¡8 de 8! Muy bien 🎉' : ok + ' de 8. Repasa las marcadas en rojo y vuelve a intentar.';
     dibujar();
   }
   function dejarDeEscuchar() {
-    if (!rec || !oido.activo) return;
+    if (!rec) return;
+    var seguia = oido.activo;
     oido.activo = false;
+    if (!seguia && oido.error) { dlg.querySelector('.lh-cuenta').textContent = ''; return; }   /* el aviso del error ya está en pantalla */
+    /* si el reconocedor ya estaba apagado, no va a avisar "end": se revisa ya */
+    if (!oido.corriendo) { evaluar(); return; }
     try { rec.stop(); } catch (x) { evaluar(); }
+    setTimeout(evaluar, 2500);   /* por si el navegador nunca avisa que terminó */
   }
 
   function click(t, fuerte) {
@@ -171,6 +196,7 @@
     dlg.querySelector('.lh-escucho').textContent = '';
     dlg.querySelector('.lh-empezar').textContent = '■ Parar';
     if (est.mic) escuchar();
+    else dlg.querySelector('.lh-escucho').textContent = '';
     for (var i = 0; i < 12; i++) {
       (function (i) {
         click(t0 + i * pulso, i % 4 === 0);
