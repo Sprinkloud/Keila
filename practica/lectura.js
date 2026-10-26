@@ -2,14 +2,14 @@
    Se muestran 8 notas; después de una cuenta de 4, un marcador avanza una nota por pulso y el alumno dice su
    nombre en voz alta, sin parar aunque se equivoque. Al final puede ver los nombres para comprobar.
    Con "Micrófono" (si el navegador tiene reconocimiento de voz: Chrome, Edge, Safari) se escucha lo que dice y cada
-   nota se marca bien o mal. Se compara el orden de los nombres, no el momento exacto en que se dijo cada uno.
+   nota se marca bien o mal, comparando cómo suena cada sílaba (ver silabas() y alinear()). Se compara el orden, no
+   el momento exacto en que se dijo cada nota.
    Uso: SprinkloudLectura.abrir({ clave: 'treble' | 'bass', notas: ['e/4', 'g/4', ...] })   (necesita VexFlow 4) */
 (function () {
   var NOMBRES = { c: 'Do', d: 'Re', e: 'Mi', f: 'Fa', g: 'Sol', a: 'La', b: 'Si' };
   /* Cómo suele escribir el reconocedor de voz cada nombre de nota */
   var OIDO = { do: 'Do', dos: 'Do', doh: 'Do', re: 'Re', rey: 'Re', reh: 'Re', mi: 'Mi', me: 'Mi', mis: 'Mi', fa: 'Fa', far: 'Fa', fah: 'Fa',
     sol: 'Sol', sole: 'Sol', sold: 'Sol', la: 'La', lah: 'La', si: 'Si', see: 'Si' };
-  var SILABAS = ['sol', 'do', 're', 'mi', 'fa', 'la', 'si'];
   var Reconocedor = window.SpeechRecognition || window.webkitSpeechRecognition;
   var CSS = '' +
     '.lh{border:0;border-radius:18px;padding:0;width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--surface,#FBF7EE);color:var(--ink,#3A3128);box-shadow:0 20px 60px rgba(0,0,0,.25)}' +
@@ -80,38 +80,72 @@
     svg.insertBefore(marca, svg.firstChild);
   }
 
-  /* ---------- Micrófono: lo que dijo, como lista de nombres de notas ---------- */
-  function limpio(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
-  /** "do re mi", "domi", "rey" → ['Do', 'Re', 'Mi'...]; lo que no es una nota se ignora. */
-  function notasDichas(texto) {
+  /* ---------- Micrófono ----------
+     El reconocedor de voz (Google en Chrome, Apple en el iPhone) está hecho para dictar palabras: si oye "do si sol"
+     puede escribir "tosido". Por eso no se buscan palabras exactas: lo que escribió se parte en sílabas
+     (to · si · do) y cada una se compara por cómo suena (vocal y consonante) con la nota que tocaba decir. */
+  function limpio(s) { return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  /* cómo suena cada nota: sus vocales y las consonantes con que el reconocedor suele escribirla */
+  var SONIDO = {
+    Do: { v: 'o', c: 'dtbpgk' }, Re: { v: 'e', c: 'rdlt' }, Mi: { v: 'ie', c: 'mnb' }, Fa: { v: 'a', c: 'fvpjh' },
+    Sol: { v: 'o', c: 'szcx' }, La: { v: 'a', c: 'lry' }, Si: { v: 'i', c: 'szcx' }
+  };
+  /** "tosido" → to · si · do, cada sílaba con su consonante y su vocal. Palabras conocidas ("rey", "me") se corrigen antes. */
+  function silabas(texto) {
     var out = [];
     limpio(texto).split(/[^a-z]+/).forEach(function (p) {
       if (!p) return;
-      if (OIDO[p]) { out.push(OIDO[p]); return; }
-      /* sílabas pegadas ("domi", "solla"): se separan si la palabra entera está hecha de nombres de notas */
-      var partes = [], resto = p;
-      while (resto) {
-        var s = SILABAS.filter(function (x) { return resto.indexOf(x) === 0; })[0];
-        if (!s) { partes = null; break; }
-        partes.push(OIDO[s]); resto = resto.slice(s.length);
-      }
-      if (partes) out = out.concat(partes);
+      if (OIDO[p]) p = OIDO[p].toLowerCase();
+      (p.match(/[^aeiou]*[aeiou]+(?:[lrsn](?![aeiou]))?/g) || []).forEach(function (s) {
+        var m = s.match(/^([^aeiou]*)([aeiou])/), c = m[1].slice(-1), v = m[2];
+        if (c === 'c' && 'aou'.indexOf(v) >= 0) c = 'k';   /* "co" suena con k, "ci" con s */
+        if (c === 'q') c = 'k';
+        out.push({ s: s, c: c, v: v });
+      });
     });
     return out;
   }
-  /** Qué notas del ejercicio dijo bien y en orden (la subsecuencia común más larga). */
-  function comparar(esperadas, dichas) {
-    var n = esperadas.length, m = dichas.length, L = [], i, j;
-    for (i = 0; i <= n; i++) { L.push([]); for (j = 0; j <= m; j++) L[i].push(0); }
-    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--)
-      L[i][j] = esperadas[i] === dichas[j] ? 1 + L[i + 1][j + 1] : Math.max(L[i + 1][j], L[i][j + 1]);
+  /** 2 = suena como esa nota; 1 = misma vocal pero otra consonante (cuenta como error); 0 = nada que ver */
+  function parecido(nombre, sil) {
+    var n = SONIDO[nombre];
+    if (n.v.indexOf(sil.v) < 0) return 0;
+    if (nombre === 'Mi' && sil.v === 'e' && 'mn'.indexOf(sil.c) < 0) return 0;   /* "e" vale como mi solo en "me" */
+    return sil.c && n.c.indexOf(sil.c) >= 0 ? 2 : 1;
+  }
+  /** Empareja en orden las notas del ejercicio con las sílabas oídas (la mejor alineación); una nota está bien si su sílaba suena como ella. */
+  function alinear(esperadas, sils) {
+    var n = esperadas.length, m = sils.length, D = [], i, j, p;
+    for (i = 0; i <= n; i++) { D.push([]); for (j = 0; j <= m; j++) D[i].push(0); }
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) {
+      p = parecido(esperadas[i], sils[j]);
+      D[i][j] = Math.max(D[i + 1][j], D[i][j + 1], p ? p + D[i + 1][j + 1] : 0);
+    }
     var bien = esperadas.map(function () { return false; });
     i = 0; j = 0;
     while (i < n && j < m) {
-      if (esperadas[i] === dichas[j]) { bien[i] = true; i++; j++; }
-      else if (L[i + 1][j] >= L[i][j + 1]) i++; else j++;
+      p = parecido(esperadas[i], sils[j]);
+      if (p && D[i][j] === p + D[i + 1][j + 1]) { bien[i] = p === 2; i++; j++; }
+      else if (D[i + 1][j] >= D[i][j + 1]) i++; else j++;
     }
-    return bien;
+    return { bien: bien, puntos: D[0][0] };
+  }
+  /** De las interpretaciones que da el reconocedor para cada parte, la que mejor calza con el ejercicio. */
+  function mejorTexto(esperadas) {
+    var elegido = [];
+    oido.sesiones.forEach(function (segs) {
+      segs.forEach(function (alts) {
+        var mejor = alts[0], max = -1;
+        alts.forEach(function (a) {
+          var pts = alinear(esperadas, silabas(elegido.concat([a]).join(' '))).puntos;
+          if (pts > max) { max = pts; mejor = a; }
+        });
+        elegido.push(mejor);
+      });
+    });
+    return elegido.join(' ').trim();
+  }
+  function textoOido() {
+    return oido.sesiones.map(function (segs) { return segs.map(function (a) { return a[0]; }).join(' '); }).join(' ').trim();
   }
   /* El reconocedor no acepta "es-419" (español de Latinoamérica, común en Chrome): se usa el país si lo tiene, si no es-MX */
   var PAISES = /^es-(EC|MX|ES|US|AR|CO|CL|PE|VE|BO|UY|PY|CR|DO|GT|HN|NI|PA|PR|SV)$/i;
@@ -130,16 +164,21 @@
   function escuchar() {
     rec = new Reconocedor();
     rec.lang = idioma();
-    rec.continuous = true; rec.interimResults = true;
-    oido = { activo: true, texto: '', partes: [], corriendo: false, error: '' };
+    rec.continuous = true; rec.interimResults = true; rec.maxAlternatives = 5;
+    oido = { activo: true, texto: '', sesiones: [[]], corriendo: false, error: '' };
     var escucho = dlg.querySelector('.lh-escucho');
     rec.onstart = function () { oido.corriendo = true; };
     rec.onresult = function (e) {
-      var t = [];
-      for (var i = 0; i < e.results.length; i++) t.push(e.results[i][0].transcript);
-      oido.texto = (oido.partes.join(' ') + ' ' + t.join(' ')).trim();
-      /* lo que oye, tal cual: así se sabe si al micrófono le llega algo */
-      escucho.textContent = 'Escucho: «' + oido.texto.slice(-80) + '»';
+      var segs = [];
+      for (var i = 0; i < e.results.length; i++) {
+        var alts = [];
+        for (var k = 0; k < e.results[i].length; k++) alts.push(e.results[i][k].transcript);
+        segs.push(alts);
+      }
+      oido.sesiones[oido.sesiones.length - 1] = segs;
+      oido.texto = textoOido();
+      /* lo que oye, tal cual, y cómo lo parte en sílabas: así se sabe si al micrófono le llega algo */
+      escucho.textContent = 'Escucho: «' + oido.texto.slice(-60) + '» → ' + silabas(oido.texto).map(function (s) { return s.s; }).join(' · ').slice(-60);
     };
     rec.onerror = function (e) {
       if (AVISOS[e.error]) { oido.activo = false; oido.error = e.error; escucho.textContent = AVISOS[e.error]; }
@@ -148,7 +187,7 @@
     /* el reconocedor a veces se corta en un silencio: mientras dure la lectura, se vuelve a encender (con un respiro) */
     rec.onend = function () {
       oido.corriendo = false;
-      if (oido.activo) { oido.partes = [oido.texto]; setTimeout(function () { if (oido.activo) try { rec.start(); } catch (x) {} }, 250); return; }
+      if (oido.activo) { oido.sesiones.push([]); setTimeout(function () { if (oido.activo) try { rec.start(); } catch (x) {} }, 250); return; }
       evaluar();
     };
     try { rec.start(); } catch (x) { escucho.textContent = 'No se pudo encender el micrófono: ' + x.message; }
@@ -156,11 +195,13 @@
   function evaluar() {
     if (oido.evaluado) return;
     oido.evaluado = true;
-    var dichas = notasDichas(oido.texto), cuenta = dlg.querySelector('.lh-cuenta');
+    var cuenta = dlg.querySelector('.lh-cuenta');
     if (oido.error) { cuenta.textContent = ''; return; }   /* el aviso del error ya está en pantalla */
     if (!oido.texto) { cuenta.textContent = 'No me llegó nada por el micrófono. Revisa que sea el micrófono correcto y habla cerca.'; return; }
-    if (!dichas.length) { cuenta.textContent = 'Escuché «' + oido.texto.slice(0, 60) + '», pero ningún nombre de nota. Di solo los nombres: do, re, mi…'; return; }
-    est.resultado = comparar(est.notas.map(nota), dichas);
+    var esperadas = est.notas.map(nota), texto = mejorTexto(esperadas), sils = silabas(texto);
+    dlg.querySelector('.lh-escucho').textContent = 'Escuché: «' + texto.slice(0, 80) + '» → ' + sils.map(function (s) { return s.s; }).join(' · ');
+    if (!sils.length) { cuenta.textContent = 'No reconocí sílabas en lo que escuché. Di los nombres separados: do, re, mi…'; return; }
+    est.resultado = alinear(esperadas, sils).bien;
     var ok = est.resultado.filter(Boolean).length;
     cuenta.textContent = ok === 8 ? '¡8 de 8! Muy bien 🎉' : ok + ' de 8. Repasa las marcadas en rojo y vuelve a intentar.';
     dibujar();
@@ -258,6 +299,6 @@
       dibujar();
     },
     /* para probar sin micrófono */
-    _notasDichas: notasDichas, _comparar: comparar
+    _silabas: silabas, _alinear: alinear
   };
 })();
