@@ -119,21 +119,33 @@ VexFlow le pone ancho en línea al SVG. `pentagrama()` lo quita para que el CSS 
 
 ## Partituras con acordes (`practica/partituras.html`)
 
-App pública (pedido de la dueña, 23 de octubre de 2026) para escribir canciones y verlas de dos formas: **solo notas** (los nombres Do, Re, Mi en recuadros por compás, cada uno del ancho de lo que dura) o **partitura** (pentagrama con VexFlow, clave de sol y armadura). Para piano y violín.
+App pública (pedido de la dueña, 23 de octubre de 2026) para ver canciones de dos formas: **notas** (los nombres Do, Re, Mi en recuadros por compás, cada uno del ancho de lo que dura) o **partitura** (pentagrama con VexFlow, clave de sol y armadura). Para piano y violín.
+
+**25 de octubre de 2026, por pedido de la dueña:**
+- Se quitó el editor ("Escribir o editar la partitura") por ahora; su código está en el historial de git (commit `a33e1ab`). Sin editor tampoco se guarda nada desde la página; la biblioteca de la hoja se sigue leyendo.
+- Abre en la vista **Notas**; el botón "Notas | Partitura" va primero.
+- Los acordes se ven siempre (se quitó "Con / Sin acordes").
+- Solo botones, sin textos alrededor: cada control tiene su nombre en `aria-label` para lectores de pantalla.
 
 **Ver**
 - Tonalidad: se transpone desde la tonalidad original con `mover(nota, pasos de letra, semitonos)`, la misma idea que `arriba()` de las hojas, así que cada nota queda bien deletreada; `simplificar()` evita dobles alteraciones. Se mueve hacia el lado más cercano (máximo 6 semitonos).
-- Con o sin acordes: los acordes van en letras (C, Am, G7) sobre la nota donde cambian; en el pentagrama son `VF.Annotation`.
+- Acordes: en letras (C, Am, G7) sobre la nota donde cambian; en el pentagrama son `VF.Annotation`.
 - Las alteraciones se dibujan según la armadura y lo que ya se alteró en el compás (`armadura()`, becuadro cuando hace falta).
 - Escuchar: WebAudio, melodía en triángulo y el acorde suave por debajo; en la vista de notas se ilumina la que suena.
 
-**Escribir** (panel "Escribir o editar la partitura")
-- Se escribe en la tonalidad original: título, instrumento, compás (4/4, 3/4, 2/4, 6/8), tonalidad, duración, puntillo, silencio y un teclado de 1 octava en el celular (teclas de 44 px) o 2 en pantallas anchas, con botones de octava.
-- Las teclas negras se nombran con bemoles si la tonalidad lleva bemoles y con sostenidos si lleva sostenidos; sin armadura: Do♯, Mi♭, Fa♯, La♭, Si♭.
-- Cada nota escrita es un botón en la lista: al tocarlo se cambia su duración o puntillo, se le pone un acorde (raíz y tipo) o se borra. Las nuevas notas entran después de la elegida.
-- Lo que se escribe queda en `localStorage` (`sprinkloud-partitura`). Sin nada guardado se muestra el ejemplo "Estrellita" con C, F y G.
+**Canciones del club** (`CANCIONES`): 28 en total, todas tradicionales o clásicas (dominio público), porque la app es pública.
+- 23 de octubre de 2026: 10 en Do mayor y 10 en Sol mayor (infantiles, villancicos y tradicionales).
+- 25 de octubre de 2026: 8 clásicas famosas que suenan en películas, series y videojuegos: Para Elisa, En la gruta del rey de la montaña, Quinta sinfonía, Pequeña serenata nocturna, Marcha turca, Greensleeves, Korobéiniki (la música del Tetris) y Marcha fúnebre de Chopin (La menor y Do menor; `leerCancion()` acepta `C`, `G`, `Am` y `Cm`).
+- **No van canciones con derechos de autor:** la dueña pidió cumbias argentinas, Disney, bachatas y bandas sonoras, pero publicar sus melodías en una página abierta expone al club a reclamos. Feliz Navidad, Mi burrito sabanero y Cielito lindo (en México los derechos duran 100 años después del autor) tampoco.
+- Solo se agregan melodías que se puedan escribir con seguridad; mejor menos y correctas.
+- **Todas son covers** (pedido de la dueña, 25 de octubre de 2026): `AUTORES` da el autor original de cada una (`[texto, es una persona]`). La hoja dice "Cover · original de Ludwig van Beethoven" o "Cover · canción tradicional francesa"; las tarjetas de la biblioteca también. Decir "cover" da crédito, pero no da permiso para publicar canciones con derechos de autor: la regla de dominio público sigue.
 
-**Canciones del club** (`CANCIONES`, 23 de octubre de 2026): 10 en Do mayor y 10 en Sol mayor, todas tradicionales o clásicas (dominio público), porque la app es pública. Las comerciales (Feliz Navidad, Mi burrito sabanero…) tienen derechos de autor y no van.
+**SEO de las canciones** (25 de octubre de 2026)
+- Cada canción es una página para Google: `seo()` pone título ("Para Elisa – cover fácil para piano y violín | Sprinkloud"; sin "| Sprinkloud" si pasa de 65 caracteres), descripción, canónica, Open Graph y una ficha `MusicComposition` (JSON-LD, con `composer` si el autor es una persona).
+- La portada `/practica/partituras` muestra la primera canción pero conserva su dirección y su SEO.
+- La canónica y `og:url` no van fijas en el HTML: con una fija, Google tomaría todas las canciones como copias de la portada.
+- Las tarjetas de la biblioteca son enlaces (`<a href="/practica/partituras/<id>">`) que Google puede seguir.
+- Las 28 canciones están en `sitemap.xml`. Al agregar una canción, sumarla al sitemap.
 - Van en el código, en un formato corto: `[Acorde]Nota+octava:duración` (por ejemplo `[G7]B4:8.`), `r` = silencio, `.` = puntillo, `|` separa compases. `leerCancion()` las convierte. `ana` = anacrusa en negras (Cumpleaños feliz, Oh Susana, Cuando los santos…).
 - Se abren por su nombre (`/practica/partituras/noche-de-paz`) y salen primero en la biblioteca, aunque la hoja esté vacía o sin conexión. Si un maestro guarda una, queda como copia suya en la hoja.
 - Al agregar una, revisar que cada compás sume lo que pide el compás (el primero suma la anacrusa) y que el rango no baje de Sol3, la nota más grave del violín.
@@ -153,6 +165,11 @@ Pedido de la dueña: lo que se enseña en la guía tiene que verse igual en las 
 - **Sílabas en la app de ritmo** (`SILABAS` en `practica/ritmo.html`): cada célula muestra debajo su sílaba, la misma de la guía y de las hojas (`C` en `practica/hojas.html`). Kodály para lo básico (ta = negra, ti-ti = dos corcheas, sh = silencio, ta-a = blanca, ta-i = negra con puntillo) y Takadimi para semicorcheas, tresillos y 6/8 (ta-ka-di-mi, ta di-mi, ta-ka di, ta-ki-da). Se ven en las tarjetas y en la partitura, también en los ritmos latinos. El botón "Sílabas" las oculta y se recuerda en `localStorage`. Si se agrega una célula, hay que darle su sílaba.
 - En la app de ritmo, en pantallas anchas, las opciones pasan a una segunda fila si no entran (`.transport` con `flex-wrap`); antes se salían de la pantalla.
 - **Lectura hablada (Dandelot)** en el piano y el violín virtuales (`practica/lectura.js`, compartido): 8 notas del modo elegido, cuenta de 4, un marcador avanza una nota por pulso y el alumno dice los nombres sin parar; "Ver nombres" los muestra en una fila debajo del pentagrama. En el piano, con "Ambas claves" se elige al azar clave de sol o de fa. Se abre con `SprinkloudLectura.abrir({ clave, notas })`.
+- **Micrófono** (25 de octubre de 2026): botón "🎤 Micrófono" en la lectura hablada, solo si el navegador tiene reconocimiento de voz (`SpeechRecognition`: Chrome, Edge y Safari; en Firefox no aparece). Al encenderlo se pide el permiso. Durante la lectura escucha en español (el idioma del navegador si es español) y al final marca cada nota con ✓ o ✗.
+  - `notasDichas()` pasa lo que oyó a nombres de notas: entiende variantes del dictado ("rey" = re, "me" = mi, "sí" = si) y sílabas pegadas ("domi"). Ignora las demás palabras.
+  - `comparar()` busca la subsecuencia común más larga: cuenta las notas dichas en orden, aunque sobre o falte alguna. No mide el momento exacto de cada nota, solo el orden.
+  - Si el reconocedor se corta en un silencio, se vuelve a encender hasta que termina la lectura.
+  - El reconocimiento lo hace el navegador (en Chrome, con los servidores de Google); la página no guarda ni envía el audio.
 
 ## Entrenador de oído (`practica/oido.html`)
 
@@ -242,7 +259,8 @@ El sitio es público y estático: no tiene servidor, formularios, llaves ni cone
     - los estilos, del sitio, de Google Fonts y de cdnjs;
     - la página no puede conectarse a ningún otro servidor (`connect-src 'self'`);
     - no se permiten formularios (`form-action 'none'`), marcos ni que otra página la meta en un marco.
-  - HSTS, `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy` y `Permissions-Policy` (sin cámara, micrófono ni ubicación).
+  - HSTS, `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy` y `Permissions-Policy` (sin cámara ni ubicación; el micrófono solo para el propio sitio, `microphone=(self)`, por la lectura hablada).
+- **Fotos de stock con guitarras** en `index.html` y `musicband.html` (un cantante con guitarra acústica, un guitarrista eléctrico): el club no enseña guitarra. Pendiente decidir con la dueña si se cambian. Desde el 25 de octubre de 2026 todas las imágenes tienen texto alternativo que describe lo que se ve.
 - **Si una herramienta nueva necesita otro CDN, una imagen externa o el micrófono,** hay que agregarlo a la CSP o a `Permissions-Policy`. Si no, el navegador lo bloquea sin avisar.
 - **Librerías externas:** siempre con versión fija (nunca `@latest` ni sin versión) y con `integrity` (SRI) y `crossorigin="anonymous"`.
   - El CDN de Tailwind no envía CORS, así que lleva la versión fija pero sin SRI.

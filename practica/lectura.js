@@ -1,9 +1,16 @@
 /* Lectura hablada (método Dandelot) para el piano y el violín virtuales.
    Se muestran 8 notas; después de una cuenta de 4, un marcador avanza una nota por pulso y el alumno dice su
    nombre en voz alta, sin parar aunque se equivoque. Al final puede ver los nombres para comprobar.
+   Con "Micrófono" (si el navegador tiene reconocimiento de voz: Chrome, Edge, Safari) se escucha lo que dice y cada
+   nota se marca bien o mal. Se compara el orden de los nombres, no el momento exacto en que se dijo cada uno.
    Uso: SprinkloudLectura.abrir({ clave: 'treble' | 'bass', notas: ['e/4', 'g/4', ...] })   (necesita VexFlow 4) */
 (function () {
   var NOMBRES = { c: 'Do', d: 'Re', e: 'Mi', f: 'Fa', g: 'Sol', a: 'La', b: 'Si' };
+  /* Cómo suele escribir el reconocedor de voz cada nombre de nota */
+  var OIDO = { do: 'Do', dos: 'Do', doh: 'Do', re: 'Re', rey: 'Re', reh: 'Re', mi: 'Mi', me: 'Mi', mis: 'Mi', fa: 'Fa', far: 'Fa', fah: 'Fa',
+    sol: 'Sol', sole: 'Sol', sold: 'Sol', la: 'La', lah: 'La', si: 'Si', see: 'Si' };
+  var SILABAS = ['sol', 'do', 're', 'mi', 'fa', 'la', 'si'];
+  var Reconocedor = window.SpeechRecognition || window.webkitSpeechRecognition;
   var CSS = '' +
     '.lh{border:0;border-radius:18px;padding:0;width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--surface,#FBF7EE);color:var(--ink,#3A3128);box-shadow:0 20px 60px rgba(0,0,0,.25)}' +
     '.lh::backdrop{background:rgba(30,37,33,.55)}' +
@@ -18,8 +25,10 @@
     '.lh button[aria-pressed=true]{background:var(--accent-soft,#E1E6CF);border-color:var(--accent,#647745)}' +
     '.lh label{display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px;color:var(--ink-2,#6D6152)}' +
     '.lh input[type=range]{width:120px}' +
-    '.lh-cuenta{font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:700;color:var(--gold-ink,#8F6A2A);min-height:28px}';
-  var dlg, est = { clave: 'treble', pool: [], notas: [], nombres: false, tempo: 60 }, timers = [], audio = null, marca = null, xs = [];
+    '.lh-cuenta{font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:700;color:var(--gold-ink,#8F6A2A);min-height:28px}' +
+    '.lh-escucho{font-size:14px;color:var(--ink-2,#6D6152);min-height:20px}';
+  var dlg, est = { clave: 'treble', pool: [], notas: [], nombres: false, tempo: 60, mic: false, resultado: null },
+    timers = [], audio = null, marca = null, xs = [], rec = null, oido = { activo: false, texto: '' };
 
   function nota(k) { return NOMBRES[k.charAt(0)]; }
   function nuevas() {
@@ -28,12 +37,12 @@
       var k; do { k = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && out.length && k === out[out.length - 1]);
       out.push(k);
     }
-    est.notas = out;
+    est.notas = out; est.resultado = null;
   }
   function dibujar() {
     var VF = Vex.Flow, caja = dlg.querySelector('.lh-papel');
     caja.replaceChildren();
-    var ancho = Math.max(300, caja.clientWidth - 12), alto = est.nombres ? 170 : 140;
+    var ancho = Math.max(300, caja.clientWidth - 12), alto = est.resultado ? 190 : est.nombres ? 170 : 140;
     var r = new VF.Renderer(caja, VF.Renderer.Backends.SVG);
     r.resize(ancho, alto);
     var ctx = r.getContext();
@@ -52,19 +61,96 @@
     var svg = caja.querySelector('svg');
     svg.setAttribute('viewBox', '0 0 ' + ancho + ' ' + alto); svg.style.width = ''; svg.style.height = '';
     svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'Ocho notas para leer en voz alta');
-    /* los nombres, todos en una misma fila debajo del pentagrama */
-    if (est.nombres) est.notas.forEach(function (k, i) {
+    var texto = function (x, y, t, color, tam) {
       var tx = document.createElementNS('http:/' + '/www.w3.org/2000/svg', 'text');
-      tx.setAttribute('x', xs[i] + 6); tx.setAttribute('y', alto - 8); tx.setAttribute('text-anchor', 'middle');
-      tx.setAttribute('font-family', 'Nunito Sans, sans-serif'); tx.setAttribute('font-weight', '800'); tx.setAttribute('font-size', '14');
-      tx.setAttribute('fill', '#8F6A2A'); tx.textContent = nota(k);
+      tx.setAttribute('x', x); tx.setAttribute('y', y); tx.setAttribute('text-anchor', 'middle');
+      tx.setAttribute('font-family', 'Nunito Sans, sans-serif'); tx.setAttribute('font-weight', '800'); tx.setAttribute('font-size', tam || '14');
+      tx.setAttribute('fill', color); tx.textContent = t;
       svg.appendChild(tx);
+    };
+    /* los nombres, todos en una misma fila debajo del pentagrama; con micrófono, debajo va ✓ o ✗ */
+    if (est.nombres || est.resultado) est.notas.forEach(function (k, i) {
+      var bien = est.resultado ? est.resultado[i] : null;
+      texto(xs[i] + 6, est.resultado ? alto - 28 : alto - 8, nota(k), bien === null ? '#8F6A2A' : bien ? '#48592F' : '#9A5245');
+      if (est.resultado) texto(xs[i] + 6, alto - 6, bien ? '✓' : '✗', bien ? '#48592F' : '#9A5245', '17');
     });
     marca = document.createElementNS('http:/' + '/www.w3.org/2000/svg', 'rect');
     marca.setAttribute('y', 6); marca.setAttribute('width', 26); marca.setAttribute('height', alto - 12); marca.setAttribute('rx', 6);
     marca.setAttribute('fill', '#C4923A'); marca.setAttribute('opacity', '0'); marca.setAttribute('aria-hidden', 'true');
     svg.insertBefore(marca, svg.firstChild);
   }
+
+  /* ---------- Micrófono: lo que dijo, como lista de nombres de notas ---------- */
+  function limpio(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  /** "do re mi", "domi", "rey" → ['Do', 'Re', 'Mi'...]; lo que no es una nota se ignora. */
+  function notasDichas(texto) {
+    var out = [];
+    limpio(texto).split(/[^a-z]+/).forEach(function (p) {
+      if (!p) return;
+      if (OIDO[p]) { out.push(OIDO[p]); return; }
+      /* sílabas pegadas ("domi", "solla"): se separan si la palabra entera está hecha de nombres de notas */
+      var partes = [], resto = p;
+      while (resto) {
+        var s = SILABAS.filter(function (x) { return resto.indexOf(x) === 0; })[0];
+        if (!s) { partes = null; break; }
+        partes.push(OIDO[s]); resto = resto.slice(s.length);
+      }
+      if (partes) out = out.concat(partes);
+    });
+    return out;
+  }
+  /** Qué notas del ejercicio dijo bien y en orden (la subsecuencia común más larga). */
+  function comparar(esperadas, dichas) {
+    var n = esperadas.length, m = dichas.length, L = [], i, j;
+    for (i = 0; i <= n; i++) { L.push([]); for (j = 0; j <= m; j++) L[i].push(0); }
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--)
+      L[i][j] = esperadas[i] === dichas[j] ? 1 + L[i + 1][j + 1] : Math.max(L[i + 1][j], L[i][j + 1]);
+    var bien = esperadas.map(function () { return false; });
+    i = 0; j = 0;
+    while (i < n && j < m) {
+      if (esperadas[i] === dichas[j]) { bien[i] = true; i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) i++; else j++;
+    }
+    return bien;
+  }
+  function escuchar() {
+    rec = new Reconocedor();
+    rec.lang = /^es/i.test(navigator.language || '') ? navigator.language : 'es-ES';
+    rec.continuous = true; rec.interimResults = true;
+    oido = { activo: true, texto: '', partes: [] };
+    rec.onresult = function (e) {
+      var t = [];
+      for (var i = 0; i < e.results.length; i++) t.push(e.results[i][0].transcript);
+      oido.texto = (oido.partes.join(' ') + ' ' + t.join(' ')).trim();
+      dlg.querySelector('.lh-escucho').textContent = 'Escucho: ' + notasDichas(oido.texto).join(' ');
+    };
+    rec.onerror = function (e) {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        oido.activo = false;
+        dlg.querySelector('.lh-escucho').textContent = 'El micrófono está bloqueado. Permítelo en el candado de la barra de direcciones.';
+      }
+    };
+    /* el reconocedor a veces se corta en un silencio: mientras dure la lectura, se vuelve a encender */
+    rec.onend = function () {
+      if (oido.activo) { oido.partes = [oido.texto]; try { rec.start(); } catch (x) {} return; }
+      evaluar();
+    };
+    try { rec.start(); } catch (x) {}
+  }
+  function evaluar() {
+    var dichas = notasDichas(oido.texto), cuenta = dlg.querySelector('.lh-cuenta');
+    if (!dichas.length) { cuenta.textContent = 'No te escuché. Revisa que el micrófono esté permitido y habla un poco más fuerte.'; return; }
+    est.resultado = comparar(est.notas.map(nota), dichas);
+    var ok = est.resultado.filter(Boolean).length;
+    cuenta.textContent = ok === 8 ? '¡8 de 8! Muy bien 🎉' : ok + ' de 8. Repasa las marcadas en rojo y vuelve a intentar.';
+    dibujar();
+  }
+  function dejarDeEscuchar() {
+    if (!rec || !oido.activo) return;
+    oido.activo = false;
+    try { rec.stop(); } catch (x) { evaluar(); }
+  }
+
   function click(t, fuerte) {
     var o = audio.createOscillator(), g = audio.createGain();
     o.frequency.value = fuerte ? 1500 : 1000;
@@ -77,11 +163,14 @@
     dlg.querySelector('.lh-empezar').textContent = '▶ Empezar';
   }
   function empezar() {
-    if (timers.length) { parar(); dlg.querySelector('.lh-cuenta').textContent = ''; return; }
+    if (timers.length) { parar(); oido.activo = false; if (rec) try { rec.abort(); } catch (x) {} dlg.querySelector('.lh-cuenta').textContent = ''; return; }
     audio = audio || new (window.AudioContext || window.webkitAudioContext)();
     if (audio.state === 'suspended') audio.resume();
+    if (est.resultado) { est.resultado = null; dibujar(); }
     var pulso = 60 / est.tempo, t0 = audio.currentTime + .15, cuenta = dlg.querySelector('.lh-cuenta');
+    dlg.querySelector('.lh-escucho').textContent = '';
     dlg.querySelector('.lh-empezar').textContent = '■ Parar';
+    if (est.mic) escuchar();
     for (var i = 0; i < 12; i++) {
       (function (i) {
         click(t0 + i * pulso, i % 4 === 0);
@@ -94,8 +183,17 @@
     }
     timers.push(setTimeout(function () {
       parar();
-      cuenta.textContent = '¿Las dijiste sin parar? Toca "Ver nombres" para comprobar.';
+      if (est.mic) { cuenta.textContent = 'Revisando…'; setTimeout(dejarDeEscuchar, 1200); }   /* un respiro para la última nota */
+      else cuenta.textContent = '¿Las dijiste sin parar? Toca "Ver nombres" para comprobar.';
     }, (t0 - audio.currentTime + 12 * pulso) * 1000));
+  }
+  /** Al encender el micrófono se pide el permiso una vez, antes de empezar a leer. */
+  function alternarMic(boton) {
+    if (est.mic) { est.mic = false; boton.setAttribute('aria-pressed', 'false'); dlg.querySelector('.lh-escucho').textContent = ''; return; }
+    var listo = function () { est.mic = true; boton.setAttribute('aria-pressed', 'true'); dlg.querySelector('.lh-escucho').textContent = 'Micrófono listo: toca Empezar y di los nombres.'; };
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { listo(); return; }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (s) { s.getTracks().forEach(function (t) { t.stop(); }); listo(); },
+      function () { dlg.querySelector('.lh-escucho').textContent = 'No se pudo usar el micrófono. Permítelo en el candado de la barra de direcciones.'; });
   }
   function crear() {
     var s = document.createElement('style'); s.textContent = CSS; document.head.appendChild(s);
@@ -107,17 +205,20 @@
       '<p>Di en voz alta el nombre de cada nota, una por pulso, sin parar aunque te equivoques. Primero suena una cuenta de 4.</p>' +
       '<div class="lh-papel"></div>' +
       '<div class="lh-cuenta" aria-live="polite"></div>' +
+      '<div class="lh-escucho" aria-live="polite"></div>' +
       '<div class="lh-fila"><button type="button" class="lh-ppal lh-empezar">▶ Empezar</button>' +
+      (Reconocedor ? '<button type="button" class="lh-mic" aria-pressed="false" title="Escucha lo que dices y marca cada nota">🎤 Micrófono</button>' : '') +
       '<label>Velocidad <input type="range" class="lh-tempo" min="40" max="120" value="60" aria-label="Pulsos por minuto"> <span class="lh-bpm">60</span></label></div>' +
       '<div class="lh-fila"><button type="button" class="lh-nombres" aria-pressed="false">Ver nombres</button>' +
       '<button type="button" class="lh-otra">Otra lectura</button><button type="button" class="lh-cerrar">Cerrar</button></div></div>';
     document.body.appendChild(dlg);
     dlg.querySelector('.lh-empezar').addEventListener('click', empezar);
+    if (Reconocedor) dlg.querySelector('.lh-mic').addEventListener('click', function (e) { alternarMic(e.currentTarget); });
     dlg.querySelector('.lh-tempo').addEventListener('input', function (e) { est.tempo = Number(e.target.value); dlg.querySelector('.lh-bpm').textContent = est.tempo; });
     dlg.querySelector('.lh-nombres').addEventListener('click', function (e) { est.nombres = !est.nombres; e.currentTarget.setAttribute('aria-pressed', est.nombres); parar(); dibujar(); });
-    dlg.querySelector('.lh-otra').addEventListener('click', function () { parar(); dlg.querySelector('.lh-cuenta').textContent = ''; est.nombres = false; dlg.querySelector('.lh-nombres').setAttribute('aria-pressed', 'false'); nuevas(); dibujar(); });
+    dlg.querySelector('.lh-otra').addEventListener('click', function () { parar(); dlg.querySelector('.lh-cuenta').textContent = ''; dlg.querySelector('.lh-escucho').textContent = ''; est.nombres = false; dlg.querySelector('.lh-nombres').setAttribute('aria-pressed', 'false'); nuevas(); dibujar(); });
     dlg.querySelector('.lh-cerrar').addEventListener('click', function () { dlg.close(); });
-    dlg.addEventListener('close', parar);
+    dlg.addEventListener('close', function () { parar(); oido.activo = false; if (rec) try { rec.abort(); } catch (x) {} });
   }
   window.SprinkloudLectura = {
     abrir: function (o) {
@@ -125,9 +226,12 @@
       est.clave = o.clave || 'treble'; est.pool = o.notas.slice(); est.nombres = false;
       dlg.querySelector('.lh-nombres').setAttribute('aria-pressed', 'false');
       dlg.querySelector('.lh-cuenta').textContent = '';
+      dlg.querySelector('.lh-escucho').textContent = '';
       nuevas();
       dlg.showModal();
       dibujar();
-    }
+    },
+    /* para probar sin micrófono */
+    _notasDichas: notasDichas, _comparar: comparar
   };
 })();
