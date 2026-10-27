@@ -37,14 +37,19 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 
 ## Juego de notas del piano (`practica/piano.html`)
 
-- `notasPiano`: las teclas de F2 a C6 (26 blancas). Las octavas 1 y 2 se muestran en clave de Fa y las 3 a 5 en clave de Sol. Con este rango, las líneas adicionales de la clave de Fa son solo las de arriba (Do4, Re4, Mi4) y las de Sol llegan hasta Do6.
+- **Teclado de una octava y una quinta** (26-oct-2026): solo Do4 a Sol5, 12 blancas (`TECLADO_DESDE` / `TECLADO_HASTA`, `enTeclado`).
+  - La dueña lo pidió porque con tantas octavas los alumnos se confundían y en el celular no cabía.
+  - Entran todos los acordes de tres notas. En los de cuatro (7), la nota que pasaría de Sol5 suena una octava más abajo (`obtenerNotasAcorde`). Los acordes funcionan en cualquier tecla.
+  - **En el juego cuenta el nombre de la nota** (la letra de `vfKey`), no la octava. Si la nota del pentagrama está en otra octava que la tecla tocada, al acertar sale un recordatorio pequeño (`recordarOctava`, `#recordatorio-octava`), por ejemplo: «En el piano real, este Sol va 1 octava más arriba».
+  - Con teclas de 24 px como mínimo entran las 12 en un celular de 360-390 px. En pantallas más angostas vuelven las flechas.
+- `notasPiano`: sigue teniendo de F2 a C6, porque el pentagrama muestra notas de todo ese rango. Las octavas 1 y 2 se muestran en clave de Fa y las 3 a 5 en clave de Sol. Con este rango, las líneas adicionales de la clave de Fa son solo las de arriba (Do4, Re4, Mi4) y las de Sol llegan hasta Do6.
 - Orden de la página: barra con "Volver" y la marca en la otra esquina, título e intro cortos, mensaje y estrellas del juego, pentagrama, piano, y al final el panel del juego (iniciar, modos y acordes). Letras compactas; el pentagrama y el piano mantienen su tamaño.
-- `modosJuego`: las notas de cada modo como `[tecla VexFlow, clave]`. Sol: líneas, espacios y líneas adicionales; Fa: lo mismo; `ambas` junta todas. Una nota de línea adicional puede mostrarse en la clave contraria a la de su tecla (por ejemplo Do4 en clave de Fa), por eso el acierto compara solo la altura (`vfKey`).
+- `modosJuego`: las notas de cada modo como `[tecla VexFlow, clave]`. Sol: líneas, espacios y líneas adicionales; Fa: lo mismo; `ambas` junta todas. Una nota de línea adicional puede mostrarse en la clave contraria a la de su tecla (por ejemplo Do4 en clave de Fa), por eso el acierto no depende de la clave. Desde el 26-oct-2026 compara solo el nombre de la nota (ver arriba).
 - El pentagrama doble se dibuja en 340 × 255, pero se muestra recortado con `viewBox="0 28 340 196"` (y `height="196"`): con el rango F2–C6 basta esa franja y el pentagrama se ve más grande (hasta 440 px de ancho) sin ocupar más alto.
 - Los pentagramas empiezan en x = 28 para que la llave que une clave de Sol y clave de Fa no quede cortada. Las notas van centradas en cada pentagrama (`dibujarCentrada`), como en la app.
 - Plicas con `auto_stem: true` (piano y violín): desde la línea del medio hacia arriba la plica va hacia abajo (Si4 en clave de Sol, Re3 en clave de Fa); por debajo, hacia arriba.
 - Aspecto: el mismo sistema visual que la app de violín (tokens de `App_Sprinkloud/DESIGN.md`: papel, musgo, ocre, Fraunces, Caveat y Nunito Sans, con tema oscuro). El pentagrama y las teclas quedan siempre sobre papel claro.
-- Tiene que funcionar en cualquier dispositivo. El teclado muestra tantas teclas blancas como quepan (unos 34 px cada una, de 7 a 31) y las flechas mueven una octava. Al elegir un modo se centra en sus notas; en el juego NO se mueve solo: el alumno busca la octava. Cada octava tiene un tinte crema (azulado en los graves, rosado en los agudos: `oct-1` a `oct-5`) y su nombre encima (`NOMBRE_OCTAVA`: 2 octavas abajo, 1 octava abajo, Octava central, 1 octava arriba, 2 octavas arriba). En computadora se ve completo y las flechas se ocultan. El pie de página no es fijo, los toques miden 44 px y el zoom está permitido.
+- Tiene que funcionar en cualquier dispositivo. El teclado muestra tantas teclas blancas como quepan (24 px cada una como mínimo, de 7 a 12) y las flechas mueven una octava. Al elegir un modo se centra en sus notas; en el juego NO se mueve solo: el alumno busca la octava. Cada octava tiene un tinte crema (azulado en los graves, rosado en los agudos: `oct-1` a `oct-5`) y su nombre encima (`NOMBRE_OCTAVA`: 2 octavas abajo, 1 octava abajo, Octava central, 1 octava arriba, 2 octavas arriba). En computadora se ve completo y las flechas se ocultan. El pie de página no es fijo, los toques miden 44 px y el zoom está permitido.
 
 ## Violín virtual (`practica/violin.html`)
 
@@ -60,7 +65,8 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 
 - App de pantalla completa: el `body` mide 100dvh (flex en columna, sin scroll de página) y reparte el alto entre `.app` y el pie de página, que es una sola línea delgada con los íconos y el copyright. Solo el lienzo tiene scroll propio cuando hay muchos compases. Incluye banco de células (Rítmicas, Largas, Silencios), partitura en compases de 4/4, reproducción con metrónomo y cuenta previa, y dictado rítmico.
 - Estilo de la app con modo oscuro; cabecera con Volver, el título y la marca Sprinkloud.
-- Las células **no tienen nombre**: sin sílabas ni etiquetas (en `CELLS` solo quedan `id`, `tab` y `notes`). Mientras suena, el círculo marca el pulso y la línea de texto queda vacía.
+- Cada célula muestra su sílaba de la guía (`SILABAS`, botón «Sílabas» para ocultarlas). Mientras suena, el círculo marca el pulso y la línea de texto queda vacía.
+- **Consigna** (`.consigna`, 26-oct-2026), una franja ocre entre los controles y la partitura: «👏 Crea tu ritmo con las tarjetas, dale ▶ y palméalo a tiempo: una palmada en cada nota cuando se ilumina». La dueña la pidió porque los alumnos no entendían que tienen que palmear a tiempo. Es la única frase de ayuda fija de la app, y en modo Pizza se oculta.
 - Figuras en negro (`--figura`; en modo oscuro, blanco). El resaltado de lo que suena es suave: el compás toma un tinte ocre muy leve y la figura que suena cambia a ocre (sin brillo). Junto a un silencio se deja más aire (`need` 34) para que se lea cada medio pulso. Los compases no llevan el rótulo "Compás N": solo "faltan X" cuando están incompletos y su basurero. Las tarjetas de la paleta no tienen número ni flecha: al tocarlas se añade la célula y suena.
 - Pocas opciones: metrónomo siempre activo y cuenta de 4 tiempos en cada play, también en el dictado (sin botones); un solo círculo (`#pulso`) muestra un reloj en reposo, la cuenta previa 1-2-3-4 y después el pulso. Sin frases de ayuda ni "Pulsa reproducir…". Controles: tempo, Repetir y el botón "Pizza"; cada compás tiene su basurero (`removeBar`). Ya no hay botón para borrar todo. Sin Deshacer, Vaciar, Marcar tempo ni barra de estado: los avisos salen en la línea de arriba (`flash`). Retroceso quita la última célula.
 - Panel de tarjetas plegable (`plegarPanel`, asa "Tarjetas"): en computadora se pliega a una franja de 40 px a la izquierda; en celulares baja y queda solo el asa. El estado se guarda en `localStorage` (`sprinkloud-ritmo-v1-panel`) y el contenido plegado queda `inert`.
@@ -221,6 +227,39 @@ Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuale
 - Nada sale del dispositivo.
 
 **Enlaces que abren cada app en su ejercicio:** `/practica/ritmo/3-4` y `/practica/oido/<ejercicio>` (ver "Rutas").
+
+## Modo lección (`practica/leccion.js`, 26 de octubre de 2026)
+
+Se activa cuando el enlace trae `?semana=N`. Lo usan los enlaces del libro (Libro_Sprinkloud), el mensaje de tareas y el panel del maestro, y el reporte de la familia (Registro_Sprinkloud). La dueña lo pidió porque el alumno llegaba a la app sin saber qué hacer: veía notas que todavía no aprendió (líneas adicionales cuando apenas sabía mi y sol) y no sabía para qué sirve la camarita.
+
+**Qué hace:**
+- Muestra una tarjeta (`<dialog class="lc">`) con:
+  - la semana, el tema y la meta;
+  - en piano y violín, las notas que se practican;
+  - 3 pasos para esa app;
+  - un paso con la camarita: qué hace y que la imagen se le manda a la maestra.
+- Al tocar «Empezar» arranca el juego de notas.
+- Deja el botón «Semana N · ¿Qué hago?» para volver a ver la tarjeta: abajo a la izquierda, y en la app de ritmo dentro de la fila de Dictado.
+
+**Cómo deja preparada cada app:**
+- **Piano y violín:** el modo de juego `leccion` tiene solo las notas vistas hasta esa semana (`notasPiano`, `notasViolin`) y se esconden los botones de modo:
+  - semanas 1 a 7: mi y sol;
+  - semana 8: + la;
+  - semana 9: do-re-mi (en el violín, re, mi, sol y la);
+  - semanas 10 a 19: la escala;
+  - semana 20: con líneas adicionales y, en el piano, clave de fa;
+  - desde la semana 21: todas, el modo normal.
+- **Ritmo:**
+  - `state.soloCeldas` deja solo las tarjetas de esa semana y esconde las pestañas;
+  - fija el compás, el tempo y un ritmo de ejemplo listo para dar play (tabla `R`);
+  - la semana 18 abre la cumbia.
+- **Oído:** esconde los otros ejercicios.
+- **Hojas:** solo la tarjeta.
+
+**Detalles técnicos:**
+- Se carga en el `<head>`, sin `defer`, para leer la dirección antes de que `hojas.html` la reescriba. Prepara la app en el evento `load`.
+- La tabla `GUIA` (tema y meta) copia la de `Registro_Sprinkloud/Guia.js`. Si la guía cambia, hay que actualizarla aquí y en `hojas.html`.
+- Un modo de juego con una sola nota haría un bucle infinito en `generarSiguienteNotaJuego`, así que cada lista tiene por lo menos 2 notas.
 
 **Ritmos latinos** (`LATINOS` en `practica/ritmo.html`):
 - salsa (clave 3-2), son (clave 2-3), reggaetón (dembow), cumbia, bachata, bolero;

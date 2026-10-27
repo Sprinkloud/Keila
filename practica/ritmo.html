@@ -222,6 +222,10 @@ input[type=range]::-moz-range-thumb{
 .chip[aria-pressed=true]{color:var(--ink);border-color:var(--ink)}
 .chip[aria-pressed=true] .dot{background:var(--accent)}
 
+/* ---------- Consigna: qué se hace en la app (la dueña la pidió: no entendían que hay que palmear a tiempo) ---------- */
+.consigna{margin:0;padding:8px 14px;font-size:14px;font-weight:700;line-height:1.35;color:var(--pine);background:var(--gold-soft);border-bottom:1px solid var(--line);text-align:center;text-wrap:balance}
+body.modo-pastel .consigna{display:none}
+
 /* ---------- Partitura ---------- */
 .score{flex:1;min-height:0;overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
 .score-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
@@ -446,6 +450,7 @@ body.sin-silabas .sil{display:none}
   *{transition:none!important;animation:none!important}
 }
 </style>
+  <script src="/practica/leccion.js"></script>
 </head>
 <body>
 
@@ -525,6 +530,8 @@ body.sin-silabas .sil{display:none}
           </button>
         </div>
       </div>
+
+      <p class="consigna">👏 Crea tu ritmo con las tarjetas, dale ▶ y palméalo a tiempo: una palmada en cada nota cuando se ilumina.</p>
 
       <div class="score" id="score">
         <div class="score-inner" id="score-inner"></div>
@@ -811,7 +818,8 @@ const state = {
   loop:false,
   pastel:false,        // modo pastel: un pulso dividido
   pastelCell:"luna",
-  silabas:true         // se ven las sílabas de la guía
+  silabas:true,        // se ven las sílabas de la guía
+  soloCeldas:null      // modo lección (practica/leccion.js): solo las tarjetas de esa semana, sin pestañas
 };
 const esDeUnPulso = c => cellDur(c) === 1;
 let history = [];
@@ -841,7 +849,8 @@ const negraSeg = () => 60 / state.tempo / cmp().pulso;
 const enPulso = t => Math.abs(rd(t % cmp().pulso, 3)) < .01;
 const freeInBar = () => { const bar = cmp().bar, r = rd(totalBeats() % bar, 3); return r === 0 ? bar : rd(bar-r, 3); };
 /* qué tarjetas se ven: en 6/8 las propias del compás; en los demás, las de la pestaña */
-const visibles = () => CELLS.filter(c => state.pastel ? esDeUnPulso(c) : state.compas === "6/8" ? c.tab === "seis" : c.tab === state.tab && cellDur(c) <= cmp().bar);
+const visibles = () => CELLS.filter(c => state.soloCeldas && !state.soloCeldas.includes(c.id) ? false
+  : state.pastel ? esDeUnPulso(c) : state.compas === "6/8" ? c.tab === "seis" : (state.soloCeldas || c.tab === state.tab) && cellDur(c) <= cmp().bar);
 
 /* =========================================================
    4. Audio

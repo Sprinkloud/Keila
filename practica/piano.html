@@ -205,6 +205,8 @@
       min-height: 22px;
       transition: color 150ms ease;
     }
+    /* recordatorio de octava al acertar una nota que en el piano real va en otra octava: pequeño, sin mover la pantalla */
+    .recordatorio-octava { margin: 0; min-height: 1.3em; font-size: .8rem; font-weight: 700; color: var(--texto-debil); }
 
     /* Estrellas del juego */
     .estrellas-juego { display: grid; gap: 2px; justify-items: center; }
@@ -447,6 +449,7 @@
       * { transition: none !important; }
     }
   </style>
+  <script src="/practica/leccion.js"></script>
 </head>
 <body>
 
@@ -466,6 +469,7 @@
 
 <div class="estado-juego">
   <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier tecla</div>
+  <p id="recordatorio-octava" class="recordatorio-octava" aria-live="polite"></p>
     <div class="estrellas-juego" id="estrellas-juego" hidden>
       <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 3">
         <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
@@ -777,8 +781,14 @@
     osc.stop(ctx.currentTime + 0.3);
   }
 
-  // En pantallas angostas se muestra un tramo del teclado (ventana) y se cambia de octava con las flechas
-  const totalBlancas = notasPiano.filter(n => n.tipo === 'blanca').length;
+  /* El teclado va de Do4 a Sol5 (una octava y una quinta), como pidió la dueña: con tantas octavas los alumnos se
+     confundían y en el celular no cabía. Alcanza para todos los acordes de tres notas. En el juego cuenta el nombre de
+     la nota y, si en el pentagrama está en otra octava, al acertar sale un recordatorio de dónde va en el piano real.
+     notasPiano sigue completo (F2 a C6) porque el pentagrama muestra notas de todo ese rango. */
+  const TECLADO_DESDE = notasPiano.findIndex(n => n.label === 'C4'), TECLADO_HASTA = notasPiano.findIndex(n => n.label === 'G5');
+  const enTeclado = i => i >= TECLADO_DESDE && i <= TECLADO_HASTA;
+  // Si la pantalla es muy angosta se muestra un tramo del teclado (ventana) y se mueve con las flechas
+  const totalBlancas = notasPiano.filter((n, i) => n.tipo === 'blanca' && enTeclado(i)).length;
   let inicioVentana = null;
 
   // octava (campo "octava" de notasPiano) -> [nombre largo, nombre corto]
@@ -792,8 +802,8 @@
 
   function blancaDe(vfKey) {
     let k = 0;
-    for (const n of notasPiano) {
-      if (n.tipo !== 'blanca') continue;
+    for (const [i, n] of notasPiano.entries()) {
+      if (n.tipo !== 'blanca' || !enTeclado(i)) continue;
       if (n.vfKey === vfKey) return k;
       k++;
     }
@@ -802,7 +812,7 @@
 
   function blancasVisibles() {
     const ancho = document.getElementById('teclado-piano').clientWidth;
-    return Math.max(7, Math.min(totalBlancas, Math.floor(ancho / 34)));
+    return Math.max(7, Math.min(totalBlancas, Math.floor(ancho / 24)));   // con teclas de 24 px entran las 12 en un celular común
   }
 
   function limitarVentana(inicio) {
@@ -838,6 +848,7 @@
     const octavasVisibles = {};
 
     notasPiano.forEach((item, index) => {
+      if (!enTeclado(index)) return;
       let izquierda;
       if (item.tipo === 'blanca') {
         const k = contadorBlancas++;
@@ -887,8 +898,18 @@
     document.getElementById('octava-aguda').disabled = inicioVentana + N >= totalBlancas;
   }
 
+  /* Recordatorio pequeño si la nota del pentagrama está en otra octava que la tecla tocada. Devuelve si hubo aviso. */
+  const NOMBRE_NOTA = { c: 'Do', d: 'Re', e: 'Mi', f: 'Fa', g: 'Sol', a: 'La', b: 'Si' };
+  function recordarOctava(tecla, objetivo) {
+    const dif = Number(objetivo.vfKey.split('/')[1]) - Number(tecla.vfKey.split('/')[1]);
+    document.getElementById('recordatorio-octava').textContent = dif === 0 ? '' : 'En el piano real, este ' + NOMBRE_NOTA[objetivo.vfKey.charAt(0)] +
+      ' va ' + Math.abs(dif) + (Math.abs(dif) === 1 ? ' octava' : ' octavas') + (dif > 0 ? ' más arriba' : ' más abajo') + '.';
+    return dif !== 0;
+  }
+
   function generarSiguienteNotaJuego() {
     esperandoSiguiente = false;
+    document.getElementById('recordatorio-octava').textContent = '';
     const pool = poolDelModo();
     let nuevaNota;
     do {
@@ -982,10 +1003,9 @@
 
     const componentes = [];
     intervalos.forEach(semitonos => {
-      const indexMapeado = indexRaiz + semitonos;
-      if (indexMapeado < notasPiano.length) {
-        componentes.push(notasPiano[indexMapeado]);
-      }
+      let indexMapeado = indexRaiz + semitonos;
+      if (indexMapeado > TECLADO_HASTA) indexMapeado -= 12;   // lo que no cabe arriba suena una octava más abajo
+      componentes.push(notasPiano[indexMapeado]);
     });
     return componentes;
   }
@@ -995,9 +1015,7 @@
     const notaPresionada = notasPiano[indexNota];
 
     if (!juegoActivo) {
-      const esOctavaGrave = notaPresionada.octava === 1 || notaPresionada.octava === 2;
-
-      if (tipoAcordeActivo !== 'OFF' && esOctavaGrave) {
+      if (tipoAcordeActivo !== 'OFF') {
         const listaAcorde = obtenerNotasAcorde(indexNota, tipoAcordeActivo);
 
         listaAcorde.forEach(n => {
@@ -1021,8 +1039,8 @@
     if (elTecla) elTecla.classList.add('activa');
 
     const feedbackEl = document.getElementById('feedback-juego');
-    // Se compara la altura: una nota con líneas adicionales puede mostrarse en la otra clave
-    const coincide = (notaPresionada.alt === 'n' && notaPresionada.vfKey === notaObjetivo.vfKey);
+    // Cuenta el nombre de la nota (el teclado tiene una octava y algo más); la octava se recuerda al acertar
+    const coincide = (notaPresionada.alt === 'n' && notaPresionada.vfKey.charAt(0) === notaObjetivo.vfKey.charAt(0));
 
     // entre un acierto y la nota siguiente no se cuentan más toques
     if (esperandoSiguiente) return;
@@ -1034,10 +1052,11 @@
       feedbackEl.textContent = gano ? (estrellasGanadas === 3 ? "¡Tres estrellas!" : "¡Ganaste una estrella!") : "¡Correcto!";
       feedbackEl.style.color = gano ? "var(--dorado)" : "var(--acierto)";
       if (gano) sonidoEstrella();
+      const aviso = recordarOctava(notaPresionada, notaObjetivo);
 
       setTimeout(() => {
         if (juegoActivo) generarSiguienteNotaJuego();
-      }, gano ? 1300 : 700);
+      }, gano ? 1300 : aviso ? 1700 : 700);
     } else {
       emitirSonidoError();
       registrarResultado(false);
