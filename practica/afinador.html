@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Afinador de violín paso a paso | Sprinkloud</title>
-  <meta name="description" content="Afinador de violín gratis para principiantes: te dice qué cuerda tocar, si hay que apretar o aflojar, y te guía para poner las 3 cintas en el diapasón. En celular o PC.">
+  <meta name="description" content="Afinador de violín gratis para principiantes: elige la cuerda y te dice si ajustar o aflojar. Te guía para poner las 3 cintas. En celular o PC.">
   <meta name="keywords" content="afinador de violín, afinar violín, cuerdas del violín, cintas del violín, afinador online, violín para principiantes">
   <meta name="author" content="Sprinkloud Club Musical">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -17,22 +17,47 @@
   <meta property="og:title" content="Afinador de violín paso a paso">
   <meta property="og:description" content="Afina tus 4 cuerdas aunque nunca lo hayas hecho y pon las 3 cintas en tu violín. Gratis.">
   <meta property="og:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
+  <meta property="og:image:alt" content="Afinador de violín de Sprinkloud">
+  <meta name="twitter:title" content="Afinador de violín paso a paso">
+  <meta name="twitter:description" content="Afina tus 4 cuerdas aunque nunca lo hayas hecho: te decimos si ajustar o aflojar. Gratis.">
+  <meta name="twitter:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="/images/Violin1.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Afinador de violín paso a paso",
-    "url": "https://sprinkloud.vercel.app/practica/afinador",
-    "image": "https://sprinkloud.vercel.app/images/Violin1.png",
-    "description": "Afinador de violín para principiantes: qué cuerda tocar, si apretar o aflojar, y cómo poner las 3 cintas del diapasón.",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "Cualquiera (navegador web)",
-    "inLanguage": "es",
-    "isAccessibleForFree": true,
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "publisher": { "@type": "Organization", "name": "Sprinkloud Club Musical", "url": "https://sprinkloud.vercel.app/" }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Afinador de violín paso a paso",
+        "url": "https://sprinkloud.vercel.app/practica/afinador",
+        "image": "https://sprinkloud.vercel.app/images/Violin1.png",
+        "description": "Afinador de violín gratis para principiantes: eliges la cuerda, la tocas y te dice si ajustar o aflojar. También te guía para poner las 3 cintas del diapasón.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Cualquiera (navegador web)",
+        "inLanguage": "es",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "Sprinkloud Club Musical", "url": "https://sprinkloud.vercel.app/" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://sprinkloud.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Material", "item": "https://sprinkloud.vercel.app/material" },
+          { "@type": "ListItem", "position": 3, "name": "Afinador de violín", "item": "https://sprinkloud.vercel.app/practica/afinador" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "¿Cuáles son las cuerdas del violín?", "acceptedAnswer": { "@type": "Answer", "text": "De la más gruesa a la más delgada: Sol, Re, La y Mi. Se afinan en Sol 196 Hz, Re 293,7 Hz, La 440 Hz y Mi 659,3 Hz." } },
+          { "@type": "Question", "name": "¿Hay que ajustar o aflojar?", "acceptedAnswer": { "@type": "Answer", "text": "Si la cuerda suena más grave que su nota, hay que ajustarla (apretarla); si suena más aguda, aflojarla. La clavija sirve para cambios grandes y el afinador fino para los pequeños." } },
+          { "@type": "Question", "name": "¿Dónde van las cintas del violín?", "acceptedAnswer": { "@type": "Answer", "text": "En la cuerda La: la cinta 1 en Si (dedo 1), la cinta 2 pegada a la primera en Do (dedo 2) y la cinta 3 en Re (dedo 3)." } },
+          { "@type": "Question", "name": "El afinador no escucha mi violín, ¿qué hago?", "acceptedAnswer": { "@type": "Answer", "text": "Permite el micrófono, acerca el celular al violín, toca la cuerda un poco más fuerte y busca un lugar sin ruido." } }
+        ]
+      }
+    ]
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,6 +105,8 @@
     .btn-volver:active { transform: scale(.97); }
     .marca { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 1.05rem; color: var(--pine); margin: 0; }
     .marca span { color: var(--gold); }
+    .intro { margin: -4px auto 12px; max-width: 52ch; text-align: center; color: var(--ink-2); font-size: .9rem; }
+    .intro b { color: var(--ink); }
     h1 { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.3rem, 4vw, 1.7rem); line-height: 1.1; color: var(--pine); margin: 4px 0 10px; text-align: center; }
 
 
@@ -93,6 +120,7 @@
     #violin .aro.activa { opacity: 1; }
     #violin .cinta { fill: #F4EFE4; stroke: #8F6A2A; stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .9; }
     #violin .cinta.actual { fill: var(--gold); }
+    #violin .nombre-cuerda { font: 800 10px "Nunito Sans", sans-serif; paint-order: stroke; stroke: #FBF7EE; stroke-width: 2.5px; }
     #violin .cinta-n { font: 800 8px "Nunito Sans", sans-serif; fill: #3A3128; }
     #violin .dedo { fill: #FBF7EE; stroke: #3A3128; stroke-width: 2px; vector-effect: non-scaling-stroke; }
     #violin .flecha { fill: none; stroke: #3A3128; stroke-width: 3px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
@@ -146,6 +174,9 @@
       transition: left 120ms linear, opacity 200ms ease, background-color 200ms ease; }
     .aguja.visible { opacity: 1; }
     .aguja.bien { background: var(--accent); }
+    .oido { display: flex; align-items: center; gap: 8px; justify-content: center; font-size: .78rem; color: var(--ink-2); font-weight: 700; }
+    .nivel { width: 120px; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+    #nivel-barra { height: 100%; width: 0; background: var(--accent); transition: width 80ms linear; }
     .suena { margin: 0; text-align: center; font-size: .85rem; color: var(--ink-2); min-height: 1.3em; }
     .accion { margin: 0; font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.25rem, 3.6vw, 1.6rem); line-height: 1.2; text-align: center; min-height: 2.4em; display: grid; place-items: center; }
     .accion.ajusta { color: var(--gold-ink); }
@@ -164,14 +195,19 @@
     .btn:active { transform: scale(.97); }
     @media (hover: hover) { .btn:hover, .chip:hover { border-color: var(--accent); } }
 
+    .faq { width: 100%; max-width: 1000px; margin: 0 0 24px; display: grid; gap: 8px; }
+    .faq h2 { font-size: 1.2rem; }
+    .faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; }
+    .faq summary { cursor: pointer; font-weight: 800; min-height: 28px; }
+    .faq p { margin: 6px 0 0; color: var(--ink-2); }
+    .faq b { color: var(--ink); }
     #footer { margin: auto -16px 0; align-self: stretch; padding: 6px 1.5em max(10px, env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); text-align: center; color: var(--ink-2); }
     .pie-copy { margin: 0; font-size: .8rem; }
 
     @media (max-width: 760px) {
       .afinador { grid-template-columns: 1fr; gap: 12px; }
       .ilus { position: static; }
-      #violin { max-height: 34dvh; }
-      .afinador.cintas #violin { max-height: 40dvh; }
+      #violin { max-height: 40dvh; }
     }
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; }
@@ -188,6 +224,7 @@
   <p class="marca">Sprink<span>loud</span></p>
 </div>
 <h1>Afinador de violín</h1>
+<p class="intro">Elige la cuerda, tócala con el dedo y te decimos si hay que <b>ajustar</b> o <b>aflojar</b>. Gratis, en el celular o la computadora.</p>
 
 <main class="afinador" id="app">
   <div class="ilus"><svg id="violin" role="img" aria-label="Violín"></svg></div>
@@ -229,6 +266,8 @@
         <span class="extremo der" id="der"></span>
       </div>
       <p class="suena" id="suena"></p>
+      <div class="oido" aria-hidden="true"><span>🎤 Te escucho</span><div class="nivel"><div id="nivel-barra"></div></div></div>
+      <p class="ayuda" id="sin-sonido" hidden>🙉 <b>No te escucho bien.</b> Acerca el celular al violín (a un palmo), toca la cuerda un poco más fuerte y revisa que nada tape el micrófono.</p>
       <p class="accion" id="accion" aria-live="polite"></p>
       <p class="detalle" id="detalle"></p>
       <details class="ayuda" id="ayuda-caja"><summary>¿Cómo se hace?</summary><p id="ayuda"></p></details>
@@ -241,8 +280,21 @@
   </section>
 </main>
 
+<section class="faq" aria-labelledby="faq-titulo">
+  <h2 id="faq-titulo">Cómo afinar el violín</h2>
+  <details><summary>¿Cuáles son las cuerdas del violín?</summary><p>De la más gruesa a la más delgada: <b>Sol</b>, <b>Re</b>, <b>La</b> y <b>Mi</b>. Con el violín de frente y el caracol arriba, Sol queda a la izquierda y Mi a la derecha. Se afinan en Sol 196 Hz, Re 293,7 Hz, La 440 Hz y Mi 659,3 Hz.</p></details>
+  <details><summary>¿Hay que ajustar o aflojar?</summary><p>Si la cuerda suena más grave que su nota, hay que <b>ajustarla</b> (apretarla). Si suena más aguda, hay que <b>aflojarla</b>. Para cambios grandes se usa la clavija, girándola muy poquito; para cambios pequeños, el afinador fino del cordal: a la derecha ajusta y a la izquierda afloja.</p></details>
+  <details><summary>¿Dónde van las cintas del violín?</summary><p>En la cuerda La: la <b>cinta 1</b> donde suena Si (dedo 1), la <b>cinta 2</b> pegada a la primera, donde suena Do (dedo 2), y la <b>cinta 3</b> donde suena Re (dedo 3). Entre Si y Do no queda espacio: los dedos 1 y 2 se tocan.</p></details>
+  <details><summary>El afinador no escucha mi violín, ¿qué hago?</summary><p>Permite el uso del micrófono, acerca el celular al violín (a un palmo), toca la cuerda con el dedo un poco más fuerte y busca un lugar sin ruido. La barra «Te escucho» se mueve cuando el micrófono oye sonido.</p></details>
+</section>
+
 <footer id="footer"><p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p></footer>
 
+<script type="module">
+  /* pitchy (MIT) para detectar la nota; se carga aparte y el afinador lo usa en cuanto está */
+  import { PitchDetector } from '/practica/vendor/pitchy.js';
+  window.PitchDetector = PitchDetector;
+</script>
 <script>
   /* ---------- El violín: ilustración de la dueña (images/violin-partes.webp, 424 × 1064) con marcas encima ----------
      Medidas tomadas de la imagen: cejilla en y = 187, puente en y = 735. Las cuerdas, de izquierda a derecha, son
@@ -268,6 +320,8 @@
     { n: 2, nota: 'Do', f: 523.25, dedo: 'dedo 2, pegado al dedo 1', y: yTraste(2) + ANCHO_CINTA },
     { n: 3, nota: 'Re', f: 587.33, dedo: 'dedo 3', y: yTraste(5) }
   ];
+  /* Pedido de la dueña: siempre el diapasón de cerca (clavijas, cejilla y la parte de las cintas), más fácil de ver en el celular */
+  const VISTA = '96 80 232 300';
   const xEn = (id, y) => { const c = CUERDAS[id]; return c.nut + (c.puente - c.nut) * (y - CEJILLA) / (PUENTE - CEJILLA); };
 
   const $ = s => document.querySelector(s);
@@ -278,21 +332,38 @@
       `<line class="cuerda" data-id="${id}" x1="${c.puente}" y1="${PUENTE}" x2="${c.cordal[0]}" y2="${c.cordal[1] - 6}" stroke="${c.color}"/>` +
       `<circle class="aro" data-id="${id}" cx="${c.clavija[0]}" cy="${c.clavija[1]}" r="21" stroke="${c.color}"/>` +
       `<circle class="aro" data-id="${id}" cx="${c.cordal[0]}" cy="${c.cordal[1]}" r="11" stroke="${c.color}"/>`).join('');
+    // el nombre de cada cuerda, abajo, con su color
+    // en vertical sobre cada cuerda, abajo de la vista, para que no se encimen
+    const nombres = Object.entries(CUERDAS).map(([id, c]) => { const x = xEn(id, 372) + 3.5;
+      return `<text class="nombre-cuerda" transform="translate(${x.toFixed(1)} 374) rotate(-90)" fill="${c.color}">${c.nombre}</text>`; }).join('');
     const cintas = CINTAS.map(c => { const x1 = xEn('sol', c.y) - 7, x2 = xEn('mi', c.y) + 8;
       return `<g class="cinta-g" data-n="${c.n}"><rect class="cinta" x="${x1}" y="${c.y - ANCHO_CINTA / 2}" width="${x2 - x1}" height="${ANCHO_CINTA}" rx="1.5"/>` +
         `<text class="cinta-n" x="${x1 - 4}" y="${c.y + 3}" text-anchor="end">${c.n}</text></g>`; }).join('');
-    svg.setAttribute('viewBox', '0 0 424 1064');
-    svg.innerHTML = `<image href="/images/violin-partes.webp" width="424" height="1064"/>${cuerdas}<g id="cintas" style="display:none">${cintas}</g><g id="guia-dedo"></g>`;
+    svg.setAttribute('viewBox', VISTA);
+    svg.innerHTML = `<image href="/images/violin-partes.webp" width="424" height="1064"/>${cuerdas}${nombres}<g id="cintas" style="display:none">${cintas}</g><g id="guia-dedo"></g>`;
   }
   dibujar();
 
-  /* ---------- Sonido: micrófono y detección de la nota (autocorrelación normalizada) ---------- */
-  let ctx = null, analizador = null, buf = null;
+  /* ---------- Sonido: micrófono y detección de la nota ----------
+     La nota la saca pitchy (método McLeod, practica/vendor/pitchy.js), que además dice qué tan clara es (clarity).
+     Si pitchy no cargara, queda la autocorrelación propia de abajo. Para que el celular sí escuche el violín:
+     - micrófono sin cancelación de eco, sin supresión de ruido y sin control de ganancia (si el navegador no lo
+       acepta, se pide el micrófono normal);
+     - un filtro que quita el zumbido grave (menos de 120 Hz) antes de analizar;
+     - umbral de volumen muy bajo (el pizzicato suena poco y se apaga rápido), con la claridad como filtro;
+     - medidor «Te escucho» y, si no oye nada en 7 s, el consejo de acercar el celular. */
+  let ctx = null, analizador = null, buf = null, detector = null, nivel = 0;
   function detectar() {
     analizador.getFloatTimeDomainData(buf);
     let rms = 0; for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
     rms = Math.sqrt(rms / buf.length);
-    if (rms < 0.006) return null;
+    nivel = rms;
+    if (rms < 0.0015) return null;
+    if (window.PitchDetector) {
+      detector = detector || window.PitchDetector.forFloat32Array(buf.length);
+      const [f, claridad] = detector.findPitch(buf, ctx.sampleRate);
+      return claridad >= 0.88 ? f : null;
+    }
     const sr = ctx.sampleRate, min = Math.floor(sr / 1400), max = Math.ceil(sr / 150), N = buf.length - max;
     const nsdf = new Float32Array(max + 2);
     for (let t = min; t <= max + 1; t++) {
@@ -313,14 +384,20 @@
     return null;
   }
   async function encenderMicrofono() {
-    if (analizador) return;
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    if (analizador) { if (ctx.state === 'suspended') await ctx.resume(); return; }
+    let stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }); }
+    catch (e) { if (e && e.name === 'NotAllowedError') throw e; stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
     ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === 'suspended') await ctx.resume();
     analizador = ctx.createAnalyser();
     analizador.fftSize = 4096;
     buf = new Float32Array(analizador.fftSize);
-    ctx.createMediaStreamSource(stream).connect(analizador);
+    const filtro = ctx.createBiquadFilter();
+    filtro.type = 'highpass'; filtro.frequency.value = 120;
+    ctx.createMediaStreamSource(stream).connect(filtro).connect(analizador);
+    // el celular suspende el audio al cambiar de app: al volver, se reanuda
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && ctx.state !== 'running') ctx.resume(); });
     requestAnimationFrame(bucle);
   }
   function tocarNota(f) {
@@ -386,8 +463,6 @@
     $('#app').classList.toggle('cintas', ver);
     $('#cintas').style.display = ver ? '' : 'none';
     $('#guia-dedo').innerHTML = '';
-    // en las cintas se acerca la vista al diapasón; al afinar se ve el violín entero
-    svg.setAttribute('viewBox', ver ? '96 80 232 290' : '0 0 424 1064');
     svg.querySelectorAll('.cuerda, .aro').forEach(e => e.classList.toggle('activa', ver && e.classList.contains('cuerda') && e.dataset.id === 'la'));
     if (ver) elegirCinta(1);
     else { sel = null; $('#medidor-caja').hidden = true; document.querySelectorAll('.btn-cuerda').forEach(b => b.setAttribute('aria-pressed', 'false')); svg.querySelectorAll('.cuerda').forEach(e => e.classList.add('activa')); }
@@ -417,6 +492,7 @@
     const obj = sel.tipo === 'cuerda' ? CUERDAS[sel.id].f : sel.c.f;
     let c = centsDe(f, obj);
     if (Math.abs(c - 1200) < 60) c -= 1200;   // a veces se oye la octava de arriba
+    else if (Math.abs(c + 1200) < 60) c += 1200;
     enGolpe.push(c);
     $('#suena').textContent = 'Suena: ' + nombreNota(f) + ' · ' + f.toFixed(1) + ' Hz';
     const bien = Math.abs(c) <= (sel.tipo === 'cuerda' ? 6 : 10);
@@ -463,12 +539,17 @@
     else if (Math.abs(c) > Math.abs(antes) + 4) $('#detalle').textContent = 'Se alejó: gira hacia el otro lado.';
   }
 
-  let ultimo = 0;
+  let ultimo = 0, oidoDesde = 0;
   function bucle(t) {
     requestAnimationFrame(bucle);
     if (!analizador || t - ultimo < 45) return;
     ultimo = t;
     const f = detectar();
+    // «Te escucho»: el nivel del micrófono, para que el alumno vea que el celular lo oye
+    $('#nivel-barra').style.width = Math.min(100, Math.round(Math.sqrt(nivel) * 400)) + '%';
+    if (sel && !oidoDesde) oidoDesde = t;
+    if (f) oidoDesde = t;
+    $('#sin-sonido').hidden = !(sel && t - oidoDesde > 7000);
     if (f && f > 150 && f < 1400) {
       lecturas.push(f); if (lecturas.length > 5) lecturas.shift();
       const med = lecturas.slice().sort((a, b) => a - b)[Math.floor(lecturas.length / 2)];

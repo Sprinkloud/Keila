@@ -64,11 +64,11 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 ## Afinador de violín (`practica/afinador.html`, ruta `/practica/afinador`)
 
 Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un violín pueda hacerlo solo. Está enlazado en Material, en la columna de violín.
-- **Imagen:** el violín completo de la dueña (`images/violin-partes.webp`, una copia de `App_Sprinkloud/assets/ilustraciones/`), con un SVG encima.
+- **Imagen:** el violín de la dueña (`images/violin-partes.webp`, una copia de `App_Sprinkloud/assets/ilustraciones/`), con un SVG encima. **Siempre se ve solo el diapasón de cerca** (`VISTA` = `96 80 232 300`: clavijas, cejilla y la parte de las cintas). La dueña lo pidió así porque en el celular, donde más se usa, el violín entero se veía chico. El nombre de cada cuerda va en vertical, abajo, con su color.
   - Medidas de la imagen (424 × 1064): cejilla en y = 187 y puente en y = 735.
   - Cuerdas de izquierda a derecha: Sol, Re, La y Mi.
   - Clavijas: Re arriba a la izquierda, Sol abajo a la izquierda, La arriba a la derecha y Mi abajo a la derecha (`CUERDAS`).
-  - El dibujo tiene afinador fino solo en la cuerda Mi.
+  - El dibujo tiene afinador fino solo en la cuerda Mi, abajo en el cordal (fuera de la vista). La ayuda lo explica con texto.
 - **Libre, sin lección** (pedido de la dueña, 28-oct): el alumno elige qué cuerda afinar entre 4 botones grandes, cada uno con el color de su cuerda (Sol, la más gruesa; Re, la 2.ª; La, la 3.ª; Mi, la más delgada). Cuando la cuerda queda afinada, su botón muestra «✓ afinada». El micrófono se enciende con el primer toque.
   - **Medidor:** a los extremos de la barra van las palabras **«Ajusta ⬆»** (a la izquierda, cuando la cuerda está baja) y **«Afloja ⬇»** (a la derecha), porque la mayoría no sabe qué hacer para subir o bajar.
   - **Qué dice:**
@@ -79,11 +79,26 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
 - **Cintas:** botón «✨ Poner las cintas», con un brillo que gira alrededor para que den ganas de tocarlo. Es un borde `conic-gradient` animado con `@property --giro`, y la chispa titila; con movimiento reducido, todo queda quieto.
   - Dentro de ese botón está la explicación: cinta 1 = Si (dedo 1), cinta 2 = Do (dedo 2) y cinta 3 = Re (dedo 3), en la cuerda La.
   - **Las cintas 1 y 2 van juntas, pegadas**, porque entre Si y Do (igual que entre Mi y Fa) los dedos se tocan. La dueña lo pidió así para que el alumno no deje espacio entre los dedos 1 y 2. En el dibujo, la cinta 2 va pegada a la 1 (`ANCHO_CINTA` = 12, más ancha que antes) y la cinta 3 va en Re (semitono 5).
-  - Se elige la cinta con chips. La vista se acerca al diapasón, con un círculo donde va el dedo y una flecha.
+  - Se elige la cinta con chips. En el diapasón se ven las 3 cintas, con un círculo donde va el dedo y una flecha.
   - **Qué dice:** «Desliza hacia el puente» si suena grave y «Desliza hacia el caracol» si suena agudo; en la barra, «Al puente ⬇» y «Al caracol ⬆». Cuando la nota da, avisa que se pegue la cinta derecha, de lado a lado (±10 cents en 5 lecturas).
-- **Detección:** micrófono sin cancelación de eco, sin supresión de ruido y sin control de ganancia. Usa autocorrelación normalizada (tipo McLeod) sobre 4096 muestras, de 150 a 1400 Hz, toma el primer pico al 90 % para no confundir la nota con su octava, y saca la mediana de las últimas 5 lecturas. Si oye la octava de arriba (+1200 cents), la corrige.
+- **Detección (para que el dispositivo sí escuche el violín):**
+  - La nota la saca **pitchy 4.1.0** (MIT, github.com/ianprime0509/pitchy, método McLeod), copiado en `practica/vendor/pitchy.js`, con su dependencia **fft.js 4.0.4** (MIT) en `practica/vendor/fft.js`. Va copiado en el sitio, sin depender de un CDN.
+  - Se carga con `<script type="module">` y queda en `window.PitchDetector`. Una lectura vale si la claridad es de 0,88 o más. Si pitchy no cargara, queda la autocorrelación propia como respaldo.
+  - El micrófono se pide sin cancelación de eco, sin supresión de ruido y sin control de ganancia. Si el navegador no lo acepta, se pide el micrófono normal.
+  - Antes de analizar pasa por un filtro pasa altos de 120 Hz, que quita el zumbido.
+  - Escucha muy bajito: el umbral es de 0,0015 RMS, porque el pizzicato suena poco.
+  - Usa la mediana de las últimas 5 lecturas. Corrige la octava de arriba o de abajo (±1200 cents).
+  - Al volver a la página, reanuda el audio (`visibilitychange`), porque el celular lo suspende.
+  - **Barra «🎤 Te escucho»:** muestra el nivel del micrófono.
+  - Si no oye nada en 7 s, aparece «No te escucho bien»: acercar el celular a un palmo, tocar más fuerte y no tapar el micrófono.
+- **SEO:**
+  - título, descripción de 143 caracteres, canonical, Open Graph y Twitter;
+  - una frase de introducción visible;
+  - la sección «Cómo afinar el violín», con 4 preguntas plegables;
+  - JSON-LD con `WebApplication`, `BreadcrumbList` y `FAQPage` con esas mismas preguntas;
+  - entrada en el `sitemap.xml`.
 - **«Escuchar la nota»:** suena un tono de referencia de 2 s.
-- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844, sin desplazamiento horizontal. En el celular, la ayuda va plegada («¿Cómo se hace?») para que el aviso quede a la vista. Falta probarlo con un violín de verdad.
+- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844, sin desplazamiento horizontal. Se probaron las 4 cuerdas afinadas, un tono a volumen 0,008 (se detecta) y el silencio (a los 7 s sale el consejo). En el celular, la ayuda va plegada («¿Cómo se hace?») para que el aviso quede a la vista. Falta probarlo con un violín de verdad.
 
 ## Células rítmicas (`practica/ritmo.html`)
 
