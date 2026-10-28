@@ -439,7 +439,7 @@
     svg.querySelectorAll('.cinta-g').forEach(g => g.querySelector('.cinta').classList.toggle('actual', +g.dataset.n === n));
     $('#medidor-caja').hidden = false;
     $('#siguiente-cinta').hidden = true;
-    extremos('Al puente', 'Al caracol');
+    extremos('Caracol', 'Puente');   // caracol = grave (izquierda), puente = agudo (derecha)
     const x = xEn('la', c.y);
     $('#guia-dedo').innerHTML = `<circle class="dedo" cx="${x}" cy="${c.y}" r="5.5"/><g id="flecha"></g>`;
     decir(cintasListas.has(n) ? `¡Cinta ${n} lista! ✓` : `Cinta ${n}: busca el ${c.nota}`, cintasListas.has(n) ? 'bien' : '', '');
