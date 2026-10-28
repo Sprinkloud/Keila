@@ -53,8 +53,11 @@
         "mainEntity": [
           { "@type": "Question", "name": "¿Cuáles son las cuerdas del violín?", "acceptedAnswer": { "@type": "Answer", "text": "De la más gruesa a la más delgada: Sol, Re, La y Mi. Se afinan en Sol 196 Hz, Re 293,7 Hz, La 440 Hz y Mi 659,3 Hz." } },
           { "@type": "Question", "name": "¿Hay que ajustar o aflojar?", "acceptedAnswer": { "@type": "Answer", "text": "Si la cuerda suena más grave que su nota, hay que ajustarla (apretarla); si suena más aguda, aflojarla. La clavija sirve para cambios grandes y el afinador fino para los pequeños." } },
+          { "@type": "Question", "name": "¿Cómo se lee el medidor?", "acceptedAnswer": { "@type": "Answer", "text": "A la izquierda están los sonidos graves y a la derecha los agudos. Si la raya queda a la izquierda, la cuerda está grave: ajústala. Si queda a la derecha, está aguda: aflójala. En el centro verde, está afinada." } },
+          { "@type": "Question", "name": "¿Cómo giro la clavija y el afinador fino?", "acceptedAnswer": { "@type": "Answer", "text": "Gira la clavija muy poquito y empújala hacia adentro. Si la raya se acerca al centro, sigue hacia el mismo lado; si se aleja, gira al otro lado. El afinador fino ajusta a la derecha y afloja a la izquierda." } },
           { "@type": "Question", "name": "¿Dónde van las cintas del violín?", "acceptedAnswer": { "@type": "Answer", "text": "En la cuerda La: la cinta 1 en Si (dedo 1), la cinta 2 pegada a la primera en Do (dedo 2) y la cinta 3 en Re (dedo 3)." } },
-          { "@type": "Question", "name": "El afinador no escucha mi violín, ¿qué hago?", "acceptedAnswer": { "@type": "Answer", "text": "Permite el micrófono, acerca el celular al violín, toca la cuerda un poco más fuerte y busca un lugar sin ruido." } }
+          { "@type": "Question", "name": "¿Cómo pongo las cintas?", "acceptedAnswer": { "@type": "Answer", "text": "Afina la cuerda La, pon el dedo donde está el círculo y tócala. Si suena grave, desliza el dedo hacia el puente; si suena agudo, hacia el caracol. Cuando la app diga «¡Ahí es!», pega la cinta justo debajo del dedo, de lado a lado." } },
+          { "@type": "Question", "name": "El afinador no escucha mi violín, ¿qué hago?", "acceptedAnswer": { "@type": "Answer", "text": "Permite el micrófono, acerca el celular al violín, toca la cuerda con el arco y busca un lugar sin ruido." } }
         ]
       }
     ]
@@ -70,6 +73,7 @@
       --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
       --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F2DDD6;
       --s-sol: #9C5B55; --s-re: #C4923A; --s-la: #647745; --s-mi: #567388;
+      --frio: #3F6E8C; --calido: #B4532A;   /* grave y agudo */
       --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-hand: Caveat, "Segoe Print", cursive;
       --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --dur-press: 140ms;
       --papel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .19 0 0 0 0 .16 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23p)'/%3E%3C/svg%3E");
@@ -164,12 +168,13 @@
 
     /* Medidor: a los extremos, la palabra de lo que hay que hacer */
     .barra { position: relative; height: 46px; border-radius: 999px; overflow: hidden;
-      background: linear-gradient(90deg, var(--gold-soft) 0 38%, var(--accent-soft) 44% 56%, #DCE5EC 62% 100%); border: 1px solid var(--line); }
+      background: linear-gradient(90deg, #D6E2EC 0 38%, var(--accent-soft) 44% 56%, #F6DCC4 62% 100%); border: 1px solid var(--line); }
     .barra::after { content: ""; position: absolute; left: 50%; top: 5px; bottom: 5px; width: 2px; margin-left: -1px; background: var(--pine); opacity: .5; }
     .medidor { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
     .extremo { font-weight: 800; font-size: 1rem; line-height: 1.1; text-align: center; }
-    .extremo.izq { color: var(--gold-ink); }
-    .extremo.der { color: var(--s-mi); }
+    .extremo.izq { color: var(--frio); }
+    .extremo.der { color: var(--calido); }
+    .extremo small { display: block; font-size: .68rem; font-weight: 700; opacity: .8; }
     .aguja { position: absolute; top: 4px; bottom: 4px; width: 10px; margin-left: -5px; left: 50%; border-radius: 5px; background: var(--ink); opacity: 0; z-index: 1;
       transition: left 120ms linear, opacity 200ms ease, background-color 200ms ease; }
     .aguja.visible { opacity: 1; }
@@ -179,11 +184,11 @@
     #nivel-barra { height: 100%; width: 0; background: var(--accent); transition: width 80ms linear; }
     .suena { margin: 0; text-align: center; font-size: .85rem; color: var(--ink-2); min-height: 1.3em; }
     .accion { margin: 0; font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.25rem, 3.6vw, 1.6rem); line-height: 1.2; text-align: center; min-height: 2.4em; display: grid; place-items: center; }
-    .accion.ajusta { color: var(--gold-ink); }
-    .accion.afloja { color: var(--s-mi); }
+    .accion.ajusta { color: var(--frio); }   /* suena grave */
+    .accion.afloja { color: var(--calido); } /* suena agudo */
     .accion.bien { color: var(--pine); }
     .accion.aviso { color: var(--danger); }
-    .detalle { margin: 0; color: var(--ink-2); font-size: .92rem; min-height: 2.8em; text-align: center; }
+    .detalle { margin: 0; color: var(--ink-2); font-size: .92rem; min-height: 1.4em; text-align: center; }
     .ayuda { margin: 0; padding: 10px 12px; border-radius: 14px; background: var(--surface-2); font-size: .9rem; color: var(--ink-2); }
     .ayuda b { color: var(--ink); }
     .ayuda summary { cursor: pointer; font-weight: 800; color: var(--ink); min-height: 28px; }
@@ -224,7 +229,6 @@
   <p class="marca">Sprink<span>loud</span></p>
 </div>
 <h1>Afinador de violín</h1>
-<p class="intro">Elige la cuerda, tócala con el dedo y te decimos si hay que <b>ajustar</b> o <b>aflojar</b>. Gratis, en el celular o la computadora.</p>
 
 <main class="afinador" id="app">
   <div class="ilus"><svg id="violin" role="img" aria-label="Violín"></svg></div>
@@ -234,7 +238,6 @@
     <div id="vista-cuerdas" style="display:grid;gap:12px">
       <p class="pregunta">¿Qué cuerda quieres afinar?</p>
       <div class="cuerdas" id="cuerdas"></div>
-      <p class="nota-mic">Tócala con el dedo (pizzicato). Usa el micrófono: el sonido no se graba.</p>
       <button class="btn-cintas" id="abrir-cintas" type="button"><span><span class="chispa" aria-hidden="true">✨</span>Poner las cintas</span></button>
     </div>
 
@@ -244,22 +247,11 @@
         <h2>Las 3 cintas</h2>
         <button class="btn" id="volver-cuerdas" type="button" style="min-height:40px;font-size:.88rem">← Afinar cuerdas</button>
       </div>
-      <details class="ayuda" id="explica-cintas" open>
-        <summary>¿Para qué sirven?</summary>
-        <p>Las cintas te muestran dónde poner cada dedo en la cuerda <b>La</b>, para que las notas suenen afinadas:</p>
-        <ul>
-          <li><b>Cinta 1 = Si</b>, con el dedo 1.</li>
-          <li><b>Cinta 2 = Do</b>, con el dedo 2.</li>
-          <li><b>Cinta 3 = Re</b>, con el dedo 3.</li>
-        </ul>
-        <p>Las cintas <b>1 y 2 van juntas</b>, pegadas: entre Si y Do (igual que entre Mi y Fa) no queda espacio, los dedos se tocan. Entre la 2 y la 3 sí hay espacio. Antes de empezar, afina la cuerda La.</p>
-      </details>
       <div class="chips" id="chips-cintas" role="group" aria-label="Cinta"></div>
     </div>
 
     <!-- El afinador (sirve para las dos vistas) -->
     <div id="medidor-caja" hidden style="display:grid;gap:10px">
-      <p class="donde" id="donde"></p>
       <div class="medidor" aria-hidden="true">
         <span class="extremo izq" id="izq"></span>
         <div class="barra"><div class="aguja" id="aguja"></div></div>
@@ -267,10 +259,9 @@
       </div>
       <p class="suena" id="suena"></p>
       <div class="oido" aria-hidden="true"><span>🎤 Te escucho</span><div class="nivel"><div id="nivel-barra"></div></div></div>
-      <p class="ayuda" id="sin-sonido" hidden>🙉 <b>No te escucho bien.</b> Acerca el celular al violín (a un palmo), toca la cuerda un poco más fuerte y revisa que nada tape el micrófono.</p>
+      <p class="ayuda" id="sin-sonido" hidden>🙉 <b>No te escucho bien.</b> Acerca el celular al violín y revisa que nada tape el micrófono.</p>
       <p class="accion" id="accion" aria-live="polite"></p>
       <p class="detalle" id="detalle"></p>
-      <details class="ayuda" id="ayuda-caja"><summary>¿Cómo se hace?</summary><p id="ayuda"></p></details>
       <div class="botones">
         <button class="btn" id="escuchar" type="button">▶ Escuchar la nota</button>
         <button class="btn" id="siguiente-cinta" type="button" hidden>Siguiente cinta</button>
@@ -284,8 +275,11 @@
   <h2 id="faq-titulo">Cómo afinar el violín</h2>
   <details><summary>¿Cuáles son las cuerdas del violín?</summary><p>De la más gruesa a la más delgada: <b>Sol</b>, <b>Re</b>, <b>La</b> y <b>Mi</b>. Con el violín de frente y el caracol arriba, Sol queda a la izquierda y Mi a la derecha. Se afinan en Sol 196 Hz, Re 293,7 Hz, La 440 Hz y Mi 659,3 Hz.</p></details>
   <details><summary>¿Hay que ajustar o aflojar?</summary><p>Si la cuerda suena más grave que su nota, hay que <b>ajustarla</b> (apretarla). Si suena más aguda, hay que <b>aflojarla</b>. Para cambios grandes se usa la clavija, girándola muy poquito; para cambios pequeños, el afinador fino del cordal: a la derecha ajusta y a la izquierda afloja.</p></details>
+  <details><summary>¿Cómo se lee el medidor?</summary><p>A la <b>izquierda</b> están los sonidos <b>graves</b> (en color frío) y a la <b>derecha</b> los <b>agudos</b> (en color cálido). Si la raya queda a la izquierda, la cuerda está grave: <b>ajústala</b>. Si queda a la derecha, está aguda: <b>aflójala</b>. En el centro verde, está afinada.</p></details>
+  <details><summary>¿Cómo giro la clavija y el afinador fino?</summary><p>Gira la clavija <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Vuelve a tocar: si la raya se acerca al centro («¡Vas bien!»), sigue hacia el mismo lado; si se aleja, gira al otro lado. Para los cambios pequeños usa el afinador fino (el tornillito del cordal): a la derecha ajusta y a la izquierda afloja.</p></details>
   <details><summary>¿Dónde van las cintas del violín?</summary><p>En la cuerda La: la <b>cinta 1</b> donde suena Si (dedo 1), la <b>cinta 2</b> pegada a la primera, donde suena Do (dedo 2), y la <b>cinta 3</b> donde suena Re (dedo 3). Entre Si y Do no queda espacio: los dedos 1 y 2 se tocan.</p></details>
-  <details><summary>El afinador no escucha mi violín, ¿qué hago?</summary><p>Permite el uso del micrófono, acerca el celular al violín (a un palmo), toca la cuerda con el dedo un poco más fuerte y busca un lugar sin ruido. La barra «Te escucho» se mueve cuando el micrófono oye sonido.</p></details>
+  <details><summary>¿Cómo pongo las cintas?</summary><p>Primero afina la cuerda La. Pon el dedo sobre la cuerda La, donde está el círculo del dibujo, y tócala. Si suena grave, desliza el dedo <b>hacia el puente</b> (más agudo); si suena agudo, deslízalo <b>hacia el caracol</b> (más grave). Cuando la app diga «¡Ahí es!», deja el dedo quieto y pega la cinta justo debajo, derecha y de lado a lado, cruzando las 4 cuerdas.</p></details>
+  <details><summary>El afinador no escucha mi violín, ¿qué hago?</summary><p>Permite el uso del micrófono, acerca el celular al violín, toca la cuerda con el arco y busca un lugar sin ruido. La barra «Te escucho» se mueve cuando el micrófono oye sonido.</p></details>
 </section>
 
 <footer id="footer"><p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p></footer>
@@ -435,11 +429,8 @@
     svg.querySelectorAll('.cuerda, .aro').forEach(e => e.classList.toggle('activa', e.dataset.id === id));
     $('#medidor-caja').hidden = false;
     $('#siguiente-cinta').hidden = true;
-    $('#donde').innerHTML = `Cuerda <b>${c.nombre}</b>: es ${c.donde}. Tócala con un dedo y déjala sonar.`;
-    $('#izq').textContent = 'Ajusta ⬆'; $('#der').textContent = 'Afloja ⬇';
-    $('#ayuda').innerHTML = `<b>Ajustar</b> (apretar) estira la cuerda y la hace sonar más aguda; <b>aflojar</b>, más grave. Su clavija es ${c.clavijaTxt}: gírala <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Si en el cordal tiene un tornillito (afinador fino), úsalo para los cambios pequeños: <b>a la derecha ↻ ajusta</b>, a la izquierda ↺ afloja.`;
-    $('#ayuda-caja').open = matchMedia('(min-width: 761px)').matches;
-    decir(afinadas.has(id) ? '¡Afinada! ✓' : `Toca la cuerda ${c.nombre}`, afinadas.has(id) ? 'bien' : '', 'Pellizca solo esa cuerda.');
+    extremos('Ajusta ⬆', 'Afloja ⬇');
+    decir(afinadas.has(id) ? '¡Afinada! ✓' : `Toca la cuerda ${c.nombre}`, afinadas.has(id) ? 'bien' : '', '');
   }
   function elegirCinta(n) {
     const c = CINTAS.find(x => x.n === n);
@@ -448,15 +439,10 @@
     svg.querySelectorAll('.cinta-g').forEach(g => g.querySelector('.cinta').classList.toggle('actual', +g.dataset.n === n));
     $('#medidor-caja').hidden = false;
     $('#siguiente-cinta').hidden = true;
-    $('#donde').innerHTML = `<b>Cinta ${c.n} = ${c.nota}.</b> Pon el <b>${c.dedo}</b> sobre la cuerda <b>La</b>, donde está el círculo, y tócala con la otra mano sin levantar el dedo.`;
-    $('#izq').textContent = 'Al puente ⬇'; $('#der').textContent = 'Al caracol ⬆';
-    $('#ayuda').innerHTML = c.n === 2
-      ? 'La cinta 2 va <b>pegada</b> a la cinta 1, sin espacio: tu dedo 2 toca al dedo 1. Cuando suene <b>Do</b>, pégala derecha, de lado a lado, cruzando las 4 cuerdas.'
-      : `Cuando suene <b>${c.nota}</b>, deja el dedo quieto y pega la cinta derecha, de lado a lado, cruzando las 4 cuerdas, justo debajo de tu dedo.`;
-    $('#ayuda-caja').open = false;
+    extremos('Al puente', 'Al caracol');
     const x = xEn('la', c.y);
     $('#guia-dedo').innerHTML = `<circle class="dedo" cx="${x}" cy="${c.y}" r="5.5"/><g id="flecha"></g>`;
-    decir(cintasListas.has(n) ? `¡Cinta ${n} lista! ✓` : `Busca el ${c.nota}`, cintasListas.has(n) ? 'bien' : '', 'Toca la cuerda La con el dedo puesto.');
+    decir(cintasListas.has(n) ? `¡Cinta ${n} lista! ✓` : `Cinta ${n}: busca el ${c.nota}`, cintasListas.has(n) ? 'bien' : '', '');
   }
   function verCintas(ver) {
     $('#vista-cuerdas').hidden = ver; $('#vista-cintas').hidden = !ver;
@@ -468,6 +454,11 @@
     else { sel = null; $('#medidor-caja').hidden = true; document.querySelectorAll('.btn-cuerda').forEach(b => b.setAttribute('aria-pressed', 'false')); svg.querySelectorAll('.cuerda').forEach(e => e.classList.add('activa')); }
   }
 
+  /* A los extremos del medidor: a la izquierda lo grave (color frío) y a la derecha lo agudo (color cálido), con lo que hay que hacer */
+  function extremos(izq, der) {
+    $('#izq').innerHTML = `${izq}<small>grave</small>`;
+    $('#der').innerHTML = `${der}<small>agudo</small>`;
+  }
   function decir(accion, clase, detalle) {
     const a = $('#accion');
     a.textContent = accion; a.className = 'accion' + (clase ? ' ' + clase : '');
@@ -494,38 +485,38 @@
     if (Math.abs(c - 1200) < 60) c -= 1200;   // a veces se oye la octava de arriba
     else if (Math.abs(c + 1200) < 60) c += 1200;
     enGolpe.push(c);
-    $('#suena').textContent = 'Suena: ' + nombreNota(f) + ' · ' + f.toFixed(1) + ' Hz';
+    $('#suena').textContent = 'Suena: ' + nombreNota(f);
     const bien = Math.abs(c) <= (sel.tipo === 'cuerda' ? 6 : 10);
     aguja(c, bien);
     bienSeguidas = bien ? bienSeguidas + 1 : 0;
     if (sel.tipo === 'cuerda') {
       const id = sel.id, cerca = Object.entries(CUERDAS).map(([k, x]) => [k, Math.abs(centsDe(f, x.f))]).sort((a, b) => a[1] - b[1])[0][0];
       if (cerca !== id && Math.abs(c) > 350) {
-        decir(`Esa suena como la cuerda ${CUERDAS[cerca].nombre}`, 'aviso', `Si quieres afinar la ${CUERDAS[cerca].nombre}, elígela arriba. La ${CUERDAS[id].nombre} es ${CUERDAS[id].donde.replace(/<[^>]+>/g, '')}.`);
+        decir(`Esa suena como la cuerda ${CUERDAS[cerca].nombre}`, 'aviso', '');
         return;
       }
       if (bien) {
-        decir('¡Afinada! ✓', 'bien', 'Así se queda. Elige otra cuerda cuando quieras.');
+        decir('¡Afinada! ✓', 'bien', '');
         if (bienSeguidas >= 6 && !afinadas.has(id)) { afinadas.add(id); campanita(); document.querySelector(`.btn-cuerda[data-id="${id}"]`).classList.add('afinada'); }
         return;
       }
       const muy = Math.abs(c) > 50;
-      if (c < 0) decir('⬆ Ajusta un poquito', 'ajusta', muy ? 'Está muy baja: gira la clavija muy poquito y vuelve a tocar.' : 'Casi: un toque al afinador fino (↻ a la derecha) o a la clavija.');
-      else decir('⬇ Afloja un poquito', 'afloja', muy ? 'Está muy alta: gira la clavija muy poquito hacia el otro lado y vuelve a tocar.' : 'Casi: un toque al afinador fino (↺ a la izquierda) o a la clavija.');
+      if (c < 0) decir('⬆ Ajusta un poquito', 'ajusta', muy ? 'Con la clavija, muy poquito.' : 'Con el afinador fino.');
+      else decir('⬇ Afloja un poquito', 'afloja', muy ? 'Con la clavija, muy poquito.' : 'Con el afinador fino.');
     } else {
       const n = sel.c.n;
-      if (Math.abs(centsDe(f, 440)) < 30) { decir('Esa es la cuerda La sola', 'aviso', 'Apoya bien el dedo sobre la cuerda La y vuelve a tocar.'); flecha(null); return; }
+      if (Math.abs(centsDe(f, 440)) < 30) { decir('Esa es la cuerda La sola', 'aviso', 'Apoya bien el dedo.'); flecha(null); return; }
       if (bien) {
-        decir(`¡Ahí es! Pega la cinta ${n}`, 'bien', 'Deja el dedo quieto y pega la cinta justo debajo de él, derecha y de lado a lado.'); flecha(null);
+        decir(`¡Ahí es! Pega la cinta ${n}`, 'bien', ''); flecha(null);
         if (bienSeguidas >= 5 && !cintasListas.has(n)) {
           cintasListas.add(n); campanita(); document.querySelector(`.chip[data-n="${n}"]`).classList.add('lista');
           $('#siguiente-cinta').hidden = n === 3;
         }
         return;
       }
-      const lejos = Math.abs(c) > 300 ? ' Pon el dedo cerca del círculo del dibujo.' : '';
-      if (c < 0) { decir('⬇ Desliza hacia el puente', 'ajusta', 'Suena más grave que ' + sel.c.nota + '.' + lejos); flecha(false); }
-      else { decir('⬆ Desliza hacia el caracol', 'afloja', 'Suena más agudo que ' + sel.c.nota + '.' + lejos); flecha(true); }
+      const lejos = Math.abs(c) > 300 ? 'Pon el dedo cerca del círculo.' : '';
+      if (c < 0) { decir('Desliza hacia el puente', 'ajusta', lejos); flecha(false); }
+      else { decir('Desliza hacia el caracol', 'afloja', lejos); flecha(true); }
     }
   }
   // Al terminar cada toque: si la nota se acercó o se alejó del centro, lo dice (sirve para saber hacia dónde girar)

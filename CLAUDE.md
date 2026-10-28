@@ -70,14 +70,15 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
   - Clavijas: Re arriba a la izquierda, Sol abajo a la izquierda, La arriba a la derecha y Mi abajo a la derecha (`CUERDAS`).
   - El dibujo tiene afinador fino solo en la cuerda Mi, abajo en el cordal (fuera de la vista). La ayuda lo explica con texto.
 - **Libre, sin lección** (pedido de la dueña, 28-oct): el alumno elige qué cuerda afinar entre 4 botones grandes, cada uno con el color de su cuerda (Sol, la más gruesa; Re, la 2.ª; La, la 3.ª; Mi, la más delgada). Cuando la cuerda queda afinada, su botón muestra «✓ afinada». El micrófono se enciende con el primer toque.
-  - **Medidor:** a los extremos de la barra van las palabras **«Ajusta ⬆»** (a la izquierda, cuando la cuerda está baja) y **«Afloja ⬇»** (a la derecha), porque la mayoría no sabe qué hacer para subir o bajar.
+  - **Medidor:** **a la izquierda lo grave, en color frío (`--frio`), y a la derecha lo agudo, en color cálido (`--calido`)**. Cada extremo dice qué hacer y debajo, en chico, «grave» o «agudo»: «Ajusta ⬆» a la izquierda y «Afloja ⬇» a la derecha. En las cintas dice «Al puente» a la izquierda y «Al caracol» a la derecha, porque deslizar hacia el puente sube el sonido y hacia el caracol lo baja. El aviso grande toma el mismo color.
+  - **Arriba no hay explicaciones** (pedido de la dueña, 28-oct): solo la elección de cuerda, el botón de cintas, el medidor, la nota que suena (sin Hz), «Te escucho», el aviso y una línea corta («Con la clavija, muy poquito» o «Con el afinador fino»). No se dice «pizzicato», porque con el dedo el micrófono casi no oye; las ayudas hablan del arco. **Todas las explicaciones van en las pestañas de abajo**: las cuerdas, ajustar o aflojar, cómo se lee el medidor, cómo girar la clavija y el afinador fino, dónde van las cintas, cómo ponerlas y qué hacer si no escucha. Esas mismas 7 preguntas están en el `FAQPage` del JSON-LD.
   - **Qué dice:**
     - si suena otra cuerda, el nombre de la que suena y dónde está la elegida;
     - «Ajusta» o «Afloja», con la clavija si está a más de 50 cents y con el afinador fino si está cerca (el afinador fino ajusta a la derecha ↻);
     - al terminar cada toque, `finDeGolpe` compara con el anterior y dice «¡Vas bien!» o «Se alejó: gira hacia el otro lado». No se da el sentido de giro de la clavija: el alumno lo descubre con esa tendencia.
   - **Cuándo cuenta como afinada:** ±6 cents en 6 lecturas seguidas.
 - **Cintas:** botón «✨ Poner las cintas», con un brillo que gira alrededor para que den ganas de tocarlo. Es un borde `conic-gradient` animado con `@property --giro`, y la chispa titila; con movimiento reducido, todo queda quieto.
-  - Dentro de ese botón está la explicación: cinta 1 = Si (dedo 1), cinta 2 = Do (dedo 2) y cinta 3 = Re (dedo 3), en la cuerda La.
+  - Cinta 1 = Si (dedo 1), cinta 2 = Do (dedo 2) y cinta 3 = Re (dedo 3), en la cuerda La. La explicación está en las pestañas de abajo, no en el botón.
   - **Las cintas 1 y 2 van juntas, pegadas**, porque entre Si y Do (igual que entre Mi y Fa) los dedos se tocan. La dueña lo pidió así para que el alumno no deje espacio entre los dedos 1 y 2. En el dibujo, la cinta 2 va pegada a la 1 (`ANCHO_CINTA` = 12, más ancha que antes) y la cinta 3 va en Re (semitono 5).
   - Se elige la cinta con chips. En el diapasón se ven las 3 cintas, con un círculo donde va el dedo y una flecha.
   - **Qué dice:** «Desliza hacia el puente» si suena grave y «Desliza hacia el caracol» si suena agudo; en la barra, «Al puente ⬇» y «Al caracol ⬆». Cuando la nota da, avisa que se pegue la cinta derecha, de lado a lado (±10 cents en 5 lecturas).
@@ -98,7 +99,7 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
   - JSON-LD con `WebApplication`, `BreadcrumbList` y `FAQPage` con esas mismas preguntas;
   - entrada en el `sitemap.xml`.
 - **«Escuchar la nota»:** suena un tono de referencia de 2 s.
-- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844, sin desplazamiento horizontal. Se probaron las 4 cuerdas afinadas, un tono a volumen 0,008 (se detecta) y el silencio (a los 7 s sale el consejo). En el celular, la ayuda va plegada («¿Cómo se hace?») para que el aviso quede a la vista. Falta probarlo con un violín de verdad.
+- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844, sin desplazamiento horizontal. Se probaron las 4 cuerdas afinadas, un tono a volumen 0,008 (se detecta) y el silencio (a los 7 s sale el consejo). Falta probarlo con un violín de verdad.
 
 ## Células rítmicas (`practica/ritmo.html`)
 
