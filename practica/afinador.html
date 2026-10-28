@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Afinador de violín paso a paso | Sprinkloud</title>
+  <meta name="description" content="Afinador de violín gratis para principiantes: te dice qué cuerda tocar, si hay que apretar o aflojar, y te guía para poner las 3 cintas en el diapasón. En celular o PC.">
+  <meta name="keywords" content="afinador de violín, afinar violín, cuerdas del violín, cintas del violín, afinador online, violín para principiantes">
+  <meta name="author" content="Sprinkloud Club Musical">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/afinador">
+  <meta name="theme-color" content="#F6F0E2">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Sprinkloud Club Musical">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/afinador">
+  <meta property="og:title" content="Afinador de violín paso a paso">
+  <meta property="og:description" content="Afina tus 4 cuerdas aunque nunca lo hayas hecho y pon las 3 cintas en tu violín. Gratis.">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/Violin1.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="/images/Violin1.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Afinador de violín paso a paso",
+    "url": "https://sprinkloud.vercel.app/practica/afinador",
+    "image": "https://sprinkloud.vercel.app/images/Violin1.png",
+    "description": "Afinador de violín para principiantes: qué cuerda tocar, si apretar o aflojar, y cómo poner las 3 cintas del diapasón.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Cualquiera (navegador web)",
+    "inLanguage": "es",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Sprinkloud Club Musical", "url": "https://sprinkloud.vercel.app/" }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <style>
+    /* Mismo sistema visual que el violín virtual (App_Sprinkloud/DESIGN.md): libro ilustrado en acuarela */
+    :root {
+      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F2DDD6;
+      --s-sol: #9C5B55; --s-re: #C4923A; --s-la: #647745; --s-mi: #567388;
+      --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-hand: Caveat, "Segoe Print", cursive;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --dur-press: 140ms;
+      --papel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .19 0 0 0 0 .16 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23p)'/%3E%3C/svg%3E");
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
+        --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585; --danger-soft: #4A2E28;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      background: var(--papel) var(--bg); color: var(--ink);
+      font: 400 16px/1.5 "Nunito Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+      display: flex; flex-direction: column; align-items: center; margin: 0;
+      padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+      min-height: 100vh; min-height: 100dvh;
+    }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--pine); outline-offset: 2px; border-radius: 6px; }
+    .barra-superior { width: 100%; max-width: 1000px; display: flex; align-items: center; justify-content: space-between; }
+    .btn-volver {
+      display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 6px 14px 6px 10px;
+      background: var(--surface); color: var(--ink-2); border: 1.5px solid var(--line); border-radius: 999px;
+      text-decoration: none; font-weight: 700; font-size: .85rem; transition: transform var(--dur-press) var(--ease-out), border-color 150ms ease;
+    }
+    @media (hover: hover) { .btn-volver:hover { border-color: var(--accent); color: var(--ink); } }
+    .btn-volver:active { transform: scale(.97); }
+    .marca { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 1.05rem; color: var(--pine); margin: 0; }
+    .marca span { color: var(--gold); }
+    h1 { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.3rem, 4vw, 1.7rem); line-height: 1.1; color: var(--pine); margin: 4px 0 10px; text-align: center; }
+
+    .afinador { width: 100%; max-width: 1000px; display: grid; grid-template-columns: minmax(200px, 340px) 1fr; gap: 18px; align-items: start; margin-bottom: 24px; }
+    .ilus { position: sticky; top: 12px; display: flex; justify-content: center; }
+    #violin { width: 100%; max-height: calc(100dvh - 130px); display: block; }
+    /* las cuerdas y los aros miden lo mismo con el violín entero o con el diapasón de cerca */
+    #violin .cuerda { stroke-width: 3.5px; vector-effect: non-scaling-stroke; stroke-linecap: round; opacity: 0; transition: opacity 200ms ease; }
+    #violin .cuerda.activa { opacity: .95; }
+    #violin .aro { fill: none; stroke-width: 3px; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity 200ms ease; }
+    #violin .aro.activa { opacity: 1; }
+    #violin .rotulo { font: 800 15px "Nunito Sans", sans-serif; paint-order: stroke; stroke: #FBF7EE; stroke-width: 4px; stroke-linejoin: round; }
+    #violin .cinta { stroke: #F4EFE4; stroke-width: 5; opacity: .5; }
+    #violin .cinta.lista { opacity: .95; }
+    #violin .cinta.actual { stroke: var(--gold); opacity: 1; }
+    #violin .dedo { fill: var(--gold); stroke: #3A3128; stroke-width: 1.2; }
+    #violin .flecha { fill: none; stroke: #3A3128; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+    .tarjeta { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: clamp(14px, 2.4vw, 22px); display: grid; gap: 12px; min-width: 0; }
+    .pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .pasos li { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--line); font-size: .8rem; font-weight: 700; color: var(--ink-2); }
+    .pasos li .punto { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+    .pasos li.actual { border-color: var(--pine); color: var(--ink); }
+    .pasos li.hecho { color: var(--pine); }
+    .pasos li.hecho .punto { background: var(--accent); }
+    .pasos .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; padding: 0; border: 0; }
+    h2 { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 1.45rem; margin: 0; color: var(--pine); line-height: 1.15; }
+    .donde { margin: 0; color: var(--ink-2); }
+    .donde b { color: var(--ink); }
+
+    .medidor { display: grid; gap: 4px; }
+    .barra { position: relative; height: 34px; border-radius: 999px; overflow: hidden;
+      background: linear-gradient(90deg, var(--danger-soft) 0 40%, var(--accent-soft) 44% 56%, var(--danger-soft) 60% 100%); border: 1px solid var(--line); }
+    .barra::after { content: ""; position: absolute; left: 50%; top: 4px; bottom: 4px; width: 2px; margin-left: -1px; background: var(--pine); opacity: .5; }
+    .aguja { position: absolute; top: 3px; bottom: 3px; width: 8px; margin-left: -4px; left: 50%; border-radius: 4px; background: var(--ink); opacity: 0; transition: left 120ms linear, opacity 200ms ease, background-color 200ms ease; }
+    .aguja.visible { opacity: 1; }
+    .aguja.bien { background: var(--accent); }
+    .escala { display: flex; justify-content: space-between; font-size: .75rem; color: var(--ink-2); font-weight: 700; }
+    .suena { margin: 0; text-align: center; font-size: .85rem; color: var(--ink-2); min-height: 1.3em; }
+
+    .accion { margin: 0; font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.25rem, 3.6vw, 1.6rem); line-height: 1.2; text-align: center; min-height: 2.4em; display: grid; place-items: center; }
+    .accion.apretar { color: var(--gold-ink); }
+    .accion.aflojar { color: var(--s-mi); }
+    .accion.bien { color: var(--pine); }
+    .accion.aviso { color: var(--danger); }
+    .detalle { margin: 0; color: var(--ink-2); font-size: .92rem; min-height: 2.8em; text-align: center; }
+    .ayuda { margin: 0; padding: 10px 12px; border-radius: 14px; background: var(--surface-2); font-size: .88rem; color: var(--ink-2); }
+    .ayuda b { color: var(--ink); }
+    .ayuda summary { cursor: pointer; font-weight: 800; color: var(--ink); min-height: 28px; }
+    .ayuda p { margin: 6px 0 0; }
+    .ayuda a { color: var(--pine); font-weight: 800; }
+    .fin .medidor, .fin #suena, .fin #detalle { display: none; }
+
+    .botones { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .btn { min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); font-weight: 800; transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease, border-color 150ms ease; }
+    .btn:active { transform: scale(.97); }
+    @media (hover: hover) { .btn:hover { border-color: var(--accent); } }
+    .btn.primario { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .btn[hidden] { display: none; }
+    .inicio { display: grid; gap: 10px; text-align: center; }
+    .inicio p { margin: 0; color: var(--ink-2); }
+    .inicio ol { text-align: left; margin: 0; padding-left: 22px; display: grid; gap: 4px; color: var(--ink-2); }
+
+    #footer { margin: auto -16px 0; align-self: stretch; padding: 6px 1.5em max(10px, env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); text-align: center; color: var(--ink-2); }
+    .pie-copy { margin: 0; font-size: .8rem; }
+
+    @media (max-width: 760px) {
+      .afinador { grid-template-columns: 1fr; gap: 12px; }
+      .ilus { position: static; }
+      #violin { max-height: 38dvh; }
+      .afinador.cintas #violin { max-height: 42dvh; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<div class="barra-superior">
+  <a href="https://sprinkloud.vercel.app/material" class="btn-volver">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg> Volver
+  </a>
+  <p class="marca">Sprink<span>loud</span></p>
+</div>
+<h1>Afinador de violín</h1>
+
+<main class="afinador" id="app">
+  <div class="ilus"><svg id="violin" role="img" aria-label="Violín"></svg></div>
+
+  <section class="tarjeta" aria-live="polite">
+    <ol class="pasos" id="pasos" aria-label="Pasos"></ol>
+
+    <div class="inicio" id="inicio">
+      <h2>Vamos a afinar tu violín</h2>
+      <ol>
+        <li>Ponte en un lugar <b>silencioso</b>.</li>
+        <li>Toca cada cuerda <b>con el dedo</b> (pizzicato), no con el arco.</li>
+        <li>La app te dice si hay que <b>apretar</b> o <b>aflojar</b>.</li>
+        <li>Al final te ayuda a poner las <b>3 cintas</b> en el diapasón.</li>
+      </ol>
+      <p>Necesita el micrófono para escuchar tu violín. El sonido no se graba ni sale de tu dispositivo.</p>
+      <div class="botones"><button class="btn primario" id="empezar" type="button">Empezar</button></div>
+      <p class="detalle" id="error-mic" role="alert"></p>
+    </div>
+
+    <div id="trabajo" hidden>
+      <div style="display:grid;gap:10px">
+        <h2 id="titulo"></h2>
+        <p class="donde" id="donde"></p>
+        <div class="medidor" aria-hidden="true">
+          <div class="barra"><div class="aguja" id="aguja"></div></div>
+          <div class="escala"><span id="izq"></span><span id="der"></span></div>
+        </div>
+        <p class="suena" id="suena"></p>
+        <p class="accion" id="accion"></p>
+        <p class="detalle" id="detalle"></p>
+        <details class="ayuda" id="ayuda-caja"><summary>¿Cómo se hace?</summary><p id="ayuda"></p></details>
+        <div class="botones">
+          <button class="btn" id="escuchar" type="button">▶ Escuchar la nota</button>
+          <button class="btn primario" id="siguiente" type="button" hidden>Siguiente</button>
+          <button class="btn" id="otra-vez" type="button" hidden>Afinar otra vez</button>
+        </div>
+        <div class="botones"><button class="btn" id="saltar" type="button" style="font-size:.85rem;min-height:40px">Saltar este paso</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer"><p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p></footer>
+
+<script>
+  /* ---------- El violín: ilustración de la dueña (images/violin-partes.webp, 424 × 1064) con marcas encima ----------
+     Medidas tomadas de la imagen: cejilla en y = 187, puente en y = 735. Las cuerdas, de izquierda a derecha, son
+     Sol, Re, La y Mi (el violín de frente, con el caracol arriba). Clavijas: Re y Sol a la izquierda (Re arriba),
+     La y Mi a la derecha (La arriba). El afinador fino del dibujo está en la cuerda Mi. */
+  const CEJILLA = 187, PUENTE = 735;
+  const CUERDAS = {
+    sol: { nombre: 'Sol', f: 196.00, color: 'var(--s-sol)', nut: 185, puente: 175, cordal: [180, 852], clavija: [132, 163],
+      donde: 'la de la <b>izquierda</b>, la más <b>gruesa</b>', clavijaTxt: 'la de <b>abajo a la izquierda</b>' },
+    re:  { nombre: 'Re',  f: 293.66, color: 'var(--s-re)',  nut: 199, puente: 196, cordal: [199, 852], clavija: [133, 123],
+      donde: 'la <b>segunda</b> desde la izquierda', clavijaTxt: 'la de <b>arriba a la izquierda</b>' },
+    la:  { nombre: 'La',  f: 440.00, color: 'var(--s-la)',  nut: 211, puente: 219, cordal: [217, 852], clavija: [277, 118],
+      donde: 'la <b>tercera</b> desde la izquierda', clavijaTxt: 'la de <b>arriba a la derecha</b>' },
+    mi:  { nombre: 'Mi',  f: 659.26, color: 'var(--s-mi)',  nut: 221, puente: 241, cordal: [240, 857], clavija: [278, 158],
+      donde: 'la de la <b>derecha</b>, la más <b>delgada</b>', clavijaTxt: 'la de <b>abajo a la derecha</b>' }
+  };
+  // Las cintas van en la cuerda La: Si (2 semitonos), Do (3, pegada a la 1) y Re (5)
+  const CINTAS = [
+    { n: 1, k: 2, nota: 'Si', f: 493.88, dedo: 'dedo 1' },
+    { n: 2, k: 3, nota: 'Do', f: 523.25, dedo: 'dedo 2, pegado al 1' },
+    { n: 3, k: 5, nota: 'Re', f: 587.33, dedo: 'dedo 3' }
+  ];
+  const PASOS = [
+    ...['la', 're', 'sol', 'mi'].map(id => ({ tipo: 'cuerda', id })),
+    ...CINTAS.map(c => ({ tipo: 'cinta', c })),
+    { tipo: 'fin' }
+  ];
+  const yTraste = k => CEJILLA + (PUENTE - CEJILLA) * (1 - Math.pow(2, -k / 12));
+  const xEn = (id, y) => { const c = CUERDAS[id]; return c.nut + (c.puente - c.nut) * (y - CEJILLA) / (PUENTE - CEJILLA); };
+
+  const $ = s => document.querySelector(s);
+  const svg = $('#violin');
+  function dibujar() {
+    const cuerdas = Object.entries(CUERDAS).map(([id, c]) =>
+      `<line class="cuerda" data-id="${id}" x1="${c.nut}" y1="${CEJILLA}" x2="${c.puente}" y2="${PUENTE}" stroke="${c.color}"/>` +
+      `<line class="cuerda" data-id="${id}" x1="${c.puente}" y1="${PUENTE}" x2="${c.cordal[0]}" y2="${c.cordal[1] - 6}" stroke="${c.color}"/>` +
+      `<circle class="aro" data-id="${id}" cx="${c.clavija[0]}" cy="${c.clavija[1]}" r="21" stroke="${c.color}"/>` +
+      `<circle class="aro" data-id="${id}" data-fino cx="${c.cordal[0]}" cy="${c.cordal[1]}" r="11" stroke="${c.color}"/>` +
+      `<text class="rotulo aro" data-id="${id}" x="${c.clavija[0] < 212 ? c.clavija[0] - 26 : c.clavija[0] + 26}" y="${c.clavija[1] + 5}" text-anchor="${c.clavija[0] < 212 ? 'end' : 'start'}" fill="${c.color}" stroke="none" style="stroke:#FBF7EE">${c.nombre}</text>`).join('');
+    const cintas = CINTAS.map(c => { const y = yTraste(c.k);
+      return `<line class="cinta" data-n="${c.n}" x1="${xEn('sol', y) - 6}" y1="${y}" x2="${xEn('mi', y) + 7}" y2="${y}"/>`; }).join('');
+    svg.innerHTML = `<image href="/images/violin-partes.webp" width="424" height="1064"/>${cintas}${cuerdas}<g id="guia-dedo"></g>`;
+  }
+  dibujar();
+
+  /* ---------- Sonido: micrófono y detección de la nota (autocorrelación normalizada) ---------- */
+  let ctx = null, analizador = null, buf = null;
+  function detectar() {
+    analizador.getFloatTimeDomainData(buf);
+    let rms = 0; for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+    rms = Math.sqrt(rms / buf.length);
+    if (rms < 0.006) return null;
+    const sr = ctx.sampleRate, min = Math.floor(sr / 1400), max = Math.ceil(sr / 150), N = buf.length - max;
+    const nsdf = new Float32Array(max + 2);
+    for (let t = min; t <= max + 1; t++) {
+      let ac = 0, m = 0;
+      for (let i = 0; i < N; i++) { ac += buf[i] * buf[i + t]; m += buf[i] * buf[i] + buf[i + t] * buf[i + t]; }
+      nsdf[t] = m ? 2 * ac / m : 0;
+    }
+    // el primer pico alto (90 % del mayor) después de que la curva baja de cero: evita confundir la nota con su octava
+    let mayor = 0; for (let t = min; t <= max; t++) if (nsdf[t] > mayor) mayor = nsdf[t];
+    if (mayor < 0.6) return null;
+    let t = min; while (t < max && nsdf[t] > 0) t++;
+    for (; t < max; t++) {
+      if (nsdf[t] > 0.9 * mayor && nsdf[t] >= nsdf[t - 1] && nsdf[t] >= nsdf[t + 1]) {
+        const a = nsdf[t - 1], b = nsdf[t], c = nsdf[t + 1], d = (a - c) / (2 * (a - 2 * b + c) || 1);
+        return sr / (t + d);
+      }
+    }
+    return null;
+  }
+  async function encenderMicrofono() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') await ctx.resume();
+    analizador = ctx.createAnalyser();
+    analizador.fftSize = 4096;
+    buf = new Float32Array(analizador.fftSize);
+    ctx.createMediaStreamSource(stream).connect(analizador);
+  }
+  function tocarNota(f) {
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), filtro = ctx.createBiquadFilter(), g = ctx.createGain(), t = ctx.currentTime;
+    o.type = 'sawtooth'; o.frequency.value = f; filtro.type = 'lowpass'; filtro.frequency.value = 2200;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.18, t + .05); g.gain.setValueAtTime(.18, t + 1.4); g.gain.linearRampToValueAtTime(0, t + 2);
+    o.connect(filtro).connect(g).connect(ctx.destination); o.start(t); o.stop(t + 2.05);
+  }
+  function campanita() {
+    const t = ctx.currentTime;
+    [1318.5, 1975.5].forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t + i * .12); g.gain.linearRampToValueAtTime(.12, t + i * .12 + .01); g.gain.exponentialRampToValueAtTime(.001, t + i * .12 + .6);
+      o.connect(g).connect(ctx.destination); o.start(t + i * .12); o.stop(t + i * .12 + .65); });
+  }
+
+  /* ---------- Pasos ---------- */
+  let paso = 0, hechos = new Set(), lecturas = [], bienSeguidas = 0, ultimoSonido = 0, ultimoGolpe = null, golpeAnterior = null, enGolpe = [];
+  const NOMBRES = ['Do', 'Do♯', 'Re', 'Re♯', 'Mi', 'Fa', 'Fa♯', 'Sol', 'Sol♯', 'La', 'La♯', 'Si'];
+  const nombreNota = f => NOMBRES[((Math.round(12 * Math.log2(f / 440)) + 9) % 12 + 12) % 12];
+  const centsDe = (f, obj) => 1200 * Math.log2(f / obj);
+
+  function pintarPasos() {
+    $('#pasos').innerHTML = PASOS.filter(p => p.tipo !== 'fin').map((p, i) => {
+      const txt = p.tipo === 'cuerda' ? CUERDAS[p.id].nombre : 'Cinta ' + p.c.n;
+      const sep = i === 4 ? '<li class="sep" aria-hidden="true"></li>' : '';
+      const color = p.tipo === 'cuerda' && hechos.has(i) ? ` style="background:${CUERDAS[p.id].color}"` : '';
+      return `${sep}<li class="${i === paso ? 'actual' : ''} ${hechos.has(i) ? 'hecho' : ''}"${i === paso ? ' aria-current="step"' : ''}><span class="punto"${color}></span>${txt}</li>`;
+    }).join('');
+  }
+  function irA(i) {
+    paso = i; lecturas = []; bienSeguidas = 0; ultimoGolpe = golpeAnterior = null; enGolpe = [];
+    const p = PASOS[paso];
+    pintarPasos();
+    $('#app').classList.toggle('cintas', p.tipo === 'cinta');
+    $('#siguiente').hidden = true;
+    $('#aguja').classList.remove('visible', 'bien');
+    $('#suena').textContent = '';
+    svg.querySelectorAll('.cuerda, .aro').forEach(e => e.classList.toggle('activa', p.tipo === 'cuerda' ? e.dataset.id === p.id : p.tipo === 'cinta' && e.classList.contains('cuerda') && e.dataset.id === 'la'));
+    svg.querySelectorAll('.cinta').forEach(e => { const n = +e.dataset.n; e.classList.toggle('lista', PASOS.some((q, j) => q.tipo === 'cinta' && q.c.n === n && hechos.has(j))); e.classList.toggle('actual', p.tipo === 'cinta' && p.c.n === n); });
+    // en las cintas se acerca la vista al diapasón; en las cuerdas se ve el violín entero
+    svg.setAttribute('viewBox', p.tipo === 'cinta' ? '96 80 232 290' : '0 0 424 1064');
+    $('#guia-dedo').innerHTML = '';
+    $('#saltar').hidden = p.tipo === 'fin';
+    $('#escuchar').hidden = p.tipo === 'fin';
+    $('#otra-vez').hidden = p.tipo !== 'fin';
+    $('#trabajo').classList.toggle('fin', p.tipo === 'fin');
+    // en computadora la ayuda se ve abierta; en el celular queda plegada para que el aviso quede a la vista
+    $('#ayuda-caja').open = matchMedia('(min-width: 761px)').matches;
+    if (p.tipo === 'cuerda') {
+      const c = CUERDAS[p.id];
+      $('#titulo').textContent = 'Cuerda ' + c.nombre;
+      $('#donde').innerHTML = `Es ${c.donde}. Tócala con un dedo y déjala sonar.`;
+      $('#izq').textContent = '◀ Baja (grave)'; $('#der').textContent = 'Alta (aguda) ▶';
+      $('#ayuda').innerHTML = `<b>Apretar</b> estira la cuerda y la hace sonar más aguda; <b>aflojar</b>, más grave. Su clavija es ${c.clavijaTxt}: gírala <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Si en el cordal tiene un tornillito (afinador fino), úsalo para los cambios pequeños: <b>a la derecha ↻ aprieta</b>, a la izquierda ↺ afloja.`;
+      decir(`Toca la cuerda ${c.nombre}`, '', 'Pellizca solo esa cuerda.');
+    } else if (p.tipo === 'cinta') {
+      const c = p.c;
+      $('#titulo').textContent = `Cinta ${c.n}: ${c.nota} en la cuerda La`;
+      $('#donde').innerHTML = `Pon el <b>${c.dedo}</b> de la mano izquierda sobre la cuerda <b>La</b>, más o menos donde está el punto del dibujo, y tócala con la otra mano sin levantar el dedo.`;
+      $('#izq').textContent = '◀ Grave: ve al puente'; $('#der').textContent = 'Aguda: ve al caracol ▶';
+      $('#ayuda').innerHTML = c.n === 2
+        ? 'La cinta 2 queda casi <b>pegada</b> a la cinta 1. Cuando suene <b>Do</b>, pégala derecha (de lado a lado, cruzando las 4 cuerdas) justo debajo de tu dedo.'
+        : `Cuando suene <b>${c.nota}</b>, deja el dedo quieto y pega la cinta derecha (de lado a lado, cruzando las 4 cuerdas) justo debajo de tu dedo.`;
+      const y = yTraste(c.k), x = xEn('la', y);
+      $('#guia-dedo').innerHTML = `<circle class="dedo" cx="${x}" cy="${y}" r="6"/><g id="flecha"></g>`;
+      decir(`Busca el ${c.nota}`, '', 'Toca la cuerda La con el dedo puesto.');
+    } else {
+      const faltan = PASOS.filter((q, j) => q.tipo !== 'fin' && !hechos.has(j)).map(q => q.tipo === 'cuerda' ? 'la cuerda ' + CUERDAS[q.id].nombre : 'la cinta ' + q.c.n);
+      $('#titulo').textContent = faltan.length ? 'Casi listo' : '¡Listo! 🎻';
+      $('#donde').innerHTML = (faltan.length ? `Te saltaste ${faltan.join(', ')}. Puedes volver a hacerlo cuando quieras. ` : 'Tu violín está afinado y tiene sus 3 cintas. ') +
+        'Antes de cada práctica, vuelve a revisar las 4 cuerdas: se desafinan con el clima y con el uso.';
+      $('#ayuda').innerHTML = '<a href="/practica/violin">Practica las notas en el violín virtual</a>';
+      $('#ayuda-caja').open = true;
+      decir(faltan.length ? '' : '¡Muy bien!', 'bien', '');
+      $('#app').classList.remove('cintas');
+      svg.setAttribute('viewBox', '0 0 424 1064');
+    }
+  }
+  function decir(accion, clase, detalle) {
+    const a = $('#accion');
+    a.textContent = accion; a.className = 'accion' + (clase ? ' ' + clase : '');
+    $('#detalle').textContent = detalle;
+  }
+  function flecha(arriba) {
+    const g = $('#flecha'); if (!g) return;
+    const p = PASOS[paso], y = yTraste(p.c.k), x = xEn('la', y) + 22;
+    g.innerHTML = arriba == null ? '' : arriba
+      ? `<path class="flecha" d="M${x} ${y + 12} V${y - 14} M${x - 6} ${y - 8} L${x} ${y - 14} L${x + 6} ${y - 8}"/>`
+      : `<path class="flecha" d="M${x} ${y - 12} V${y + 14} M${x - 6} ${y + 8} L${x} ${y + 14} L${x + 6} ${y + 8}"/>`;
+  }
+  function aguja(c, bien) {
+    const ag = $('#aguja');
+    ag.style.left = (50 + Math.max(-50, Math.min(50, c))) + '%';
+    ag.classList.add('visible'); ag.classList.toggle('bien', bien);
+  }
+  function completar() {
+    if (hechos.has(paso)) return;
+    hechos.add(paso); pintarPasos(); campanita();
+    $('#siguiente').hidden = false;
+    $('#siguiente').textContent = PASOS[paso + 1].tipo === 'fin' ? 'Terminar' : 'Siguiente';
+    if (PASOS[paso].tipo === 'cinta') svg.querySelector(`.cinta[data-n="${PASOS[paso].c.n}"]`).classList.add('lista');
+  }
+
+  // Cada lectura de la nota: qué hacer según lo lejos que está
+  function evaluar(f) {
+    const p = PASOS[paso];
+    if (p.tipo === 'fin') return;
+    const obj = p.tipo === 'cuerda' ? CUERDAS[p.id].f : p.c.f;
+    let c = centsDe(f, obj);
+    if (Math.abs(c - 1200) < 60) c -= 1200;   // a veces se oye la octava de arriba
+    enGolpe.push(c);
+    $('#suena').textContent = 'Suena: ' + nombreNota(f) + ' · ' + f.toFixed(1) + ' Hz';
+    const bien = Math.abs(c) <= (p.tipo === 'cuerda' ? 6 : 10);
+    aguja(c, bien);
+    bienSeguidas = bien ? bienSeguidas + 1 : 0;
+    if (p.tipo === 'cuerda') {
+      const cerca = Object.entries(CUERDAS).map(([id, x]) => [id, Math.abs(centsDe(f, x.f))]).sort((a, b) => a[1] - b[1])[0][0];
+      if (cerca !== p.id && Math.abs(c) > 350) {
+        decir(`Esa suena como la cuerda ${CUERDAS[cerca].nombre}`, 'aviso', `Toca la cuerda ${CUERDAS[p.id].nombre}: ${CUERDAS[p.id].donde.replace(/<[^>]+>/g, '')}.`);
+        return;
+      }
+      if (bien) { decir('¡Afinada! ✓', 'bien', hechos.has(paso) ? 'Pasa a la siguiente cuerda.' : 'Así se queda. Tócala otra vez para comprobar.'); if (bienSeguidas >= 6) completar(); return; }
+      const muy = Math.abs(c) > 50;
+      if (c < 0) decir('⬆ Aprieta un poquito', 'apretar', muy ? 'Está muy baja: gira la clavija muy poquito y vuelve a tocar.' : 'Casi: un toque al afinador fino (↻ a la derecha) o a la clavija.');
+      else decir('⬇ Afloja un poquito', 'aflojar', muy ? 'Está muy alta: gira la clavija muy poquito hacia el otro lado y vuelve a tocar.' : 'Casi: un toque al afinador fino (↺ a la izquierda) o a la clavija.');
+    } else {
+      if (Math.abs(centsDe(f, 440)) < 30) { decir('Esa es la cuerda La sola', 'aviso', 'Apoya bien el dedo sobre la cuerda La y vuelve a tocar.'); flecha(null); return; }
+      if (bien) { decir(`¡Ahí es! Pega la cinta ${p.c.n}`, 'bien', 'Deja el dedo quieto y pega la cinta justo debajo de él, derecha y de lado a lado.'); flecha(null); if (bienSeguidas >= 5) completar(); return; }
+      const lejos = Math.abs(c) > 300 ? ' Pon el dedo cerca del punto del dibujo.' : '';
+      if (c < 0) { decir('Desliza hacia el puente ⬇', 'apretar', 'Suena más grave que ' + p.c.nota + '.' + lejos); flecha(false); }
+      else { decir('Desliza hacia el caracol ⬆', 'aflojar', 'Suena más agudo que ' + p.c.nota + '.' + lejos); flecha(true); }
+    }
+  }
+  // Al terminar cada toque: si la nota se acercó o se alejó del centro, lo dice (sirve para saber hacia dónde girar)
+  function finDeGolpe() {
+    if (enGolpe.length < 3) { enGolpe = []; return; }
+    const orden = enGolpe.slice().sort((a, b) => a - b), c = orden[Math.floor(orden.length / 2)];
+    enGolpe = [];
+    golpeAnterior = ultimoGolpe; ultimoGolpe = c;
+    const p = PASOS[paso];
+    if (p.tipo !== 'cuerda' || golpeAnterior == null || hechos.has(paso) || Math.abs(c) <= 6) return;
+    if (Math.abs(c) < Math.abs(golpeAnterior) - 4) $('#detalle').textContent = '¡Vas bien! Sigue girando hacia el mismo lado, poquito a poco.';
+    else if (Math.abs(c) > Math.abs(golpeAnterior) + 4) $('#detalle').textContent = 'Se alejó: gira hacia el otro lado.';
+  }
+
+  let ultimo = 0;
+  function bucle(t) {
+    requestAnimationFrame(bucle);
+    if (!analizador || t - ultimo < 45) return;
+    ultimo = t;
+    const f = detectar();
+    if (f && f > 150 && f < 1400) {
+      lecturas.push(f); if (lecturas.length > 5) lecturas.shift();
+      const med = lecturas.slice().sort((a, b) => a - b)[Math.floor(lecturas.length / 2)];
+      ultimoSonido = t;
+      if (lecturas.length >= 3) evaluar(med);
+    } else if (ultimoSonido && t - ultimoSonido > 300) {
+      lecturas = []; ultimoSonido = 0; bienSeguidas = 0; finDeGolpe();
+    }
+  }
+
+  $('#empezar').addEventListener('click', async () => {
+    try {
+      await encenderMicrofono();
+      $('#inicio').hidden = true; $('#trabajo').hidden = false;
+      irA(0);
+      requestAnimationFrame(bucle);
+    } catch (e) {
+      $('#error-mic').textContent = 'No se pudo usar el micrófono. Revisa que el navegador tenga permiso para usarlo y vuelve a intentar.';
+    }
+  });
+  $('#escuchar').addEventListener('click', () => { const p = PASOS[paso]; tocarNota(p.tipo === 'cuerda' ? CUERDAS[p.id].f : p.c.f); });
+  $('#siguiente').addEventListener('click', () => irA(Math.min(paso + 1, PASOS.length - 1)));
+  $('#saltar').addEventListener('click', () => irA(Math.min(paso + 1, PASOS.length - 1)));
+  $('#otra-vez').addEventListener('click', () => { hechos.clear(); irA(0); });
+  pintarPasos();
+  // antes de empezar se ve el violín con las 4 cuerdas marcadas
+  svg.querySelectorAll('.cuerda').forEach(e => e.classList.add('activa'));
+</script>
+</body>
+</html>

@@ -61,6 +61,27 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 - El pentagrama se dibuja en 320 × 155 para que entren Sol3 y Re6 con sus líneas adicionales. La nota va centrada en el pentagrama, como en la app (`dibujarCentrada`: se dibuja en su propio grupo y se mueve al centro, entre la clave y el final).
 - En computadora (900 px o más), `.fila-superior` pone el pentagrama a la izquierda y el panel del juego a la derecha; debajo va el violín, con un ancho según el alto de la pantalla (`100dvh - 520px`) para que todo entre sin scroll (probado en 1280×800). En celulares `.fila-superior` es `display: contents` y todo queda en una columna.
 
+## Afinador de violín (`practica/afinador.html`, ruta `/practica/afinador`)
+
+Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un violín pueda hacerlo solo. Está enlazado en Material, en la columna de violín.
+- **Imagen:** el violín completo de la dueña (`images/violin-partes.webp`, una copia de `App_Sprinkloud/assets/ilustraciones/`), con un SVG encima.
+  - Medidas de la imagen (424 × 1064): cejilla en y = 187 y puente en y = 735.
+  - Cuerdas de izquierda a derecha: Sol, Re, La y Mi.
+  - Clavijas: Re arriba a la izquierda, Sol abajo a la izquierda, La arriba a la derecha y Mi abajo a la derecha (`CUERDAS`).
+  - El dibujo tiene afinador fino solo en la cuerda Mi.
+- **Pasos:** primero las 4 cuerdas, en el orden La, Re, Sol y Mi; después las 3 cintas en la cuerda La: cinta 1 en Si, cinta 2 en Do (casi pegada a la 1) y cinta 3 en Re. Son los semitonos 2, 3 y 5, las mismas cintas que dibuja el violín virtual.
+  - En las cintas, la vista se acerca al diapasón (`viewBox`). Un punto ocre muestra dónde poner el dedo y una flecha indica hacia dónde deslizarlo.
+  - Cada paso se puede saltar. Al final se dice qué pasos faltaron.
+- **Qué dice:**
+  - **Si la cuerda equivocada suena:** el nombre de la cuerda que suena y dónde está la que hay que tocar.
+  - **Si está baja o alta:** «Aprieta» o «Afloja», con la clavija si está a más de 50 cents y con el afinador fino si está cerca. El afinador fino aprieta a la derecha ↻.
+  - **Tendencia:** al terminar cada toque, `finDeGolpe` compara con el toque anterior y dice «¡Vas bien!» o «Se alejó: gira hacia el otro lado». No se da el sentido de giro de la clavija, porque depende del violín: el alumno lo descubre con esa tendencia.
+  - **En las cintas:** «Desliza hacia el puente» si suena grave y «Desliza hacia el caracol» si suena agudo. Cuando la nota da, dice que pegue la cinta derecha, de lado a lado.
+  - **Cuándo cuenta como afinada:** la cuerda, con ±6 cents en 6 lecturas seguidas; la cinta, con ±10 cents en 5. Suena una campanita y aparece «Siguiente».
+- **Detección:** micrófono sin cancelación de eco, sin supresión de ruido y sin control de ganancia. Usa autocorrelación normalizada (tipo McLeod) sobre 4096 muestras, de 150 a 1400 Hz, toma el primer pico al 90 % para no confundir la nota con su octava, y saca la mediana de las últimas 5 lecturas. Si oye la octava de arriba (+1200 cents), la corrige.
+- **«Escuchar la nota»:** suena un tono de referencia de 2 s.
+- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844. En el celular, la ayuda va en un desplegable («¿Cómo se hace?») para que el aviso quede a la vista.
+
 ## Células rítmicas (`practica/ritmo.html`)
 
 - App de pantalla completa: el `body` mide 100dvh (flex en columna, sin scroll de página) y reparte el alto entre `.app` y el pie de página, que es una sola línea delgada con los íconos y el copyright. Solo el lienzo tiene scroll propio cuando hay muchos compases. Incluye banco de células (Rítmicas, Largas, Silencios), partitura en compases de 4/4, reproducción con metrónomo y cuenta previa, y dictado rítmico.
