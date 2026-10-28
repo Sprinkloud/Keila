@@ -82,6 +82,7 @@
     .marca span { color: var(--gold); }
     h1 { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.3rem, 4vw, 1.7rem); line-height: 1.1; color: var(--pine); margin: 4px 0 10px; text-align: center; }
 
+
     .afinador { width: 100%; max-width: 1000px; display: grid; grid-template-columns: minmax(200px, 340px) 1fr; gap: 18px; align-items: start; margin-bottom: 24px; }
     .ilus { position: sticky; top: 12px; display: flex; justify-content: center; }
     #violin { width: 100%; max-height: calc(100dvh - 130px); display: block; }
@@ -90,57 +91,78 @@
     #violin .cuerda.activa { opacity: .95; }
     #violin .aro { fill: none; stroke-width: 3px; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity 200ms ease; }
     #violin .aro.activa { opacity: 1; }
-    #violin .rotulo { font: 800 15px "Nunito Sans", sans-serif; paint-order: stroke; stroke: #FBF7EE; stroke-width: 4px; stroke-linejoin: round; }
-    #violin .cinta { stroke: #F4EFE4; stroke-width: 5; opacity: .5; }
-    #violin .cinta.lista { opacity: .95; }
-    #violin .cinta.actual { stroke: var(--gold); opacity: 1; }
-    #violin .dedo { fill: var(--gold); stroke: #3A3128; stroke-width: 1.2; }
-    #violin .flecha { fill: none; stroke: #3A3128; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    #violin .cinta { fill: #F4EFE4; stroke: #8F6A2A; stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .9; }
+    #violin .cinta.actual { fill: var(--gold); }
+    #violin .cinta-n { font: 800 8px "Nunito Sans", sans-serif; fill: #3A3128; }
+    #violin .dedo { fill: #FBF7EE; stroke: #3A3128; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+    #violin .flecha { fill: none; stroke: #3A3128; stroke-width: 3px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
 
     .tarjeta { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: clamp(14px, 2.4vw, 22px); display: grid; gap: 12px; min-width: 0; }
-    .pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-    .pasos li { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--line); font-size: .8rem; font-weight: 700; color: var(--ink-2); }
-    .pasos li .punto { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
-    .pasos li.actual { border-color: var(--pine); color: var(--ink); }
-    .pasos li.hecho { color: var(--pine); }
-    .pasos li.hecho .punto { background: var(--accent); }
-    .pasos .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; padding: 0; border: 0; }
-    h2 { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 1.45rem; margin: 0; color: var(--pine); line-height: 1.15; }
+    h2 { font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 1.35rem; margin: 0; color: var(--pine); line-height: 1.15; }
+    .pregunta { margin: 0; font-weight: 800; text-align: center; }
+    .nota-mic { margin: 0; font-size: .8rem; color: var(--ink-2); text-align: center; }
+
+    /* Las 4 cuerdas: el alumno elige cuál afinar */
+    .cuerdas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .btn-cuerda { min-height: 64px; border-radius: 16px; border: 2px solid var(--c); background: var(--surface); display: grid; place-items: center; gap: 0; padding: 6px 4px;
+      transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease; }
+    .btn-cuerda b { font-family: var(--f-display); font-size: 1.25rem; line-height: 1.1; color: var(--c); }
+    .btn-cuerda small { font-size: .72rem; color: var(--ink-2); font-weight: 700; }
+    .btn-cuerda:active { transform: scale(.97); }
+    .btn-cuerda[aria-pressed="true"] { background: var(--c); }
+    .btn-cuerda[aria-pressed="true"] b, .btn-cuerda[aria-pressed="true"] small { color: #FBF7EE; }
+    .btn-cuerda .ok { visibility: hidden; font-size: .75rem; font-weight: 800; color: var(--pine); }
+    .btn-cuerda.afinada .ok { visibility: visible; }
+    .btn-cuerda[aria-pressed="true"] .ok { color: #FBF7EE; }
+
+    /* Botón de las cintas: un brillo que gira alrededor para que den ganas de tocarlo */
+    @property --giro { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+    .btn-cintas { justify-self: center; position: relative; border: 0; padding: 3px; border-radius: 999px; min-height: 50px;
+      background: conic-gradient(from var(--giro), var(--gold) 0deg, #FFF3CF 50deg, var(--gold) 110deg, var(--accent) 200deg, var(--gold-soft) 290deg, var(--gold) 360deg);
+      animation: girar 3.2s linear infinite; transition: transform var(--dur-press) var(--ease-out); }
+    .btn-cintas > span { display: flex; align-items: center; gap: 8px; height: 100%; background: var(--surface); border-radius: 999px; padding: 10px 22px; font-weight: 800; color: var(--ink); }
+    .btn-cintas .chispa { display: inline-block; animation: titilar 1.6s ease-in-out infinite; }
+    .btn-cintas:active { transform: scale(.97); }
+    @keyframes girar { to { --giro: 360deg; } }
+    @keyframes titilar { 0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; } 50% { transform: scale(.75) rotate(20deg); opacity: .6; } }
+
+    .cabeza-cintas { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip { min-height: 40px; padding: 4px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); font-weight: 800; font-size: .88rem; }
+    .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: #3A3128; }
+    .chip.lista::after { content: " ✓"; }
     .donde { margin: 0; color: var(--ink-2); }
     .donde b { color: var(--ink); }
 
-    .medidor { display: grid; gap: 4px; }
-    .barra { position: relative; height: 34px; border-radius: 999px; overflow: hidden;
-      background: linear-gradient(90deg, var(--danger-soft) 0 40%, var(--accent-soft) 44% 56%, var(--danger-soft) 60% 100%); border: 1px solid var(--line); }
-    .barra::after { content: ""; position: absolute; left: 50%; top: 4px; bottom: 4px; width: 2px; margin-left: -1px; background: var(--pine); opacity: .5; }
-    .aguja { position: absolute; top: 3px; bottom: 3px; width: 8px; margin-left: -4px; left: 50%; border-radius: 4px; background: var(--ink); opacity: 0; transition: left 120ms linear, opacity 200ms ease, background-color 200ms ease; }
+    /* Medidor: a los extremos, la palabra de lo que hay que hacer */
+    .barra { position: relative; height: 46px; border-radius: 999px; overflow: hidden;
+      background: linear-gradient(90deg, var(--gold-soft) 0 38%, var(--accent-soft) 44% 56%, #DCE5EC 62% 100%); border: 1px solid var(--line); }
+    .barra::after { content: ""; position: absolute; left: 50%; top: 5px; bottom: 5px; width: 2px; margin-left: -1px; background: var(--pine); opacity: .5; }
+    .medidor { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+    .extremo { font-weight: 800; font-size: 1rem; line-height: 1.1; text-align: center; }
+    .extremo.izq { color: var(--gold-ink); }
+    .extremo.der { color: var(--s-mi); }
+    .aguja { position: absolute; top: 4px; bottom: 4px; width: 10px; margin-left: -5px; left: 50%; border-radius: 5px; background: var(--ink); opacity: 0; z-index: 1;
+      transition: left 120ms linear, opacity 200ms ease, background-color 200ms ease; }
     .aguja.visible { opacity: 1; }
     .aguja.bien { background: var(--accent); }
-    .escala { display: flex; justify-content: space-between; font-size: .75rem; color: var(--ink-2); font-weight: 700; }
     .suena { margin: 0; text-align: center; font-size: .85rem; color: var(--ink-2); min-height: 1.3em; }
-
     .accion { margin: 0; font-family: var(--f-display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: clamp(1.25rem, 3.6vw, 1.6rem); line-height: 1.2; text-align: center; min-height: 2.4em; display: grid; place-items: center; }
-    .accion.apretar { color: var(--gold-ink); }
-    .accion.aflojar { color: var(--s-mi); }
+    .accion.ajusta { color: var(--gold-ink); }
+    .accion.afloja { color: var(--s-mi); }
     .accion.bien { color: var(--pine); }
     .accion.aviso { color: var(--danger); }
     .detalle { margin: 0; color: var(--ink-2); font-size: .92rem; min-height: 2.8em; text-align: center; }
-    .ayuda { margin: 0; padding: 10px 12px; border-radius: 14px; background: var(--surface-2); font-size: .88rem; color: var(--ink-2); }
+    .ayuda { margin: 0; padding: 10px 12px; border-radius: 14px; background: var(--surface-2); font-size: .9rem; color: var(--ink-2); }
     .ayuda b { color: var(--ink); }
     .ayuda summary { cursor: pointer; font-weight: 800; color: var(--ink); min-height: 28px; }
-    .ayuda p { margin: 6px 0 0; }
-    .ayuda a { color: var(--pine); font-weight: 800; }
-    .fin .medidor, .fin #suena, .fin #detalle { display: none; }
+    .ayuda p, .ayuda ul { margin: 6px 0 0; }
+    .ayuda ul { padding-left: 20px; display: grid; gap: 3px; }
 
     .botones { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
     .btn { min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); font-weight: 800; transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease, border-color 150ms ease; }
     .btn:active { transform: scale(.97); }
-    @media (hover: hover) { .btn:hover { border-color: var(--accent); } }
-    .btn.primario { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-    .btn[hidden] { display: none; }
-    .inicio { display: grid; gap: 10px; text-align: center; }
-    .inicio p { margin: 0; color: var(--ink-2); }
-    .inicio ol { text-align: left; margin: 0; padding-left: 22px; display: grid; gap: 4px; color: var(--ink-2); }
+    @media (hover: hover) { .btn:hover, .chip:hover { border-color: var(--accent); } }
 
     #footer { margin: auto -16px 0; align-self: stretch; padding: 6px 1.5em max(10px, env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); text-align: center; color: var(--ink-2); }
     .pie-copy { margin: 0; font-size: .8rem; }
@@ -148,10 +170,13 @@
     @media (max-width: 760px) {
       .afinador { grid-template-columns: 1fr; gap: 12px; }
       .ilus { position: static; }
-      #violin { max-height: 38dvh; }
-      .afinador.cintas #violin { max-height: 42dvh; }
+      #violin { max-height: 34dvh; }
+      .afinador.cintas #violin { max-height: 40dvh; }
     }
-    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+      .btn-cintas, .btn-cintas .chispa { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -167,42 +192,52 @@
 <main class="afinador" id="app">
   <div class="ilus"><svg id="violin" role="img" aria-label="Violín"></svg></div>
 
-  <section class="tarjeta" aria-live="polite">
-    <ol class="pasos" id="pasos" aria-label="Pasos"></ol>
-
-    <div class="inicio" id="inicio">
-      <h2>Vamos a afinar tu violín</h2>
-      <ol>
-        <li>Ponte en un lugar <b>silencioso</b>.</li>
-        <li>Toca cada cuerda <b>con el dedo</b> (pizzicato), no con el arco.</li>
-        <li>La app te dice si hay que <b>apretar</b> o <b>aflojar</b>.</li>
-        <li>Al final te ayuda a poner las <b>3 cintas</b> en el diapasón.</li>
-      </ol>
-      <p>Necesita el micrófono para escuchar tu violín. El sonido no se graba ni sale de tu dispositivo.</p>
-      <div class="botones"><button class="btn primario" id="empezar" type="button">Empezar</button></div>
-      <p class="detalle" id="error-mic" role="alert"></p>
+  <section class="tarjeta">
+    <!-- Afinar: el alumno elige la cuerda -->
+    <div id="vista-cuerdas" style="display:grid;gap:12px">
+      <p class="pregunta">¿Qué cuerda quieres afinar?</p>
+      <div class="cuerdas" id="cuerdas"></div>
+      <p class="nota-mic">Tócala con el dedo (pizzicato). Usa el micrófono: el sonido no se graba.</p>
+      <button class="btn-cintas" id="abrir-cintas" type="button"><span><span class="chispa" aria-hidden="true">✨</span>Poner las cintas</span></button>
     </div>
 
-    <div id="trabajo" hidden>
-      <div style="display:grid;gap:10px">
-        <h2 id="titulo"></h2>
-        <p class="donde" id="donde"></p>
-        <div class="medidor" aria-hidden="true">
-          <div class="barra"><div class="aguja" id="aguja"></div></div>
-          <div class="escala"><span id="izq"></span><span id="der"></span></div>
-        </div>
-        <p class="suena" id="suena"></p>
-        <p class="accion" id="accion"></p>
-        <p class="detalle" id="detalle"></p>
-        <details class="ayuda" id="ayuda-caja"><summary>¿Cómo se hace?</summary><p id="ayuda"></p></details>
-        <div class="botones">
-          <button class="btn" id="escuchar" type="button">▶ Escuchar la nota</button>
-          <button class="btn primario" id="siguiente" type="button" hidden>Siguiente</button>
-          <button class="btn" id="otra-vez" type="button" hidden>Afinar otra vez</button>
-        </div>
-        <div class="botones"><button class="btn" id="saltar" type="button" style="font-size:.85rem;min-height:40px">Saltar este paso</button></div>
+    <!-- Las cintas -->
+    <div id="vista-cintas" hidden style="display:grid;gap:12px">
+      <div class="cabeza-cintas">
+        <h2>Las 3 cintas</h2>
+        <button class="btn" id="volver-cuerdas" type="button" style="min-height:40px;font-size:.88rem">← Afinar cuerdas</button>
+      </div>
+      <details class="ayuda" id="explica-cintas" open>
+        <summary>¿Para qué sirven?</summary>
+        <p>Las cintas te muestran dónde poner cada dedo en la cuerda <b>La</b>, para que las notas suenen afinadas:</p>
+        <ul>
+          <li><b>Cinta 1 = Si</b>, con el dedo 1.</li>
+          <li><b>Cinta 2 = Do</b>, con el dedo 2.</li>
+          <li><b>Cinta 3 = Re</b>, con el dedo 3.</li>
+        </ul>
+        <p>Las cintas <b>1 y 2 van juntas</b>, pegadas: entre Si y Do (igual que entre Mi y Fa) no queda espacio, los dedos se tocan. Entre la 2 y la 3 sí hay espacio. Antes de empezar, afina la cuerda La.</p>
+      </details>
+      <div class="chips" id="chips-cintas" role="group" aria-label="Cinta"></div>
+    </div>
+
+    <!-- El afinador (sirve para las dos vistas) -->
+    <div id="medidor-caja" hidden style="display:grid;gap:10px">
+      <p class="donde" id="donde"></p>
+      <div class="medidor" aria-hidden="true">
+        <span class="extremo izq" id="izq"></span>
+        <div class="barra"><div class="aguja" id="aguja"></div></div>
+        <span class="extremo der" id="der"></span>
+      </div>
+      <p class="suena" id="suena"></p>
+      <p class="accion" id="accion" aria-live="polite"></p>
+      <p class="detalle" id="detalle"></p>
+      <details class="ayuda" id="ayuda-caja"><summary>¿Cómo se hace?</summary><p id="ayuda"></p></details>
+      <div class="botones">
+        <button class="btn" id="escuchar" type="button">▶ Escuchar la nota</button>
+        <button class="btn" id="siguiente-cinta" type="button" hidden>Siguiente cinta</button>
       </div>
     </div>
+    <p class="detalle" id="error-mic" role="alert" style="min-height:0"></p>
   </section>
 </main>
 
@@ -215,27 +250,24 @@
      La y Mi a la derecha (La arriba). El afinador fino del dibujo está en la cuerda Mi. */
   const CEJILLA = 187, PUENTE = 735;
   const CUERDAS = {
-    sol: { nombre: 'Sol', f: 196.00, color: 'var(--s-sol)', nut: 185, puente: 175, cordal: [180, 852], clavija: [132, 163],
-      donde: 'la de la <b>izquierda</b>, la más <b>gruesa</b>', clavijaTxt: 'la de <b>abajo a la izquierda</b>' },
-    re:  { nombre: 'Re',  f: 293.66, color: 'var(--s-re)',  nut: 199, puente: 196, cordal: [199, 852], clavija: [133, 123],
-      donde: 'la <b>segunda</b> desde la izquierda', clavijaTxt: 'la de <b>arriba a la izquierda</b>' },
-    la:  { nombre: 'La',  f: 440.00, color: 'var(--s-la)',  nut: 211, puente: 219, cordal: [217, 852], clavija: [277, 118],
-      donde: 'la <b>tercera</b> desde la izquierda', clavijaTxt: 'la de <b>arriba a la derecha</b>' },
-    mi:  { nombre: 'Mi',  f: 659.26, color: 'var(--s-mi)',  nut: 221, puente: 241, cordal: [240, 857], clavija: [278, 158],
-      donde: 'la de la <b>derecha</b>, la más <b>delgada</b>', clavijaTxt: 'la de <b>abajo a la derecha</b>' }
+    sol: { nombre: 'Sol', f: 196.00, color: '#9C5B55', nut: 185, puente: 175, cordal: [180, 852], clavija: [132, 163],
+      donde: 'la de la <b>izquierda</b>, la más <b>gruesa</b>', corto: 'la más gruesa', clavijaTxt: 'la de <b>abajo a la izquierda</b>' },
+    re:  { nombre: 'Re',  f: 293.66, color: '#C4923A', nut: 199, puente: 196, cordal: [199, 852], clavija: [133, 123],
+      donde: 'la <b>segunda</b> desde la izquierda', corto: '2.ª', clavijaTxt: 'la de <b>arriba a la izquierda</b>' },
+    la:  { nombre: 'La',  f: 440.00, color: '#647745', nut: 211, puente: 219, cordal: [217, 852], clavija: [277, 118],
+      donde: 'la <b>tercera</b> desde la izquierda', corto: '3.ª', clavijaTxt: 'la de <b>arriba a la derecha</b>' },
+    mi:  { nombre: 'Mi',  f: 659.26, color: '#567388', nut: 221, puente: 241, cordal: [240, 857], clavija: [278, 158],
+      donde: 'la de la <b>derecha</b>, la más <b>delgada</b>', corto: 'la más delgada', clavijaTxt: 'la de <b>abajo a la derecha</b>' }
   };
-  // Las cintas van en la cuerda La: Si (2 semitonos), Do (3, pegada a la 1) y Re (5)
-  const CINTAS = [
-    { n: 1, k: 2, nota: 'Si', f: 493.88, dedo: 'dedo 1' },
-    { n: 2, k: 3, nota: 'Do', f: 523.25, dedo: 'dedo 2, pegado al 1' },
-    { n: 3, k: 5, nota: 'Re', f: 587.33, dedo: 'dedo 3' }
-  ];
-  const PASOS = [
-    ...['la', 're', 'sol', 'mi'].map(id => ({ tipo: 'cuerda', id })),
-    ...CINTAS.map(c => ({ tipo: 'cinta', c })),
-    { tipo: 'fin' }
-  ];
+  /* Las cintas, en la cuerda La: Si, Do y Re. Pedido de la dueña: la 1 y la 2 se dibujan JUNTAS (Si-Do es medio tono,
+     los dedos se tocan) y más anchas, para que el alumno no crea que hay que dejar espacio entre los dedos 1 y 2. */
+  const ANCHO_CINTA = 12;
   const yTraste = k => CEJILLA + (PUENTE - CEJILLA) * (1 - Math.pow(2, -k / 12));
+  const CINTAS = [
+    { n: 1, nota: 'Si', f: 493.88, dedo: 'dedo 1', y: yTraste(2) },
+    { n: 2, nota: 'Do', f: 523.25, dedo: 'dedo 2, pegado al dedo 1', y: yTraste(2) + ANCHO_CINTA },
+    { n: 3, nota: 'Re', f: 587.33, dedo: 'dedo 3', y: yTraste(5) }
+  ];
   const xEn = (id, y) => { const c = CUERDAS[id]; return c.nut + (c.puente - c.nut) * (y - CEJILLA) / (PUENTE - CEJILLA); };
 
   const $ = s => document.querySelector(s);
@@ -245,11 +277,12 @@
       `<line class="cuerda" data-id="${id}" x1="${c.nut}" y1="${CEJILLA}" x2="${c.puente}" y2="${PUENTE}" stroke="${c.color}"/>` +
       `<line class="cuerda" data-id="${id}" x1="${c.puente}" y1="${PUENTE}" x2="${c.cordal[0]}" y2="${c.cordal[1] - 6}" stroke="${c.color}"/>` +
       `<circle class="aro" data-id="${id}" cx="${c.clavija[0]}" cy="${c.clavija[1]}" r="21" stroke="${c.color}"/>` +
-      `<circle class="aro" data-id="${id}" data-fino cx="${c.cordal[0]}" cy="${c.cordal[1]}" r="11" stroke="${c.color}"/>` +
-      `<text class="rotulo aro" data-id="${id}" x="${c.clavija[0] < 212 ? c.clavija[0] - 26 : c.clavija[0] + 26}" y="${c.clavija[1] + 5}" text-anchor="${c.clavija[0] < 212 ? 'end' : 'start'}" fill="${c.color}" stroke="none" style="stroke:#FBF7EE">${c.nombre}</text>`).join('');
-    const cintas = CINTAS.map(c => { const y = yTraste(c.k);
-      return `<line class="cinta" data-n="${c.n}" x1="${xEn('sol', y) - 6}" y1="${y}" x2="${xEn('mi', y) + 7}" y2="${y}"/>`; }).join('');
-    svg.innerHTML = `<image href="/images/violin-partes.webp" width="424" height="1064"/>${cintas}${cuerdas}<g id="guia-dedo"></g>`;
+      `<circle class="aro" data-id="${id}" cx="${c.cordal[0]}" cy="${c.cordal[1]}" r="11" stroke="${c.color}"/>`).join('');
+    const cintas = CINTAS.map(c => { const x1 = xEn('sol', c.y) - 7, x2 = xEn('mi', c.y) + 8;
+      return `<g class="cinta-g" data-n="${c.n}"><rect class="cinta" x="${x1}" y="${c.y - ANCHO_CINTA / 2}" width="${x2 - x1}" height="${ANCHO_CINTA}" rx="1.5"/>` +
+        `<text class="cinta-n" x="${x1 - 4}" y="${c.y + 3}" text-anchor="end">${c.n}</text></g>`; }).join('');
+    svg.setAttribute('viewBox', '0 0 424 1064');
+    svg.innerHTML = `<image href="/images/violin-partes.webp" width="424" height="1064"/>${cuerdas}<g id="cintas" style="display:none">${cintas}</g><g id="guia-dedo"></g>`;
   }
   dibujar();
 
@@ -280,6 +313,7 @@
     return null;
   }
   async function encenderMicrofono() {
+    if (analizador) return;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
     ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === 'suspended') await ctx.resume();
@@ -287,6 +321,7 @@
     analizador.fftSize = 4096;
     buf = new Float32Array(analizador.fftSize);
     ctx.createMediaStreamSource(stream).connect(analizador);
+    requestAnimationFrame(bucle);
   }
   function tocarNota(f) {
     ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
@@ -302,122 +337,119 @@
       o.connect(g).connect(ctx.destination); o.start(t + i * .12); o.stop(t + i * .12 + .65); });
   }
 
-  /* ---------- Pasos ---------- */
-  let paso = 0, hechos = new Set(), lecturas = [], bienSeguidas = 0, ultimoSonido = 0, ultimoGolpe = null, golpeAnterior = null, enGolpe = [];
+  /* ---------- Qué se está afinando: una cuerda (la que elige el alumno) o una cinta ---------- */
+  let sel = null;   // { tipo: 'cuerda', id } o { tipo: 'cinta', c }
+  const afinadas = new Set(), cintasListas = new Set();
+  let lecturas = [], bienSeguidas = 0, ultimoSonido = 0, ultimoGolpe = null, enGolpe = [];
   const NOMBRES = ['Do', 'Do♯', 'Re', 'Re♯', 'Mi', 'Fa', 'Fa♯', 'Sol', 'Sol♯', 'La', 'La♯', 'Si'];
   const nombreNota = f => NOMBRES[((Math.round(12 * Math.log2(f / 440)) + 9) % 12 + 12) % 12];
   const centsDe = (f, obj) => 1200 * Math.log2(f / obj);
 
-  function pintarPasos() {
-    $('#pasos').innerHTML = PASOS.filter(p => p.tipo !== 'fin').map((p, i) => {
-      const txt = p.tipo === 'cuerda' ? CUERDAS[p.id].nombre : 'Cinta ' + p.c.n;
-      const sep = i === 4 ? '<li class="sep" aria-hidden="true"></li>' : '';
-      const color = p.tipo === 'cuerda' && hechos.has(i) ? ` style="background:${CUERDAS[p.id].color}"` : '';
-      return `${sep}<li class="${i === paso ? 'actual' : ''} ${hechos.has(i) ? 'hecho' : ''}"${i === paso ? ' aria-current="step"' : ''}><span class="punto"${color}></span>${txt}</li>`;
-    }).join('');
-  }
-  function irA(i) {
-    paso = i; lecturas = []; bienSeguidas = 0; ultimoGolpe = golpeAnterior = null; enGolpe = [];
-    const p = PASOS[paso];
-    pintarPasos();
-    $('#app').classList.toggle('cintas', p.tipo === 'cinta');
-    $('#siguiente').hidden = true;
-    $('#aguja').classList.remove('visible', 'bien');
-    $('#suena').textContent = '';
-    svg.querySelectorAll('.cuerda, .aro').forEach(e => e.classList.toggle('activa', p.tipo === 'cuerda' ? e.dataset.id === p.id : p.tipo === 'cinta' && e.classList.contains('cuerda') && e.dataset.id === 'la'));
-    svg.querySelectorAll('.cinta').forEach(e => { const n = +e.dataset.n; e.classList.toggle('lista', PASOS.some((q, j) => q.tipo === 'cinta' && q.c.n === n && hechos.has(j))); e.classList.toggle('actual', p.tipo === 'cinta' && p.c.n === n); });
-    // en las cintas se acerca la vista al diapasón; en las cuerdas se ve el violín entero
-    svg.setAttribute('viewBox', p.tipo === 'cinta' ? '96 80 232 290' : '0 0 424 1064');
-    $('#guia-dedo').innerHTML = '';
-    $('#saltar').hidden = p.tipo === 'fin';
-    $('#escuchar').hidden = p.tipo === 'fin';
-    $('#otra-vez').hidden = p.tipo !== 'fin';
-    $('#trabajo').classList.toggle('fin', p.tipo === 'fin');
-    // en computadora la ayuda se ve abierta; en el celular queda plegada para que el aviso quede a la vista
+  $('#cuerdas').innerHTML = ['sol', 're', 'la', 'mi'].map(id => { const c = CUERDAS[id];
+    return `<button class="btn-cuerda" type="button" data-id="${id}" aria-pressed="false" style="--c:${c.color}"><b>${c.nombre}</b><small>${c.corto}</small><span class="ok">✓ afinada</span></button>`; }).join('');
+  $('#chips-cintas').innerHTML = CINTAS.map(c => `<button class="chip" type="button" data-n="${c.n}" aria-pressed="false">Cinta ${c.n} · ${c.nota}</button>`).join('');
+
+  function reiniciarLecturas() { lecturas = []; bienSeguidas = 0; ultimoGolpe = null; enGolpe = []; $('#aguja').classList.remove('visible', 'bien'); $('#suena').textContent = ''; }
+
+  function elegirCuerda(id) {
+    sel = { tipo: 'cuerda', id }; reiniciarLecturas();
+    const c = CUERDAS[id];
+    document.querySelectorAll('.btn-cuerda').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+    svg.querySelectorAll('.cuerda, .aro').forEach(e => e.classList.toggle('activa', e.dataset.id === id));
+    $('#medidor-caja').hidden = false;
+    $('#siguiente-cinta').hidden = true;
+    $('#donde').innerHTML = `Cuerda <b>${c.nombre}</b>: es ${c.donde}. Tócala con un dedo y déjala sonar.`;
+    $('#izq').textContent = 'Ajusta ⬆'; $('#der').textContent = 'Afloja ⬇';
+    $('#ayuda').innerHTML = `<b>Ajustar</b> (apretar) estira la cuerda y la hace sonar más aguda; <b>aflojar</b>, más grave. Su clavija es ${c.clavijaTxt}: gírala <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Si en el cordal tiene un tornillito (afinador fino), úsalo para los cambios pequeños: <b>a la derecha ↻ ajusta</b>, a la izquierda ↺ afloja.`;
     $('#ayuda-caja').open = matchMedia('(min-width: 761px)').matches;
-    if (p.tipo === 'cuerda') {
-      const c = CUERDAS[p.id];
-      $('#titulo').textContent = 'Cuerda ' + c.nombre;
-      $('#donde').innerHTML = `Es ${c.donde}. Tócala con un dedo y déjala sonar.`;
-      $('#izq').textContent = '◀ Baja (grave)'; $('#der').textContent = 'Alta (aguda) ▶';
-      $('#ayuda').innerHTML = `<b>Apretar</b> estira la cuerda y la hace sonar más aguda; <b>aflojar</b>, más grave. Su clavija es ${c.clavijaTxt}: gírala <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Si en el cordal tiene un tornillito (afinador fino), úsalo para los cambios pequeños: <b>a la derecha ↻ aprieta</b>, a la izquierda ↺ afloja.`;
-      decir(`Toca la cuerda ${c.nombre}`, '', 'Pellizca solo esa cuerda.');
-    } else if (p.tipo === 'cinta') {
-      const c = p.c;
-      $('#titulo').textContent = `Cinta ${c.n}: ${c.nota} en la cuerda La`;
-      $('#donde').innerHTML = `Pon el <b>${c.dedo}</b> de la mano izquierda sobre la cuerda <b>La</b>, más o menos donde está el punto del dibujo, y tócala con la otra mano sin levantar el dedo.`;
-      $('#izq').textContent = '◀ Grave: ve al puente'; $('#der').textContent = 'Aguda: ve al caracol ▶';
-      $('#ayuda').innerHTML = c.n === 2
-        ? 'La cinta 2 queda casi <b>pegada</b> a la cinta 1. Cuando suene <b>Do</b>, pégala derecha (de lado a lado, cruzando las 4 cuerdas) justo debajo de tu dedo.'
-        : `Cuando suene <b>${c.nota}</b>, deja el dedo quieto y pega la cinta derecha (de lado a lado, cruzando las 4 cuerdas) justo debajo de tu dedo.`;
-      const y = yTraste(c.k), x = xEn('la', y);
-      $('#guia-dedo').innerHTML = `<circle class="dedo" cx="${x}" cy="${y}" r="6"/><g id="flecha"></g>`;
-      decir(`Busca el ${c.nota}`, '', 'Toca la cuerda La con el dedo puesto.');
-    } else {
-      const faltan = PASOS.filter((q, j) => q.tipo !== 'fin' && !hechos.has(j)).map(q => q.tipo === 'cuerda' ? 'la cuerda ' + CUERDAS[q.id].nombre : 'la cinta ' + q.c.n);
-      $('#titulo').textContent = faltan.length ? 'Casi listo' : '¡Listo! 🎻';
-      $('#donde').innerHTML = (faltan.length ? `Te saltaste ${faltan.join(', ')}. Puedes volver a hacerlo cuando quieras. ` : 'Tu violín está afinado y tiene sus 3 cintas. ') +
-        'Antes de cada práctica, vuelve a revisar las 4 cuerdas: se desafinan con el clima y con el uso.';
-      $('#ayuda').innerHTML = '<a href="/practica/violin">Practica las notas en el violín virtual</a>';
-      $('#ayuda-caja').open = true;
-      decir(faltan.length ? '' : '¡Muy bien!', 'bien', '');
-      $('#app').classList.remove('cintas');
-      svg.setAttribute('viewBox', '0 0 424 1064');
-    }
+    decir(afinadas.has(id) ? '¡Afinada! ✓' : `Toca la cuerda ${c.nombre}`, afinadas.has(id) ? 'bien' : '', 'Pellizca solo esa cuerda.');
   }
+  function elegirCinta(n) {
+    const c = CINTAS.find(x => x.n === n);
+    sel = { tipo: 'cinta', c }; reiniciarLecturas();
+    document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.n === n)));
+    svg.querySelectorAll('.cinta-g').forEach(g => g.querySelector('.cinta').classList.toggle('actual', +g.dataset.n === n));
+    $('#medidor-caja').hidden = false;
+    $('#siguiente-cinta').hidden = true;
+    $('#donde').innerHTML = `<b>Cinta ${c.n} = ${c.nota}.</b> Pon el <b>${c.dedo}</b> sobre la cuerda <b>La</b>, donde está el círculo, y tócala con la otra mano sin levantar el dedo.`;
+    $('#izq').textContent = 'Al puente ⬇'; $('#der').textContent = 'Al caracol ⬆';
+    $('#ayuda').innerHTML = c.n === 2
+      ? 'La cinta 2 va <b>pegada</b> a la cinta 1, sin espacio: tu dedo 2 toca al dedo 1. Cuando suene <b>Do</b>, pégala derecha, de lado a lado, cruzando las 4 cuerdas.'
+      : `Cuando suene <b>${c.nota}</b>, deja el dedo quieto y pega la cinta derecha, de lado a lado, cruzando las 4 cuerdas, justo debajo de tu dedo.`;
+    $('#ayuda-caja').open = false;
+    const x = xEn('la', c.y);
+    $('#guia-dedo').innerHTML = `<circle class="dedo" cx="${x}" cy="${c.y}" r="5.5"/><g id="flecha"></g>`;
+    decir(cintasListas.has(n) ? `¡Cinta ${n} lista! ✓` : `Busca el ${c.nota}`, cintasListas.has(n) ? 'bien' : '', 'Toca la cuerda La con el dedo puesto.');
+  }
+  function verCintas(ver) {
+    $('#vista-cuerdas').hidden = ver; $('#vista-cintas').hidden = !ver;
+    $('#app').classList.toggle('cintas', ver);
+    $('#cintas').style.display = ver ? '' : 'none';
+    $('#guia-dedo').innerHTML = '';
+    // en las cintas se acerca la vista al diapasón; al afinar se ve el violín entero
+    svg.setAttribute('viewBox', ver ? '96 80 232 290' : '0 0 424 1064');
+    svg.querySelectorAll('.cuerda, .aro').forEach(e => e.classList.toggle('activa', ver && e.classList.contains('cuerda') && e.dataset.id === 'la'));
+    if (ver) elegirCinta(1);
+    else { sel = null; $('#medidor-caja').hidden = true; document.querySelectorAll('.btn-cuerda').forEach(b => b.setAttribute('aria-pressed', 'false')); svg.querySelectorAll('.cuerda').forEach(e => e.classList.add('activa')); }
+  }
+
   function decir(accion, clase, detalle) {
     const a = $('#accion');
     a.textContent = accion; a.className = 'accion' + (clase ? ' ' + clase : '');
     $('#detalle').textContent = detalle;
   }
   function flecha(arriba) {
-    const g = $('#flecha'); if (!g) return;
-    const p = PASOS[paso], y = yTraste(p.c.k), x = xEn('la', y) + 22;
+    const g = $('#flecha'); if (!g || !sel || sel.tipo !== 'cinta') return;
+    const y = sel.c.y, x = xEn('la', y) + 24;
     g.innerHTML = arriba == null ? '' : arriba
       ? `<path class="flecha" d="M${x} ${y + 12} V${y - 14} M${x - 6} ${y - 8} L${x} ${y - 14} L${x + 6} ${y - 8}"/>`
       : `<path class="flecha" d="M${x} ${y - 12} V${y + 14} M${x - 6} ${y + 8} L${x} ${y + 14} L${x + 6} ${y + 8}"/>`;
   }
   function aguja(c, bien) {
     const ag = $('#aguja');
-    ag.style.left = (50 + Math.max(-50, Math.min(50, c))) + '%';
+    ag.style.left = (50 + Math.max(-46, Math.min(46, c))) + '%';
     ag.classList.add('visible'); ag.classList.toggle('bien', bien);
-  }
-  function completar() {
-    if (hechos.has(paso)) return;
-    hechos.add(paso); pintarPasos(); campanita();
-    $('#siguiente').hidden = false;
-    $('#siguiente').textContent = PASOS[paso + 1].tipo === 'fin' ? 'Terminar' : 'Siguiente';
-    if (PASOS[paso].tipo === 'cinta') svg.querySelector(`.cinta[data-n="${PASOS[paso].c.n}"]`).classList.add('lista');
   }
 
   // Cada lectura de la nota: qué hacer según lo lejos que está
   function evaluar(f) {
-    const p = PASOS[paso];
-    if (p.tipo === 'fin') return;
-    const obj = p.tipo === 'cuerda' ? CUERDAS[p.id].f : p.c.f;
+    if (!sel) return;
+    const obj = sel.tipo === 'cuerda' ? CUERDAS[sel.id].f : sel.c.f;
     let c = centsDe(f, obj);
     if (Math.abs(c - 1200) < 60) c -= 1200;   // a veces se oye la octava de arriba
     enGolpe.push(c);
     $('#suena').textContent = 'Suena: ' + nombreNota(f) + ' · ' + f.toFixed(1) + ' Hz';
-    const bien = Math.abs(c) <= (p.tipo === 'cuerda' ? 6 : 10);
+    const bien = Math.abs(c) <= (sel.tipo === 'cuerda' ? 6 : 10);
     aguja(c, bien);
     bienSeguidas = bien ? bienSeguidas + 1 : 0;
-    if (p.tipo === 'cuerda') {
-      const cerca = Object.entries(CUERDAS).map(([id, x]) => [id, Math.abs(centsDe(f, x.f))]).sort((a, b) => a[1] - b[1])[0][0];
-      if (cerca !== p.id && Math.abs(c) > 350) {
-        decir(`Esa suena como la cuerda ${CUERDAS[cerca].nombre}`, 'aviso', `Toca la cuerda ${CUERDAS[p.id].nombre}: ${CUERDAS[p.id].donde.replace(/<[^>]+>/g, '')}.`);
+    if (sel.tipo === 'cuerda') {
+      const id = sel.id, cerca = Object.entries(CUERDAS).map(([k, x]) => [k, Math.abs(centsDe(f, x.f))]).sort((a, b) => a[1] - b[1])[0][0];
+      if (cerca !== id && Math.abs(c) > 350) {
+        decir(`Esa suena como la cuerda ${CUERDAS[cerca].nombre}`, 'aviso', `Si quieres afinar la ${CUERDAS[cerca].nombre}, elígela arriba. La ${CUERDAS[id].nombre} es ${CUERDAS[id].donde.replace(/<[^>]+>/g, '')}.`);
         return;
       }
-      if (bien) { decir('¡Afinada! ✓', 'bien', hechos.has(paso) ? 'Pasa a la siguiente cuerda.' : 'Así se queda. Tócala otra vez para comprobar.'); if (bienSeguidas >= 6) completar(); return; }
+      if (bien) {
+        decir('¡Afinada! ✓', 'bien', 'Así se queda. Elige otra cuerda cuando quieras.');
+        if (bienSeguidas >= 6 && !afinadas.has(id)) { afinadas.add(id); campanita(); document.querySelector(`.btn-cuerda[data-id="${id}"]`).classList.add('afinada'); }
+        return;
+      }
       const muy = Math.abs(c) > 50;
-      if (c < 0) decir('⬆ Aprieta un poquito', 'apretar', muy ? 'Está muy baja: gira la clavija muy poquito y vuelve a tocar.' : 'Casi: un toque al afinador fino (↻ a la derecha) o a la clavija.');
-      else decir('⬇ Afloja un poquito', 'aflojar', muy ? 'Está muy alta: gira la clavija muy poquito hacia el otro lado y vuelve a tocar.' : 'Casi: un toque al afinador fino (↺ a la izquierda) o a la clavija.');
+      if (c < 0) decir('⬆ Ajusta un poquito', 'ajusta', muy ? 'Está muy baja: gira la clavija muy poquito y vuelve a tocar.' : 'Casi: un toque al afinador fino (↻ a la derecha) o a la clavija.');
+      else decir('⬇ Afloja un poquito', 'afloja', muy ? 'Está muy alta: gira la clavija muy poquito hacia el otro lado y vuelve a tocar.' : 'Casi: un toque al afinador fino (↺ a la izquierda) o a la clavija.');
     } else {
+      const n = sel.c.n;
       if (Math.abs(centsDe(f, 440)) < 30) { decir('Esa es la cuerda La sola', 'aviso', 'Apoya bien el dedo sobre la cuerda La y vuelve a tocar.'); flecha(null); return; }
-      if (bien) { decir(`¡Ahí es! Pega la cinta ${p.c.n}`, 'bien', 'Deja el dedo quieto y pega la cinta justo debajo de él, derecha y de lado a lado.'); flecha(null); if (bienSeguidas >= 5) completar(); return; }
-      const lejos = Math.abs(c) > 300 ? ' Pon el dedo cerca del punto del dibujo.' : '';
-      if (c < 0) { decir('Desliza hacia el puente ⬇', 'apretar', 'Suena más grave que ' + p.c.nota + '.' + lejos); flecha(false); }
-      else { decir('Desliza hacia el caracol ⬆', 'aflojar', 'Suena más agudo que ' + p.c.nota + '.' + lejos); flecha(true); }
+      if (bien) {
+        decir(`¡Ahí es! Pega la cinta ${n}`, 'bien', 'Deja el dedo quieto y pega la cinta justo debajo de él, derecha y de lado a lado.'); flecha(null);
+        if (bienSeguidas >= 5 && !cintasListas.has(n)) {
+          cintasListas.add(n); campanita(); document.querySelector(`.chip[data-n="${n}"]`).classList.add('lista');
+          $('#siguiente-cinta').hidden = n === 3;
+        }
+        return;
+      }
+      const lejos = Math.abs(c) > 300 ? ' Pon el dedo cerca del círculo del dibujo.' : '';
+      if (c < 0) { decir('⬇ Desliza hacia el puente', 'ajusta', 'Suena más grave que ' + sel.c.nota + '.' + lejos); flecha(false); }
+      else { decir('⬆ Desliza hacia el caracol', 'afloja', 'Suena más agudo que ' + sel.c.nota + '.' + lejos); flecha(true); }
     }
   }
   // Al terminar cada toque: si la nota se acercó o se alejó del centro, lo dice (sirve para saber hacia dónde girar)
@@ -425,11 +457,10 @@
     if (enGolpe.length < 3) { enGolpe = []; return; }
     const orden = enGolpe.slice().sort((a, b) => a - b), c = orden[Math.floor(orden.length / 2)];
     enGolpe = [];
-    golpeAnterior = ultimoGolpe; ultimoGolpe = c;
-    const p = PASOS[paso];
-    if (p.tipo !== 'cuerda' || golpeAnterior == null || hechos.has(paso) || Math.abs(c) <= 6) return;
-    if (Math.abs(c) < Math.abs(golpeAnterior) - 4) $('#detalle').textContent = '¡Vas bien! Sigue girando hacia el mismo lado, poquito a poco.';
-    else if (Math.abs(c) > Math.abs(golpeAnterior) + 4) $('#detalle').textContent = 'Se alejó: gira hacia el otro lado.';
+    const antes = ultimoGolpe; ultimoGolpe = c;
+    if (!sel || sel.tipo !== 'cuerda' || antes == null || Math.abs(c) <= 6) return;
+    if (Math.abs(c) < Math.abs(antes) - 4) $('#detalle').textContent = '¡Vas bien! Sigue girando hacia el mismo lado, poquito a poco.';
+    else if (Math.abs(c) > Math.abs(antes) + 4) $('#detalle').textContent = 'Se alejó: gira hacia el otro lado.';
   }
 
   let ultimo = 0;
@@ -448,22 +479,18 @@
     }
   }
 
-  $('#empezar').addEventListener('click', async () => {
-    try {
-      await encenderMicrofono();
-      $('#inicio').hidden = true; $('#trabajo').hidden = false;
-      irA(0);
-      requestAnimationFrame(bucle);
-    } catch (e) {
-      $('#error-mic').textContent = 'No se pudo usar el micrófono. Revisa que el navegador tenga permiso para usarlo y vuelve a intentar.';
-    }
-  });
-  $('#escuchar').addEventListener('click', () => { const p = PASOS[paso]; tocarNota(p.tipo === 'cuerda' ? CUERDAS[p.id].f : p.c.f); });
-  $('#siguiente').addEventListener('click', () => irA(Math.min(paso + 1, PASOS.length - 1)));
-  $('#saltar').addEventListener('click', () => irA(Math.min(paso + 1, PASOS.length - 1)));
-  $('#otra-vez').addEventListener('click', () => { hechos.clear(); irA(0); });
-  pintarPasos();
-  // antes de empezar se ve el violín con las 4 cuerdas marcadas
+  // El micrófono se enciende con el primer toque (los navegadores lo piden así)
+  async function conMicrofono(accion) {
+    try { await encenderMicrofono(); $('#error-mic').textContent = ''; accion(); }
+    catch (e) { $('#error-mic').textContent = 'No se pudo usar el micrófono. Revisa que el navegador tenga permiso para usarlo y vuelve a intentar.'; }
+  }
+  $('#cuerdas').addEventListener('click', e => { const b = e.target.closest('.btn-cuerda'); if (b) conMicrofono(() => elegirCuerda(b.dataset.id)); });
+  $('#abrir-cintas').addEventListener('click', () => conMicrofono(() => verCintas(true)));
+  $('#volver-cuerdas').addEventListener('click', () => verCintas(false));
+  $('#chips-cintas').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) elegirCinta(+b.dataset.n); });
+  $('#siguiente-cinta').addEventListener('click', () => elegirCinta(Math.min(3, sel.c.n + 1)));
+  $('#escuchar').addEventListener('click', () => { if (sel) tocarNota(sel.tipo === 'cuerda' ? CUERDAS[sel.id].f : sel.c.f); });
+  // antes de elegir se ven las 4 cuerdas marcadas
   svg.querySelectorAll('.cuerda').forEach(e => e.classList.add('activa'));
 </script>
 </body>

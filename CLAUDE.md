@@ -69,18 +69,21 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
   - Cuerdas de izquierda a derecha: Sol, Re, La y Mi.
   - Clavijas: Re arriba a la izquierda, Sol abajo a la izquierda, La arriba a la derecha y Mi abajo a la derecha (`CUERDAS`).
   - El dibujo tiene afinador fino solo en la cuerda Mi.
-- **Pasos:** primero las 4 cuerdas, en el orden La, Re, Sol y Mi; después las 3 cintas en la cuerda La: cinta 1 en Si, cinta 2 en Do (casi pegada a la 1) y cinta 3 en Re. Son los semitonos 2, 3 y 5, las mismas cintas que dibuja el violín virtual.
-  - En las cintas, la vista se acerca al diapasón (`viewBox`). Un punto ocre muestra dónde poner el dedo y una flecha indica hacia dónde deslizarlo.
-  - Cada paso se puede saltar. Al final se dice qué pasos faltaron.
-- **Qué dice:**
-  - **Si la cuerda equivocada suena:** el nombre de la cuerda que suena y dónde está la que hay que tocar.
-  - **Si está baja o alta:** «Aprieta» o «Afloja», con la clavija si está a más de 50 cents y con el afinador fino si está cerca. El afinador fino aprieta a la derecha ↻.
-  - **Tendencia:** al terminar cada toque, `finDeGolpe` compara con el toque anterior y dice «¡Vas bien!» o «Se alejó: gira hacia el otro lado». No se da el sentido de giro de la clavija, porque depende del violín: el alumno lo descubre con esa tendencia.
-  - **En las cintas:** «Desliza hacia el puente» si suena grave y «Desliza hacia el caracol» si suena agudo. Cuando la nota da, dice que pegue la cinta derecha, de lado a lado.
-  - **Cuándo cuenta como afinada:** la cuerda, con ±6 cents en 6 lecturas seguidas; la cinta, con ±10 cents en 5. Suena una campanita y aparece «Siguiente».
+- **Libre, sin lección** (pedido de la dueña, 28-oct): el alumno elige qué cuerda afinar entre 4 botones grandes, cada uno con el color de su cuerda (Sol, la más gruesa; Re, la 2.ª; La, la 3.ª; Mi, la más delgada). Cuando la cuerda queda afinada, su botón muestra «✓ afinada». El micrófono se enciende con el primer toque.
+  - **Medidor:** a los extremos de la barra van las palabras **«Ajusta ⬆»** (a la izquierda, cuando la cuerda está baja) y **«Afloja ⬇»** (a la derecha), porque la mayoría no sabe qué hacer para subir o bajar.
+  - **Qué dice:**
+    - si suena otra cuerda, el nombre de la que suena y dónde está la elegida;
+    - «Ajusta» o «Afloja», con la clavija si está a más de 50 cents y con el afinador fino si está cerca (el afinador fino ajusta a la derecha ↻);
+    - al terminar cada toque, `finDeGolpe` compara con el anterior y dice «¡Vas bien!» o «Se alejó: gira hacia el otro lado». No se da el sentido de giro de la clavija: el alumno lo descubre con esa tendencia.
+  - **Cuándo cuenta como afinada:** ±6 cents en 6 lecturas seguidas.
+- **Cintas:** botón «✨ Poner las cintas», con un brillo que gira alrededor para que den ganas de tocarlo. Es un borde `conic-gradient` animado con `@property --giro`, y la chispa titila; con movimiento reducido, todo queda quieto.
+  - Dentro de ese botón está la explicación: cinta 1 = Si (dedo 1), cinta 2 = Do (dedo 2) y cinta 3 = Re (dedo 3), en la cuerda La.
+  - **Las cintas 1 y 2 van juntas, pegadas**, porque entre Si y Do (igual que entre Mi y Fa) los dedos se tocan. La dueña lo pidió así para que el alumno no deje espacio entre los dedos 1 y 2. En el dibujo, la cinta 2 va pegada a la 1 (`ANCHO_CINTA` = 12, más ancha que antes) y la cinta 3 va en Re (semitono 5).
+  - Se elige la cinta con chips. La vista se acerca al diapasón, con un círculo donde va el dedo y una flecha.
+  - **Qué dice:** «Desliza hacia el puente» si suena grave y «Desliza hacia el caracol» si suena agudo; en la barra, «Al puente ⬇» y «Al caracol ⬆». Cuando la nota da, avisa que se pegue la cinta derecha, de lado a lado (±10 cents en 5 lecturas).
 - **Detección:** micrófono sin cancelación de eco, sin supresión de ruido y sin control de ganancia. Usa autocorrelación normalizada (tipo McLeod) sobre 4096 muestras, de 150 a 1400 Hz, toma el primer pico al 90 % para no confundir la nota con su octava, y saca la mediana de las últimas 5 lecturas. Si oye la octava de arriba (+1200 cents), la corrige.
 - **«Escuchar la nota»:** suena un tono de referencia de 2 s.
-- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844. En el celular, la ayuda va en un desplegable («¿Cómo se hace?») para que el aviso quede a la vista.
+- **Cómo se probó:** con un oscilador en lugar del micrófono (`getUserMedia` reemplazado en Playwright), a 1280 × 800 y a 390 × 844, sin desplazamiento horizontal. En el celular, la ayuda va plegada («¿Cómo se hace?») para que el aviso quede a la vista. Falta probarlo con un violín de verdad.
 
 ## Células rítmicas (`practica/ritmo.html`)
 
