@@ -391,6 +391,14 @@
     .etiqueta-octava.oct-5 { background: #F3DDD4; }
     .tecla.blanca.activa { background: #E1E6CF !important; color: #48592F; box-shadow: inset 0 -5px 0 #647745; }
 
+    /* Juego de intervalos: la tecla de partida en ocre y un puntito numerado en cada semitono que se avanza */
+    .tecla.desde { box-shadow: inset 0 0 0 3px #C4923A !important; }
+    .tecla.blanca.desde { background: #F1E0BC !important; }
+    .tecla.negra.desde { background: #8F6A2A !important; }
+    .tecla .cuenta { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); width: 20px; height: 20px; border-radius: 50%;
+      background: #647745; color: #fff; font: 800 11px/20px "Nunito Sans", system-ui, sans-serif; text-align: center; pointer-events: none; }
+    .tecla.negra .cuenta { bottom: 8px; }   /* en las blancas va abajo (las negras tapan la parte de arriba) */
+    .tecla.mal-intervalo .cuenta { background: #9A5245; }
     .tecla.negra {
       position: absolute;
       height: 60%;
@@ -513,6 +521,7 @@
     </div>
     <div class="grupo-modo">
       <button class="btn-modo seleccionado" data-modo="ambas" onclick="seleccionarModo('ambas')">Ambas claves</button>
+      <button class="btn-modo" data-modo="intervalos" onclick="seleccionarModo('intervalos')" title="Desde una tecla, toca el intervalo que te pide contando los semitonos">Intervalos</button>
     </div>
   </div>
 
@@ -622,6 +631,8 @@
   }
 
   function seleccionarModo(modo) {
+    intervalosJuego = modo === 'intervalos' ? (intervalosJuego || TODOS_INTERVALOS) : null;
+    if (modo === 'intervalos') { limpiarCuenta(); if (juegoActivo) { reiniciarEstrellas(); generarIntervalo(); } document.querySelectorAll('.btn-modo').forEach(btn => btn.classList.toggle('seleccionado', btn.dataset.modo === modo)); return; }
     modoJuego = modo;
     document.querySelectorAll('.btn-modo').forEach(btn => btn.classList.toggle('seleccionado', btn.dataset.modo === modo));
     centrarEnModo();
@@ -973,6 +984,79 @@
     });
   }
 
+  /* ---------- Juego de intervalos (pedido de la dueña, 29-oct-2026: los intervalos se ven y se practican en el piano) ----------
+     Se marca una tecla y se pide un intervalo hacia arriba («Desde Do, toca una 3ª mayor»). Al acertar suenan las dos
+     notas, se ven en el pentagrama y cada tecla avanzada (blanca o negra) muestra su número: así se cuentan los
+     semitonos. Si se equivoca, dice qué intervalo tocó y muestra la cuenta. leccion.js elige los intervalos de cada lección. */
+  const NOMBRE_INTERVALO = { 1: '2ª menor', 2: '2ª mayor', 3: '3ª menor', 4: '3ª mayor', 5: '4ª justa', 6: 'tritono', 7: '5ª justa',
+    8: '6ª menor', 9: '6ª mayor', 10: '7ª menor', 11: '7ª mayor', 12: 'octava' };
+  const TODOS_INTERVALOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  let intervalosJuego = null, intervalo = null;   // intervalo: { desde: índice en notasPiano, st: semitonos }
+  const unoDe = (st, art) => (art ? (st === 6 ? 'un ' : 'una ') : '') + NOMBRE_INTERVALO[st];
+  const semitonos = n => n + (n === 1 ? ' semitono' : ' semitonos');
+  function limpiarCuenta() {
+    document.querySelectorAll('.tecla .cuenta').forEach(e => e.remove());
+    document.querySelectorAll('.tecla.desde, .tecla.mal-intervalo').forEach(e => e.classList.remove('desde', 'mal-intervalo'));
+  }
+  function marcarDesde() {
+    const t = document.querySelector(`.tecla[data-index="${intervalo.desde}"]`);
+    if (t) t.classList.add('desde');
+  }
+  /* un puntito con su número en cada tecla desde la de partida hasta «hasta» */
+  function mostrarCuenta(hasta, mal) {
+    for (let k = 1; k <= hasta - intervalo.desde; k++) {
+      const t = document.querySelector(`.tecla[data-index="${intervalo.desde + k}"]`);
+      if (!t) continue;
+      const b = document.createElement('span'); b.className = 'cuenta'; b.textContent = k; t.append(b);
+      t.classList.toggle('mal-intervalo', !!mal);
+    }
+  }
+  function generarIntervalo() {
+    esperandoSiguiente = false;
+    limpiarCuenta();
+    document.getElementById('recordatorio-octava').textContent = '';
+    const st = intervalosJuego[Math.floor(Math.random() * intervalosJuego.length)];
+    // la tecla de partida: una blanca del teclado desde la que el intervalo todavía cabe
+    const opciones = [];
+    for (let i = TECLADO_DESDE; i + st <= TECLADO_HASTA; i++) if (notasPiano[i].tipo === 'blanca') opciones.push(i);
+    let desde;
+    do { desde = opciones[Math.floor(Math.random() * opciones.length)]; } while (intervalo && opciones.length > 1 && desde === intervalo.desde && st === intervalo.st);
+    intervalo = { desde, st };
+    inicioVentana = limitarVentana(blancaDe(notasPiano[desde].vfKey) - 1);
+    construirTecladoPiano();
+    marcarDesde();
+    renderizarDoblePentagrama([notasPiano[desde]]);
+    const fb = document.getElementById('feedback-juego');
+    fb.textContent = `Desde ${NOMBRE_NOTA[notasPiano[desde].vfKey.charAt(0)]}, toca ${unoDe(st, true)}`;
+    fb.style.color = 'var(--dorado)';
+  }
+  function manejarIntervalo(index) {
+    if (esperandoSiguiente) return;
+    const fb = document.getElementById('feedback-juego');
+    const st = index - intervalo.desde;
+    limpiarCuenta(); marcarDesde();
+    if (st === intervalo.st) {
+      esperandoSiguiente = true;
+      const gano = registrarResultado(true);
+      emitirSonidoPiano(notasPiano[intervalo.desde].freq);
+      setTimeout(() => emitirSonidoPiano(notasPiano[index].freq), 380);
+      mostrarCuenta(index);
+      renderizarDoblePentagrama([notasPiano[intervalo.desde], notasPiano[index]]);
+      fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + NOMBRE_INTERVALO[st].charAt(0).toUpperCase() + NOMBRE_INTERVALO[st].slice(1) + ': ' + semitonos(st) + '.';
+      fb.style.color = gano ? 'var(--dorado)' : 'var(--acierto)';
+      if (gano) sonidoEstrella();
+      setTimeout(() => { if (juegoActivo && intervalosJuego) generarIntervalo(); }, gano ? 2200 : 1800);
+      return;
+    }
+    emitirSonidoError();
+    registrarResultado(false);
+    if (st > 0 && NOMBRE_INTERVALO[st]) {
+      mostrarCuenta(index, true);
+      fb.textContent = `Esa es ${unoDe(st, true)} (${semitonos(st)}). ${unoDe(intervalo.st, false).charAt(0).toUpperCase() + unoDe(intervalo.st, false).slice(1)}: ${semitonos(intervalo.st)}. Cuenta otra vez.`;
+    } else fb.textContent = 'Sube desde la tecla marcada y cuenta los semitonos.';
+    fb.style.color = 'var(--error)';
+  }
+
   function toggleJuego() {
     juegoActivo = !juegoActivo;
     const btn = document.getElementById('btn-juego');
@@ -985,12 +1069,12 @@
       reiniciarEstrellas();
       document.getElementById('estrellas-juego').hidden = false;
       botonesAcorde.forEach(b => b.disabled = true);
-      generarSiguienteNotaJuego();
+      if (intervalosJuego) generarIntervalo(); else generarSiguienteNotaJuego();
     } else {
       btn.textContent = "Iniciar juego de notas";
       btn.classList.remove('activo');
       botonesAcorde.forEach(b => b.disabled = false);
-      notaObjetivo = null;
+      notaObjetivo = null; intervalo = null; limpiarCuenta();
       feedbackEl.textContent = "Modo libre: Toca cualquier tecla";
       feedbackEl.style.color = "var(--texto-debil)";
       renderizarDoblePentagrama([{ vfKey: 'c/4', alt: 'n', clef: 'treble' }]);
@@ -1035,6 +1119,7 @@
     }
 
     // MODO JUEGO
+    if (intervalosJuego && intervalo) { manejarIntervalo(indexNota); return; }
     const elTecla = document.querySelector(`.tecla[data-index="${indexNota}"]`);
     if (elTecla) elTecla.classList.add('activa');
 
@@ -1083,7 +1168,7 @@
   </nav>
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
-<script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? 'Juego de notas: ' + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el piano'; } };</script>
+<script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? (intervalosJuego ? 'Juego de intervalos: ' : 'Juego de notas: ') + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el piano'; } };</script>
 <script src="/practica/lectura.js"></script>
 <script>
   /* Lectura hablada (Dandelot) con las notas del modo elegido; con "Ambas claves" se alterna entre sol y fa */

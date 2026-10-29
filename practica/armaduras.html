@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Armaduras: orden de sostenidos y bemoles | Sprinkloud</title>
+  <meta name="description" content="Practica gratis el orden de los sostenidos y los bemoles, descubre en qué tonalidad mayor está una armadura y encuentra su relativa menor.">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/armaduras">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sprinkloud">
+  <meta property="og:title" content="Armaduras: sostenidos y bemoles">
+  <meta property="og:description" content="El orden de los sostenidos y los bemoles, la tonalidad de cada armadura y su relativa menor. Gratis.">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/armaduras">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js" integrity="sha384-NOpv0+9OuhqtqeXLSoULPF4d3UCwlWkmcHkJklpAosC7LpqYvhFCFqqu9QElzbjS" crossorigin="anonymous"></script>
+  <style>
+    /* Mismo sistema visual que las otras herramientas; las respuestas son botones esponjosos como los del bosque.
+       App nueva (29-oct-2026, pedido de la dueña): practicar el orden de los sostenidos y los bemoles, la tonalidad de
+       una armadura y su relativa menor, de varias maneras, para interiorizarlo. */
+    :root {
+      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F3DED8;
+      --papel: #FFFDF8; --madera: #8A5A35; --madera-borde: #5E3B22;
+      --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-body: "Nunito Sans", "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
+        --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585; --danger-soft: #45302B;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    /* ♯ y ♭ no están en Nunito: se toman de una fuente de símbolos (si no, el sistema pone un emoji azul) */
+    body { background: var(--bg); color: var(--ink); font-family: var(--f-body), "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", sans-serif; font-size: 16px; line-height: 1.5; min-height: 100dvh; display: flex; flex-direction: column; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px max(16px, env(safe-area-inset-left)); max-width: 980px; width: 100%; margin: 0 auto; }
+    .barra a { font-weight: 700; text-decoration: none; color: var(--accent); }
+    .marca { font-family: var(--f-display); font-weight: 700; color: var(--pine); }
+    main { flex: 1; width: 100%; max-width: 980px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left)) 32px; display: grid; gap: 16px; align-content: start; grid-template-columns: minmax(0, 1fr); }
+    h1 { font-family: var(--f-display); font-size: clamp(24px, 4.5vw, 34px); color: var(--pine); margin: 0; line-height: 1.15; }
+    .modos { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+    .modo { flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
+    .modo[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .tablero { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; justify-items: center; text-align: center; }
+    .pregunta { font-family: var(--f-display); font-size: clamp(20px, 3.5vw, 27px); margin: 0; }
+    /* el pentagrama siempre en papel claro, como en las hojas */
+    .pentagrama { width: 100%; max-width: 420px; background: var(--papel); border-radius: 14px; padding: 4px 8px; }
+    .pentagrama svg { width: 100%; height: auto; display: block; }
+    .respuestas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(96px, 100%), 1fr)); gap: 12px 10px; width: 100%; max-width: 640px; }
+    /* botón esponjoso: cara acolchada sobre un borde de madera que se hunde al tocarlo */
+    .puff { position: relative; border: 0; padding: 0; background: transparent; border-radius: 18px; min-height: 58px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .puff .borde { position: absolute; inset: 0; border-radius: inherit; background: var(--line); box-shadow: 0 8px 12px -9px rgba(58, 40, 20, .5); }
+    .puff .cara { position: relative; display: flex; align-items: center; justify-content: center; min-height: inherit; padding: 8px 10px; border-radius: inherit; font-weight: 800; font-size: 18px;
+      background: radial-gradient(120% 90% at 30% 15%, rgba(255, 255, 255, .5), transparent 55%), var(--papel); color: #3A3128;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .06), inset 0 2px 1px rgba(255, 255, 255, .5); transform: translateY(-5px); transition: transform 120ms var(--ease-out); }
+    .puff:active .cara { transform: translateY(-1px); transition-duration: 40ms; }
+    .puff.bien .borde { background: var(--pine); } .puff.bien .cara { background: #E1E6CF; color: #48592F; }
+    .puff.mal .borde { background: var(--danger); } .puff.mal .cara { background: #F3DED8; color: #8E4D41; }
+    .puff.usado { opacity: .45; }
+    .puff[disabled] { cursor: default; }
+    .veredicto { min-height: 28px; font-weight: 800; font-size: 18px; margin: 0; }
+    .veredicto.bien { color: var(--pine); } .veredicto.mal { color: var(--danger); }
+    .regla { font-family: "Caveat", cursive; font-size: 25px; color: var(--gold-ink); margin: 0; min-height: 1.2em; }
+    .acciones { display: flex; gap: 10px; justify-content: center; }
+    .btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
+    .btn.principal { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .marcador { display: flex; gap: 18px; justify-content: center; color: var(--ink-2); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .marcador b { color: var(--ink); font-family: var(--f-display); font-size: 22px; }
+    footer { text-align: center; color: var(--ink-2); font-size: 13px; padding: 14px; }
+    @media (prefers-reduced-motion: reduce) { .puff .cara { transition: none; } }
+  </style>
+  <script src="/practica/leccion.js"></script>
+</head>
+<body>
+  <div class="barra">
+    <a href="/material">← Volver</a>
+    <span class="marca">Sprinkloud</span>
+  </div>
+  <main>
+    <h1>Armaduras</h1>
+    <div class="modos" role="group" aria-label="Ejercicio" id="modos"></div>
+    <section class="tablero" aria-live="polite">
+      <p class="pregunta" id="pregunta"></p>
+      <div class="pentagrama" id="pentagrama"></div>
+      <div class="respuestas" id="respuestas"></div>
+      <p class="veredicto" id="veredicto"></p>
+      <p class="regla" id="regla"></p>
+      <div class="acciones"><button class="btn principal" type="button" id="siguiente">Siguiente</button></div>
+      <div class="marcador"><span>Aciertos <b id="aciertos">0</b></span><span>Intentos <b id="intentos">0</b></span><span>Racha <b id="racha">0</b></span></div>
+    </section>
+  </main>
+  <footer>© Club musical Sprinkloud</footer>
+
+<script>
+"use strict";
+/* ---------- Armaduras (datos) ----------
+   El índice es la cantidad de alteraciones: MAYORES_S[2] = Re (2 sostenidos). Lo copia la app del bosque. */
+const SOSTENIDOS = ['Fa', 'Do', 'Sol', 'Re', 'La', 'Mi', 'Si'];
+const BEMOLES = ['Si', 'Mi', 'La', 'Re', 'Sol', 'Do', 'Fa'];
+const MAYORES_S = ['Do', 'Sol', 'Re', 'La', 'Mi', 'Si', 'Fa♯', 'Do♯'], VF_S = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#'];
+const MAYORES_B = ['Do', 'Fa', 'Si♭', 'Mi♭', 'La♭', 'Re♭', 'Sol♭', 'Do♭'], VF_B = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb'];
+const MENORES_S = ['La', 'Mi', 'Si', 'Fa♯', 'Do♯', 'Sol♯', 'Re♯', 'La♯'], MENORES_B = ['La', 'Re', 'Sol', 'Do', 'Fa', 'Si♭', 'Mi♭', 'La♭'];
+/* la regla para descubrir la tonalidad mayor de una armadura */
+function reglaDe(tipo, n) {
+  if (n === 0) return 'Sin alteraciones: Do mayor';
+  if (tipo === 's') return 'Último sostenido ' + SOSTENIDOS[n - 1] + '♯ + un semitono = ' + MAYORES_S[n] + ' mayor';
+  return n === 1 ? 'Un solo bemol: Fa mayor' : 'Penúltimo bemol ' + BEMOLES[n - 2] + '♭ = ' + MAYORES_B[n] + ' mayor';
+}
+/* ---------- fin de los datos ---------- */
+
+const $ = s => document.querySelector(s);
+const azar = arr => arr[Math.floor(Math.random() * arr.length)];
+const mezclar = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------- Sonidos cortos (acierto, error) ---------- */
+let ctx = null;
+function audio() { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+function tono(f, t, dur, gain, tipo) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = tipo || 'sine'; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + dur + .05);
+}
+const sonidoBien = () => { audio(); [784, 1047].forEach((f, i) => tono(f, ctx.currentTime + i * .08, .35, .2)); };
+const sonidoMal = () => { audio(); tono(180, ctx.currentTime, .25, .15, 'triangle'); };
+
+/* ---------- El pentagrama con la armadura ---------- */
+function dibujar(vfKey) {
+  const cont = $('#pentagrama'); cont.innerHTML = '';
+  const VF = Vex.Flow, r = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
+  r.resize(380, 120);
+  const c = r.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');
+  const st = new VF.Stave(10, 10, 360); st.addClef('treble'); if (vfKey && vfKey !== 'C') st.addKeySignature(vfKey);
+  st.setContext(c).draw();
+  const svg = cont.querySelector('svg');   // que se achique con la pantalla
+  svg.setAttribute('viewBox', '0 0 380 120'); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.width = '100%'; svg.style.height = 'auto';
+}
+
+/* ---------- Ejercicios ---------- */
+const MODOS = {
+  'orden-s': { nombre: 'Orden de los ♯' },
+  'orden-b': { nombre: 'Orden de los ♭' },
+  tonalidad: { nombre: '¿Qué tonalidad?' },
+  armadura: { nombre: '¿Cuántas alteraciones?' },
+  relativa: { nombre: 'Relativa menor' }
+};
+/* qué alteraciones entran: 's', 'b' o 'mezcla' (leccion.js lo fija según la lección) */
+let familia = 'mezcla', modo = 'tonalidad', actual = null, esperando = false;
+let aciertos = 0, intentos = 0, racha = 0;
+const tipoAlAzar = () => familia === 'mezcla' ? azar(['s', 'b']) : familia;
+
+function botones(ops, alElegir) {
+  const r = $('#respuestas'); r.replaceChildren();
+  ops.forEach(op => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'puff'; b.dataset.op = op;
+    b.innerHTML = '<span class="borde"></span><span class="cara"></span>';
+    b.querySelector('.cara').textContent = op;
+    b.addEventListener('click', () => alElegir(op, b));
+    r.append(b);
+  });
+}
+function marcar(ok) {
+  intentos++; if (ok) { aciertos++; racha++; } else racha = 0;
+  $('#aciertos').textContent = aciertos; $('#intentos').textContent = intentos; $('#racha').textContent = racha;
+  ok ? sonidoBien() : sonidoMal();
+}
+function veredicto(texto, ok) { const v = $('#veredicto'); v.textContent = texto; v.className = 'veredicto' + (ok === undefined ? '' : ok ? ' bien' : ' mal'); }
+
+/* 1. Ordenar: tocar las alteraciones en su orden; cada acierto aparece en la armadura */
+function nuevaOrden(tipo) {
+  const orden = tipo === 's' ? SOSTENIDOS : BEMOLES, signo = tipo === 's' ? '♯' : '♭';
+  actual = { tipo, k: 0, errores: 0 };
+  $('#pregunta').textContent = tipo === 's' ? 'Toca los sostenidos en orden' : 'Toca los bemoles en orden';
+  dibujar('C'); veredicto(''); $('#regla').textContent = '';
+  botones(mezclar(orden.map(n => n + signo)), (op, b) => {
+    if (!actual || actual.k >= 7 || b.classList.contains('usado')) return;
+    if (op === orden[actual.k] + signo) {
+      actual.k++; b.classList.add('usado', 'bien'); b.disabled = true;
+      dibujar((tipo === 's' ? VF_S : VF_B)[actual.k]);
+      audio(); tono(523 + actual.k * 40, ctx.currentTime, .2, .15);
+      if (actual.k === 7) { marcar(actual.errores === 0); veredicto(actual.errores ? '¡Completo! Repítelo sin errores' : '¡Perfecto!', true); $('#regla').textContent = orden.map(n => n + signo).join(' · '); }
+    } else {
+      actual.errores++; sonidoMal(); b.classList.add('mal'); setTimeout(() => b.classList.remove('mal'), 500);
+      veredicto('Sigue ' + (actual.k + 1) + 'º', false);
+    }
+  });
+}
+/* 2. ¿Qué tonalidad mayor es esta armadura? */
+function nuevaTonalidad() {
+  const tipo = tipoAlAzar(), n = 1 + Math.floor(Math.random() * 7);
+  const mayores = tipo === 's' ? MAYORES_S : MAYORES_B, correcta = mayores[n] + ' mayor';
+  actual = { correcta };
+  $('#pregunta').textContent = '¿En qué tonalidad mayor estás?';
+  dibujar((tipo === 's' ? VF_S : VF_B)[n]); veredicto(''); $('#regla').textContent = '';
+  const otras = mezclar(mayores.slice(1).map(m => m + ' mayor').filter(m => m !== correcta)).slice(0, 3);
+  responder(mezclar(otras.concat([correcta])), correcta, reglaDe(tipo, n));
+}
+/* 3. ¿Cuántas alteraciones tiene esta tonalidad? */
+function nuevaArmadura() {
+  const tipo = tipoAlAzar(), n = 1 + Math.floor(Math.random() * 7), signo = tipo === 's' ? '♯' : '♭';
+  const correcta = n + ' ' + signo;
+  actual = { correcta };
+  $('#pregunta').textContent = '¿Cuántos ' + (tipo === 's' ? 'sostenidos' : 'bemoles') + ' tiene ' + (tipo === 's' ? MAYORES_S : MAYORES_B)[n] + ' mayor?';
+  dibujar('C'); veredicto(''); $('#regla').textContent = '';
+  responder([1, 2, 3, 4, 5, 6, 7].map(k => k + ' ' + signo), correcta, reglaDe(tipo, n), () => dibujar((tipo === 's' ? VF_S : VF_B)[n]));
+}
+/* 4. La relativa menor de una armadura (la misma armadura, 3 semitonos abajo) */
+function nuevaRelativa() {
+  const tipo = tipoAlAzar(), n = Math.floor(Math.random() * 6);
+  const mayor = (tipo === 's' ? MAYORES_S : MAYORES_B)[n], menores = tipo === 's' ? MENORES_S : MENORES_B, correcta = menores[n] + ' menor';
+  actual = { correcta };
+  $('#pregunta').textContent = mayor + ' mayor: ¿cuál es su relativa menor?';
+  dibujar((tipo === 's' ? VF_S : VF_B)[n]); veredicto(''); $('#regla').textContent = '';
+  const otras = mezclar(menores.slice(0, 7).map(m => m + ' menor').filter(m => m !== correcta)).slice(0, 3);
+  responder(mezclar(otras.concat([correcta])), correcta, 'Misma armadura, 3 semitonos abajo: ' + mayor + ' → ' + menores[n]);
+}
+function responder(ops, correcta, regla, alTerminar) {
+  esperando = true;
+  botones(ops, (op, b) => {
+    if (!esperando) return;
+    esperando = false;
+    const ok = op === correcta;
+    marcar(ok);
+    b.classList.add(ok ? 'bien' : 'mal');
+    if (!ok) { const c = [...document.querySelectorAll('#respuestas .puff')].find(x => x.dataset.op === correcta); if (c) c.classList.add('bien'); }
+    document.querySelectorAll('#respuestas .puff').forEach(x => { x.disabled = true; });
+    veredicto(ok ? '¡Sí!' : 'Era ' + correcta, ok);
+    $('#regla').textContent = regla;
+    if (alTerminar) alTerminar();
+  });
+}
+function nueva() {
+  if (modo === 'orden-s') nuevaOrden('s');
+  else if (modo === 'orden-b') nuevaOrden('b');
+  else if (modo === 'armadura') nuevaArmadura();
+  else if (modo === 'relativa') nuevaRelativa();
+  else nuevaTonalidad();
+}
+/* los modos que se ven (leccion.js los limita en cada lección) */
+let visibles = Object.keys(MODOS);
+function pintarModos() {
+  const m = $('#modos'); m.replaceChildren();
+  visibles.forEach(k => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'modo'; b.textContent = MODOS[k].nombre; b.setAttribute('aria-pressed', k === modo);
+    b.addEventListener('click', () => { modo = k; pintarModos(); nueva(); });
+    m.append(b);
+  });
+}
+/* lo usa leccion.js: armaduras('sostenidos' | 'bemoles' | 'relativas') */
+function prepararLeccion(cual) {
+  if (cual === 'sostenidos') { familia = 's'; visibles = ['orden-s', 'tonalidad', 'armadura']; modo = 'orden-s'; }
+  else if (cual === 'bemoles') { familia = 'b'; visibles = ['orden-b', 'tonalidad', 'armadura', 'orden-s']; modo = 'orden-b'; }
+  else if (cual === 'relativas') { familia = 'mezcla'; visibles = ['relativa', 'tonalidad', 'armadura', 'orden-s', 'orden-b']; modo = 'relativa'; }
+  pintarModos(); nueva();
+}
+$('#siguiente').addEventListener('click', nueva);
+const pedido = new URLSearchParams(location.search).get('modo');
+if (pedido && MODOS[pedido]) modo = pedido;
+pintarModos(); nueva();
+</script>
+<script>window.SprinkloudPractica = { app: 'Armaduras', detalle: function () { return intentos ? 'Armaduras: ' + aciertos + ' aciertos de ' + intentos : 'Practicó armaduras'; } };</script>
+<script src="/practica/comprobante.js"></script>
+</body>
+</html>

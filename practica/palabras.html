@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Palabras de música | Sprinkloud</title>
+  <meta name="description" content="Juego gratis de vocabulario musical: lee la definición y elige la palabra correcta. Pulso, compás, armadura, cadencia, modos y más.">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/palabras">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sprinkloud">
+  <meta property="og:title" content="Palabras de música">
+  <meta property="og:description" content="Lee la definición y elige la palabra: el vocabulario de la música, etapa por etapa. Gratis.">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/palabras">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/practica/juegos.css">
+  <style>
+    .respuestas { grid-template-columns: repeat(2, minmax(0, 1fr)); }   /* palabras largas: dos columnas anchas */
+    .definicion { font-family: var(--f-display); font-size: clamp(20px, 3.6vw, 26px); line-height: 1.35; margin: 0; max-width: 560px; background: var(--papel); color: #3A3128; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 18px -14px rgba(58, 40, 20, .5); }
+  </style>
+  <script src="/practica/palabras-datos.js"></script>
+</head>
+<body>
+  <div class="barra">
+    <a href="/material">← Volver</a>
+    <span class="marca">Sprinkloud</span>
+  </div>
+  <main>
+    <h1>Palabras de música</h1>
+    <div class="modos" role="group" aria-label="Hasta qué etapa" id="modos"></div>
+    <section class="tablero" aria-live="polite">
+      <p class="pregunta">¿Qué palabra es?</p>
+      <p class="definicion" id="definicion"></p>
+      <div class="respuestas" id="respuestas"></div>
+      <p class="veredicto" id="veredicto"></p>
+      <div class="acciones"><button class="btn principal" type="button" id="siguiente">Siguiente</button></div>
+      <div class="marcador"><span>Aciertos <b id="aciertos">0</b></span><span>Intentos <b id="intentos">0</b></span><span>Racha <b id="racha">0</b></span></div>
+    </section>
+  </main>
+  <footer>© Club musical Sprinkloud</footer>
+
+<script>
+"use strict";
+/* Juego de vocabulario (29-oct-2026): la definición y 4 palabras. Las palabras salen del glosario de los libros más
+   otras muy comunes (palabras-datos.js, generado por Libro_Sprinkloud/herramientas/palabras.js). ?etapa=N limita las
+   palabras a las de las etapas 1 a N; las que se fallan vuelven a salir más tarde. */
+const $ = s => document.querySelector(s);
+const TODAS = window.PALABRAS_MUSICA || [];
+const ETAPAS = Math.max(...TODAS.map(x => x.e));
+const mezclar = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+let hasta = Math.min(ETAPAS, Number(new URLSearchParams(location.search).get('etapa')) || ETAPAS);
+let mazo = [], actual = null, esperando = false, aciertos = 0, intentos = 0, racha = 0;
+const pendientes = [];   // las que se fallaron: vuelven después de 3 preguntas
+
+let ctx = null;
+function audio() { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+function tono(f, t, dur, gain, tipo) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = tipo || 'sine'; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + dur + .05);
+}
+const sonidoBien = () => { audio(); [784, 1047].forEach((f, i) => tono(f, ctx.currentTime + i * .08, .35, .2)); };
+const sonidoMal = () => { audio(); tono(180, ctx.currentTime, .25, .15, 'triangle'); };
+
+const pool = () => TODAS.filter(x => x.e <= hasta);
+function siguiente() {
+  const listo = pendientes.findIndex(x => x.espera <= 0);
+  pendientes.forEach(x => x.espera--);
+  if (listo >= 0) return pendientes.splice(listo, 1)[0].palabra;
+  if (!mazo.length) mazo = mezclar(pool());
+  return mazo.pop();
+}
+function nueva() {
+  actual = siguiente();
+  $('#definicion').textContent = actual.d;
+  const v = $('#veredicto'); v.textContent = ''; v.className = 'veredicto';
+  const otras = mezclar(pool().filter(x => x.p !== actual.p)).slice(0, 3).map(x => x.p);
+  const r = $('#respuestas'); r.replaceChildren(); esperando = true;
+  mezclar(otras.concat([actual.p])).forEach(op => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'puff'; b.dataset.op = op;
+    b.innerHTML = '<span class="borde"></span><span class="cara"></span>';
+    b.querySelector('.cara').textContent = op;
+    b.addEventListener('click', () => {
+      if (!esperando) return; esperando = false;
+      const ok = op === actual.p;
+      intentos++; if (ok) { aciertos++; racha++; } else { racha = 0; pendientes.push({ palabra: actual, espera: 3 }); }
+      $('#aciertos').textContent = aciertos; $('#intentos').textContent = intentos; $('#racha').textContent = racha;
+      ok ? sonidoBien() : sonidoMal();
+      b.classList.add(ok ? 'bien' : 'mal');
+      if (!ok) [...r.children].find(x => x.dataset.op === actual.p).classList.add('bien');
+      [...r.children].forEach(x => { x.disabled = true; });
+      v.textContent = ok ? '¡Sí!' : 'Era «' + actual.p + '»'; v.className = 'veredicto ' + (ok ? 'bien' : 'mal');
+    });
+    r.append(b);
+  });
+}
+function pintarEtapas() {
+  const m = $('#modos'); m.replaceChildren();
+  for (let n = 1; n <= ETAPAS; n++) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'modo'; b.textContent = n === ETAPAS ? 'Todas' : 'Hasta la etapa ' + n; b.setAttribute('aria-pressed', n === hasta);
+    b.addEventListener('click', () => { hasta = n; mazo = []; pendientes.length = 0; pintarEtapas(); nueva(); });
+    m.append(b);
+  }
+}
+$('#siguiente').addEventListener('click', nueva);
+pintarEtapas(); nueva();
+</script>
+<script>window.SprinkloudPractica = { app: 'Palabras de música', detalle: function () { return intentos ? 'Palabras de música: ' + aciertos + ' aciertos de ' + intentos : 'Practicó palabras de música'; } };</script>
+<script src="/practica/comprobante.js"></script>
+</body>
+</html>

@@ -179,7 +179,7 @@ const MODOS = {
     }
   },
   intervalos: {
-    nombre: 'Intervalos', guia: 'Semanas 24, 25 y 26 de la guía.',
+    nombre: 'Intervalos', guia: 'Etapa 3 · Lección 13 y Etapa 4 · Lecciones 1 y 2.',
     opciones: { nivel: Object.keys(NIVELES_INT), forma: ['Melódico (una y otra)', 'Armónico (juntas)'] },
     pregunta: () => '¿Qué intervalo sonó?',
     crear(o) {
@@ -190,19 +190,19 @@ const MODOS = {
     }
   },
   mayorMenor: {
-    nombre: '¿Mayor o menor?', guia: 'Semanas 30 y 35 de la guía.',
+    nombre: '¿Mayor o menor?', guia: 'Etapa 4 · Lección 7 y Etapa 5 · Lección 3.',
     opciones: { forma: ['Acorde y luego arpegio', 'Solo el acorde', 'Solo el arpegio'] },
     pregunta: () => '¿El acorde es mayor o menor?',
     crear(o) { return acorde(['Mayor', 'Menor'], o.forma); }
   },
   triadas: {
-    nombre: 'Las 4 triadas', guia: 'Etapa 4 · Lección 7 de la guía.',
+    nombre: 'Las 4 triadas', guia: 'Etapa 4 · Lección 8 de la guía.',
     opciones: { forma: ['Acorde y luego arpegio', 'Solo el acorde', 'Solo el arpegio'] },
     pregunta: () => '¿Qué tipo de triada sonó?',
     crear(o) { return acorde(Object.keys(TRIADAS), o.forma); }
   },
   reposo: {
-    nombre: '¿Tensión o reposo?', guia: 'Semanas 33 y 46 de la guía.',
+    nombre: '¿Tensión o reposo?', guia: 'Etapa 5 · Lección 1 y Etapa 6 · Lección 5.',
     pregunta: () => '¿El final suena a reposo (llegó a casa) o a tensión (pide seguir)?',
     crear() {
       const t = azar(55, 62), I = [t, t + 4, t + 7], IV = [t + 5, t + 9, t + 12], V = [t + 7, t + 11, t + 14], V7 = [t + 7, t + 11, t + 14, t + 17], vi = [t + 9, t + 12, t + 16];

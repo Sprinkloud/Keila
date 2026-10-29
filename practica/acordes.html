@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acordes e inversiones | Sprinkloud</title>
+  <meta name="description" content="Practica gratis las inversiones de acordes: reconoce el estado fundamental, la primera y la segunda inversión, el nombre del acorde y cómo se escribe con barra (Do/Mi).">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/acordes">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sprinkloud">
+  <meta property="og:title" content="Acordes e inversiones">
+  <meta property="og:description" content="Estado fundamental, primera y segunda inversión, y los acordes con barra. Gratis.">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/acordes">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/practica/juegos.css">
+  <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js" integrity="sha384-NOpv0+9OuhqtqeXLSoULPF4d3UCwlWkmcHkJklpAosC7LpqYvhFCFqqu9QElzbjS" crossorigin="anonymous"></script>
+  <script src="/practica/leccion.js"></script>
+</head>
+<body>
+  <div class="barra">
+    <a href="/material">← Volver</a>
+    <span class="marca">Sprinkloud</span>
+  </div>
+  <main>
+    <h1>Acordes e inversiones</h1>
+    <div class="modos" role="group" aria-label="Ejercicio" id="modos"></div>
+    <section class="tablero" aria-live="polite">
+      <p class="pregunta" id="pregunta"></p>
+      <div class="pentagrama" id="pentagrama"></div>
+      <div class="acciones"><button class="btn" type="button" id="escuchar">🔊 Escuchar</button></div>
+      <div class="respuestas" id="respuestas"></div>
+      <p class="veredicto" id="veredicto"></p>
+      <p class="regla" id="regla"></p>
+      <div class="acciones"><button class="btn principal" type="button" id="siguiente">Siguiente</button></div>
+      <div class="marcador"><span>Aciertos <b id="aciertos">0</b></span><span>Intentos <b id="intentos">0</b></span><span>Racha <b id="racha">0</b></span></div>
+    </section>
+  </main>
+  <footer>© Club musical Sprinkloud</footer>
+
+<script>
+"use strict";
+/* ---------- Acordes (datos) ----------
+   Los 6 acordes de Do mayor (todas teclas blancas, sin alteraciones que distraigan). raiz: 0 = Do … 6 = Si.
+   Lo copia la app del bosque. */
+const LETRAS = ['c', 'd', 'e', 'f', 'g', 'a', 'b'], NOTAS_ES = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
+const ACORDES = [{ raiz: 0, menor: false }, { raiz: 3, menor: false }, { raiz: 4, menor: false }, { raiz: 1, menor: true }, { raiz: 2, menor: true }, { raiz: 5, menor: true }];
+const INVERSIONES = ['Estado fundamental', '1ª inversión', '2ª inversión'];
+const nombreAcorde = a => NOTAS_ES[a.raiz] + (a.menor ? 'm' : '');
+/* las 3 notas (índices de letra) de abajo hacia arriba, según la inversión */
+function notasDe(a, inv) { const n = [a.raiz, (a.raiz + 2) % 7, (a.raiz + 4) % 7]; return n.slice(inv).concat(n.slice(0, inv)); }
+const conBarra = (a, inv) => nombreAcorde(a) + (inv ? '/' + NOTAS_ES[notasDe(a, inv)[0]] : '');
+/* claves de VexFlow subiendo desde la octava 4 */
+function clavesDe(a, inv) {
+  let oct = 4, ant = -1;
+  return notasDe(a, inv).map(l => { if (l <= ant) oct++; ant = l; return LETRAS[l] + '/' + oct; });
+}
+function reglaDe(a, inv) {
+  const bajo = NOTAS_ES[notasDe(a, inv)[0]], papel = ['la fundamental', 'la tercera', 'la quinta'][inv];
+  return 'Abajo está ' + bajo + ', ' + papel + ' de ' + nombreAcorde(a) + ': ' + INVERSIONES[inv].toLowerCase() + (inv ? ' (' + conBarra(a, inv) + ')' : '');
+}
+/* ---------- fin de los datos ---------- */
+
+const $ = s => document.querySelector(s);
+const azar = arr => arr[Math.floor(Math.random() * arr.length)];
+const mezclar = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------- Sonido: piano sintetizado (el mismo del entrenador de oído) ---------- */
+let ctx = null;
+function audio() { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+const MIDI = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+function piano(t, midi, dur, gain) {
+  const out = ctx.createGain(), hz = 440 * Math.pow(2, (midi - 69) / 12);
+  out.gain.setValueAtTime(0.0001, t); out.gain.exponentialRampToValueAtTime(gain, t + .006); out.gain.setTargetAtTime(0.0001, t + dur, .2);
+  [[1, 1], [2, .4], [3, .15]].forEach(([h, a]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = hz * h; g.gain.value = a; o.connect(g); g.connect(out); o.start(t); o.stop(t + dur + .6); });
+  out.connect(ctx.destination);
+}
+function sonarAcorde(claves) {
+  audio(); const t = ctx.currentTime + .05;
+  claves.forEach((k, i) => { const [l, o] = k.split('/'); piano(t + i * .12, 12 * (Number(o) + 1) + MIDI[l], 1.4, .22); });
+}
+function tono(f, t, dur, gain, tipo) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = tipo || 'sine'; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + dur + .05);
+}
+const sonidoBien = () => { audio(); [784, 1047].forEach((f, i) => tono(f, ctx.currentTime + i * .08, .35, .2)); };
+const sonidoMal = () => { audio(); tono(180, ctx.currentTime, .25, .15, 'triangle'); };
+
+function dibujar(claves) {
+  const cont = $('#pentagrama'); cont.innerHTML = '';
+  const VF = Vex.Flow, r = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
+  r.resize(300, 130);
+  const c = r.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');
+  const st = new VF.Stave(10, 10, 280); st.addClef('treble'); st.setContext(c).draw();
+  const n = new VF.StaveNote({ keys: claves, duration: 'w' });
+  VF.Formatter.FormatAndDraw(c, st, [n]);
+  const svg = cont.querySelector('svg'); svg.setAttribute('viewBox', '0 0 300 130'); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.width = '100%'; svg.style.height = 'auto';
+}
+
+/* ---------- Ejercicios ---------- */
+const MODOS = { inversion: '¿Qué inversión?', nombre: '¿Qué acorde es?', barra: 'Con barra' };
+let modo = 'inversion', visibles = Object.keys(MODOS), actual = null, esperando = false;
+let aciertos = 0, intentos = 0, racha = 0;
+function marcar(ok) {
+  intentos++; if (ok) { aciertos++; racha++; } else racha = 0;
+  $('#aciertos').textContent = aciertos; $('#intentos').textContent = intentos; $('#racha').textContent = racha;
+  ok ? sonidoBien() : sonidoMal();
+}
+function veredicto(t, ok) { const v = $('#veredicto'); v.textContent = t; v.className = 'veredicto' + (ok === undefined ? '' : ok ? ' bien' : ' mal'); }
+function botones(ops, correcta, regla) {
+  const r = $('#respuestas'); r.replaceChildren(); esperando = true;
+  ops.forEach(op => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'puff'; b.dataset.op = op;
+    b.innerHTML = '<span class="borde"></span><span class="cara"></span>';
+    b.querySelector('.cara').textContent = op;
+    b.addEventListener('click', () => {
+      if (!esperando) return; esperando = false;
+      const ok = op === correcta; marcar(ok);
+      b.classList.add(ok ? 'bien' : 'mal');
+      if (!ok) { const c = [...r.children].find(x => x.dataset.op === correcta); if (c) c.classList.add('bien'); }
+      [...r.children].forEach(x => { x.disabled = true; });
+      veredicto(ok ? '¡Sí!' : 'Era ' + correcta, ok); $('#regla').textContent = regla;
+    });
+    r.append(b);
+  });
+}
+function nueva() {
+  const a = azar(ACORDES), inv = Math.floor(Math.random() * 3), claves = clavesDe(a, inv);
+  actual = { a, inv, claves };
+  dibujar(claves); sonarAcorde(claves); veredicto(''); $('#regla').textContent = '';
+  if (modo === 'inversion') {
+    $('#pregunta').textContent = '¿Qué inversión es?';
+    botones(INVERSIONES, INVERSIONES[inv], reglaDe(a, inv));
+  } else if (modo === 'nombre') {
+    $('#pregunta').textContent = '¿Qué acorde es?';
+    const correcta = nombreAcorde(a), trampa = ACORDES.find(x => x.raiz === notasDe(a, inv)[0]);   // el acorde de la nota del bajo
+    const ops = new Set([correcta]); if (trampa) ops.add(nombreAcorde(trampa));
+    mezclar(ACORDES).forEach(x => { if (ops.size < 4) ops.add(nombreAcorde(x)); });
+    botones(mezclar([...ops]), correcta, 'Ordénalo en terceras: ' + notasDe(a, 0).map(l => NOTAS_ES[l]).join('-') + ' → ' + correcta + (a.menor ? ' (menor)' : ' (mayor)'));
+  } else {
+    $('#pregunta').textContent = '¿Cómo se escribe con barra?';
+    const correcta = conBarra(a, inv);
+    const ops = new Set([correcta, conBarra(a, 0), conBarra(a, 1), conBarra(a, 2)]);
+    botones(mezclar([...ops]), correcta, 'La letra después de la barra es la nota del bajo: ' + reglaDe(a, inv));
+  }
+}
+function pintarModos() {
+  const m = $('#modos'); m.replaceChildren();
+  visibles.forEach(k => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'modo'; b.textContent = MODOS[k]; b.setAttribute('aria-pressed', k === modo);
+    b.addEventListener('click', () => { modo = k; pintarModos(); nueva(); });
+    m.append(b);
+  });
+}
+$('#siguiente').addEventListener('click', nueva);
+$('#escuchar').addEventListener('click', () => actual && sonarAcorde(actual.claves));
+const pedido = new URLSearchParams(location.search).get('modo');
+if (pedido && MODOS[pedido]) modo = pedido;
+pintarModos(); nueva();
+</script>
+<script>window.SprinkloudPractica = { app: 'Acordes e inversiones', detalle: function () { return intentos ? 'Acordes e inversiones: ' + aciertos + ' aciertos de ' + intentos : 'Practicó acordes e inversiones'; } };</script>
+<script src="/practica/comprobante.js"></script>
+</body>
+</html>

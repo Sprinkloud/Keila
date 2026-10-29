@@ -147,7 +147,15 @@
 
 <script>
 /* ---------- La guía (semana, etapa, tema, objetivo); la fuente es Registro_Sprinkloud/Guia.js ---------- */
-const GUIA = /*GUIA*/[[1,"1 · Cuerpo y pulso","El pulso","Mantiene el pulso 30 segundos con el metrónomo a 80, con palmas y con los pies."],[2,"1 · Cuerpo y pulso","Largo y corto: ta y ti-ti","Dice y palmea ritmos de 4 pulsos con ta (negra) y ti-ti (corcheas)."],[3,"1 · Cuerpo y pulso","El silencio","Reconoce y respeta el silencio de negra dentro de un ritmo de 4 pulsos."],[4,"1 · Cuerpo y pulso","Agudo y grave","Distingue si un sonido sube o baja y lo muestra con el cuerpo."],[5,"1 · Cuerpo y pulso","Sol-mi: primeras notas cantadas","Canta sol-mi con fononimia y lo repite afinado."],[6,"1 · Cuerpo y pulso","Ostinato y conjunto","Mantiene un ritmo repetido (ostinato) mientras otro suena distinto."],[7,"2 · Primeras lecturas","El pentagrama","Nombra líneas y espacios del pentagrama y ubica una nota en cada uno."],[8,"2 · Primeras lecturas","Clave de sol: sol, mi, la","Lee y canta sol, mi y la en clave de sol."],[9,"2 · Primeras lecturas","Do-re-mi","Canta y ubica do, re, mi con signos de mano y en el pentagrama."],[10,"2 · Primeras lecturas","La escala de Do","Canta la escala de Do subiendo y bajando con signos de mano."],[11,"2 · Primeras lecturas","Figuras: redonda, blanca, negra, corchea","Dice cuánto dura cada figura y la toca con su duración."],[12,"2 · Primeras lecturas","Compás: 2/4, 3/4 y 4/4","Marca el acento del compás y reconoce si una canción va en 2, 3 o 4."],[13,"2 · Primeras lecturas","Primera lectura de 4 compases","Lee y toca una melodía de 4 compases en clave de sol sin parar."],[14,"2 · Primeras lecturas","Dictado rítmico","Escucha un ritmo de 4 pulsos y lo escribe correctamente."],[15,"3 · Lectura y ritmo","El puntillo","Lee y toca blanca con puntillo y negra con puntillo."],[16,"3 · Lectura y ritmo","Semicorcheas: ta-ka-di-mi","Dice y toca 4 semicorcheas parejas en un pulso."],[17,"3 · Lectura y ritmo","Combinaciones: ta-di-mi y ta-ka-di","Lee corchea + 2 semicorcheas y 2 semicorcheas + corchea."],[18,"3 · Lectura y ritmo","Ligadura y síncopa","Toca una síncopa simple sin acelerar."],[19,"3 · Lectura y ritmo","Coordinación: pulso y ritmo a la vez","Marca el pulso con una mano y dice el ritmo con la voz al mismo tiempo."],[20,"3 · Lectura y ritmo","Más notas en el pentagrama","Lee las notas de la tesitura de su instrumento sin contar líneas."],[21,"3 · Lectura y ritmo","Lectura con todas las notas","Lee una melodía de 8 compases usando todo lo aprendido."],[22,"3 · Lectura y ritmo","Las 12 notas: sostenidos y bemoles","Nombra las 12 notas en orden (con sus sostenidos y bemoles) y las toca."],[23,"3 · Lectura y ritmo","Tono y semitono","Distingue tono y semitono en su instrumento y de oído."],[24,"3 · Lectura y ritmo","Intervalos 1: segundas y terceras","Explica qué es un intervalo y reconoce 2ª y 3ª, menores y mayores, contando semitonos."],[25,"4 · Intervalos, escalas y acordes","Intervalos 2: cuarta, quinta, tritono y octava","Reconoce de oído 4ª justa, 5ª justa, tritono y 8ª, con canciones de referencia."],[26,"4 · Intervalos, escalas y acordes","Intervalos 3: sextas y séptimas","Nombra los 12 intervalos con sus semitonos y reconoce de oído al menos 6."],[27,"4 · Intervalos, escalas y acordes","La escala mayor: fórmula e intervalos","Construye una escala mayor con T-T-S-T-T-T-S, nombra sus intervalos y la canta."],[28,"4 · Intervalos, escalas y acordes","Escalas de Sol y Fa mayor y su armadura","Toca Sol y Fa mayor y explica qué dice la armadura."],[29,"4 · Intervalos, escalas y acordes","Círculo de quintas","Ordena Do, Sol, Re, La, Fa y dice cuántas alteraciones tiene cada tonalidad."],[30,"4 · Intervalos, escalas y acordes","Triadas mayor y menor","Arma un acorde mayor (4 + 3) y uno menor (3 + 4) desde cualquier nota y los distingue de oído."],[31,"4 · Intervalos, escalas y acordes","Triadas aumentada y disminuida","Construye las 4 triadas y analiza los acordes de la canción que toca."],[32,"4 · Intervalos, escalas y acordes","Armonizar la escala mayor","Nombra los 7 acordes que salen de Do mayor (I a VII) y dice cuáles son mayores y menores."],[33,"5 · Tonalidad: reposo, mayor y menor","Centro tonal y reposo","Reconoce de oído cuándo una canción \"llega a casa\" (reposo en el I)."],[34,"5 · Tonalidad: reposo, mayor y menor","Progresiones mayores: I, IV, V y vi","Acompaña una canción sencilla con I, IV, V y vi."],[35,"5 · Tonalidad: reposo, mayor y menor","Escala menor natural y su relativa","Explica que La menor y Do mayor tienen las mismas notas y distingue de oído mayor y menor."],[36,"5 · Tonalidad: reposo, mayor y menor","Progresiones menores","Toca una progresión que reposa en un acorde menor (i, iv, v o VI, VII)."],[37,"5 · Tonalidad: reposo, mayor y menor","Escala pentatónica","Construye la pentatónica mayor y menor quitando 2 notas de su escala."],[38,"5 · Tonalidad: reposo, mayor y menor","Improvisar con la pentatónica","Improvisa 8 compases con la pentatónica sobre una base, terminando en reposo."],[39,"5 · Tonalidad: reposo, mayor y menor","Compás de 6/8","Siente y toca el 6/8 en dos grandes pulsos."],[40,"5 · Tonalidad: reposo, mayor y menor","Dictado melódico","Escribe una melodía corta de 4 compases de oído."],[41,"6 · Músico completo","Dinámicas y articulaciones","Toca piano, forte, crescendo, ligado y staccato cuando lo pide la partitura."],[42,"6 · Músico completo","Tempo y términos","Conoce Lento, Andante, Allegro y los toca con el metrónomo."],[43,"6 · Músico completo","La forma: AB y ABA","Reconoce las partes de una canción y las nombra."],[44,"6 · Músico completo","Lectura a primera vista","Lee 8 compases nuevos sin parar, aunque se equivoque."],[45,"6 · Músico completo","Dos contra tres","Hace 2 contra 3 con las manos de forma pareja."],[46,"6 · Músico completo","Acorde de séptima de dominante","Construye el V7 y explica por qué \"pide\" volver al I."],[47,"6 · Músico completo","Inversiones de acordes","Toca un acorde en sus inversiones y explica qué nota queda en el bajo."],[48,"6 · Músico completo","Proyecto: mi primera composición","Compone y toca 8 compases usando compás, escala, acordes y reposo."]];
+const GUIA = /*GUIA*/[[1,"1 · Cuerpo y pulso","El pulso","Mantiene el pulso 30 segundos con el metrónomo a 80, con palmas y en el pecho."],[2,"1 · Cuerpo y pulso","Largo y corto: ta y ti-ti","Dice y palmea ritmos de 4 pulsos con ta (negra) y ti-ti (corcheas)."],[3,"1 · Cuerpo y pulso","El silencio","Reconoce y respeta el silencio de negra dentro de un ritmo de 4 pulsos."],[4,"1 · Cuerpo y pulso","Agudo y grave","Distingue si un sonido sube o baja y lo muestra con el cuerpo."],[5,"1 · Cuerpo y pulso","Sol-mi: primeras notas cantadas","Canta sol-mi afinado y lo encuentra en su instrumento."],[6,"1 · Cuerpo y pulso","Ostinato y conjunto","Mantiene un ritmo repetido (ostinato) mientras otro suena distinto."],[7,"2 · Primeras lecturas","El pentagrama","Nombra líneas y espacios del pentagrama y ubica una nota en cada uno."],[8,"2 · Primeras lecturas","Clave de sol: sol, mi, la","Lee y canta sol, mi y la en clave de sol."],[9,"2 · Primeras lecturas","Do-re-mi","Canta, toca y ubica do, re y mi en el pentagrama."],[10,"2 · Primeras lecturas","La escala de Do","Canta la escala de Do subiendo y bajando, diciendo el nombre de cada nota."],[11,"2 · Primeras lecturas","Figuras: redonda, blanca, negra, corchea","Dice cuánto dura cada figura y la toca con su duración."],[12,"2 · Primeras lecturas","Compás: 2/4, 3/4 y 4/4","Marca el acento del compás y reconoce si una canción va en 2, 3 o 4."],[13,"2 · Primeras lecturas","Primera lectura de 4 compases","Lee y toca una melodía de 4 compases en clave de sol sin parar."],[14,"2 · Primeras lecturas","Dictado rítmico","Escucha un ritmo de 4 pulsos y lo escribe correctamente."],[15,"3 · Lectura y ritmo","El puntillo","Lee y toca blanca con puntillo y negra con puntillo."],[16,"3 · Lectura y ritmo","Semicorcheas: ta-ka-di-mi","Dice y toca 4 semicorcheas parejas en un pulso."],[17,"3 · Lectura y ritmo","Combinaciones: ta-di-mi y ta-ka-di","Lee corchea + 2 semicorcheas y 2 semicorcheas + corchea."],[18,"3 · Lectura y ritmo","Ligadura y síncopa","Toca una síncopa simple sin acelerar."],[19,"3 · Lectura y ritmo","Coordinación: pulso y ritmo a la vez","Marca el pulso con una mano y dice el ritmo con la voz al mismo tiempo."],[20,"3 · Lectura y ritmo","Clave de fa: líneas / Cuerda Sol","Piano: nombra y toca las 5 líneas de la clave de fa (sol, si, re, fa, la). Violín: lee y toca las notas de la cuerda Sol."],[21,"3 · Lectura y ritmo","Clave de fa: espacios / Cuerda Mi","Piano: nombra y toca los 4 espacios de la clave de fa (la, do, mi, sol). Violín: lee y toca las notas de la cuerda Mi."],[22,"3 · Lectura y ritmo","Líneas adicionales: clave de sol / abajo","Piano: lee las notas con líneas adicionales en clave de sol. Violín: lee las notas con líneas adicionales abajo del pentagrama."],[23,"3 · Lectura y ritmo","Líneas adicionales: clave de fa / arriba","Piano: lee las notas con líneas adicionales en clave de fa. Violín: lee las notas con líneas adicionales arriba del pentagrama."],[24,"3 · Lectura y ritmo","Lectura con todas las notas","Lee una melodía de 8 compases usando todo lo aprendido."],[25,"3 · Lectura y ritmo","Las 12 notas: sostenidos y bemoles","Nombra las 12 notas en orden (con sus sostenidos y bemoles) y las toca."],[26,"3 · Lectura y ritmo","Tono y semitono","Distingue tono y semitono en su instrumento y de oído."],[27,"3 · Lectura y ritmo","Intervalos 1: segundas y terceras","Explica qué es un intervalo y reconoce 2ª y 3ª, menores y mayores, contando semitonos."],[28,"4 · Intervalos, escalas y acordes","Intervalos 2: cuarta, quinta, tritono y octava","Reconoce de oído 4ª justa, 5ª justa, tritono y 8ª, con canciones de referencia."],[29,"4 · Intervalos, escalas y acordes","Intervalos 3: sextas y séptimas","Nombra los 12 intervalos con sus semitonos y reconoce de oído al menos 6."],[30,"4 · Intervalos, escalas y acordes","La escala mayor: fórmula e intervalos","Construye una escala mayor con T-T-S-T-T-T-S, nombra sus intervalos y la canta."],[31,"4 · Intervalos, escalas y acordes","Escalas de Sol y Fa mayor y su armadura","Toca Sol y Fa mayor y explica qué dice la armadura."],[32,"4 · Intervalos, escalas y acordes","Orden de los sostenidos: ¿en qué tonalidad estoy?","Dice el orden de los sostenidos y descubre la tonalidad mayor de una armadura (el último sostenido más un semitono)."],[33,"4 · Intervalos, escalas y acordes","Orden de los bemoles","Dice el orden de los bemoles y descubre la tonalidad mayor de una armadura con bemoles (el penúltimo bemol; con uno solo, Fa mayor)."],[34,"4 · Intervalos, escalas y acordes","Triadas mayor y menor","Arma un acorde mayor (4 + 3) y uno menor (3 + 4) desde cualquier nota y los distingue de oído."],[35,"4 · Intervalos, escalas y acordes","Triadas aumentada y disminuida","Construye las 4 triadas y analiza los acordes de la canción que toca."],[36,"4 · Intervalos, escalas y acordes","Inversiones de acordes","Reconoce un acorde invertido, dice su nombre y qué nota tiene en el bajo (Do/Mi, Do/Sol)."],[37,"4 · Intervalos, escalas y acordes","Armonizar la escala mayor","Nombra los 7 acordes que salen de Do mayor (I a VII) y dice cuáles son mayores y menores."],[38,"5 · Tonalidad: reposo, mayor y menor","Centro tonal y reposo","Reconoce de oído cuándo una canción \"llega a casa\" (reposo en el I)."],[39,"5 · Tonalidad: reposo, mayor y menor","Progresiones mayores: I, IV, V y vi","Acompaña una canción sencilla con I, IV, V y vi."],[40,"5 · Tonalidad: reposo, mayor y menor","Escala menor natural y su relativa","Explica que La menor y Do mayor tienen las mismas notas y distingue de oído mayor y menor."],[41,"5 · Tonalidad: reposo, mayor y menor","Progresiones menores","Toca una progresión que reposa en un acorde menor (i, iv, v o VI, VII)."],[42,"5 · Tonalidad: reposo, mayor y menor","Círculo de quintas: mayores, menores y sus acordes","Usa el círculo para ubicar una tonalidad, su relativa menor, sus 6 acordes y sus vecinas (para progresiones y cambios de tonalidad)."],[43,"5 · Tonalidad: reposo, mayor y menor","Escala pentatónica","Construye la pentatónica mayor y menor quitando 2 notas de su escala."],[44,"5 · Tonalidad: reposo, mayor y menor","Improvisar con la pentatónica","Improvisa 8 compases con la pentatónica sobre una base, terminando en reposo."],[45,"5 · Tonalidad: reposo, mayor y menor","Compás de 6/8","Siente y toca el 6/8 en dos grandes pulsos."],[46,"5 · Tonalidad: reposo, mayor y menor","Dictado melódico","Escribe una melodía corta de 4 compases de oído."],[47,"6 · Músico completo","Dinámicas y articulaciones","Toca piano, forte, crescendo, ligado y staccato cuando lo pide la partitura."],[48,"6 · Músico completo","Tempo y términos","Conoce Lento, Andante, Allegro y los toca con el metrónomo."],[49,"6 · Músico completo","La forma: AB y ABA","Reconoce las partes de una canción y las nombra."],[50,"6 · Músico completo","Lectura a primera vista","Lee 8 compases nuevos sin parar, aunque se equivoque."],[51,"6 · Músico completo","Acorde de séptima de dominante","Construye el V7 y explica por qué \"pide\" volver al I."],[52,"6 · Músico completo","Proyecto: mi primera composición","Compone y toca 8 compases usando compás, escala, acordes y reposo."],[53,"7 · Los modos griegos","¿Qué es un modo?","Explica qué es un modo (las mismas notas con otra nota casa) y nombra los 7 modos con su tecla blanca."],[54,"7 · Los modos griegos","El modo eólico: la menor natural","Toca el modo eólico y explica en qué se diferencia del jónico."],[55,"7 · Los modos griegos","El modo mixolidio","Toca el modo mixolidio y dice su nota característica (la séptima menor)."],[56,"7 · Los modos griegos","El modo dórico","Toca el modo dórico y dice su nota característica (la sexta mayor)."],[57,"7 · Los modos griegos","El modo lidio","Toca el modo lidio y dice su nota característica (la cuarta aumentada)."],[58,"7 · Los modos griegos","El modo frigio","Toca el modo frigio y dice su nota característica (la segunda menor)."],[59,"7 · Los modos griegos","El modo locrio","Toca el modo locrio y explica por qué suena inestable (la quinta disminuida)."],[60,"7 · Los modos griegos","Los 7 modos, del más brillante al más oscuro","Ordena los 7 modos por su brillo y los reconoce de oído (mayor o menor y su nota característica)."]];
+/* Las lecciones 20 a 23 son distintas en piano y en violín: el tema dice «piano / violín» y el objetivo
+   «Piano: … Violín: …». parteDe deja solo la del instrumento. */
+function parteDe(texto, ins) {
+  const t = String(texto || ''), m = t.match(/^Piano: (.*?) Violín: (.*)$/);
+  if (m) return ins === 'violin' ? m[2] : m[1];
+  const p = t.split(' / ');
+  return p.length === 2 ? p[ins === 'violin' ? 1 : 0] : t;
+}
 
 /* ---------- Teoría: notas, escalas, intervalos y acordes ---------- */
 const SOLFEO = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
@@ -184,6 +192,10 @@ const TONALIDADES = [
   { t: nota(0), n: 0 }, { t: nota(4), n: 1 }, { t: nota(1), n: 2 }, { t: nota(5), n: 3 }, { t: nota(2), n: 4 }, { t: nota(6), n: 5 },
   { t: nota(3), n: -1 }, { t: nota(6, -1), n: -2 }, { t: nota(2, -1), n: -3 }, { t: nota(5, -1), n: -4 }
 ];
+/* los modos en el orden del libro 7: b = tecla blanca de inicio (0 = Do), car = grado característico */
+const MODOS_HOJA = [{ n: 'Jónico', b: 0, car: null }, { n: 'Eólico', b: 5, car: 2 }, { n: 'Mixolidio', b: 4, car: 6 }, { n: 'Dórico', b: 1, car: 5 },
+  { n: 'Lidio', b: 3, car: 3 }, { n: 'Frigio', b: 2, car: 1 }, { n: 'Locrio', b: 6, car: 4 }];
+const NOMBRES_BLANCAS = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
 const ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 
 /* ---------- Lo que escribe el alumno: notas y acordes en español o con letras ---------- */
@@ -466,6 +478,29 @@ const T = {
       return item(i, el('div', { class: 'enunciado', text: 'Grado ' + ROMANOS[k] + ' de ' + nombre(t) + (menor ? ' menor' : ' mayor') }), el('div', { class: 'respuestas' }, campoAcorde(ns[k], tipoGrado(ns, k))));
     }), { papel: 'Hoja rayada' });
   },
+  /* la armadura escrita con sus alteraciones; el alumno escribe la tonalidad mayor (29-oct) */
+  queTonalidad({ tonalidades }) {
+    const SOST = [nota(3, 1), nota(0, 1), nota(4, 1), nota(1, 1), nota(5, 1), nota(2, 1), nota(6, 1)];
+    const BEM = [nota(6, -1), nota(2, -1), nota(5, -1), nota(1, -1), nota(4, -1), nota(0, -1), nota(3, -1)];
+    return ejercicio('¿En qué tonalidad estoy?', 'Sostenidos: el último más un semitono. Bemoles: el penúltimo (con uno solo, Fa mayor).', tonalidades.map((x, i) =>
+      item(i, el('div', { class: 'enunciado', text: (x.n > 0 ? SOST.slice(0, x.n) : BEM.slice(0, -x.n)).map(nombre).join(', ') + ' →' }),
+        el('div', { class: 'respuestas' }, campoNota(x.t), el('span', { class: 'sep', text: 'mayor' })))), { papel: 'Hoja rayada' });
+  },
+  /* los modos (etapa 7, 29-oct): con las teclas blancas, cada tecla de inicio es un modo */
+  queModo({ cuales }) {
+    // en la primera lección se aprenden los 7 nombres con su tecla blanca; después, solo los modos ya vistos
+    const preguntas = cuales.length === 1 ? MODOS_HOJA : MODOS_HOJA.filter((_, i) => cuales.includes(i));
+    return ejercicio('¿Qué modo es?', 'Con las teclas blancas, la nota donde empieza dice el modo.', mezclar(preguntas).map((m, i) =>
+      item(i, el('div', { class: 'enunciado', text: 'De ' + NOMBRES_BLANCAS[m.b] + ' a ' + NOMBRES_BLANCAS[m.b] }), el('div', { class: 'respuestas' }, eleccion(MODOS_HOJA.map(x => x.n), m.n, 'Modo')))), { papel: 'Hoja rayada' });
+  },
+  escalaModo({ cuales }) {
+    return T.secuencia({ titulo: 'Completa el modo', consigna: 'Solo teclas blancas, desde la nota casa hasta la misma nota arriba.', series: MODOS_HOJA.filter((_, i) => cuales.includes(i)).map(m =>
+      Array.from({ length: 8 }, (_, k) => nota((m.b + k) % 7, 0, 4 + Math.floor((m.b + k) / 7)))), cant: cuales.length });
+  },
+  notaCaracteristica({ cuales }) {
+    return ejercicio('La nota característica', 'La nota que hace único al modo (la que lo diferencia de la escala mayor o de la menor).', MODOS_HOJA.filter((m, i) => cuales.includes(i) && m.car !== null).map((m, i) =>
+      item(i, el('div', { class: 'enunciado', text: NOMBRES_BLANCAS[m.b] + ' ' + m.n.toLowerCase() + ' →' }), el('div', { class: 'respuestas' }, campoNota(nota((m.b + m.car) % 7, 0, 4))))), { papel: 'Hoja rayada' });
+  },
   relativas({ tonicas }) {
     return ejercicio('La relativa menor', 'La relativa menor empieza en el 6.º grado de la escala mayor (o 3 semitonos abajo).', tonicas.map((t, i) =>
       item(i, el('div', { class: 'enunciado', text: nombre(t) + ' mayor →' }), el('div', { class: 'respuestas' }, campoNota(escala(t, MAYOR)[5]), el('span', { class: 'sep', text: 'menor' })))), { papel: 'Hoja rayada' });
@@ -536,36 +571,59 @@ function ejerciciosDe(s, ins) {
     17: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' }), T.completar({ celdas: TK2.concat([C.taa]) })],
     18: () => [T.silabas({ celdas: TK3, metodo: 'Takadimi' })],
     19: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' })],
-    20: () => [T.nombrar({ notas: SOL_TODAS, titulo: 'Notas en clave de sol (con líneas adicionales)' })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', titulo: 'Notas en clave de fa' })] : []),
-    21: () => [T.nombrar({ notas: SOL_TODAS, cant: 6 }), T.dibujar({ notas: SOL_TODAS.slice(2, 16) })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', cant: 4, titulo: 'Notas en clave de fa' })] : []),
-    22: () => [T.nombrar({ notas: N([3, 4, 1], [0, 5, 1], [6, 4, -1], [2, 4, -1], [4, 4, 1], [5, 4, -1], [1, 4, 1]), titulo: 'Notas con alteraciones' }),
+    /* 20 a 23 (29-oct): la vieja «Más notas» en 4 lecciones, una cosa a la vez. Piano: clave de fa y líneas adicionales;
+       violín: cuerda Sol, cuerda Mi y líneas adicionales abajo y arriba. */
+    20: () => fa ? [T.nombrar({ notas: N([4, 2], [6, 2], [1, 3], [3, 3], [5, 3]), clave: 'bass', cant: 6, titulo: 'Clave de fa: las líneas' }), T.dibujar({ notas: N([4, 2], [6, 2], [1, 3], [3, 3], [5, 3]), clave: 'bass', cant: 4 })]
+      : [T.nombrar({ notas: N([4, 3], [5, 3], [6, 3], [0, 4]), cant: 6, titulo: 'Las notas de la cuerda Sol' }), T.dibujar({ notas: N([4, 3], [5, 3], [6, 3], [0, 4]), cant: 4 })],
+    21: () => fa ? [T.nombrar({ notas: N([5, 2], [0, 3], [2, 3], [4, 3]), clave: 'bass', cant: 6, titulo: 'Clave de fa: los espacios' }), T.nombrar({ notas: RANGO.fa.notas.slice(0, 9), clave: 'bass', cant: 6, titulo: 'Líneas y espacios mezclados' })]
+      : [T.nombrar({ notas: N([2, 5], [3, 5, 1], [4, 5], [5, 5]), cant: 6, titulo: 'Las notas de la cuerda Mi' }), T.dibujar({ notas: N([2, 5], [4, 5], [5, 5]), cant: 3 })],
+    22: () => fa ? [T.nombrar({ notas: N([5, 3], [6, 3], [0, 4], [5, 5], [6, 5]), cant: 6, titulo: 'Clave de sol: líneas adicionales' }), T.dibujar({ notas: N([0, 4], [6, 3], [5, 3], [5, 5]), cant: 4 })]
+      : [T.nombrar({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]), cant: 6, titulo: 'Líneas adicionales abajo' }), T.dibujar({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]), cant: 4 })],
+    23: () => fa ? [T.nombrar({ notas: N([3, 2], [6, 3], [0, 4], [1, 4], [2, 4]), clave: 'bass', cant: 6, titulo: 'Clave de fa: líneas adicionales' }), T.dibujar({ notas: N([0, 4], [6, 3], [1, 4], [3, 2]), clave: 'bass', cant: 4 })]
+      : [T.nombrar({ notas: N([4, 5], [5, 5], [6, 5]), cant: 6, titulo: 'Líneas adicionales arriba' }), T.dibujar({ notas: N([4, 5], [5, 5], [6, 5]), cant: 3 })],
+    24: () => [T.nombrar({ notas: SOL_TODAS, cant: 6 }), T.dibujar({ notas: SOL_TODAS.slice(2, 16) })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', cant: 4, titulo: 'Notas en clave de fa' })] : []),
+    25: () => [T.nombrar({ notas: N([3, 4, 1], [0, 5, 1], [6, 4, -1], [2, 4, -1], [4, 4, 1], [5, 4, -1], [1, 4, 1]), titulo: 'Notas con alteraciones' }),
       T.secuencia({ titulo: 'Escribe la nota que falta', consigna: 'Las 12 notas, subiendo por semitonos.', series: [[nota(0), nota(0, 1), nota(1), nota(1, 1), nota(2), nota(3), nota(3, 1), nota(4)], [nota(4), nota(4, 1), nota(5), nota(5, 1), nota(6), nota(0, 0, 5)]], cant: 2 })],
-    23: () => [T.tonoSemitono({})],
-    24: () => [T.intervalos({ cuales: [1, 2, 3, 4] })],
-    25: () => [T.intervalos({ cuales: [5, 6, 7, 12] })],
-    26: () => [T.intervalos({ cuales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], cant: 8 })],
-    27: () => [T.escalaMayor({ tonicas: [nota(4), nota(3), nota(1)] }), T.tonoSemitono({ cant: 4 })],
-    28: () => [T.armaduras({ tonalidades: TONALIDADES.filter(x => [0, 1, 2, -1].includes(x.n)) }), T.escalaMayor({ tonicas: [nota(4), nota(3)] })],
-    29: () => [T.circulo(), T.armaduras({ tonalidades: mezclar(TONALIDADES.filter(x => Math.abs(x.n) <= 3)).slice(0, 5) })],
-    30: () => [T.triadas({ tipos: ['mayor', 'menor'] }), T.queTriada({ tipos: ['mayor', 'menor'] })],
-    31: () => [T.triadas({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] }), T.queTriada({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] })],
-    32: () => [T.armonizar({ tonicas: [nota(0), nota(4)] })],
-    33: () => [T.grados({ tonicas: [nota(0), nota(4), nota(3)], preguntas: [0, 3, 4, 5] })],
-    34: () => [T.grados({ tonicas: [nota(0), nota(4), nota(1), nota(3)], preguntas: [0, 3, 4, 5] })],
-    35: () => [T.relativas({ tonicas: [nota(0), nota(4), nota(3), nota(1)] }), T.escalaMayor({ tonicas: [nota(5), nota(2)], menor: true })],
-    36: () => [T.grados({ tonicas: [nota(5), nota(2)], preguntas: [0, 3, 4], menor: true }), T.armonizar({ tonicas: [nota(5)], menor: true })],
-    37: () => [T.pentatonica({ tonicas: [[nota(0), false], [nota(4), false], [nota(5), true], [nota(2), true]] })],
-    39: () => [T.silabas({ celdas: SEIS, compas: '6/8', metodo: 'Takadimi en 6/8' }), T.completar({ celdas: SEIS, compases: ['6/8'] })],
-    41: () => [T.terminos({ titulo: 'Dinámicas y articulaciones', lista: [['p', 'Suave'], ['f', 'Fuerte'], ['mf', 'Medio fuerte'], ['cresc.', 'Cada vez más fuerte'], ['dim.', 'Cada vez más suave'], ['Staccato', 'Notas cortas y separadas'], ['Legato', 'Notas ligadas']] })],
-    42: () => [T.terminos({ titulo: 'Tempo', lista: [['Lento', 'Muy despacio'], ['Andante', 'Al paso, tranquilo'], ['Moderato', 'Moderado'], ['Allegro', 'Rápido y alegre'], ['Presto', 'Muy rápido'], ['Ritardando', 'Ir más despacio']] })],
-    44: () => [T.nombrar({ notas: SOL_TODAS, cant: 12, titulo: 'Lectura rápida: escribe el nombre de cada nota' })],
-    46: () => [T.septima({ tonicas: [nota(0), nota(4), nota(3), nota(1)] })],
-    47: () => [T.inversiones({})]
+    26: () => [T.tonoSemitono({})],
+    27: () => [T.intervalos({ cuales: [1, 2, 3, 4] })],
+    28: () => [T.intervalos({ cuales: [5, 6, 7, 12] })],
+    29: () => [T.intervalos({ cuales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], cant: 8 })],
+    30: () => [T.escalaMayor({ tonicas: [nota(4), nota(3), nota(1)] }), T.tonoSemitono({ cant: 4 })],
+    31: () => [T.armaduras({ tonalidades: TONALIDADES.filter(x => [0, 1, 2, -1].includes(x.n)) }), T.escalaMayor({ tonicas: [nota(4), nota(3)] })],
+    /* 32 y 33 (29-oct): el orden de los sostenidos y el de los bemoles, y la tonalidad de cada armadura */
+    32: () => [T.secuencia({ titulo: 'El orden de los sostenidos', consigna: 'Fa, Do, Sol, Re, La, Mi, Si.', series: [[nota(3, 1), nota(0, 1), nota(4, 1), nota(1, 1), nota(5, 1), nota(2, 1), nota(6, 1)]], cant: 2 }),
+      T.queTonalidad({ tonalidades: TONALIDADES.filter(x => x.n >= 1) }), T.armaduras({ tonalidades: TONALIDADES.filter(x => x.n >= 1 && x.n <= 4) })],
+    33: () => [T.secuencia({ titulo: 'El orden de los bemoles', consigna: 'Si, Mi, La, Re, Sol, Do, Fa: el de los sostenidos al revés.', series: [[nota(6, -1), nota(2, -1), nota(5, -1), nota(1, -1), nota(4, -1), nota(0, -1), nota(3, -1)]], cant: 2 }),
+      T.queTonalidad({ tonalidades: TONALIDADES.filter(x => x.n <= -1).concat(TONALIDADES.filter(x => x.n >= 2 && x.n <= 3)) }), T.armaduras({ tonalidades: TONALIDADES.filter(x => x.n !== 0) })],
+    34: () => [T.triadas({ tipos: ['mayor', 'menor'] }), T.queTriada({ tipos: ['mayor', 'menor'] })],
+    35: () => [T.triadas({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] }), T.queTriada({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] })],
+    36: () => [T.inversiones({})],
+    37: () => [T.armonizar({ tonicas: [nota(0), nota(4)] })],
+    38: () => [T.grados({ tonicas: [nota(0), nota(4), nota(3)], preguntas: [0, 3, 4, 5] })],
+    39: () => [T.grados({ tonicas: [nota(0), nota(4), nota(1), nota(3)], preguntas: [0, 3, 4, 5] })],
+    40: () => [T.relativas({ tonicas: [nota(0), nota(4), nota(3), nota(1)] }), T.escalaMayor({ tonicas: [nota(5), nota(2)], menor: true })],
+    41: () => [T.grados({ tonicas: [nota(5), nota(2)], preguntas: [0, 3, 4], menor: true }), T.armonizar({ tonicas: [nota(5)], menor: true })],
+    42: () => [T.circulo(), T.relativas({ tonicas: [nota(0), nota(4), nota(1), nota(3), nota(6, -1)] }), T.armaduras({ tonalidades: mezclar(TONALIDADES.filter(x => Math.abs(x.n) <= 3)).slice(0, 5) })],
+    43: () => [T.pentatonica({ tonicas: [[nota(0), false], [nota(4), false], [nota(5), true], [nota(2), true]] })],
+    45: () => [T.silabas({ celdas: SEIS, compas: '6/8', metodo: 'Takadimi en 6/8' }), T.completar({ celdas: SEIS, compases: ['6/8'] })],
+    47: () => [T.terminos({ titulo: 'Dinámicas y articulaciones', lista: [['p', 'Suave'], ['f', 'Fuerte'], ['mf', 'Medio fuerte'], ['cresc.', 'Cada vez más fuerte'], ['dim.', 'Cada vez más suave'], ['Staccato', 'Notas cortas y separadas'], ['Legato', 'Notas ligadas']] })],
+    48: () => [T.terminos({ titulo: 'Tempo', lista: [['Lento', 'Muy despacio'], ['Andante', 'Al paso, tranquilo'], ['Moderato', 'Moderado'], ['Allegro', 'Rápido y alegre'], ['Presto', 'Muy rápido'], ['Ritardando', 'Ir más despacio']] })],
+    50: () => [T.nombrar({ notas: SOL_TODAS, cant: 12, titulo: 'Lectura rápida: escribe el nombre de cada nota' })],
+    51: () => [T.septima({ tonicas: [nota(0), nota(4), nota(3), nota(1)] })],
+    /* 53 a 60 (29-oct): los modos griegos, sumando uno por lección */
+    53: () => [T.queModo({ cuales: [0] }), T.escalaModo({ cuales: [0] })],
+    54: () => [T.queModo({ cuales: [0,1] }), T.escalaModo({ cuales: [0,1] }), T.notaCaracteristica({ cuales: [0,1] })],
+    55: () => [T.queModo({ cuales: [0,1,2] }), T.escalaModo({ cuales: [0,1,2] }), T.notaCaracteristica({ cuales: [0,1,2] })],
+    56: () => [T.queModo({ cuales: [0,1,2,3] }), T.escalaModo({ cuales: [0,1,2,3] }), T.notaCaracteristica({ cuales: [0,1,2,3] })],
+    57: () => [T.queModo({ cuales: [0,1,2,3,4] }), T.escalaModo({ cuales: [0,1,2,3,4] }), T.notaCaracteristica({ cuales: [0,1,2,3,4] })],
+    58: () => [T.queModo({ cuales: [0,1,2,3,4,5] }), T.escalaModo({ cuales: [0,1,2,3,4,5] }), T.notaCaracteristica({ cuales: [0,1,2,3,4,5] })],
+    59: () => [T.queModo({ cuales: [0,1,2,3,4,5,6] }), T.escalaModo({ cuales: [0,1,2,3,4,5,6] }), T.notaCaracteristica({ cuales: [0,1,2,3,4,5,6] })],
+    60: () => [T.queModo({ cuales: [0,1,2,3,4,5,6] }), T.escalaModo({ cuales: [0,1,2,3,4,5,6] }), T.notaCaracteristica({ cuales: [0,1,2,3,4,5,6] })],
   };
   return (M[s] || (() => []))();
 }
 /** Semanas sin hoja (no tienen entrada en ejerciciosDe). */
-const SIN_HOJA = [1, 38, 40, 43, 45, 48];
+const SIN_HOJA = [1, 44, 46, 49, 52];
 const tieneHoja = s => !SIN_HOJA.includes(s);
 
 /* ---------- Armar, revisar e imprimir ---------- */
@@ -596,14 +654,14 @@ function armar() {
   if (!conHoja) {
     hoja.replaceChildren(el('div', { class: 'sin-hoja' },
       el('span', { class: 'etapa', text: nivel(s) }),
-      el('h2', { text: g[2] }),
+      el('h2', { text: parteDe(g[2], ins) }),
       el('p', { text: 'Esta lección no tiene hoja de práctica: lo que se aprende se practica tocando, en clase y con la app de la lección.' })));
     return;
   }
   hoja.replaceChildren(el('div', { class: 'hoja-cabeza' },
     el('span', { class: 'etapa', text: nivel(s) }),
-    el('h2', { text: g[2] }),
-    el('p', { text: g[3] }),
+    el('h2', { text: parteDe(g[2], ins) }),
+    el('p', { text: parteDe(g[3], ins) }),
     el('div', { class: 'datos-alumno' }, el('span', { text: 'Nombre:' }), el('span', { text: 'Fecha:' }))));
   ejerciciosDe(s, ins).forEach(e => hoja.append(e));
 }
@@ -645,7 +703,7 @@ function iniciar() {
 }
 iniciar();
 </script>
-<script>window.SprinkloudPractica = { app: 'Hojas de práctica', detalle: function () { var s = Number(document.querySelector('#semana').value), g = GUIA.find(function (x) { return x[0] === s; }), r = document.querySelector('#resultado'); return nivel(s) + ': ' + g[2] + (r && !r.hidden ? ' · ' + r.textContent : ''); } };</script>
+<script>window.SprinkloudPractica = { app: 'Hojas de práctica', detalle: function () { var s = Number(document.querySelector('#semana').value), g = GUIA.find(function (x) { return x[0] === s; }), r = document.querySelector('#resultado'); return nivel(s) + ': ' + parteDe(g[2], document.querySelector('#instrumento').value) + (r && !r.hidden ? ' · ' + r.textContent : ''); } };</script>
 <script src="/practica/comprobante.js"></script>
 </body>
 </html>

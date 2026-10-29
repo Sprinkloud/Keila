@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modos griegos | Sprinkloud</title>
+  <meta name="description" content="Practica gratis los modos griegos: reconócelos en el pentagrama, encuentra su nota característica y distínguelos de oído.">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/modos">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sprinkloud">
+  <meta property="og:title" content="Modos griegos">
+  <meta property="og:description" content="Jónico, dórico, frigio, lidio, mixolidio, eólico y locrio: en el pentagrama, su nota característica y de oído. Gratis.">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/modos">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/practica/juegos.css">
+  <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js" integrity="sha384-NOpv0+9OuhqtqeXLSoULPF4d3UCwlWkmcHkJklpAosC7LpqYvhFCFqqu9QElzbjS" crossorigin="anonymous"></script>
+  <style>
+    /* el teclado para formar y tocar los modos (dos octavas, de Do4 a Do6) */
+    .teclado-modos { position: relative; display: flex; width: 100%; max-width: 620px; height: clamp(130px, 26vw, 180px); touch-action: manipulation; }
+    .tm { position: relative; border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; font: inherit; }
+    .tm.blanca { flex: 1; background: var(--papel); border: 1.5px solid #3A3128; border-radius: 0 0 8px 8px; margin-left: -1.5px; box-shadow: inset 0 -5px 0 #DCCFB5; }
+    .tm.negra { position: absolute; top: 0; height: 62%; background: #3A3128; border-radius: 0 0 6px 6px; z-index: 2; }
+    .tm:active { transform: translateY(2px); }
+    .tm.blanca.en-modo { background: #E1E6CF; } .tm.negra.en-modo { background: #647745; }
+    .tm.blanca.casa { background: #F1E0BC; box-shadow: inset 0 0 0 3px #C4923A; } .tm.negra.casa { background: #8F6A2A; }
+    .tm.blanca.car { box-shadow: inset 0 0 0 3px #C4923A; } .tm.negra.car { box-shadow: 0 0 0 3px #C4923A; }
+    .tm.mal { background: #F3DED8 !important; }
+    .tm .num { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); font-weight: 800; font-size: 11px; color: #48592F; pointer-events: none; }
+    .tm.negra .num { color: #FFFDF8; bottom: 6px; }
+    .elegir-modo { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .elegir-modo .modo { min-height: 40px; }
+  </style>
+  <script src="/practica/leccion.js"></script>
+</head>
+<body>
+  <div class="barra">
+    <a href="/material">← Volver</a>
+    <span class="marca">Sprinkloud</span>
+  </div>
+  <main>
+    <h1>Modos griegos</h1>
+    <div class="modos" role="group" aria-label="Ejercicio" id="modos"></div>
+    <section class="tablero" aria-live="polite">
+      <p class="pregunta" id="pregunta"></p>
+      <div class="pentagrama" id="pentagrama"></div>
+      <div class="elegir-modo" id="elegir-modo" hidden role="group" aria-label="Modo"></div>
+      <div class="teclado-modos" id="teclado-modos" hidden role="group" aria-label="Piano"></div>
+      <div class="acciones"><button class="btn" type="button" id="escuchar">🔊 Escuchar</button></div>
+      <div class="respuestas" id="respuestas"></div>
+      <p class="veredicto" id="veredicto"></p>
+      <p class="regla" id="regla"></p>
+      <div class="acciones"><button class="btn principal" type="button" id="siguiente">Siguiente</button></div>
+      <div class="marcador"><span>Aciertos <b id="aciertos">0</b></span><span>Intentos <b id="intentos">0</b></span><span>Racha <b id="racha">0</b></span></div>
+    </section>
+  </main>
+  <footer>© Club musical Sprinkloud</footer>
+
+<script>
+"use strict";
+/* ---------- Modos (datos) ----------
+   En el orden en que se aprenden en el libro 7. blanca: la tecla blanca donde empieza (0 = Do … 6 = Si); st: los
+   semitonos desde la nota casa; car: el grado de la nota característica (null en el jónico). Lo copia el bosque. */
+const MODOS_G = [
+  { n: 'Jónico', blanca: 0, st: [0, 2, 4, 5, 7, 9, 11], car: null, que: 'la escala mayor' },
+  { n: 'Eólico', blanca: 5, st: [0, 2, 3, 5, 7, 8, 10], car: 2, que: 'la menor natural: su tercera es menor' },
+  { n: 'Mixolidio', blanca: 4, st: [0, 2, 4, 5, 7, 9, 10], car: 6, que: 'mayor con la séptima menor' },
+  { n: 'Dórico', blanca: 1, st: [0, 2, 3, 5, 7, 9, 10], car: 5, que: 'menor con la sexta mayor' },
+  { n: 'Lidio', blanca: 3, st: [0, 2, 4, 6, 7, 9, 11], car: 3, que: 'mayor con la cuarta aumentada' },
+  { n: 'Frigio', blanca: 2, st: [0, 1, 3, 5, 7, 8, 10], car: 1, que: 'menor con la segunda menor' },
+  { n: 'Locrio', blanca: 6, st: [0, 1, 3, 5, 6, 8, 10], car: 4, que: 'segunda menor y quinta disminuida' }
+];
+const BLANCAS_ES = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'], BLANCAS_VF = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
+/* las 8 notas del modo desde su tecla blanca (claves de VexFlow y nombres) */
+function escalaBlanca(m) {
+  const claves = [], nombres = [];
+  for (let k = 0; k <= 7; k++) { const l = (m.blanca + k) % 7, oct = 4 + Math.floor((m.blanca + k) / 7); claves.push(BLANCAS_VF[l] + '/' + oct); nombres.push(BLANCAS_ES[l]); }
+  return { claves, nombres };
+}
+const ORDINAL = ['1ª', '2ª', '3ª', '4ª', '5ª', '6ª', '7ª'];
+/* ---------- fin de los datos ---------- */
+
+const $ = s => document.querySelector(s);
+const azar = arr => arr[Math.floor(Math.random() * arr.length)];
+const mezclar = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------- Sonido ---------- */
+let ctx = null;
+function audio() { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+function piano(t, midi, dur, gain) {
+  const out = ctx.createGain(), hz = 440 * Math.pow(2, (midi - 69) / 12);
+  out.gain.setValueAtTime(0.0001, t); out.gain.exponentialRampToValueAtTime(gain, t + .006); out.gain.setTargetAtTime(0.0001, t + dur, .15);
+  [[1, 1], [2, .4], [3, .15]].forEach(([h, a]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = hz * h; g.gain.value = a; o.connect(g); g.connect(out); o.start(t); o.stop(t + dur + .5); });
+  out.connect(ctx.destination);
+}
+/* la escala del modo desde una nota (midi), subiendo, y al final la nota casa larga */
+function sonarModo(m, desde) {
+  audio(); let t = ctx.currentTime + .05;
+  m.st.concat([12]).forEach(s => { piano(t, desde + s, .32, .25); t += .3; });
+  piano(t + .1, desde, 1.2, .25); piano(t + .1, desde + m.st[2], 1.2, .18); piano(t + .1, desde + 7, 1.2, .18);
+}
+const MIDI_BLANCA = [60, 62, 64, 65, 67, 69, 71];
+function tono(f, t, dur, gain, tipo) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = tipo || 'sine'; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + dur + .05);
+}
+const sonidoBien = () => { audio(); [784, 1047].forEach((f, i) => tono(f, ctx.currentTime + i * .08, .35, .2)); };
+const sonidoMal = () => { audio(); tono(180, ctx.currentTime, .25, .15, 'triangle'); };
+
+function dibujar(claves, resaltar) {
+  const cont = $('#pentagrama'); cont.innerHTML = '';
+  if (!claves) return;
+  const VF = Vex.Flow, r = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
+  r.resize(380, 130);
+  const c = r.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');
+  const st = new VF.Stave(6, 10, 368); st.addClef('treble'); st.setContext(c).draw();
+  const ns = claves.map((k, i) => { const n = new VF.StaveNote({ keys: [k], duration: 'q' }); if (i === resaltar) n.setStyle({ fillStyle: '#C4923A', strokeStyle: '#C4923A' }); return n; });
+  const v = new VF.Voice({ num_beats: 8, beat_value: 4 }).setMode(VF.Voice.Mode.SOFT).addTickables(ns);
+  new VF.Formatter().joinVoices([v]).format([v], 310); v.draw(c, st);
+  const svg = cont.querySelector('svg'); svg.setAttribute('viewBox', '0 0 380 130'); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.width = '100%'; svg.style.height = 'auto';
+}
+
+/* ---------- El piano de los modos (pedido de la dueña, 29-oct): se elige el modo y al tocar una tecla se forma desde
+   ahí; en la práctica se pide, por ejemplo, «Toca Sol mixolidio» y se tocan sus 8 notas en orden. ---------- */
+const NOMBRE_ST = ['Do', 'Do♯', 'Re', 'Mi♭', 'Mi', 'Fa', 'Fa♯', 'Sol', 'La♭', 'La', 'Si♭', 'Si'];
+const LETRA_ST = [0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6], NATURAL = [0, 2, 4, 5, 7, 9, 11];
+/* las 8 notas del modo desde la tecla st (0 = Do4), escritas con letras seguidas (Re dórico: Re, Mi, Fa…) */
+function modoDesde(m, st) {
+  const raiz = LETRA_ST[st % 12], notas = [];
+  m.st.concat([12]).forEach((d, k) => {
+    const l = (raiz + k) % 7, real = st + d;
+    const oct = 4 + Math.round((real - NATURAL[l]) / 12), alt = real - (NATURAL[l] + 12 * (oct - 4));   // la octava que deja la alteración más chica
+    const sig = { '-2': '𝄫', '-1': '♭', 0: '', 1: '♯', 2: '𝄪' }[alt], vf = { '-2': 'bb', '-1': 'b', 0: '', 1: '#', 2: '##' }[alt];
+    notas.push({ st: real, nombre: BLANCAS_ES[l] + sig, clave: BLANCAS_VF[l] + vf + '/' + oct, vf });
+  });
+  return notas;
+}
+let teclas = [], modoElegido = MODOS_G[0], alTecla = null;
+function armarTeclado() {
+  const t = $('#teclado-modos'); t.replaceChildren(); teclas = [];
+  let blancas = 0;
+  for (let st = 0; st <= 24; st++) {
+    const negra = !NATURAL.includes(st % 12);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tm ' + (negra ? 'negra' : 'blanca'); b.setAttribute('aria-label', NOMBRE_ST[st % 12] + (st >= 12 ? ' de arriba' : ''));
+    if (negra) { b.style.left = 'calc(' + blancas + ' * (100% / 15) - (100% / 15) * .31)'; b.style.width = 'calc((100% / 15) * .62)'; } else blancas++;
+    b.addEventListener('pointerdown', e => { e.preventDefault(); if (alTecla) alTecla(st, b); });
+    b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && alTecla) { e.preventDefault(); alTecla(st, b); } });
+    teclas[st] = b; t.append(b);
+  }
+}
+function limpiarTeclado() { teclas.forEach(b => { b.classList.remove('en-modo', 'casa', 'car', 'mal'); b.replaceChildren(); }); }
+function marcarModo(m, notas) {
+  limpiarTeclado();
+  notas.forEach((n, k) => { const b = teclas[n.st]; if (!b) return; b.classList.add(k === 0 || k === 7 ? 'casa' : 'en-modo'); if (k === m.car) b.classList.add('car'); const s = document.createElement('span'); s.className = 'num'; s.textContent = n.nombre; b.append(s); });
+}
+function dibujarModo(notas, car) {
+  const cont = $('#pentagrama'); cont.innerHTML = '';
+  const VF = Vex.Flow, rr = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
+  rr.resize(380, 130);
+  const c = rr.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');
+  const st = new VF.Stave(6, 10, 368); st.addClef('treble'); st.setContext(c).draw();
+  const ns = notas.map((n, i) => { const x = new VF.StaveNote({ keys: [n.clave], duration: 'q' }); if (n.vf) x.addModifier(new VF.Accidental(n.vf), 0); if (i === car) x.setStyle({ fillStyle: '#C4923A', strokeStyle: '#C4923A' }); return x; });
+  const v = new VF.Voice({ num_beats: 8, beat_value: 4 }).setMode(VF.Voice.Mode.SOFT).addTickables(ns);
+  new VF.Formatter().joinVoices([v]).format([v], 310); v.draw(c, st);
+  const svg = cont.querySelector('svg'); svg.setAttribute('viewBox', '0 0 380 130'); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.width = '100%'; svg.style.height = 'auto';
+}
+function pintarElegirModo() {
+  const f = $('#elegir-modo'); f.replaceChildren();
+  conocidos().forEach(m => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'modo'; b.textContent = m.n; b.setAttribute('aria-pressed', m === modoElegido);
+    b.addEventListener('click', () => { modoElegido = m; pintarElegirModo(); $('#pregunta').textContent = 'Toca una tecla: ahí empieza ' + m.n.toLowerCase(); limpiarTeclado(); });
+    f.append(b);
+  });
+}
+function explorar() {
+  if (!conocidos().includes(modoElegido)) modoElegido = conocidos()[0];
+  pintarElegirModo(); limpiarTeclado(); dibujar(null); $('#respuestas').replaceChildren();
+  $('#pregunta').textContent = 'Elige un modo y toca una tecla: ahí empieza ' + modoElegido.n.toLowerCase();
+  actual = null;
+  alTecla = st => {
+    if (st > 12) return;   // desde la primera octava, para que entren las 8 notas
+    const notas = modoDesde(modoElegido, st);
+    marcarModo(modoElegido, notas); dibujarModo(notas, modoElegido.car);
+    actual = () => sonarModo(modoElegido, 60 + st); actual();
+    $('#regla').textContent = notas[0].nombre + ' ' + modoElegido.n.toLowerCase() + ': ' + notas.map(n => n.nombre).join(' · ');
+  };
+}
+function tocarModo() {
+  const m = azar(conocidos()), raiz = azar([0, 2, 4, 5, 7, 9, 11]), notas = modoDesde(m, raiz);
+  limpiarTeclado(); dibujar(null); $('#respuestas').replaceChildren();
+  $('#pregunta').textContent = 'Toca ' + notas[0].nombre + ' ' + m.n.toLowerCase() + ', nota por nota, subiendo';
+  actual = () => sonarModo(m, 60 + raiz);
+  let k = 0, errores = 0; esperando = true;
+  alTecla = (st, b) => {
+    if (!esperando) return;
+    if (st === notas[k].st) {
+      b.classList.add(k === 0 || k === 7 ? 'casa' : 'en-modo'); if (k === m.car) b.classList.add('car');
+      const s = document.createElement('span'); s.className = 'num'; s.textContent = notas[k].nombre; b.append(s);
+      audio(); piano(ctx.currentTime, 60 + st, .5, .25); k++;
+      if (k === 8) { esperando = false; marcar(errores === 0); veredicto(errores ? '¡Completo! Ahora sin errores' : '¡Perfecto!', true); dibujarModo(notas, m.car);
+        $('#regla').textContent = m.n + ': ' + m.que + (m.car !== null ? ' (' + notas[m.car].nombre + ')' : ''); }
+    } else { errores++; sonidoMal(); b.classList.add('mal'); setTimeout(() => b.classList.remove('mal'), 450); veredicto('Sigue la nota ' + (k + 1) + ' de 8', false); }
+  };
+}
+
+/* ---------- Ejercicios ---------- */
+const EJERCICIOS = { ver: '¿Qué modo es?', caracteristica: 'Nota característica', oido: 'De oído', explorar: 'Formar en el piano', tocar: 'Toca el modo' };
+let modo = 'ver', visibles = Object.keys(EJERCICIOS), aprendidos = MODOS_G.length, actual = null, esperando = false;
+let aciertos = 0, intentos = 0, racha = 0;
+const conocidos = () => MODOS_G.slice(0, aprendidos);
+function marcar(ok) {
+  intentos++; if (ok) { aciertos++; racha++; } else racha = 0;
+  $('#aciertos').textContent = aciertos; $('#intentos').textContent = intentos; $('#racha').textContent = racha;
+  ok ? sonidoBien() : sonidoMal();
+}
+function veredicto(t, ok) { const v = $('#veredicto'); v.textContent = t; v.className = 'veredicto' + (ok === undefined ? '' : ok ? ' bien' : ' mal'); }
+function botones(ops, correcta, regla, despues) {
+  const r = $('#respuestas'); r.replaceChildren(); esperando = true;
+  ops.forEach(op => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'puff'; b.dataset.op = op;
+    b.innerHTML = '<span class="borde"></span><span class="cara"></span>';
+    b.querySelector('.cara').textContent = op;
+    b.addEventListener('click', () => {
+      if (!esperando) return; esperando = false;
+      const ok = op === correcta; marcar(ok);
+      b.classList.add(ok ? 'bien' : 'mal');
+      if (!ok) { const c = [...r.children].find(x => x.dataset.op === correcta); if (c) c.classList.add('bien'); }
+      [...r.children].forEach(x => { x.disabled = true; });
+      veredicto(ok ? '¡Sí!' : 'Era ' + correcta, ok); $('#regla').textContent = regla;
+      if (despues) despues();
+    });
+    r.append(b);
+  });
+}
+function nueva() {
+  veredicto(''); $('#regla').textContent = '';
+  const conPiano = modo === 'explorar' || modo === 'tocar';
+  $('#teclado-modos').hidden = !conPiano; $('#elegir-modo').hidden = modo !== 'explorar'; alTecla = null;
+  if (modo === 'explorar') return explorar();
+  if (modo === 'tocar') return tocarModo();
+  if (modo === 'ver') {
+    // nombrar un modo por su tecla blanca: sirve desde la primera lección (son los 7 nombres)
+    const m = azar(MODOS_G), e = escalaBlanca(m);
+    actual = () => sonarModo(m, MIDI_BLANCA[m.blanca]);
+    $('#pregunta').textContent = 'Empieza en ' + e.nombres[0] + ', con las teclas blancas: ¿qué modo es?';
+    dibujar(e.claves); actual();
+    botones(MODOS_G.map(x => x.n), m.n, BLANCAS_ES[m.blanca] + ' → ' + m.n.toLowerCase() + ': ' + m.que);
+  } else if (modo === 'caracteristica') {
+    const m = azar(conocidos().filter(x => x.car !== null)) || MODOS_G[1], e = escalaBlanca(m);
+    actual = () => sonarModo(m, MIDI_BLANCA[m.blanca]);
+    $('#pregunta').textContent = '¿Cuál es la nota característica de ' + e.nombres[0] + ' ' + m.n.toLowerCase() + '?';
+    dibujar(e.claves); actual();
+    const correcta = e.nombres[m.car];
+    const ops = mezclar(mezclar(e.nombres.slice(1, 7).filter(n => n !== correcta)).slice(0, 3).concat([correcta]));
+    botones(ops, correcta, m.n + ': ' + m.que + ' → ' + correcta + ' (' + ORDINAL[m.car] + ')', () => dibujar(e.claves, m.car));
+  } else {
+    // de oído: todos desde Do, así solo cambia el color
+    const m = azar(conocidos());
+    actual = () => sonarModo(m, 60);
+    $('#pregunta').textContent = 'Escucha: ¿qué modo es? (todos empiezan en Do)';
+    dibujar(null); actual();
+    const ops = conocidos().map(x => x.n);
+    botones(ops, m.n, 'Primero: ¿mayor o menor? Después, su nota característica. ' + m.n + ': ' + m.que + '.');
+  }
+}
+function pintarModos() {
+  const m = $('#modos'); m.replaceChildren();
+  visibles.forEach(k => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'modo'; b.textContent = EJERCICIOS[k]; b.setAttribute('aria-pressed', k === modo);
+    b.addEventListener('click', () => { modo = k; pintarModos(); nueva(); });
+    m.append(b);
+  });
+}
+/* lo usa leccion.js: los modos aprendidos hasta la lección (modos:N) */
+function prepararLeccion(n) {
+  aprendidos = Math.max(1, Math.min(MODOS_G.length, n));
+  visibles = (aprendidos === 1 ? ['ver'] : aprendidos === 2 ? ['ver', 'oido'] : ['ver', 'caracteristica', 'oido']).concat(['explorar', 'tocar']);
+  modo = 'tocar';
+  pintarModos(); nueva();
+}
+armarTeclado();
+$('#siguiente').addEventListener('click', nueva);
+$('#escuchar').addEventListener('click', () => actual && actual());
+const pedido = new URLSearchParams(location.search).get('modo');
+if (pedido && EJERCICIOS[pedido]) modo = pedido;
+pintarModos(); nueva();
+</script>
+<script>window.SprinkloudPractica = { app: 'Modos griegos', detalle: function () { return intentos ? 'Modos griegos: ' + aciertos + ' aciertos de ' + intentos : 'Practicó los modos griegos'; } };</script>
+<script src="/practica/comprobante.js"></script>
+</body>
+</html>

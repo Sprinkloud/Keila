@@ -135,7 +135,7 @@ Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (4
   - términos.
 - `ejerciciosDe(semana, instrumento)` dice qué lleva cada semana.
 - **Solo ejercicios que se pueden resolver aquí y revisar** (pedido de la dueña, 23 de octubre de 2026). Se quitaron las preguntas abiertas con renglones ("dibuja un círculo…" en un cuadro de texto) y los pentagramas en blanco, que en el celular no se podían usar.
-- **Semanas sin hoja:** `SIN_HOJA = [1, 38, 40, 43, 45, 48]` (pulso con el cuerpo, improvisar, dictado melódico, la forma, dos contra tres, componer). No tienen un ejercicio escrito lógico, así que la página muestra un aviso, el selector dice "(sin hoja)" y se ocultan Otra hoja, Imprimir y Revisar. Esas semanas se practican solo con su app. La misma lista está en `Registro_Sprinkloud/maestros/Maestro.html` y `Reporte.html`, que no mandan el enlace de la hoja en esas semanas.
+- **Semanas sin hoja:** `SIN_HOJA = [1, 41, 43, 46, 48, 51]` (antes del 29-oct: 1, 38, 40, 43, 45 y 48) (pulso con el cuerpo, improvisar, dictado melódico, la forma, dos contra tres, componer). No tienen un ejercicio escrito lógico, así que la página muestra un aviso, el selector dice "(sin hoja)" y se ocultan Otra hoja, Imprimir y Revisar. Esas semanas se practican solo con su app. La misma lista está en `Registro_Sprinkloud/maestros/Maestro.html` y `Reporte.html`, que no mandan el enlace de la hoja en esas semanas.
 - `el()` aplana los hijos con `flat(Infinity)`. Antes aplanaba un solo nivel, y las secuencias y escalas (semanas 9, 10, 22, 27, 28, 29 y 35) mostraban "[object HTMLSpanElement]" en vez de las notas y los campos.
 - La teoría se calcula; no hay respuestas escritas a mano:
   - `arriba(nota, pasos de letra, semitonos)` deletrea bien cada nota;
@@ -206,6 +206,28 @@ App pública (pedido de la dueña, 23 de octubre de 2026) para ver canciones de 
 - La CSP permite `connect-src` a `script.google.com` y `script.googleusercontent.com` solo por esta app.
 
 
+
+## 60 lecciones y 5 apps nuevas (29 de octubre de 2026, revisión de la dueña; falta subir)
+- La guía tiene 60 lecciones en 7 etapas (`leccion.js` `ETAPAS = [6, 8, 13, 10, 9, 6, 8]`): la vieja «Más notas» se separó en 4; la etapa 4 suma el orden de los sostenidos (32), el de los bemoles (33) y las inversiones (36); el círculo de quintas está en la etapa 5 (42); la 6 ya no tiene «Dos contra tres»; la 7 son los modos griegos (53 a 60). Los temas y metas de esas 4 dicen «piano / violín»; `para()` en `leccion.js` y `parteDe()` en `hojas.html` muestran solo lo del instrumento.
+- Notas del juego en las 4 nuevas (solo las nuevas): piano 20 líneas de la clave de fa, 21 líneas y espacios, 22 líneas adicionales en clave de sol (la, si, Do central, la, si), 23 líneas adicionales en clave de fa (fa, si, Do central, re, mi); violín 20 cuerda Sol, 21 cuerda Mi (sin Fa♯: el juego usa naturales), 22 líneas adicionales abajo, 23 arriba.
+- Hojas nuevas para las lecciones 20 a 23 (distintas en piano y violín); las demás se corrieron +3. `hojas.html` copia la guía de `Registro_Sprinkloud/Guia.js` (el script del 29-oct la regeneró).
+- **Piano virtual, modo «Intervalos»:** se marca una tecla y pide un intervalo hacia arriba («Desde Do, toca una 3ª mayor»). Al acertar suenan las dos notas, salen en el pentagrama y cada tecla avanzada, blanca o negra, muestra su número; si se equivoca, dice qué intervalo tocó y muestra la cuenta en rojo. En las lecciones de intervalos (27, 28 y 29) `leccion.js` lo abre con sus intervalos (`INTERVALOS`).
+- `oido.html` cita las lecciones por etapa y lección (no por semana).
+- **App nueva `practica/armaduras.html`** (en Material, junto al entrenador de oído): 5 ejercicios con botones esponjosos y el pentagrama en papel claro (VexFlow):
+  - **Orden de los ♯ / ♭:** tocar las alteraciones en orden; cada acierto aparece en la armadura.
+  - **¿Qué tonalidad?:** una armadura y 4 tonalidades mayores.
+  - **¿Cuántas alteraciones?:** una tonalidad y de 1 a 7.
+  - **Relativa menor.**
+  - Debajo de cada respuesta va la regla escrita a mano («Último sostenido Do♯ + un semitono = Re mayor»).
+  - `leccion.js` llama `prepararLeccion('sostenidos' | 'bemoles' | 'relativas')` en las lecciones 32, 33 y 41, y deja solo sus ejercicios.
+  - Los datos (orden, tonalidades, relativas y `reglaDe`) van entre `const SOSTENIDOS` y `/* ---------- fin de los datos`: la app del bosque los copia.
+  - `♯` y `♭` se toman de una fuente de símbolos; si no, Windows pone un emoji azul.
+- Hojas: 32 y 33 con el orden (secuencia), «¿En qué tonalidad estoy?» (`T.queTonalidad`, nuevo) y la armadura; la 42 (círculo) suma la relativa menor; 53 a 60 con `T.queModo`, `T.escalaModo` y `T.notaCaracteristica` (solo los modos ya vistos). `SIN_HOJA = [1, 44, 46, 49, 52]`.
+- **Apps nuevas** (en Material; estilo común en `practica/juegos.css`; los datos de cada una van entre su primera constante y `/* ---------- fin de los datos`, y la app del bosque los copia):
+  - `circulo.html`, **Círculo de quintas**: un círculo que se toca (12 mayores afuera, 12 menores adentro): ¿dónde va?, vecinas (IV y V), relativa menor y los 6 acordes. Pregunta solo por tonalidades que no cruzan Fa♯/Sol♭ (`PREGUNTABLES`).
+  - `acordes.html`, **Acordes e inversiones**: los 6 acordes de Do mayor en un pentagrama y con sonido: ¿qué inversión?, ¿qué acorde es? (con la trampa de la nota del bajo) y cómo se escribe con barra.
+  - `modos.html`, **Modos griegos**: ¿qué modo es? (por su tecla blanca), su nota característica (en ocre al responder) y de oído (todos desde Do). Con piano (dos octavas): **Formar en el piano** (se elige el modo y al tocar una tecla se forma desde ahí: teclado, pentagrama con sus alteraciones bien escritas y sonido; `modoDesde`) y **Toca el modo** («Toca Sol mixolidio»: sus 8 notas en orden, con la nota característica en ocre). `prepararLeccion(N)` deja solo los N modos aprendidos y abre «Toca el modo».
+  - `palabras.html`, **Palabras de música**: la definición y 4 palabras; «Hasta la etapa N»; las que se fallan vuelven. Datos en `palabras-datos.js` (generado por `Libro_Sprinkloud/herramientas/palabras.js`, 98 palabras).
 
 ## Las apps van a juego con la guía (23 de octubre de 2026)
 

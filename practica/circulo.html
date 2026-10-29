@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Círculo de quintas interactivo | Sprinkloud</title>
+  <meta name="description" content="Practica gratis el círculo de quintas: dónde va cada tonalidad, sus vecinas, su relativa menor y los 6 acordes de una tonalidad.">
+  <link rel="canonical" href="https://sprinkloud.vercel.app/practica/circulo">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sprinkloud">
+  <meta property="og:title" content="Círculo de quintas interactivo">
+  <meta property="og:description" content="Tonalidades, vecinas, relativas menores y los acordes de cada tonalidad. Gratis.">
+  <meta property="og:url" content="https://sprinkloud.vercel.app/practica/circulo">
+  <meta property="og:image" content="https://sprinkloud.vercel.app/images/logo-sprinkloud.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,500..700&family=Caveat:wght@600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/practica/juegos.css">
+  <style>
+    /* el círculo: cada tonalidad es un botón; afuera las mayores, adentro sus relativas menores */
+    .circulo { width: 100%; max-width: 440px; }
+    .circulo svg { width: 100%; height: auto; display: block; }
+    .sitio { cursor: pointer; }
+    .sitio circle { fill: var(--papel); stroke: var(--line); stroke-width: 2.5; transition: fill .15s ease, stroke .15s ease; }
+    .sitio.menor circle { fill: #EEF1E2; }
+    .sitio text { font-family: "Caveat", cursive; fill: #48592F; pointer-events: none; }
+    .sitio .alt { font-family: var(--f-body); font-weight: 800; fill: #8F6A2A; }
+    .sitio.oculto text { visibility: hidden; }
+    .sitio.marcado circle { fill: #F1E0BC; stroke: #C4923A; stroke-width: 3.5; }
+    .sitio.bien circle { fill: #E1E6CF; stroke: #48592F; stroke-width: 3.5; }
+    .sitio.mal circle { fill: #F3DED8; stroke: #9A5245; stroke-width: 3.5; }
+    .sitio:focus-visible circle { stroke: var(--gold); stroke-width: 4; }
+    @media (hover: hover) { .sitio:hover circle { stroke: var(--accent); } }
+  </style>
+  <script src="/practica/leccion.js"></script>
+</head>
+<body>
+  <div class="barra">
+    <a href="/material">← Volver</a>
+    <span class="marca">Sprinkloud</span>
+  </div>
+  <main>
+    <h1>Círculo de quintas</h1>
+    <div class="modos" role="group" aria-label="Ejercicio" id="modos"></div>
+    <section class="tablero" aria-live="polite">
+      <p class="pregunta" id="pregunta"></p>
+      <div class="circulo" id="circulo"></div>
+      <p class="veredicto" id="veredicto"></p>
+      <p class="regla" id="regla"></p>
+      <div class="acciones"><button class="btn principal" type="button" id="siguiente">Siguiente</button></div>
+      <div class="marcador"><span>Aciertos <b id="aciertos">0</b></span><span>Intentos <b id="intentos">0</b></span><span>Racha <b id="racha">0</b></span></div>
+    </section>
+  </main>
+  <footer>© Club musical Sprinkloud</footer>
+
+<script>
+"use strict";
+/* ---------- Círculo (datos) ----------
+   Posición 0 = Do arriba; hacia la derecha suben los sostenidos y hacia la izquierda los bemoles. Lo copia el bosque. */
+const C_MAYORES = ['Do', 'Sol', 'Re', 'La', 'Mi', 'Si', 'Fa♯', 'Re♭', 'La♭', 'Mi♭', 'Si♭', 'Fa'];
+const C_MENORES = ['Lam', 'Mim', 'Sim', 'Fa♯m', 'Do♯m', 'Sol♯m', 'Re♯m', 'Si♭m', 'Fam', 'Dom', 'Solm', 'Rem'];
+const C_ALT = ['0', '1♯', '2♯', '3♯', '4♯', '5♯', '6', '5♭', '4♭', '3♭', '2♭', '1♭'];
+const vecina = (i, d) => (i + d + 12) % 12;
+/* los 6 acordes de la tonalidad i: la tonalidad y sus dos vecinas (I, IV, V) y sus relativas menores (vi, ii, iii) */
+function acordesDe(i) {
+  return { mayores: [vecina(i, -1), i, vecina(i, 1)], menores: [vecina(i, -1), i, vecina(i, 1)] };
+}
+function reglaAcordes(i) {
+  return 'I ' + C_MAYORES[i] + ' · IV ' + C_MAYORES[vecina(i, -1)] + ' · V ' + C_MAYORES[vecina(i, 1)] +
+    ' · ii ' + C_MENORES[vecina(i, -1)] + ' · iii ' + C_MENORES[vecina(i, 1)] + ' · vi ' + C_MENORES[i];
+}
+/* las tonalidades por las que se pregunta: sin Do (está fijo arriba) y sin Fa♯ ni Re♭, cuyos acordes cruzan Fa♯ / Sol♭
+   y obligarían a hablar de enarmónicos */
+const PREGUNTABLES = [1, 2, 3, 4, 5, 8, 9, 10, 11];
+function altTexto(i) {
+  if (i === 0) return 'sin alteraciones';
+  if (i === 6) return '6 sostenidos (o 6 bemoles)';
+  const n = parseInt(C_ALT[i], 10), s = C_ALT[i].includes('♯');
+  return n + (s ? ' sostenido' : ' bemol') + (n > 1 ? (s ? 's' : 'es') : '');
+}
+/* ---------- fin de los datos ---------- */
+
+const $ = s => document.querySelector(s);
+const NS = 'http:/' + '/www.w3.org/2000/svg';
+const nodo = (tag, at, texto) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (texto != null) e.textContent = texto; return e; };
+const azar = n => Math.floor(Math.random() * n);
+
+/* sonidos cortos */
+let ctx = null;
+function audio() { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+function tono(f, t, dur, gain, tipo) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = tipo || 'sine'; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + dur + .05);
+}
+const sonidoBien = () => { audio(); [784, 1047].forEach((f, i) => tono(f, ctx.currentTime + i * .08, .35, .2)); };
+const sonidoMal = () => { audio(); tono(180, ctx.currentTime, .25, .15, 'triangle'); };
+const toque = () => { audio(); tono(660, ctx.currentTime, .12, .1); };
+
+/* ---------- El círculo: 24 botones (12 mayores afuera, 12 menores adentro) ---------- */
+const sitios = { mayor: [], menor: [] };
+let alTocar = null;
+function armarCirculo() {
+  const s = nodo('svg', { viewBox: '0 0 440 440', role: 'group', 'aria-label': 'Círculo de quintas' });
+  s.append(nodo('circle', { cx: 220, cy: 220, r: 175, fill: 'none', stroke: 'var(--line)', 'stroke-width': 2 }));
+  s.append(nodo('circle', { cx: 220, cy: 220, r: 108, fill: 'none', stroke: 'var(--line)', 'stroke-width': 1.5 }));
+  ['mayor', 'menor'].forEach(tipo => {
+    for (let i = 0; i < 12; i++) {
+      const a = -Math.PI / 2 + i * Math.PI / 6, R = tipo === 'mayor' ? 175 : 108, x = 220 + R * Math.cos(a), y = 220 + R * Math.sin(a);
+      const g = nodo('g', { class: 'sitio ' + tipo, tabindex: '0', role: 'button', 'aria-label': tipo === 'mayor' ? C_MAYORES[i] + ' mayor' : C_MENORES[i].replace(/m$/, ' menor') });
+      g.append(nodo('circle', { cx: x, cy: y, r: tipo === 'mayor' ? 32 : 25 }));
+      const nombre = tipo === 'mayor' ? C_MAYORES[i] : C_MENORES[i];
+      g.append(nodo('text', { x, y: y + (tipo === 'mayor' ? 4 : 7), 'text-anchor': 'middle', style: 'font-size:' + (tipo === 'mayor' ? (nombre.length > 3 ? 21 : 26) : (nombre.length > 4 ? 15 : 19)) + 'px' }, nombre));
+      if (tipo === 'mayor') g.append(nodo('text', { x, y: y + 22, 'text-anchor': 'middle', class: 'alt', style: 'font-size:12px' }, C_ALT[i]));
+      const tocar = () => { if (alTocar) alTocar(tipo, i, g); };
+      g.addEventListener('click', tocar);
+      g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocar(); } });
+      sitios[tipo].push(g); s.append(g);
+    }
+  });
+  $('#circulo').append(s);
+}
+function limpiar() { [...sitios.mayor, ...sitios.menor].forEach(g => g.classList.remove('marcado', 'bien', 'mal', 'oculto')); }
+
+/* ---------- Ejercicios ---------- */
+const MODOS = { donde: '¿Dónde va?', vecinas: 'Vecinas (IV y V)', relativa: 'Relativa menor', acordes: 'Los 6 acordes' };
+let modo = 'donde', visibles = Object.keys(MODOS), esperando = false;
+let aciertos = 0, intentos = 0, racha = 0;
+function marcar(ok) {
+  intentos++; if (ok) { aciertos++; racha++; } else racha = 0;
+  $('#aciertos').textContent = aciertos; $('#intentos').textContent = intentos; $('#racha').textContent = racha;
+  ok ? sonidoBien() : sonidoMal();
+}
+function veredicto(t, ok) { const v = $('#veredicto'); v.textContent = t; v.className = 'veredicto' + (ok === undefined ? '' : ok ? ' bien' : ' mal'); }
+function nueva() {
+  limpiar(); veredicto(''); $('#regla').textContent = ''; esperando = true;
+  const i = PREGUNTABLES[azar(PREGUNTABLES.length)];
+  if (modo === 'donde') {
+    sitios.mayor.forEach((g, k) => { if (k) g.classList.add('oculto'); });
+    $('#pregunta').textContent = '¿Dónde va ' + C_MAYORES[i] + ' mayor?';
+    alTocar = (tipo, k, g) => {
+      if (!esperando || tipo !== 'mayor') return;
+      esperando = false; const ok = k === i;
+      g.classList.remove('oculto'); g.classList.add(ok ? 'bien' : 'mal');
+      if (!ok) { sitios.mayor[i].classList.remove('oculto'); sitios.mayor[i].classList.add('bien'); }
+      marcar(ok); veredicto(ok ? '¡Sí!' : 'Va aquí', ok);
+      $('#regla').textContent = C_MAYORES[i] + ' mayor: ' + altTexto(i);
+    };
+  } else if (modo === 'vecinas') {
+    sitios.mayor[i].classList.add('marcado');
+    $('#pregunta').textContent = 'Toca las dos vecinas de ' + C_MAYORES[i] + ' mayor';
+    const faltan = new Set([vecina(i, -1), vecina(i, 1)]); let errores = 0;
+    alTocar = (tipo, k, g) => {
+      if (!esperando || tipo !== 'mayor' || k === i || g.classList.contains('bien')) return;
+      if (faltan.has(k)) { faltan.delete(k); g.classList.add('bien'); toque(); }
+      else { errores++; g.classList.add('mal'); sonidoMal(); setTimeout(() => g.classList.remove('mal'), 600); }
+      if (!faltan.size) { esperando = false; marcar(errores === 0); veredicto(errores ? '¡Listo! Otra vez sin errores' : '¡Sí!', true);
+        $('#regla').textContent = 'IV ' + C_MAYORES[vecina(i, -1)] + ' (izquierda) · V ' + C_MAYORES[vecina(i, 1)] + ' (derecha)'; }
+    };
+  } else if (modo === 'relativa') {
+    sitios.mayor[i].classList.add('marcado');
+    $('#pregunta').textContent = 'Toca la relativa menor de ' + C_MAYORES[i] + ' mayor';
+    alTocar = (tipo, k, g) => {
+      if (!esperando || tipo !== 'menor') return;
+      esperando = false; const ok = k === i;
+      g.classList.add(ok ? 'bien' : 'mal'); if (!ok) sitios.menor[i].classList.add('bien');
+      marcar(ok); veredicto(ok ? '¡Sí!' : 'Era ' + C_MENORES[i], ok);
+      $('#regla').textContent = 'Misma armadura, justo adentro: ' + C_MAYORES[i] + ' → ' + C_MENORES[i];
+    };
+  } else {
+    sitios.mayor[i].classList.add('marcado');
+    $('#pregunta').textContent = 'Toca los 6 acordes de ' + C_MAYORES[i] + ' mayor';
+    const ac = acordesDe(i), faltan = new Set(ac.mayores.map(k => 'mayor' + k).concat(ac.menores.map(k => 'menor' + k))); let errores = 0;
+    faltan.delete('mayor' + i); sitios.mayor[i].classList.add('bien');
+    alTocar = (tipo, k, g) => {
+      if (!esperando || g.classList.contains('bien')) return;
+      if (faltan.has(tipo + k)) { faltan.delete(tipo + k); g.classList.add('bien'); toque(); }
+      else { errores++; g.classList.add('mal'); sonidoMal(); setTimeout(() => g.classList.remove('mal'), 600); }
+      if (!faltan.size) { esperando = false; marcar(errores === 0); veredicto(errores ? '¡Listo! Otra vez sin errores' : '¡Sí!', true); $('#regla').textContent = reglaAcordes(i); }
+    };
+  }
+}
+function pintarModos() {
+  const m = $('#modos'); m.replaceChildren();
+  visibles.forEach(k => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'modo'; b.textContent = MODOS[k]; b.setAttribute('aria-pressed', k === modo);
+    b.addEventListener('click', () => { modo = k; pintarModos(); nueva(); });
+    m.append(b);
+  });
+}
+$('#siguiente').addEventListener('click', nueva);
+armarCirculo();
+const pedido = new URLSearchParams(location.search).get('modo');
+if (pedido && MODOS[pedido]) modo = pedido;
+pintarModos(); nueva();
+</script>
+<script>window.SprinkloudPractica = { app: 'Círculo de quintas', detalle: function () { return intentos ? 'Círculo de quintas: ' + aciertos + ' aciertos de ' + intentos : 'Practicó el círculo de quintas'; } };</script>
+<script src="/practica/comprobante.js"></script>
+</body>
+</html>

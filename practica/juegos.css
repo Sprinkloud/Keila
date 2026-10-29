@@ -1,0 +1,61 @@
+    /* Estilo común de las apps de práctica nuevas (armaduras, círculo, acordes, modos y palabras; 29-oct-2026): el mismo
+       sistema visual que las otras herramientas y las respuestas como botones esponjosos, como en la app del bosque. */
+    :root {
+      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F3DED8;
+      --papel: #FFFDF8; --madera: #8A5A35; --madera-borde: #5E3B22;
+      --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-body: "Nunito Sans", "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
+        --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585; --danger-soft: #45302B;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    /* ♯ y ♭ no están en Nunito: se toman de una fuente de símbolos (si no, el sistema pone un emoji azul) */
+    body { background: var(--bg); color: var(--ink); font-family: var(--f-body), "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", sans-serif; font-size: 16px; line-height: 1.5; min-height: 100dvh; display: flex; flex-direction: column; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px max(16px, env(safe-area-inset-left)); max-width: 980px; width: 100%; margin: 0 auto; }
+    .barra a { font-weight: 700; text-decoration: none; color: var(--accent); }
+    .marca { font-family: var(--f-display); font-weight: 700; color: var(--pine); }
+    main { flex: 1; width: 100%; max-width: 980px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left)) 32px; display: grid; gap: 16px; align-content: start; grid-template-columns: minmax(0, 1fr); }
+    h1 { font-family: var(--f-display); font-size: clamp(24px, 4.5vw, 34px); color: var(--pine); margin: 0; line-height: 1.15; }
+    .modos { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+    .modo { flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
+    .modo[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .tablero { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; justify-items: center; text-align: center; }
+    .pregunta { font-family: var(--f-display); font-size: clamp(20px, 3.5vw, 27px); margin: 0; }
+    /* el pentagrama siempre en papel claro, como en las hojas */
+    .pentagrama { width: 100%; max-width: 420px; background: var(--papel); border-radius: 14px; padding: 4px 8px; }
+    .pentagrama svg { width: 100%; height: auto; display: block; }
+    .respuestas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(96px, 100%), 1fr)); gap: 12px 10px; width: 100%; max-width: 640px; }
+    /* botón esponjoso: cara acolchada sobre un borde de madera que se hunde al tocarlo */
+    .puff { position: relative; border: 0; padding: 0; background: transparent; border-radius: 18px; min-height: 58px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .puff .borde { position: absolute; inset: 0; border-radius: inherit; background: var(--line); box-shadow: 0 8px 12px -9px rgba(58, 40, 20, .5); }
+    .puff .cara { position: relative; display: flex; align-items: center; justify-content: center; min-height: inherit; padding: 8px 10px; border-radius: inherit; font-weight: 800; font-size: 18px;
+      background: radial-gradient(120% 90% at 30% 15%, rgba(255, 255, 255, .5), transparent 55%), var(--papel); color: #3A3128;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .06), inset 0 2px 1px rgba(255, 255, 255, .5); transform: translateY(-5px); transition: transform 120ms var(--ease-out); }
+    .puff:active .cara { transform: translateY(-1px); transition-duration: 40ms; }
+    .puff.bien .borde { background: var(--pine); } .puff.bien .cara { background: #E1E6CF; color: #48592F; }
+    .puff.mal .borde { background: var(--danger); } .puff.mal .cara { background: #F3DED8; color: #8E4D41; }
+    .puff.usado { opacity: .45; }
+    .puff[disabled] { cursor: default; }
+    .veredicto { min-height: 28px; font-weight: 800; font-size: 18px; margin: 0; }
+    .veredicto.bien { color: var(--pine); } .veredicto.mal { color: var(--danger); }
+    .regla { font-family: "Caveat", cursive; font-size: 25px; color: var(--gold-ink); margin: 0; min-height: 1.2em; }
+    .acciones { display: flex; gap: 10px; justify-content: center; }
+    .btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
+    .btn.principal { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .marcador { display: flex; gap: 18px; justify-content: center; color: var(--ink-2); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .marcador b { color: var(--ink); font-family: var(--f-display); font-size: 22px; }
+    footer { text-align: center; color: var(--ink-2); font-size: 13px; padding: 14px; }
+    @media (prefers-reduced-motion: reduce) { .puff .cara { transition: none; } }
+  
