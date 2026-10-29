@@ -175,6 +175,21 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 }
 .now.idle{color:var(--muted);font-size:14px;font-family:"Nunito Sans",sans-serif}
 
+/* Seguir el ritmo: botón esponjoso como en la app del bosque (cara acolchada sobre un borde de madera que se hunde) */
+.golpe-fila{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-top:12px}
+.golpe-ritmo{position:relative;border:0;padding:0;background:transparent;border-radius:22px;min-height:64px;min-width:min(56vw,260px);font:inherit;font-weight:800;font-size:1.1rem;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.golpe-ritmo .borde{position:absolute;inset:0;border-radius:inherit;background:#5E3B22;box-shadow:0 10px 14px -10px rgba(58,40,20,.55)}
+.golpe-ritmo .cara{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;min-height:inherit;padding:10px 20px;border-radius:inherit;color:#FFFDF5;
+  background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),radial-gradient(140% 120% at 70% 110%,rgba(0,0,0,.14),transparent 60%),#8A5A35;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.1),inset 0 2px 1px rgba(255,255,255,.45);transform:translateY(-7px);transition:transform 120ms cubic-bezier(.23,1,.32,1)}
+.golpe-ritmo .ico{font-size:1.6rem;line-height:1}
+.golpe-ritmo.golpe .cara,.golpe-ritmo:active .cara{transform:translateY(-1px);transition-duration:40ms}
+.golpe-ritmo.bien .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#647745}
+.golpe-ritmo.mal .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#9A5245}
+.golpe-marcador{margin:0;font-weight:700;color:var(--ink-2)}
+.nt.a-tiempo{color:var(--musgo)}
+@media (max-width:520px){.golpe-fila{grid-template-columns:1fr;justify-items:center;text-align:center}.golpe-ritmo{width:100%}}
+@media (prefers-reduced-motion:reduce){.golpe-ritmo .cara{transition:none}}
 .play{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
   height:44px;padding:0 22px;border-radius:999px;background:var(--musgo);color:var(--on-musgo);
@@ -508,6 +523,13 @@ body.sin-silabas .sil{display:none}
             <span id="play-text">Reproducir</span>
           </button>
         </div>
+        <!-- Seguir el ritmo: en vez de palmear, se toca el tambor (o cualquier tecla) en cada nota y la app dice si fue a tiempo -->
+        <div class="golpe-fila">
+          <button class="golpe-ritmo" id="btn-golpe" type="button" aria-label="Tambor: tócalo en cada nota (también vale cualquier tecla)">
+            <span class="borde"></span><span class="cara"><span class="ico" aria-hidden="true">🥁</span>Toca en cada nota</span>
+          </button>
+          <p class="golpe-marcador" id="golpe-marcador" aria-live="polite">Dale ▶ y toca el tambor (o cualquier tecla) en cada nota</p>
+        </div>
         <div class="tline opts">
           <label class="compas" for="compas">Compás
             <select id="compas">
@@ -531,7 +553,7 @@ body.sin-silabas .sil{display:none}
         </div>
       </div>
 
-      <p class="consigna">👏 Crea tu ritmo con las tarjetas, dale ▶ y palméalo a tiempo: una palmada en cada nota cuando se ilumina.</p>
+      <p class="consigna">👏 Crea tu ritmo con las tarjetas, dale ▶ y palméalo a tiempo (o toca el tambor 🥁): un golpe en cada nota cuando se ilumina.</p>
 
       <div class="score" id="score">
         <div class="score-inner" id="score-inner"></div>
@@ -975,6 +997,7 @@ function startPlay(skipCount){
   schedulePass(play.start);
 
   play.on = true; play.beat = -1; play.idx = 0; play.queued = false;
+  reiniciarGolpes();
   paintPlay();
   play.raf = requestAnimationFrame(tick);
 }
@@ -1008,12 +1031,58 @@ function tick(){
   if(ctx.currentTime >= end){
     if(state.loop){
       play.start = end; play.idx = 0; play.queued = false; play.beat = -1;
+      golpes.usadas = new Set(); golpes.vueltas++;
     } else { stopPlay(); return; }
   }
   play.raf = requestAnimationFrame(tick);
 }
 
+/* =========================================================
+   Seguir el ritmo con el tambor: cada golpe se compara con la nota más cercana (±130 ms = a tiempo).
+   Vale el botón, un clic o cualquier tecla mientras suena (Espacio sigue siendo reproducir/detener).
+   ========================================================= */
+const golpes = {aTiempo:0, total:0, usadas:new Set(), vueltas:1};
+const VENTANA = .13;   // segundos de tolerancia
+function reiniciarGolpes(){
+  golpes.aTiempo = 0; golpes.total = 0; golpes.usadas = new Set(); golpes.vueltas = 1;
+  pintarGolpes();
+}
+function notasConSonido(){ return play.ev.filter(e => !e.rest).length; }
+function pintarGolpes(final){
+  const m = $("#golpe-marcador"); if(!m) return;
+  if(!golpes.total && !final){ m.textContent = play.on ? "¡Toca en cada nota!" : "Dale ▶ y toca el tambor (o cualquier tecla) en cada nota"; return; }
+  const n = notasConSonido();
+  if(final && golpes.vueltas > 1){ m.textContent = "🥁 " + golpes.aTiempo + " notas a tiempo en " + golpes.vueltas + " vueltas"; return; }
+  m.textContent = final
+    ? (golpes.aTiempo >= n && n ? "🎉 ¡Todas a tiempo! " : "🥁 ") + golpes.aTiempo + " de " + n + " notas a tiempo"
+    : "🥁 " + golpes.aTiempo + " a tiempo";
+}
+function golpeRitmo(){
+  const b = $("#btn-golpe");
+  b.classList.add("golpe"); setTimeout(() => b.classList.remove("golpe"), 90);
+  audio();
+  tone(ctx.destination, ctx.currentTime, 140, .16, .45, "sine");   // el golpe suena al instante
+  if(!play.on){ flash("Primero dale ▶ Reproducir y toca el tambor en cada nota"); return; }
+  const beat = segNegra();
+  let rel = (ctx.currentTime - play.start)/beat;          // en negras
+  if(rel < -VENTANA/beat) return;                         // todavía es la cuenta previa
+  if(state.loop && play.len) rel = ((rel % play.len) + play.len) % play.len;
+  let mejor = null, dist = Infinity;
+  play.ev.forEach((e, i) => { if(e.rest) return; const d = Math.abs(e.t - rel); if(d < dist){ dist = d; mejor = i; } });
+  golpes.total++;
+  const ok = mejor !== null && dist*beat <= VENTANA && !golpes.usadas.has(mejor);
+  if(ok){
+    golpes.usadas.add(mejor); golpes.aTiempo++;
+    const e = play.ev[mejor], el = document.querySelector('[data-nid="'+e.ci+'-'+e.ni+'"]');
+    if(el){ el.classList.add("a-tiempo"); setTimeout(() => el.classList.remove("a-tiempo"), 600); }
+  }
+  b.classList.remove("bien", "mal"); b.classList.add(ok ? "bien" : "mal");
+  clearTimeout(golpeRitmo.t); golpeRitmo.t = setTimeout(() => b.classList.remove("bien", "mal"), 220);
+  pintarGolpes();
+}
+
 function stopPlay(quiet){
+  if(play.on && golpes.total) setTimeout(() => pintarGolpes(true), 0);   // al terminar: cuántas notas fueron a tiempo
   play.on = false;
   cancelAnimationFrame(play.raf);
   if(session){
@@ -1459,12 +1528,18 @@ function init(){
 
   $("#btn-quiz").onclick   = openQuiz;
   $("#quiz-close").onclick = closeQuiz;
+  /* el golpe cuenta al presionar (no al soltar): responde al instante */
+  $("#btn-golpe").addEventListener("pointerdown", e => { if(e.button > 0) return; e.preventDefault(); golpeRitmo(); });
+  $("#btn-golpe").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); e.stopPropagation(); golpeRitmo(); } });
   $("#quiz-again").onclick = hearQuiz;
   $("#quiz-next").onclick  = nextQuiz;
   $("#quiz").onclick = e => { if(e.target.id === "quiz") closeQuiz(); };
 
   document.addEventListener("keydown", e => {
     if(e.target.matches("input,textarea")) return;
+    if(play.on && e.code !== "Space" && e.key !== "Escape" && e.key !== "Tab" && !e.ctrlKey && !e.metaKey && !e.altKey){
+      e.preventDefault(); if(!e.repeat) golpeRitmo(); return;   // seguir el ritmo con cualquier tecla
+    }
     if(e.code === "Space"){
       e.preventDefault();
       if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
