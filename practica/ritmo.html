@@ -1039,7 +1039,7 @@ function tick(){
 
 /* =========================================================
    Seguir el ritmo con el tambor: cada golpe se compara con la nota más cercana (±130 ms = a tiempo).
-   Vale el botón, un clic o cualquier tecla mientras suena (Espacio sigue siendo reproducir/detener).
+   Vale el botón, un clic o cualquier tecla mientras suena, Espacio y Enter incluidos (para detener: Escape o el botón ■).
    ========================================================= */
 const golpes = {aTiempo:0, total:0, usadas:new Set(), vueltas:1};
 const VENTANA = .13;   // segundos de tolerancia
@@ -1537,8 +1537,11 @@ function init(){
 
   document.addEventListener("keydown", e => {
     if(e.target.matches("input,textarea")) return;
-    if(play.on && e.code !== "Space" && e.key !== "Escape" && e.key !== "Tab" && !e.ctrlKey && !e.metaKey && !e.altKey){
-      e.preventDefault(); if(!e.repeat) golpeRitmo(); return;   // seguir el ritmo con cualquier tecla
+    if(play.on && e.key !== "Escape" && e.key !== "Tab" && !e.ctrlKey && !e.metaKey && !e.altKey){
+      // seguir el ritmo con cualquier tecla, Espacio y Enter incluidos (para detener: Escape o el botón ■)
+      e.preventDefault();
+      if(document.activeElement && document.activeElement !== document.body && document.activeElement.blur) document.activeElement.blur();   // que la tecla no apriete otro botón
+      if(!e.repeat) golpeRitmo(); return;
     }
     if(e.code === "Space"){
       e.preventDefault();
