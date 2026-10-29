@@ -176,18 +176,18 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .now.idle{color:var(--muted);font-size:14px;font-family:"Nunito Sans",sans-serif}
 
 /* Seguir el ritmo: botón esponjoso como en la app del bosque (cara acolchada sobre un borde de madera que se hunde) */
-.golpe-fila{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:12px}
-.golpe-ritmo{position:relative;border:0;padding:0;background:transparent;border-radius:999px;min-height:48px;font:inherit;font-weight:800;font-size:.98rem;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.golpe-fila{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:6px 14px 10px}
+.golpe-ritmo{position:relative;border:0;padding:0;background:transparent;border-radius:50%;width:52px;height:52px;min-height:52px;flex:none;font:inherit;font-weight:800;font-size:.98rem;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 .golpe-ritmo .borde{position:absolute;inset:0;border-radius:inherit;background:#5E3B22;box-shadow:0 0 0 2px var(--gold),0 8px 12px -8px rgba(58,40,20,.55);animation:golpe-halo 2.4s ease-in-out infinite}
 @keyframes golpe-halo{50%{box-shadow:0 0 0 2px var(--gold),0 0 14px 3px rgba(212,160,60,.45),0 8px 12px -8px rgba(58,40,20,.55)}}
-.golpe-ritmo .cara{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:inherit;padding:6px 18px;border-radius:inherit;color:#FFFDF5;
+.golpe-ritmo .cara{position:relative;display:flex;align-items:center;justify-content:center;gap:0;height:100%;min-height:inherit;padding:0;border-radius:inherit;color:#FFFDF5;
   background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),radial-gradient(140% 120% at 70% 110%,rgba(0,0,0,.14),transparent 60%),#8A5A35;
   box-shadow:inset 0 -3px 0 rgba(0,0,0,.1),inset 0 2px 1px rgba(255,255,255,.45);transform:translateY(-5px);transition:transform 120ms cubic-bezier(.23,1,.32,1)}
-.golpe-ritmo .ico{font-size:1.25rem;line-height:1}
+.golpe-ritmo .ico{font-size:1.5rem;line-height:1}
 .golpe-ritmo.golpe .cara,.golpe-ritmo:active .cara{transform:translateY(-1px);transition-duration:40ms}
 .golpe-ritmo.bien .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#647745}
 .golpe-ritmo.mal .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#9A5245}
-.golpe-marcador{margin:0;font-weight:700;font-size:.92rem;color:var(--ink-2)}
+.golpe-marcador{margin:0;min-height:1.2em;font-weight:700;font-size:.92rem;color:var(--ink-2)}
 .nt.a-tiempo{color:var(--musgo)}
 @media (prefers-reduced-motion:reduce){.golpe-ritmo .cara{transition:none}.golpe-ritmo .borde{animation:none}}
 .play{
@@ -526,9 +526,9 @@ body.sin-silabas .sil{display:none}
         <!-- Seguir el ritmo: en vez de palmear, se toca el tambor (o cualquier tecla) en cada nota y la app dice si fue a tiempo -->
         <div class="golpe-fila">
           <button class="golpe-ritmo" id="btn-golpe" type="button" aria-label="Tambor: tócalo en cada nota (también vale cualquier tecla)">
-            <span class="borde"></span><span class="cara"><span class="ico" aria-hidden="true">🥁</span>Toca en cada nota</span>
+            <span class="borde"></span><span class="cara"><span class="ico" aria-hidden="true">🥁</span></span>
           </button>
-          <p class="golpe-marcador" id="golpe-marcador" aria-live="polite">Dale ▶ y toca el tambor (o cualquier tecla) en cada nota</p>
+          <p class="golpe-marcador" id="golpe-marcador" aria-live="polite"></p>
         </div>
         <div class="tline opts">
           <label class="compas" for="compas">Compás
@@ -1050,7 +1050,7 @@ function reiniciarGolpes(){
 function notasConSonido(){ return play.ev.filter(e => !e.rest).length; }
 function pintarGolpes(final){
   const m = $("#golpe-marcador"); if(!m) return;
-  if(!golpes.total && !final){ m.textContent = play.on ? "¡Toca en cada nota!" : "Dale ▶ y toca el tambor (o cualquier tecla) en cada nota"; return; }
+  if(!golpes.total && !final){ m.textContent = ""; return; }   // solo el tambor: sin explicaciones, el marcador sale al tocar
   const n = notasConSonido();
   if(final && golpes.vueltas > 1){ m.textContent = "🥁 " + golpes.aTiempo + " notas a tiempo en " + golpes.vueltas + " vueltas"; return; }
   m.textContent = final
@@ -1062,7 +1062,7 @@ function golpeRitmo(){
   b.classList.add("golpe"); setTimeout(() => b.classList.remove("golpe"), 90);
   audio();
   tone(ctx.destination, ctx.currentTime, 140, .16, .45, "sine");   // el golpe suena al instante
-  if(!play.on){ flash("Primero dale ▶ Reproducir y toca el tambor en cada nota"); return; }
+  if(!play.on) return;
   const beat = segNegra();
   let rel = (ctx.currentTime - play.start)/beat;          // en negras
   if(rel < -VENTANA/beat) return;                         // todavía es la cuenta previa
