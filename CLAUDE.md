@@ -24,7 +24,7 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 |---|---|
 | `/`, `/material`, `/metodologia`, `/musicband` | páginas del sitio |
 | `/practica/piano`, `/practica/violin`, `/practica/ritmo`, `/practica/oido`, `/practica/hojas` | herramientas |
-| `/practica/hojas/violin/semana-2` | hoja de una semana (rewrite a `hojas.html`, que lee la ruta) |
+| `/practica/hojas/violin/etapa-1-leccion-2` | hoja de una lección (rewrite a `hojas.html`, que lee la ruta). La vieja `/semana-2` también sirve |
 | `/practica/ritmo/3-4` | app de ritmo en un compás (rewrite a `ritmo.html`) |
 | `/practica/ritmo/latinos` | app de ritmo con la cumbia cargada a tempo 90, lista para dar play. Es el enlace que se manda a quien pide información (respuesta rápida `VApp` y agente de IA) |
 | `/practica/oido/segundas-y-terceras` | entrenador en un ejercicio (rewrite a `oido.html`; los nombres están en `EJERCICIOS`) |
@@ -269,6 +269,14 @@ Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuale
 **Enlaces que abren cada app en su ejercicio:** `/practica/ritmo/3-4` y `/practica/oido/<ejercicio>` (ver "Rutas").
 
 ## Modo lección (`practica/leccion.js`, 26 de octubre de 2026)
+
+**Etapa y lección, nunca semana (28 de octubre de 2026, pedido de la dueña).** «Semana 9» estresa al alumno que lleva años de clases. Por eso:
+- **Lo que se ve:** la tarjeta, el botón «¿Qué hago?», la hoja, el selector de las hojas y el texto del entrenador de oído dicen «Etapa 2 · Lección 3».
+- **Enlaces nuevos:**
+  - apps: `?etapa=E&leccion=L`;
+  - hojas: `/practica/hojas/<ins>/etapa-E-leccion-L`, y con `?modo=leccion` abren en modo lección.
+- **`leccion.js`** pasa de etapa y lección a semana con `ETAPAS = [6, 8, 10, 8, 8, 8]` (las lecciones de cada etapa en `Registro_Sprinkloud/Guia.js`; si cambian, actualizarlo). **`hojas.html`** lo calcula desde su `GUIA`.
+- **Siguen sirviendo:** los enlaces viejos `?semana=N`, `/semana-N?leccion=1` y `?semana=N&i=…`, que están en los libros ya armados y en mensajes enviados. Al abrir una hoja, la dirección se reescribe con la forma nueva.
 
 Se activa cuando el enlace trae `?semana=N`. Lo usan los enlaces del libro (Libro_Sprinkloud), el mensaje de tareas y el panel del maestro, y el reporte de la familia (Registro_Sprinkloud). La dueña lo pidió porque el alumno llegaba a la app sin saber qué hacer: veía notas que todavía no aprendió (líneas adicionales cuando apenas sabía mi y sol) y no sabía para qué sirve la camarita.
 

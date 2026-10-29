@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hojas de práctica de teoría musical | Sprinkloud</title>
-  <meta name="description" content="Hojas de práctica de teoría musical por semana: notas, ritmo, intervalos, escalas y acordes. Para resolver en el celular o imprimir.">
+  <meta name="description" content="Hojas de práctica de teoría musical por lección: notas, ritmo, intervalos, escalas y acordes. Para resolver en el celular o imprimir.">
   <link rel="canonical" href="https://sprinkloud.vercel.app/practica/hojas">
   <link rel="icon" href="/images/favicon.png" type="image/png">
   <meta property="og:type" content="website">
@@ -128,10 +128,10 @@
   <main>
     <header>
       <h1>Hojas de práctica de teoría musical</h1>
-      <p class="intro">Una hoja por semana de la guía de Sprinkloud. Resuélvela aquí o imprímela: lo que se escribe no se olvida.</p>
+      <p class="intro">Una hoja por lección de la guía de Sprinkloud. Resuélvela aquí o imprímela: lo que se escribe no se olvida.</p>
     </header>
     <div class="controles">
-      <label for="semana">Semana<select id="semana"></select></label>
+      <label for="semana">Lección<select id="semana"></select></label>
       <label for="instrumento">Instrumento<select id="instrumento"><option value="piano">Piano</option><option value="violin">Violín</option></select></label>
       <button class="btn" type="button" id="otra">Otra hoja</button>
       <button class="btn" type="button" id="imprimir">Imprimir</button>
@@ -571,8 +571,17 @@ const tieneHoja = s => !SIN_HOJA.includes(s);
 /* ---------- Armar, revisar e imprimir ---------- */
 const $ = s => document.querySelector(s);
 const params = new URLSearchParams(location.search);
-/* Enlace de cada semana: /practica/hojas/violin/semana-2 (los enlaces viejos ?semana=2&i=violin también sirven) */
-const ruta = location.pathname.match(/\/hojas\/(piano|violin)\/semana-(\d+)/);
+/* Lo que ve el alumno es "Etapa 1 · Lección 2", nunca el número de semana (estresa a quien lleva años de clases);
+   la semana queda como clave interna de la guía. */
+function etapaLeccion(s) {
+  const g = GUIA.find(x => x[0] === s);
+  return [parseInt(g[1], 10), GUIA.filter(x => x[1] === g[1] && x[0] <= s).length];
+}
+function semanaDe(e, l) { const g = GUIA.filter(x => parseInt(x[1], 10) === e)[l - 1]; return g ? g[0] : 0; }
+const nivel = s => { const [e, l] = etapaLeccion(s); return 'Etapa ' + e + ' · Lección ' + l; };
+/* Enlace de cada lección: /practica/hojas/violin/etapa-1-leccion-2. Los viejos /semana-2 y ?semana=2&i=violin también sirven. */
+const ruta = location.pathname.match(/\/hojas\/(piano|violin)\/(?:semana-(\d+)|etapa-(\d+)-leccion-(\d+))/);
+const semanaRuta = ruta ? (ruta[2] ? Number(ruta[2]) : semanaDe(Number(ruta[3]), Number(ruta[4]))) : 0;
 let variante = Number(params.get('v')) || 1;
 function armar() {
   const s = Number($('#semana').value), ins = $('#instrumento').value, g = GUIA.find(x => x[0] === s);
@@ -582,16 +591,17 @@ function armar() {
   const conHoja = tieneHoja(s);
   ['#otra', '#imprimir', '.acciones'].forEach(x => { $(x).hidden = !conHoja; });
   $('#resultado').hidden = true;
-  history.replaceState(null, '', '/practica/hojas/' + ins + '/semana-' + s + (variante > 1 ? '?v=' + variante : ''));
+  const [e, l] = etapaLeccion(s);
+  history.replaceState(null, '', '/practica/hojas/' + ins + '/etapa-' + e + '-leccion-' + l + (variante > 1 ? '?v=' + variante : ''));
   if (!conHoja) {
     hoja.replaceChildren(el('div', { class: 'sin-hoja' },
-      el('span', { class: 'etapa', text: 'Semana ' + s + ' · Etapa ' + g[1] }),
+      el('span', { class: 'etapa', text: nivel(s) }),
       el('h2', { text: g[2] }),
-      el('p', { text: 'Esta semana no tiene hoja de práctica: lo que se aprende se practica tocando, en clase y con la app de la semana.' })));
+      el('p', { text: 'Esta lección no tiene hoja de práctica: lo que se aprende se practica tocando, en clase y con la app de la lección.' })));
     return;
   }
   hoja.replaceChildren(el('div', { class: 'hoja-cabeza' },
-    el('span', { class: 'etapa', text: 'Semana ' + s + ' · Etapa ' + g[1] }),
+    el('span', { class: 'etapa', text: nivel(s) }),
     el('h2', { text: g[2] }),
     el('p', { text: g[3] }),
     el('div', { class: 'datos-alumno' }, el('span', { text: 'Nombre:' }), el('span', { text: 'Fecha:' }))));
@@ -621,9 +631,9 @@ function iniciar() {
   let etapa = '';
   GUIA.forEach(([s, et, tema]) => {
     if (et !== etapa) { etapa = et; sel.append(el('optgroup', { label: 'Etapa ' + et })); }
-    sel.lastChild.append(el('option', { value: s, text: s + '. ' + tema + (tieneHoja(s) ? '' : ' (sin hoja)') }));
+    sel.lastChild.append(el('option', { value: s, text: 'Lección ' + etapaLeccion(s)[1] + '. ' + tema + (tieneHoja(s) ? '' : ' (sin hoja)') }));
   });
-  sel.value = String(Math.min(Math.max(Number(ruta ? ruta[2] : params.get('semana')) || 1, 1), GUIA.length));
+  sel.value = String(Math.min(Math.max(semanaRuta || Number(params.get('semana')) || 1, 1), GUIA.length));
   $('#instrumento').value = (ruta ? ruta[1] : params.get('i')) === 'violin' ? 'violin' : 'piano';
   sel.addEventListener('change', () => { variante = 1; armar(); });
   $('#instrumento').addEventListener('change', armar);
@@ -635,7 +645,7 @@ function iniciar() {
 }
 iniciar();
 </script>
-<script>window.SprinkloudPractica = { app: 'Hojas de práctica', detalle: function () { var s = Number(document.querySelector('#semana').value), g = GUIA.find(function (x) { return x[0] === s; }), r = document.querySelector('#resultado'); return 'Semana ' + s + ': ' + g[2] + (r && !r.hidden ? ' · ' + r.textContent : ''); } };</script>
+<script>window.SprinkloudPractica = { app: 'Hojas de práctica', detalle: function () { var s = Number(document.querySelector('#semana').value), g = GUIA.find(function (x) { return x[0] === s; }), r = document.querySelector('#resultado'); return nivel(s) + ': ' + g[2] + (r && !r.hidden ? ' · ' + r.textContent : ''); } };</script>
 <script src="/practica/comprobante.js"></script>
 </body>
 </html>

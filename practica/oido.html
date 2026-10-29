@@ -171,7 +171,7 @@ const TRIADAS = { Mayor: [0, 4, 7], Menor: [0, 3, 7], Aumentada: [0, 4, 8], Dism
 
 const MODOS = {
   sube: {
-    nombre: '¿Sube o baja?', guia: 'Semana 4 de la guía: agudo y grave.',
+    nombre: '¿Sube o baja?', guia: 'Etapa 1 · Lección 4 de la guía: agudo y grave.',
     pregunta: () => '¿La segunda nota sube o baja?',
     crear() {
       const a = azar(55, 72); let b; do { b = azar(55, 76); } while (Math.abs(b - a) < 2);
@@ -196,7 +196,7 @@ const MODOS = {
     crear(o) { return acorde(['Mayor', 'Menor'], o.forma); }
   },
   triadas: {
-    nombre: 'Las 4 triadas', guia: 'Semana 31 de la guía.',
+    nombre: 'Las 4 triadas', guia: 'Etapa 4 · Lección 7 de la guía.',
     opciones: { forma: ['Acorde y luego arpegio', 'Solo el acorde', 'Solo el arpegio'] },
     pregunta: () => '¿Qué tipo de triada sonó?',
     crear(o) { return acorde(Object.keys(TRIADAS), o.forma); }

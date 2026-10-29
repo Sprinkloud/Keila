@@ -1,22 +1,36 @@
 /*
  * Sprinkloud · modo lección (lo usan todas las apps de práctica)
  *
- * Cuando el enlace trae ?semana=N (desde el libro, el mensaje de tareas de la maestra o el panel del maestro):
- * - muestra una tarjeta con la semana y el tema de la guía, la meta, 3 pasos de qué hacer en ESTA app
+ * Cuando el enlace trae ?etapa=E&leccion=L (el mensaje de tareas de la maestra y el reporte de la familia) o el viejo
+ * ?semana=N (los libros y los mensajes ya enviados); en las hojas, /etapa-E-leccion-L?modo=leccion o /semana-N?leccion=1:
+ * - muestra una tarjeta con la etapa, la lección y el tema de la guía (nunca el número de semana: estresa), la meta, 3 pasos de qué hacer en ESTA app
  *   y para qué sirve la camarita (comprobante.js);
  * - deja la app preparada solo con lo que el alumno ya aprendió hasta esa semana:
  *     piano y violín: el juego de notas solo con esas notas (sin líneas adicionales si todavía no las vio);
  *     ritmo: el compás, las tarjetas de figuras de esa semana y un ritmo de ejemplo listo para dar play;
- * - deja un botón "Semana N · ¿Qué hago?" para volver a ver los pasos.
+ * - deja un botón "Etapa E · Lección L · ¿Qué hago?" para volver a ver los pasos.
  * Se carga en el <head> (sin defer) para leer la dirección antes de que la página la reescriba.
  * La guía (tema y meta) es la de Registro_Sprinkloud/Guia.js; si cambia, actualizar GUIA aquí y en hojas.html.
  */
 (function () {
   'use strict';
-  var semana = Number(new URLSearchParams(location.search).get('semana'));
+  /* Lecciones de cada etapa de la guía (Registro_Sprinkloud/Guia.js): la semana N es la lección L de la etapa E */
+  var ETAPAS = [6, 8, 10, 8, 8, 8];
+  function semanaDe(e, l) {
+    if (!(e >= 1 && e <= ETAPAS.length && l >= 1 && l <= ETAPAS[e - 1])) return 0;
+    for (var s = l, i = 0; i < e - 1; i++) s += ETAPAS[i];
+    return s;
+  }
+  var q = new URLSearchParams(location.search);
+  var semana = Number(q.get('semana')) || (q.get('etapa') ? semanaDe(Number(q.get('etapa')), Number(q.get('leccion'))) : 0);
   var rutaHoja = location.pathname.match(/\/hojas\/(piano|violin)\/semana-(\d+)/);
+  var rutaNueva = location.pathname.match(/\/hojas\/(piano|violin)\/etapa-(\d+)-leccion-(\d+)/);
   var app = (location.pathname.match(/\/practica\/(piano|violin|ritmo|oido|hojas)/) || [])[1];
   if (!semana && rutaHoja && /[?&]leccion=1/.test(location.search)) semana = Number(rutaHoja[2]);
+  if (!semana && rutaNueva && q.get('modo') === 'leccion') semana = semanaDe(Number(rutaNueva[2]), Number(rutaNueva[3]));
+  var etapa = 0, leccion = semana;
+  while (etapa < ETAPAS.length && leccion > ETAPAS[etapa]) leccion -= ETAPAS[etapa++];
+  var NIVEL = 'Etapa ' + (etapa + 1) + ' · Lección ' + leccion;
   if (!app || !(semana >= 1 && semana <= 48)) return;
 
   /* [tema, meta] de cada semana */
@@ -206,7 +220,7 @@
     }
     var notas = queNotas();
     dlg.innerHTML = '<div class="lc-in">' +
-      '<p class="lc-sem">Semana ' + semana + '</p>' +
+      '<p class="lc-sem">' + NIVEL + '</p>' +
       '<h2 id="lc-titulo">' + g[0] + '</h2>' +
       '<p class="lc-meta">Tu meta: ' + g[1] + '</p>' +
       (notas ? '<p>' + notas + '</p>' : '') +
@@ -220,7 +234,7 @@
     preparar();
     var chip = document.createElement('button');
     chip.type = 'button'; chip.className = 'lc-chip';
-    chip.textContent = 'Semana ' + semana + ' · ¿Qué hago?';
+    chip.textContent = NIVEL + ' · ¿Qué hago?';
     /* en la app de ritmo va en la fila de Dictado (abajo flotaría sobre las tarjetas); en las demás, abajo a la izquierda */
     var fila = app === 'ritmo' && document.querySelector('.panel-foot');
     chip.addEventListener('click', function () { mostrar(false); });
