@@ -187,7 +187,6 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .golpe-ritmo.golpe .cara,.golpe-ritmo:active .cara{transform:translateY(-1px);transition-duration:40ms}
 .golpe-ritmo.bien .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#647745}
 .golpe-ritmo.mal .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#9A5245}
-.golpe-marcador{margin:0;min-height:1.2em;font-weight:700;font-size:.92rem;color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){.golpe-ritmo .cara{transition:none}.golpe-ritmo .borde{animation:none}}
 .play{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
@@ -530,7 +529,6 @@ body.sin-silabas .sil{display:none}
           <button class="golpe-ritmo" id="btn-golpe" type="button" aria-label="Tambor: tócalo en cada nota (también vale cualquier tecla)">
             <span class="borde"></span><span class="cara"><span class="ico" aria-hidden="true">🥁</span></span>
           </button>
-          <p class="golpe-marcador" id="golpe-marcador" aria-live="polite"></p>
         </div>
         <div class="tline opts">
           <label class="compas" for="compas">Compás
@@ -1035,7 +1033,7 @@ function tick(){
   if(ctx.currentTime >= end + (state.loop ? 0 : VENTANA)){
     if(state.loop){
       play.start = end; play.idx = 0; play.queued = false; play.beat = -1;
-      golpes.usadas = new Set(); golpes.marcadas = new Set(); golpes.vueltas++; limpiarMarcas();
+      golpes.usadas = new Set(); golpes.marcadas = new Set(); limpiarMarcas();
     } else { stopPlay(); return; }
   }
   play.raf = requestAnimationFrame(tick);
@@ -1047,7 +1045,7 @@ function tick(){
    toca cuando OYE la nota. Las notas quedan pintadas: verde a tiempo, rojo si pasó sin golpe.
    Vale el botón, un clic o cualquier tecla mientras suena, Espacio y Enter incluidos (para detener: Escape o el botón ■).
    ========================================================= */
-const golpes = {aTiempo:0, total:0, usadas:new Set(), marcadas:new Set(), vueltas:1};
+const golpes = {total:0, usadas:new Set(), marcadas:new Set()};
 const VENTANA = .22;   // segundos de tolerancia
 const retraso = () => (ctx && (ctx.outputLatency || ctx.baseLatency)) || 0;   // lo que tarda en oírse
 function notaEl(e){ return document.querySelector(state.pastel ? '[data-nid="p-'+e.ni+'"]' : '[data-nid="'+e.ci+'-'+e.ni+'"]'); }
@@ -1062,18 +1060,8 @@ function marcarFallos(){
   });
 }
 function reiniciarGolpes(){
-  golpes.aTiempo = 0; golpes.total = 0; golpes.usadas = new Set(); golpes.marcadas = new Set(); golpes.vueltas = 1;
-  limpiarMarcas(); pintarGolpes();
-}
-function notasConSonido(){ return play.ev.filter(e => !e.rest).length; }
-function pintarGolpes(final){
-  const m = $("#golpe-marcador"); if(!m) return;
-  if(!golpes.total && !final){ m.textContent = ""; return; }   // solo el tambor: sin explicaciones, el marcador sale al tocar
-  const n = notasConSonido();
-  if(final && golpes.vueltas > 1){ m.textContent = "🥁 " + golpes.aTiempo + " notas a tiempo en " + golpes.vueltas + " vueltas"; return; }
-  m.textContent = final
-    ? (golpes.aTiempo >= n && n ? "🎉 ¡Todas a tiempo! " : "🥁 ") + golpes.aTiempo + " de " + n + " notas a tiempo"
-    : "🥁 " + golpes.aTiempo + " a tiempo";
+  golpes.total = 0; golpes.usadas = new Set(); golpes.marcadas = new Set();
+  limpiarMarcas();
 }
 function golpeRitmo(){
   const b = $("#btn-golpe");
@@ -1090,17 +1078,16 @@ function golpeRitmo(){
   golpes.total++;
   const ok = mejor !== null && dist*beat <= VENTANA && !golpes.usadas.has(mejor);
   if(ok){
-    golpes.usadas.add(mejor); golpes.aTiempo++;
+    golpes.usadas.add(mejor);
     const el = notaEl(play.ev[mejor]);
     if(el){ el.classList.remove("golpe-mal"); el.classList.add("golpe-bien"); }
   }
   b.classList.remove("bien", "mal"); b.classList.add(ok ? "bien" : "mal");
   clearTimeout(golpeRitmo.t); golpeRitmo.t = setTimeout(() => b.classList.remove("bien", "mal"), 220);
-  pintarGolpes();
 }
 
 function stopPlay(quiet){
-  if(play.on && golpes.total){ marcarFallos(); setTimeout(() => pintarGolpes(true), 0); }   // al terminar: cuántas notas fueron a tiempo
+  if(play.on && golpes.total) marcarFallos();   // al terminar, las notas sin golpe quedan en rojo (sin mensaje: solo verde y rojo)
   play.on = false;
   cancelAnimationFrame(play.raf);
   if(session){
