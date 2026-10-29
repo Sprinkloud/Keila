@@ -83,6 +83,9 @@ function escalaBlanca(m) {
 }
 const ORDINAL = ['1ª', '2ª', '3ª', '4ª', '5ª', '6ª', '7ª'];
 /* ---------- fin de los datos ---------- */
+const ES_NOTA = { c: 'Do', d: 'Re', e: 'Mi', f: 'Fa', g: 'Sol', a: 'La', b: 'Si' }, ES_ALT = { '#': '♯', b: '♭', '##': ' doble sostenido', bb: ' doble bemol', '': '' };
+const decirClave = k => { const m = k.match(/^([a-g])(##|bb|#|b)?\//); return ES_NOTA[m[1]] + ES_ALT[m[2] || '']; };
+
 
 const $ = s => document.querySelector(s);
 const azar = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -115,7 +118,8 @@ const sonidoMal = () => { audio(); tono(180, ctx.currentTime, .25, .15, 'triangl
 
 function dibujar(claves, resaltar) {
   const cont = $('#pentagrama'); cont.innerHTML = '';
-  if (!claves) return;
+  if (!claves) { cont.removeAttribute('role'); cont.removeAttribute('aria-label'); return; }
+  cont.setAttribute('role', 'img'); cont.setAttribute('aria-label', 'Escala: ' + claves.map(decirClave).join(', '));
   const VF = Vex.Flow, r = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
   r.resize(380, 130);
   const c = r.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');
@@ -162,6 +166,7 @@ function marcarModo(m, notas) {
 }
 function dibujarModo(notas, car) {
   const cont = $('#pentagrama'); cont.innerHTML = '';
+  cont.setAttribute('role', 'img'); cont.setAttribute('aria-label', 'Escala: ' + notas.map(n => n.nombre).join(', '));
   const VF = Vex.Flow, rr = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
   rr.resize(380, 130);
   const c = rr.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');

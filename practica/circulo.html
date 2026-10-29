@@ -23,14 +23,14 @@
     .circulo { width: 100%; max-width: 440px; }
     .circulo svg { width: 100%; height: auto; display: block; }
     .sitio { cursor: pointer; }
-    .sitio circle { fill: var(--papel); stroke: var(--line); stroke-width: 2.5; transition: fill .15s ease, stroke .15s ease; }
-    .sitio.menor circle { fill: #EEF1E2; }
-    .sitio text { font-family: "Caveat", cursive; fill: #48592F; pointer-events: none; }
-    .sitio .alt { font-family: var(--f-body); font-weight: 800; fill: #8F6A2A; }
+    .sitio circle { fill: var(--papel); stroke: var(--papel-linea); stroke-width: 2.5; transition: fill .15s ease, stroke .15s ease; }
+    .sitio.menor circle { fill: var(--papel-menor); }
+    .sitio text { font-family: "Caveat", cursive; fill: var(--papel-musgo); pointer-events: none; }
+    .sitio .alt { font-family: var(--f-body); font-weight: 800; fill: var(--papel-ocre); }
     .sitio.oculto text { visibility: hidden; }
-    .sitio.marcado circle { fill: #F1E0BC; stroke: #C4923A; stroke-width: 3.5; }
-    .sitio.bien circle { fill: #E1E6CF; stroke: #48592F; stroke-width: 3.5; }
-    .sitio.mal circle { fill: #F3DED8; stroke: #9A5245; stroke-width: 3.5; }
+    .sitio.marcado circle { fill: var(--marca); stroke: var(--marca-borde); stroke-width: 3.5; }
+    .sitio.bien circle { fill: var(--bien-fondo); stroke: var(--papel-musgo); stroke-width: 3.5; }
+    .sitio.mal circle { fill: var(--mal-fondo); stroke: var(--danger); stroke-width: 3.5; }
     .sitio:focus-visible circle { stroke: var(--gold); stroke-width: 4; }
     @media (hover: hover) { .sitio:hover circle { stroke: var(--accent); } }
   </style>
@@ -110,7 +110,8 @@ function armarCirculo() {
   ['mayor', 'menor'].forEach(tipo => {
     for (let i = 0; i < 12; i++) {
       const a = -Math.PI / 2 + i * Math.PI / 6, R = tipo === 'mayor' ? 175 : 108, x = 220 + R * Math.cos(a), y = 220 + R * Math.sin(a);
-      const g = nodo('g', { class: 'sitio ' + tipo, tabindex: '0', role: 'button', 'aria-label': tipo === 'mayor' ? C_MAYORES[i] + ' mayor' : C_MENORES[i].replace(/m$/, ' menor') });
+      const etiqueta = tipo === 'mayor' ? C_MAYORES[i] + ' mayor' : C_MENORES[i].replace(/m$/, ' menor');
+      const g = nodo('g', { class: 'sitio ' + tipo, tabindex: '0', role: 'button', 'aria-label': etiqueta, 'data-nombre': etiqueta });
       g.append(nodo('circle', { cx: x, cy: y, r: tipo === 'mayor' ? 32 : 25 }));
       const nombre = tipo === 'mayor' ? C_MAYORES[i] : C_MENORES[i];
       g.append(nodo('text', { x, y: y + (tipo === 'mayor' ? 4 : 7), 'text-anchor': 'middle', style: 'font-size:' + (tipo === 'mayor' ? (nombre.length > 3 ? 21 : 26) : (nombre.length > 4 ? 15 : 19)) + 'px' }, nombre));
@@ -123,7 +124,10 @@ function armarCirculo() {
   });
   $('#circulo').append(s);
 }
-function limpiar() { [...sitios.mayor, ...sitios.menor].forEach(g => g.classList.remove('marcado', 'bien', 'mal', 'oculto')); }
+function limpiar() { [...sitios.mayor, ...sitios.menor].forEach(g => { g.classList.remove('marcado', 'bien', 'mal', 'oculto'); if (g.dataset.nombre) g.setAttribute('aria-label', g.dataset.nombre); }); }
+/* «¿Dónde va?»: la posición oculta no dice su nombre a los lectores de pantalla (si no, se oye la respuesta) */
+function ocultar(g, k) { g.classList.add('oculto'); g.setAttribute('aria-label', 'Lugar ' + (k + 1) + ' del círculo'); }
+function mostrarNombre(g) { g.classList.remove('oculto'); g.setAttribute('aria-label', g.dataset.nombre); }
 
 /* ---------- Ejercicios ---------- */
 const MODOS = { donde: '¿Dónde va?', vecinas: 'Vecinas (IV y V)', relativa: 'Relativa menor', acordes: 'Los 6 acordes' };
@@ -139,13 +143,13 @@ function nueva() {
   limpiar(); veredicto(''); $('#regla').textContent = ''; esperando = true;
   const i = PREGUNTABLES[azar(PREGUNTABLES.length)];
   if (modo === 'donde') {
-    sitios.mayor.forEach((g, k) => { if (k) g.classList.add('oculto'); });
+    sitios.mayor.forEach((g, k) => { if (k) ocultar(g, k); });
     $('#pregunta').textContent = '¿Dónde va ' + C_MAYORES[i] + ' mayor?';
     alTocar = (tipo, k, g) => {
       if (!esperando || tipo !== 'mayor') return;
       esperando = false; const ok = k === i;
-      g.classList.remove('oculto'); g.classList.add(ok ? 'bien' : 'mal');
-      if (!ok) { sitios.mayor[i].classList.remove('oculto'); sitios.mayor[i].classList.add('bien'); }
+      mostrarNombre(g); g.classList.add(ok ? 'bien' : 'mal');
+      if (!ok) { mostrarNombre(sitios.mayor[i]); sitios.mayor[i].classList.add('bien'); }
       marcar(ok); veredicto(ok ? '¡Sí!' : 'Va aquí', ok);
       $('#regla').textContent = C_MAYORES[i] + ' mayor: ' + altTexto(i);
     };

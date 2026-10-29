@@ -64,6 +64,9 @@ function reglaDe(a, inv) {
   return 'Abajo está ' + bajo + ', ' + papel + ' de ' + nombreAcorde(a) + ': ' + INVERSIONES[inv].toLowerCase() + (inv ? ' (' + conBarra(a, inv) + ')' : '');
 }
 /* ---------- fin de los datos ---------- */
+const ES_NOTA = { c: 'Do', d: 'Re', e: 'Mi', f: 'Fa', g: 'Sol', a: 'La', b: 'Si' }, ES_ALT = { '#': '♯', b: '♭', '##': ' doble sostenido', bb: ' doble bemol', '': '' };
+const decirClave = k => { const m = k.match(/^([a-g])(##|bb|#|b)?\//); return ES_NOTA[m[1]] + ES_ALT[m[2] || '']; };
+
 
 const $ = s => document.querySelector(s);
 const azar = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -100,6 +103,7 @@ function dibujar(claves) {
   const st = new VF.Stave(10, 10, 280); st.addClef('treble'); st.setContext(c).draw();
   const n = new VF.StaveNote({ keys: claves, duration: 'w' });
   VF.Formatter.FormatAndDraw(c, st, [n]);
+  cont.setAttribute('role', 'img'); cont.setAttribute('aria-label', 'Acorde, de abajo hacia arriba: ' + claves.map(decirClave).join(', '));
   const svg = cont.querySelector('svg'); svg.setAttribute('viewBox', '0 0 300 130'); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.width = '100%'; svg.style.height = 'auto';
 }
 
