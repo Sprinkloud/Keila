@@ -207,7 +207,7 @@ App pública (pedido de la dueña, 23 de octubre de 2026) para ver canciones de 
 
 
 
-## 60 lecciones y 5 apps nuevas (29 de octubre de 2026, revisión de la dueña; falta subir)
+## 60 lecciones y 5 apps nuevas (29 de octubre de 2026, revisión de la dueña; publicado el 29-oct)
 - La guía tiene 60 lecciones en 7 etapas (`leccion.js` `ETAPAS = [6, 8, 13, 10, 9, 6, 8]`): la vieja «Más notas» se separó en 4; la etapa 4 suma el orden de los sostenidos (32), el de los bemoles (33) y las inversiones (36); el círculo de quintas está en la etapa 5 (42); la 6 ya no tiene «Dos contra tres»; la 7 son los modos griegos (53 a 60). Los temas y metas de esas 4 dicen «piano / violín»; `para()` en `leccion.js` y `parteDe()` en `hojas.html` muestran solo lo del instrumento.
 - Notas del juego en las 4 nuevas (solo las nuevas): piano 20 líneas de la clave de fa, 21 líneas y espacios, 22 líneas adicionales en clave de sol (la, si, Do central, la, si), 23 líneas adicionales en clave de fa (fa, si, Do central, re, mi); violín 20 cuerda Sol, 21 cuerda Mi (sin Fa♯: el juego usa naturales), 22 líneas adicionales abajo, 23 arriba.
 - Hojas nuevas para las lecciones 20 a 23 (distintas en piano y violín); las demás se corrieron +3. `hojas.html` copia la guía de `Registro_Sprinkloud/Guia.js` (el script del 29-oct la regeneró).
