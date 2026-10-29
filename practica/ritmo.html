@@ -188,7 +188,6 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .golpe-ritmo.bien .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#647745}
 .golpe-ritmo.mal .cara{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.4),transparent 55%),#9A5245}
 .golpe-marcador{margin:0;min-height:1.2em;font-weight:700;font-size:.92rem;color:var(--ink-2)}
-.nt.a-tiempo{color:var(--musgo)}
 @media (prefers-reduced-motion:reduce){.golpe-ritmo .cara{transition:none}.golpe-ritmo .borde{animation:none}}
 .play{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
@@ -284,6 +283,9 @@ body.modo-pastel .consigna{display:none}
 .nt{transition:color .05s linear}
 /* la figura que suena cambia de color */
 .nt.on{color:var(--gold)}
+/* tambor: cada nota queda marcada (verde = a tiempo, rojo = se pasó) hasta volver a reproducir */
+.nt.golpe-bien,.nt.golpe-bien.on{color:#4F7A3A}
+.nt.golpe-mal,.nt.golpe-mal.on{color:#B5523F}
 
 .empty{
   background:var(--card);border:1px dashed var(--line);border-radius:var(--radius);
@@ -1028,24 +1030,40 @@ function tick(){
   if(state.loop && !play.queued && ctx.currentTime > end - .3){
     schedulePass(end); play.queued = true;
   }
-  if(ctx.currentTime >= end){
+  marcarFallos();
+  // sin Repetir, se espera un poquito al final para que valga un golpe tardío en la última nota
+  if(ctx.currentTime >= end + (state.loop ? 0 : VENTANA)){
     if(state.loop){
       play.start = end; play.idx = 0; play.queued = false; play.beat = -1;
-      golpes.usadas = new Set(); golpes.vueltas++;
+      golpes.usadas = new Set(); golpes.marcadas = new Set(); golpes.vueltas++; limpiarMarcas();
     } else { stopPlay(); return; }
   }
   play.raf = requestAnimationFrame(tick);
 }
 
 /* =========================================================
-   Seguir el ritmo con el tambor: cada golpe se compara con la nota más cercana (±130 ms = a tiempo).
+   Seguir el ritmo con el tambor: cada golpe se compara con la nota más cercana (±220 ms = a tiempo, pedido de la dueña:
+   que sea flexible). Se descuenta lo que tarda el sonido en salir por el parlante (outputLatency), porque el alumno
+   toca cuando OYE la nota. Las notas quedan pintadas: verde a tiempo, rojo si pasó sin golpe.
    Vale el botón, un clic o cualquier tecla mientras suena, Espacio y Enter incluidos (para detener: Escape o el botón ■).
    ========================================================= */
-const golpes = {aTiempo:0, total:0, usadas:new Set(), vueltas:1};
-const VENTANA = .13;   // segundos de tolerancia
+const golpes = {aTiempo:0, total:0, usadas:new Set(), marcadas:new Set(), vueltas:1};
+const VENTANA = .22;   // segundos de tolerancia
+const retraso = () => (ctx && (ctx.outputLatency || ctx.baseLatency)) || 0;   // lo que tarda en oírse
+function notaEl(e){ return document.querySelector(state.pastel ? '[data-nid="p-'+e.ni+'"]' : '[data-nid="'+e.ci+'-'+e.ni+'"]'); }
+function limpiarMarcas(){ document.querySelectorAll(".nt.golpe-bien, .nt.golpe-mal").forEach(el => el.classList.remove("golpe-bien", "golpe-mal")); }
+/* las notas que ya pasaron sin golpe se pintan de rojo (solo si el alumno está tocando) */
+function marcarFallos(){
+  if(!golpes.total) return;
+  const rel = (ctx.currentTime - retraso() - play.start)/segNegra() - VENTANA/segNegra();
+  play.ev.forEach((e, i) => {
+    if(e.rest || e.t > rel || golpes.usadas.has(i) || golpes.marcadas.has(i)) return;
+    golpes.marcadas.add(i); const el = notaEl(e); if(el) el.classList.add("golpe-mal");
+  });
+}
 function reiniciarGolpes(){
-  golpes.aTiempo = 0; golpes.total = 0; golpes.usadas = new Set(); golpes.vueltas = 1;
-  pintarGolpes();
+  golpes.aTiempo = 0; golpes.total = 0; golpes.usadas = new Set(); golpes.marcadas = new Set(); golpes.vueltas = 1;
+  limpiarMarcas(); pintarGolpes();
 }
 function notasConSonido(){ return play.ev.filter(e => !e.rest).length; }
 function pintarGolpes(final){
@@ -1064,7 +1082,7 @@ function golpeRitmo(){
   tone(ctx.destination, ctx.currentTime, 140, .16, .45, "sine");   // el golpe suena al instante
   if(!play.on) return;
   const beat = segNegra();
-  let rel = (ctx.currentTime - play.start)/beat;          // en negras
+  let rel = (ctx.currentTime - retraso() - play.start)/beat;   // en negras, contando cuándo se oyó
   if(rel < -VENTANA/beat) return;                         // todavía es la cuenta previa
   if(state.loop && play.len) rel = ((rel % play.len) + play.len) % play.len;
   let mejor = null, dist = Infinity;
@@ -1073,8 +1091,8 @@ function golpeRitmo(){
   const ok = mejor !== null && dist*beat <= VENTANA && !golpes.usadas.has(mejor);
   if(ok){
     golpes.usadas.add(mejor); golpes.aTiempo++;
-    const e = play.ev[mejor], el = document.querySelector('[data-nid="'+e.ci+'-'+e.ni+'"]');
-    if(el){ el.classList.add("a-tiempo"); setTimeout(() => el.classList.remove("a-tiempo"), 600); }
+    const el = notaEl(play.ev[mejor]);
+    if(el){ el.classList.remove("golpe-mal"); el.classList.add("golpe-bien"); }
   }
   b.classList.remove("bien", "mal"); b.classList.add(ok ? "bien" : "mal");
   clearTimeout(golpeRitmo.t); golpeRitmo.t = setTimeout(() => b.classList.remove("bien", "mal"), 220);
@@ -1082,7 +1100,7 @@ function golpeRitmo(){
 }
 
 function stopPlay(quiet){
-  if(play.on && golpes.total) setTimeout(() => pintarGolpes(true), 0);   // al terminar: cuántas notas fueron a tiempo
+  if(play.on && golpes.total){ marcarFallos(); setTimeout(() => pintarGolpes(true), 0); }   // al terminar: cuántas notas fueron a tiempo
   play.on = false;
   cancelAnimationFrame(play.raf);
   if(session){
