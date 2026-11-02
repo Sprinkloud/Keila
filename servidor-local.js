@@ -3,7 +3,7 @@
 const http = require('http'), fs = require('fs'), path = require('path');
 const RAIZ = __dirname;
 const tipos = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp',
-  '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.xml': 'application/xml', '.txt': 'text/plain', '.json': 'application/json' };
+  '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.xml': 'application/xml', '.txt': 'text/plain', '.json': 'application/json', '.mp4': 'video/mp4' };
 const patron = s => new RegExp('^' + s.replace(/\.(?!\*)/g, '\\.').replace(/:[a-z]+/g, '([^/]+)') + '$');
 http.createServer((req, res) => {
   const v = JSON.parse(fs.readFileSync(RAIZ + '/vercel.json', 'utf8'));
@@ -17,7 +17,7 @@ http.createServer((req, res) => {
   if (p.endsWith('/')) p += 'index.html';
   let f = path.join(RAIZ, p);
   if (!path.extname(f) && fs.existsSync(f + '.html')) f += '.html';
-  if (!f.startsWith(path.normalize(RAIZ)) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.statusCode = 404; return res.end('no'); }
+  if (!f.startsWith(path.normalize(RAIZ)) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.statusCode = 404; f = path.join(RAIZ, '404.html'); }  // como Vercel: la 404 propia
   v.headers[0].headers.forEach(h => { if (h.key !== 'Strict-Transport-Security') res.setHeader(h.key, h.value.replace('; upgrade-insecure-requests', '')); });
   res.setHeader('Content-Type', tipos[path.extname(f).toLowerCase()] || 'application/octet-stream');
   fs.createReadStream(f).pipe(res);

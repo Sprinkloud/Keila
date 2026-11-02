@@ -1,12 +1,16 @@
 # CLAUDE.md: página_Sprinkloud (repo Sprinkloud/Keila)
 
-Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.vercel.app/ (Vercel despliega desde `main`). Es HTML estático, sin build: la plantilla "Spectral" de HTML5 UP (`assets/`) más páginas propias de teoría musical.
+Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.vercel.app/ (Vercel despliega desde `main`). Es HTML estático, sin build. Desde el 2-nov-2026 la portada es la página de ventas nueva (estilo propio en `sitio/`). **La página anterior** (plantilla "Spectral" de HTML5 UP: portada, metodología, music band, `assets/` y la licencia de la plantilla) **ya no está en el sitio**: se guarda de repuesto en la etiqueta de git `pagina-antigua` (`git checkout pagina-antigua -- <archivo>` para recuperar algo) y sus direcciones (`/antigua`, `/metodologia`, `/musicband`, `/index`) redirigen con 308 a `/`, para que Google sepa adónde apuntar (pedido de la dueña: nada de versiones viejas en Vercel).
+
+**Reglas de la dueña (2-nov-2026):** cada vez que se sube algo a la web se revisa el SEO (ver el paso 3 de `/subir-sprinkloud`), y los enlaces que llevan a otra página se abren en ventana nueva (`target="_blank" rel="noopener"`; los `#` de la misma página no), porque la gente no sabe volver y se estresa.
 
 ## Estructura
 
 | Ruta | Qué es |
 |---|---|
-| `index.html`, `material.html`, `metodologia.html`, `musicband.html` | Páginas del sitio (plantilla Spectral, jQuery). |
+| `index.html` | **Portada: página de ventas** (2-nov-2026). Ver «Página de ventas» más abajo. |
+| `material.html`, `privacidad.html`, `terminos.html`, `404.html`, `bienvenida.html` | Páginas con el estilo nuevo (mismo `sitio/estilo.css`, menú y pie). `404.html` la sirve Vercel sola en cualquier ruta que no existe. `bienvenida.html` («¡Bienvenido al Club musical Sprinkloud!») es para quien ya pagó en PayPhone: botón «Avisar que ya pagué» a WhatsApp con Anita y los 4 pasos que siguen; `noindex` y fuera del sitemap. |
+| `sitio/` | Lo del estilo nuevo: `estilo.css`, `app.js` (aparecer al entrar, la escena 3D del hero y **la burbuja de Anita, que se arma aquí para todas las páginas nuevas**), `img/` (capturas de la app, portadas, videos, foto de Keila, `compartir.jpg` 1200×630 para Open Graph) y `vendor/phosphor/`. Siempre con rutas absolutas (`/sitio/...`), para que sirvan en la 404 y en cualquier ruta. |
 | `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html`, `practica/oido.html` y `practica/partituras.html`. |
 | `images/` | Fotos y logos. `logo-sprinkloud.png` (1200×630, fondo blanco) es la imagen para compartir de las páginas que no tienen una propia. |
 | `vercel.json` | Rutas limpias, redirecciones de las rutas viejas y encabezados de seguridad (ver "Rutas" y "Seguridad"). |
@@ -14,7 +18,18 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 
 ## Material (`material.html`)
 
-Dos columnas (en celular, una debajo de otra): **Práctico**, con las herramientas del sitio por instrumento (piano, violín, y piano y violín), y **Libros**, con los PDF de Google Drive. Por pedido de la dueña (22 de octubre de 2026) se quitaron "Sujetar el violín" y "Notas en el violín" (Genially) y se borró la página "Sonido & Notas"; su ruta redirige a `/material`. Era la única que usaba Tailwind, así que `cdn.tailwindcss.com` salió de la CSP.
+Rehecha el 2-nov-2026 con el estilo nuevo, en tres grupos (pedido de la dueña: «teoría musical en teoría musical, violín en violín, piano en piano»):
+- **Teoría musical** (sirve para los dos instrumentos): ritmo, hojas de práctica, oído, armaduras, círculo de quintas, acordes e inversiones, modos griegos y palabras de música.
+- **Violín:** violín y pentagrama, afinador y partituras con acordes.
+- **Piano:** piano y pentagrama y partituras con acordes (las partituras son para los dos, por eso van en ambos).
+- **Libros:** solo la serie nueva «Aprendo música con Sprinkloud», con enlace a la búsqueda en Amazon Kindle. **Se quitaron los PDF viejos de Drive** («Primero escucho», «Segundo repito», «Primero escucho violín») para que no confundan.
+- Antes (22-oct) se habían quitado "Sujetar el violín" y "Notas en el violín" (Genially) y la página "Sonido & Notas" (su ruta redirige a `/material`; `cdn.tailwindcss.com` salió de la CSP).
+
+## Privacidad, términos y lanzamiento (2-nov-2026)
+- `privacidad.html` y `terminos.html` solo dicen lo que es cierto del sistema: qué datos se guardan (registro, avance, Google opcional en la app), que la tarjeta la procesa PayPhone, los servicios (Google, PayPhone, WhatsApp/Meta), sin cookies de medición, derechos según la Ley Orgánica de Protección de Datos Personales del Ecuador, y los planes con sus precios. Reglas de la dueña (2-nov): un cambio de clase se avisa con al menos 2 horas; si falta sin avisar o avisa con menos de 2 horas, la clase se pierde; no hay devolución del dinero. Están en los términos y en las preguntas frecuentes de la portada.
+- Sin Google Analytics ni aviso de cookies (decisión del 2-nov: no tiene cuenta y no le hace falta).
+- `sitemap.xml`: la portada, Material, privacidad, términos y todas las herramientas (se sumaron armaduras, círculo, acordes, modos y palabras); salieron metodología y music band.
+- `servidor-local.js` ahora sirve `404.html` como Vercel y los `.mp4`.
 
 ## Rutas
 
@@ -22,7 +37,7 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 
 | Ruta | Archivo |
 |---|---|
-| `/`, `/material`, `/metodologia`, `/musicband` | páginas del sitio |
+| `/`, `/material`, `/privacidad`, `/terminos`, `/bienvenida` | páginas del sitio (`/antigua`, `/metodologia` y `/musicband` redirigen a `/`) |
 | `/practica/piano`, `/practica/violin`, `/practica/ritmo`, `/practica/oido`, `/practica/hojas` | herramientas |
 | `/practica/hojas/violin/etapa-1-leccion-2` | hoja de una lección (rewrite a `hojas.html`, que lee la ruta). La vieja `/semana-2` también sirve |
 | `/practica/ritmo/3-4` | app de ritmo en un compás (rewrite a `ritmo.html`) |
@@ -482,3 +497,19 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
+
+## Página de ventas (`index.html` + `sitio/`, portada desde el 2-nov-2026)
+Pedido de la dueña: una página que venda (neuroventas), empresarial y de liderazgo, que no parezca un juego, con los productos (clases, app y libros). Se armó en `propuesta/` y, aprobada el 2-nov, pasó a ser la portada (la carpeta `propuesta/` ya no existe). Vista privada de la propuesta: https://claude.ai/artifact/3aZboesRxSDcuwgfJCB78e
+- Conserva del `index` viejo: la verificación de Google Search Console (`google-site-verification`) y el JSON-LD (`EducationalOrganization`, ahora con los 3 planes y sus precios, y `WebSite`).
+- Dirección: el marino del logo como color principal y un solo acento, el verde bosque, solo en los botones de compra. Una fuente (Plus Jakarta Sans); SPRINKLOUD en Montserrat, como el logo. Modo claro y oscuro.
+- **Segunda versión (2-nov, «se ve plana»; referencia xtratheme.com/landing):** hero marino con corte en diagonal (`clip-path`, variable `--corte`), escena 3D con dos celulares y un libro (`perspective` y `rotateY`, que sigue apenas al mouse en `app.js`), 4 cifras reales en tarjetas montadas sobre el borde del hero, la sección de la app y la historia también en bloques marinos con corte, sombras en capas (`--sombra`, `--sombra-alta`) y elevación al pasar el mouse (solo con `hover: hover`). **Libros en 3D** con CSS (`.libro3d`: tapa, canto de hojas en `::before` y contratapa en `::after`), en un estante con repisa. **Se quitó el zoom** y la imagen de Gemini de la clase (la dueña no la quiso).
+- **El método es una lista** (`.lista-metodo`: ícono, título y texto; las 7 etapas en píldoras), sin imágenes: la dueña dijo que el bento con imágenes y texto no se entendía.
+- **Anita** (la asistente de IA de WhatsApp del club): burbuja fija abajo a la derecha («¿Te ayudo? Habla con Anita»). El panel tiene su saludo, tres atajos (elegir plan, ver horarios, tengo una pregunta) y un campo para escribir; todo abre WhatsApp con el mensaje listo («Hola Anita, …») y ahí responde ella. No hay chatbot en la página: la conversación vive en WhatsApp, donde ya está el agente.
+- Sin Google Analytics por ahora (decisión del 2-nov: no tiene cuenta y no le hace falta). Sin GA4 tampoco hace falta aviso de cookies.
+- Orden de venta: promesa y botón «Mira cómo es una clase», cifras, la clase (video de Keila), el problema, el método (lista), la app (4 capturas), los 7 libros, cómo empezar, la fundadora, la historia de Montse, los planes (con «¿Quieres saber tu horario antes de pagar?» y la app sola), preguntas y cierre.
+- Íconos Phosphor (MIT) guardados en `vendor/phosphor/style.css` con la fuente en data URI (la CSP del sitio no deja cargar estilos de otros servidores). Solo hay peso regular (no `ph-fill`).
+- `img/clase-violin.mp4` (540 px, 4,5 MB, 54 s: Keila explica cómo tomar el arco) con su póster `clase-violin-poster.webp`; el póster también va en la celda «Clases en vivo» del bento.
+- `img/keila.webp`: la foto feliz de Keila (camisa amarilla), recortada a 4:5 sin tocar el fondo. La foto seria con fondo cambiado se descartó (perdía parte del cuerpo).
+- `img/montse.mp4` (540 px, 5 MB, con permiso de la familia) en la sección de la historia; se carga al tocar play. Los videos van en la página y no incrustados de Instagram (no sacan a la gente de la página; la CSP del sitio bloquea iframes).
+- Los botones de los planes llevan a los links de pago de PayPhone, con la inscripción incluida: Ritmo USD 40 (`ppls.me/uibDKQRMd7xbgfIY7EOiw`), Melodía USD 74 (`ppls.me/SRMIn1PCOiiClMDWW05Jw`) y Armonía USD 102 (`ppls.me/NieRjMo9wbMCJ0OXwHrcMw`); montos comprobados en la página de PayPhone. Solo PayPhone en la página (decisión del 2-nov: una sola forma de pago, para no confundir); Wise queda como respaldo por WhatsApp. Los precios son los mismos de Ecuador.
+- Antes de publicar: `/impeccable audit` y `review-animations` (regla del workspace).

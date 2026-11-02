@@ -43,8 +43,23 @@
       "permanent": true
     },
     {
-      "source": "/metodolog([^i].*)a",
-      "destination": "/metodologia",
+      "source": "/metodolog(.*)",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/musicband",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/antigua",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index",
+      "destination": "/",
       "permanent": true
     }
   ],
