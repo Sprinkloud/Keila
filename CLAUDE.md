@@ -498,6 +498,9 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
 
+## Planes después de la clase (3-nov-2026)
+- Los planes ahora van justo después de «Así es una clase» (el video), y no arriba: la dueña quiere que primero vean la muestra de la clase. Las portadas 5 a 7 son las nuevas, de día.
+
 ## Anita en beige y pie pequeño (3-nov-2026)
 - **Anita:** fondo beige (`#f6efe2`), mensajitos verdes claros y botones de adentro esponjosos (planes, días, horas, atajos y enviar). La cabecera y el borde siguen verdes.
 - **Sin «Tu maestro por WhatsApp»** en los planes: la dueña dijo que sobra. Los términos siguen mencionando la comunicación con el maestro.
