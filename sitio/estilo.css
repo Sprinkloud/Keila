@@ -358,8 +358,7 @@ section { padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 64px); max-width: 12
 .oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .anita { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 30; display: grid; justify-items: end; gap: 12px; }
 .anita-ava { width: 44px; height: 44px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--acento); color: #fff; font-size: 1.4rem; }
-.anita-boton { display: flex; align-items: center; gap: 10px; border: 0; cursor: pointer; font: inherit; color: var(--tinta); background: var(--superficie); padding: 6px 18px 6px 6px; border-radius: 999px; box-shadow: var(--sombra-alta); transition: transform .16s var(--ease); }
-.anita-boton:active { transform: scale(.97); }
+.anita-boton { display: flex; align-items: center; gap: 10px; cursor: pointer; font: inherit; padding: 6px 18px 6px 6px; border-radius: 999px; min-height: 0; }
 .anita-hola { display: grid; text-align: left; font-size: .82rem; line-height: 1.25; color: var(--tinta-2); }
 .anita-hola b { font-size: .95rem; color: var(--tinta); }
 .anita-panel { width: min(340px, calc(100vw - 36px)); background: var(--superficie); border-radius: 20px; box-shadow: var(--sombra-alta); overflow: hidden; transform-origin: bottom right; }
@@ -380,9 +379,121 @@ section { padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 64px); max-width: 12
 @media (max-width: 520px) { .anita-hola { display: none; } .anita-boton { padding: 6px; } .anita-boton .anita-ava { width: 52px; height: 52px; font-size: 1.6rem; } }
 @media (prefers-reduced-motion: reduce) { .anita-panel:not([hidden]) { animation: none; } }
 
+/* ---------- Botones esponjosos (pedido de la dueña, 2-nov: pagar y escribir, en todas las secciones) ----------
+   Tienen capas: una base más oscura debajo hace de grosor del botón, y al tocarlos se hunden hasta ella. */
+.esponja { position: relative; border: 0; min-height: 52px; padding: 0 26px; font-weight: 800; cursor: pointer;
+  box-shadow: 0 6px 0 var(--base), 0 14px 24px -10px rgb(20 27 51 / .45), inset 0 2px 0 rgb(255 255 255 / .35);
+  transition: transform .14s var(--ease), box-shadow .14s var(--ease), filter .2s var(--ease); }
+.esponja:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--base), 0 4px 10px -6px rgb(20 27 51 / .4), inset 0 2px 0 rgb(255 255 255 / .25); transition-duration: .06s; }
+.esponja-verde { background: linear-gradient(180deg, #3f9056, #2f6b3f); color: #fff; --base: #1d4628; }
+.esponja-blanca { background: linear-gradient(180deg, #ffffff, #eceff5); color: #1d2747; --base: #b9bfce; }
+.esponja.btn-sm { min-height: 40px; padding: 0 18px; box-shadow: 0 4px 0 var(--base), inset 0 2px 0 rgb(255 255 255 / .3); }
+.esponja.btn-sm:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--base); }
+@media (hover: hover) and (pointer: fine) {
+  .esponja:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 8px 0 var(--base), 0 18px 28px -10px rgb(20 27 51 / .5), inset 0 2px 0 rgb(255 255 255 / .35); }
+  .esponja:active { transform: translateY(5px); }
+}
+/* brillo que gira alrededor del botón, para que den ganas de tocarlo */
+@property --giro { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.brilla { isolation: isolate; }
+.brilla::before { content: ''; position: absolute; inset: -4px; border-radius: inherit; padding: 3px; z-index: -1; pointer-events: none;
+  background: conic-gradient(from var(--giro), transparent 0 62%, rgb(255 255 255 / .2) 70%, #fff6c9 80%, #8fd3a2 86%, transparent 94%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: giro 2.8s linear infinite; }
+@keyframes giro { to { --giro: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .brilla::before { animation: none; --giro: 200deg; } }
+
+/* la fila de pagar y escribir que va al final de cada sección */
+.cta-fila { display: flex; flex-wrap: wrap; gap: 14px 16px; margin-top: 34px; align-items: center; }
+.cta-centro { justify-content: center; }
+.historia .cta-fila, .app .cta-fila { position: relative; }
+@media (max-width: 520px) { .cta-fila .esponja { flex: 1 1 100%; } }
+
+/* ---------- Paisajes de los libros detrás del texto (para que no quede blanco tanto tiempo) ----------
+   Las acuarelas tienen el borde blanco; además se funden con una máscara y suben despacio al bajar (parallax con la
+   línea de tiempo de la vista; sin soporte o con movimiento reducido, quedan quietas). */
+.con-paisaje { position: relative; isolation: isolate; }
+.paisaje { position: absolute; z-index: -1; pointer-events: none; height: auto; opacity: .3; width: min(720px, 72vw);
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 52%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 52%, transparent 100%); }
+.paisaje-der { right: -6vw; top: 4%; }
+.paisaje-izq { left: -6vw; top: 6%; }
+.paisaje-centro { left: 50%; top: 50%; translate: -50% -50%; width: min(1150px, 110vw); opacity: .22; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) { .paisaje { animation: flota linear both; animation-timeline: view(); } }
+}
+@keyframes flota { from { transform: translateY(70px) scale(1.06); } to { transform: translateY(-70px) scale(1); } }
+@media (prefers-color-scheme: dark) { .paisaje { opacity: .12; } .paisaje-centro { opacity: .1; } }
+@media (max-width: 760px) { .paisaje-der, .paisaje-izq { width: 110vw; opacity: .2; top: auto; bottom: 0; } }
+
+/* ---------- Cinta de escenas de los libros (se mueve sola; al pasar el mouse se detiene) ---------- */
+.cinta { max-width: none; padding: 30px 0 18px; overflow: hidden; }
+.cinta-pista { display: flex; width: max-content; animation: cinta 70s linear infinite; }
+.cinta-grupo { display: flex; gap: 22px; padding-right: 22px; padding-block: 8px; }
+.cinta figure { margin: 0; width: clamp(200px, 22vw, 280px); position: relative; border-radius: var(--radio); overflow: hidden; background: #fff;
+  box-shadow: var(--sombra); transform: rotate(var(--r, -1.5deg)); }
+.cinta figure:nth-child(even) { --r: 1.5deg; }
+.cinta img { width: 100%; transform: scale(1.14); }
+.cinta figcaption { position: absolute; left: 10px; bottom: 10px; background: rgb(255 255 255 / .85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  padding: 4px 12px; border-radius: 999px; font-size: .82rem; font-weight: 700; color: #1d2747; }
+@keyframes cinta { to { transform: translateX(-50%); } }
+@media (hover: hover) and (pointer: fine) { .cinta:hover .cinta-pista { animation-play-state: paused; } }
+@media (prefers-reduced-motion: reduce) { .cinta { overflow-x: auto; } .cinta-pista { animation: none; } }
+
+/* ---------- Notas que suben en el hero ---------- */
+.notas-flotan { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.notas-flotan span { position: absolute; bottom: -40px; font-size: 30px; color: rgb(143 211 162 / .55); opacity: 0; }
+.notas-flotan span:nth-child(1) { left: 6%; } .notas-flotan span:nth-child(2) { left: 22%; font-size: 22px; }
+.notas-flotan span:nth-child(3) { left: 41%; } .notas-flotan span:nth-child(4) { left: 58%; font-size: 24px; }
+.notas-flotan span:nth-child(5) { left: 76%; } .notas-flotan span:nth-child(6) { left: 92%; font-size: 20px; }
+@media (prefers-reduced-motion: no-preference) {
+  .notas-flotan span { animation: sube-nota 11s linear infinite; }
+  .notas-flotan span:nth-child(2) { animation-delay: 2s; } .notas-flotan span:nth-child(3) { animation-delay: 4.5s; }
+  .notas-flotan span:nth-child(4) { animation-delay: 6s; } .notas-flotan span:nth-child(5) { animation-delay: 8s; } .notas-flotan span:nth-child(6) { animation-delay: 9.5s; }
+}
+@keyframes sube-nota { 0% { transform: translateY(0) rotate(-8deg); opacity: 0; } 12% { opacity: 1; } 85% { opacity: .8; } 100% { transform: translateY(-640px) rotate(18deg); opacity: 0; } }
+
+/* ---------- Anita: vistas de planes y de horarios ---------- */
+.anita-planes { padding: 4px 16px 6px; display: grid; gap: 8px; }
+.anita-plan { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; text-align: left; width: 100%; cursor: pointer; font: inherit;
+  border: 1.5px solid var(--linea); background: var(--superficie); color: var(--tinta); border-radius: 14px; padding: 10px 14px;
+  box-shadow: 0 3px 0 var(--linea); transition: transform .12s var(--ease), box-shadow .12s var(--ease), border-color .2s var(--ease); }
+.anita-plan b { font-size: 1rem; }
+.anita-plan span { color: var(--tinta-2); font-size: .82rem; grid-column: 1; }
+.anita-plan strong { grid-row: 1 / span 2; grid-column: 2; font-size: 1.05rem; color: var(--acento); }
+.anita-plan:active { transform: translateY(3px); box-shadow: 0 0 0 var(--linea); }
+@media (hover: hover) and (pointer: fine) { .anita-plan:hover { border-color: var(--acento); } }
+.anita-volver { border: 0; background: none; color: var(--tinta-2); font: inherit; font-size: .85rem; font-weight: 700; cursor: pointer; padding: 4px 16px 0; display: inline-flex; gap: 4px; align-items: center; min-height: 32px; }
+.cal-dias { display: grid; grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); gap: 6px; padding: 6px 16px; }
+.cal-dia { display: grid; justify-items: center; padding: 6px 0; border-radius: 12px; border: 1.5px solid var(--linea); background: var(--superficie); color: var(--tinta); font: inherit; cursor: pointer; }
+.cal-dia small { font-size: .7rem; color: var(--tinta-2); text-transform: uppercase; letter-spacing: .04em; }
+.cal-dia b { font-size: 1.05rem; }
+.cal-dia[aria-pressed="true"] { background: var(--marino); border-color: var(--marino); color: #fff; }
+.cal-dia[aria-pressed="true"] small { color: var(--sobre-marino-2); }
+.cal-dia:disabled { opacity: .4; cursor: default; }
+.cal-horas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px 16px 4px; min-height: 48px; }
+.cal-hora { min-height: 40px; border-radius: 999px; border: 1.5px solid var(--acento); background: var(--superficie); color: var(--acento); font: inherit; font-weight: 800; cursor: pointer;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--acento) 40%, transparent); transition: transform .12s var(--ease), box-shadow .12s var(--ease); }
+.cal-hora:active { transform: translateY(3px); box-shadow: none; }
+.cal-nota { padding: 4px 16px 0; font-size: .82rem; color: var(--tinta-2); }
+.cal-carga { grid-column: 1 / -1; height: 40px; border-radius: 999px; background: linear-gradient(90deg, var(--superficie-2), var(--linea), var(--superficie-2)); background-size: 200% 100%; animation: carga 1.2s linear infinite; }
+@keyframes carga { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .cal-carga { animation: none; } }
+
 /* ---------- Aparecer al entrar (opacidad y un desplazamiento corto, una vez) ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  .revela { opacity: 0; translate: 0 22px; transition: opacity .7s var(--ease), translate .7s var(--ease), transform .45s var(--ease), box-shadow .3s var(--ease); }
-  .revela.visto { opacity: 1; translate: 0 0; }
+  .revela { opacity: 0; translate: 0 22px; filter: blur(6px); transition: opacity .7s var(--ease), translate .7s var(--ease), filter .7s var(--ease), transform .45s var(--ease), box-shadow .3s var(--ease); }
+  .revela.visto { opacity: 1; translate: 0 0; filter: none; }
 }
 @media (prefers-reduced-motion: reduce) { .escena-3d, .tel, .estante .libro3d { transition: none; } }
+
+/* Anita: su botón es esponjoso (con su forma de píldora con la cara) y los atajos del panel son botones */
+.anita-boton.esponja { padding: 6px 18px 6px 6px; min-height: 0; font-weight: 400; }
+@media (max-width: 520px) { .anita-boton.esponja { padding: 6px; } }
+.anita-op button { font: inherit; cursor: pointer; background: none; color: var(--acento); font-weight: 700; font-size: .9rem; border: 1.5px solid var(--acento); border-radius: 999px; padding: 7px 14px; min-height: 36px; display: inline-flex; align-items: center; }
+@media (hover: hover) and (pointer: fine) { .anita-op button:hover { background: var(--acento); color: var(--acento-txt); } }
+button.enlace { border: 0; background: none; font: inherit; font-weight: 700; cursor: pointer; padding: 0; color: var(--tinta); }
+/* el paisaje del cierre no se mete en el pie, y detrás de las preguntas va más suave para que se lea bien */
+.cierre { overflow: clip; }
+.pie { position: relative; background: var(--fondo); }
+.faq .paisaje { opacity: .2; }
+@media (prefers-color-scheme: dark) { .faq .paisaje { opacity: .1; } }

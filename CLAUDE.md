@@ -498,6 +498,27 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
 
+## Tercera versión de la portada (2-nov-2026, noche): pagar primero, botones esponjosos y Anita con planes y horarios
+Pedido de la dueña: «lo más importante de la página es que pague».
+- **Los planes van arriba**, justo después de las cifras. Antes estaban casi al final.
+- **Botones esponjosos** (`.esponja`, con `.esponja-verde` y `.esponja-blanca`): tienen una base más oscura debajo (`--base`) y se hunden al tocarlos.
+  - Al final de cada sección hay una fila `.cta-fila` con «Pagar mi plan» (a `#planes`) y «Escríbenos», con ícono de teléfono, que va a WhatsApp.
+  - Los botones de pago de los planes, el del menú y el del hero también son esponjosos.
+- **Brillo que gira** (`.brilla`): un anillo `conic-gradient` con `@property --giro`. Lo llevan el botón de Anita, el botón principal del hero, el de Melodía y el del cierre. Con movimiento reducido, el anillo queda quieto.
+- **Anita** (`sitio/app.js`):
+  - **Su botón** es esponjoso y con brillo.
+  - **Se abre sola** a los 10 s (`ABRIR_SOLA_MS`), una vez por visita (`sessionStorage` `anita-sola`), con los 3 planes: «¿Empezamos? Elige tu plan y te ayudo a pagar en un minuto». No se abre en `/bienvenida`, ni si la persona ya la tocó.
+  - **«Elegir mi plan»** muestra Ritmo, Melodía y Armonía con su precio. Al tocar uno se abre WhatsApp con ese plan para Anita.
+  - **«Ver horarios disponibles»** pregunta primero el instrumento: Piano, con Keila Espín, o Violín, con Jova (`INSTRUMENTOS` en `app.js`; dueña, 3-nov). Después un calendario corto: los días de esta semana, o de la próxima si es fin de semana, y las horas libres de cada día. Al elegir una hora se abre WhatsApp con ese día y esa hora.
+    - Los horarios salen de la web app de maestros (`API_HORARIOS` = `…/exec?api=horarios`, ver `Registro_Sprinkloud/CLAUDE.md`). Solo trae días y horas, sin nombres.
+    - Si no carga, ofrece pedírselos a Anita.
+  - El enlace «Ver horarios» de los planes abre a Anita en esa vista (`data-anita="horarios"`).
+- **Paisajes de los libros** detrás del texto (`.con-paisaje` y `.paisaje`, en `sitio/img/paisajes/`): son 6 acuarelas de `Libro_Sprinkloud/img/gemini` (1400 px, unos 120 KB cada una).
+  - Tienen transparencia y una máscara que las funde con el fondo, y suben despacio al bajar (parallax con `animation-timeline: view()`).
+  - Van en el manifiesto, el método, los libros, los pasos, las preguntas y el cierre. En modo oscuro quedan más suaves.
+- **Cinta de escenas** (`.cinta`, entre el método y la app): 8 escenas de los libros (560 px) que pasan solas en 70 s. Se detiene al pasar el mouse; con movimiento reducido queda quieta y se desliza a mano.
+- **Notas que suben** en el hero (`.notas-flotan`), y la entrada de cada bloque con un poco de desenfoque (`.revela`).
+
 ## Página de ventas (`index.html` + `sitio/`, portada desde el 2-nov-2026)
 Pedido de la dueña: una página que venda (neuroventas), empresarial y de liderazgo, que no parezca un juego, con los productos (clases, app y libros). Se armó en `propuesta/` y, aprobada el 2-nov, pasó a ser la portada (la carpeta `propuesta/` ya no existe). Vista privada de la propuesta: https://claude.ai/artifact/3aZboesRxSDcuwgfJCB78e
 - Conserva del `index` viejo: la verificación de Google Search Console (`google-site-verification`) y el JSON-LD (`EducationalOrganization`, ahora con los 3 planes y sus precios, y `WebSite`).
