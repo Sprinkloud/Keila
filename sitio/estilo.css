@@ -537,3 +537,37 @@ button.enlace { border: 0; background: none; font: inherit; font-weight: 700; cu
 @media (max-width: 860px) { .postular { grid-template-columns: 1fr; } .postular-img { order: -1; } }
 .anita-panel .cal-dia[aria-pressed="true"] { background: #2f6b3f; border-color: #2f6b3f; color: #fff; }
 .anita-panel .cal-dia[aria-pressed="true"] small { color: #d6efdc; }
+
+/* ---------- Pie pequeño y ordenado (dueña, 3-nov): íconos de Instagram y WhatsApp, enlaces centrados y el © ---------- */
+.pie { padding: 26px 16px 22px; text-align: center; border-top: 1px solid var(--linea); }
+.pie-iconos { display: flex; justify-content: center; gap: 14px; }
+.pie-iconos a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 1.35rem; text-decoration: none;
+  color: var(--tinta); background: var(--superficie); box-shadow: 0 3px 0 var(--linea); transition: transform .14s var(--ease), box-shadow .14s var(--ease); }
+.pie-iconos a:active { transform: translateY(3px); box-shadow: none; }
+@media (hover: hover) and (pointer: fine) { .pie-iconos a:hover { color: var(--acento); } }
+.pie .pie-links { justify-content: center; padding: 14px 0 0; gap: 6px 18px; }
+.pie .pie-links a { text-decoration: none; }
+.pie-copy { margin-top: 10px; font-size: .82rem; color: var(--tinta-2); }
+
+/* ---------- Anita: fondo beige y mensajitos verdes (dueña, 3-nov); los botones de adentro, esponjosos ---------- */
+.anita-panel { --anita-fondo: #f6efe2; --anita-borde: #2f6b3f; }
+.anita-panel .burbuja { background: #dff0e2; border: 1px solid #c3e0c9; color: #1d2747; }
+.anita-panel .anita-plan, .anita-panel .cal-dia { background: #fff; border-color: #e3d8c4; box-shadow: 0 4px 0 #e3d8c4; transition: transform .12s var(--ease), box-shadow .12s var(--ease); }
+.anita-panel .anita-plan:active, .anita-panel .cal-dia:active { transform: translateY(3px); box-shadow: 0 1px 0 #e3d8c4; }
+.anita-panel .cal-dia:disabled { box-shadow: none; }
+.anita-panel .cal-dia[aria-pressed="true"] { box-shadow: 0 4px 0 #1d4628; }
+.anita-panel .cal-hora { background: #fff; box-shadow: 0 4px 0 #1d4628; }
+.anita-panel .cal-hora:active { transform: translateY(3px); box-shadow: 0 1px 0 #1d4628; }
+.anita-panel .anita-op button { background: #fff; box-shadow: 0 3px 0 #1d4628; transition: transform .12s var(--ease), box-shadow .12s var(--ease); }
+.anita-panel .anita-op button:active { transform: translateY(3px); box-shadow: none; }
+.anita-escribe { border-top-color: #e3d8c4; }
+.anita-escribe input { border-color: #e3d8c4; }
+.anita-escribe button { box-shadow: 0 3px 0 #1d4628; }
+.anita-escribe button:active { transform: translateY(3px); box-shadow: none; }
+@media (prefers-color-scheme: dark) {
+  .anita-panel { --anita-fondo: #2a2419; }
+  .anita-panel .burbuja { background: #1f3a28; border-color: #2c5238; color: #eef0f6; }
+  .anita-panel .anita-plan, .anita-panel .cal-dia, .anita-panel .cal-hora, .anita-panel .anita-op button, .anita-escribe input { background: #342d20; border-color: #4a4130; color: #eef0f6; }
+  .anita-panel .anita-plan, .anita-panel .cal-dia { box-shadow: 0 4px 0 #4a4130; }
+}
+@media (max-width: 520px) { .pie { padding-bottom: 96px; } }   /* que el botón de Anita no tape el pie */
