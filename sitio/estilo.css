@@ -158,10 +158,16 @@ section { padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 64px); max-width: 12
 
 /* ---------- Cifras grandes que se montan sobre el borde del hero ---------- */
 .cifras { position: relative; z-index: 2; margin-top: -150px; padding-top: 0; padding-bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.cifra { background: var(--superficie); border-radius: var(--radio); padding: 26px 24px; box-shadow: var(--sombra-alta); display: grid; gap: 6px; }
+.cifra { background: var(--superficie); border-radius: var(--radio); padding: 26px 24px; box-shadow: var(--sombra-alta); display: grid; gap: 6px; align-content: start; }
 .cifra b { font-size: clamp(2rem, 3.4vw, 2.8rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; color: var(--tinta); }
 .cifra span { color: var(--tinta-2); font-size: .98rem; line-height: 1.4; }
-.cifra:nth-child(1) b { color: var(--acento); }
+.cifra b { font-size: clamp(1.3rem, 2vw, 1.6rem); letter-spacing: -.02em; line-height: 1.15; }
+.cifra > i { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: color-mix(in srgb, var(--acento) 12%, transparent); color: var(--acento); font-size: 1.5rem; margin-bottom: 6px; }
+/* lo que incluyen todos los planes */
+.incluido { list-style: none; margin: 18px auto 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 900px; }
+.incluido li { display: inline-flex; align-items: center; gap: 8px; background: var(--superficie); border: 1px solid var(--linea); border-radius: 999px; padding: 8px 16px; font-weight: 700; box-shadow: var(--sombra); }
+.incluido i { color: var(--acento); font-size: 1.2rem; }
+.planes-nota { margin: 14px auto 0; color: var(--tinta-2); max-width: 60ch; }
 @media (max-width: 900px) { .cifras { grid-template-columns: 1fr 1fr; margin-top: -110px; } }
 
 /* ---------- Así es una clase (el video de Keila) ---------- */

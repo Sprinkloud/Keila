@@ -498,6 +498,15 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
 
+## Ajustes de la dueña (3-nov-2026)
+- **Sin el botón «Mira cómo es una clase»** en el hero: queda solo «Elegir y pagar mi plan».
+- **Las 4 tarjetas debajo del hero llevan palabras, no números** («los números confunden»), cada una con su ícono:
+  - «Uno a uno»: aprende con tus canciones favoritas;
+  - «Método ágil»: metas cortas, a tu ritmo, y ves tu avance cada semana;
+  - «Libro»: cada lección trae su práctica interactiva;
+  - «App»: aprende teoría de forma divertida.
+- **Lo que incluyen todos los planes** (`.incluido`, en píldoras): clases en vivo, acceso PRO a la app, tu libro digital y tu maestro por WhatsApp entre semana (el alumno le escribe sus dudas fuera de la clase). Cada plan lo repite en su lista: «App PRO y tu libro digital» y «Tu maestro por WhatsApp». También está en los términos.
+
 ## Tercera versión de la portada (2-nov-2026, noche): pagar primero, botones esponjosos y Anita con planes y horarios
 Pedido de la dueña: «lo más importante de la página es que pague».
 - **Los planes van arriba**, justo después de las cifras. Antes estaban casi al final.
