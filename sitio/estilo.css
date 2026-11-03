@@ -503,3 +503,37 @@ button.enlace { border: 0; background: none; font: inherit; font-weight: 700; cu
 .pie { position: relative; background: var(--fondo); }
 .faq .paisaje { opacity: .2; }
 @media (prefers-color-scheme: dark) { .faq .paisaje { opacity: .1; } }
+
+/* Anita con su propio color (dueña, 3-nov: «se confunde con el color de la página»): verde bosque y un fondo verde muy
+   claro, distinto del marino y del blanco de la página. */
+.anita-panel { --anita-fondo: #eef6ef; --anita-borde: #2f6b3f; background: var(--anita-fondo); border: 2px solid var(--anita-borde);
+  box-shadow: 0 0 0 6px rgb(47 107 63 / .14), var(--sombra-alta); }
+.anita-cab { background: linear-gradient(160deg, #3f9056, #24563a); }
+.anita-cab span:not(.anita-ava) { color: #d6efdc; }
+.anita-cab .anita-ava { background: #fff; color: #2f6b3f; }
+.anita-panel .burbuja { background: #fff; border: 1px solid #cfe3d3; }
+.anita-panel .anita-plan, .anita-panel .cal-dia { background: #fff; }
+.anita-escribe { border-top-color: #cfe3d3; }
+.anita-escribe input { background: #fff; }
+.anita-boton .anita-ava { background: #fff; color: #2f6b3f; }
+.anita-boton .anita-hola { color: #e3f3e7; }
+.anita-boton .anita-hola b { color: #fff; }
+@media (prefers-color-scheme: dark) {
+  .anita-panel { --anita-fondo: #132a1b; --anita-borde: #4f9a63; }
+  .anita-panel .burbuja, .anita-panel .anita-plan, .anita-panel .cal-dia, .anita-escribe input { background: #1a3423; border-color: #2c5238; color: #eef0f6; }
+}
+
+/* Trabaja con nosotros: las tarjetas informativas (como las de Material, pero sin enlace) y el bloque para postular */
+.lista-fija .tarjeta { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; height: 100%; padding: 18px; background: var(--superficie); border-radius: var(--radio); box-shadow: var(--sombra); }
+.lista-fija .tarjeta > i { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--acento) 12%, transparent); color: var(--acento); font-size: 1.35rem; }
+.lista-fija b { display: block; font-weight: 700; line-height: 1.3; }
+.lista-fija span { display: block; color: var(--tinta-2); font-size: .92rem; line-height: 1.45; margin-top: 4px; }
+.postular { grid-template-columns: 1.3fr 1fr; }
+.postular p b { color: var(--tinta); }
+.postular-img { width: 100%; border-radius: var(--radio); }
+.video-pide { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+.video-pide li { display: flex; gap: 12px; align-items: center; background: var(--superficie-2); border-radius: 12px; padding: 12px 16px; }
+.video-pide i { color: var(--acento); font-size: 1.4rem; }
+@media (max-width: 860px) { .postular { grid-template-columns: 1fr; } .postular-img { order: -1; } }
+.anita-panel .cal-dia[aria-pressed="true"] { background: #2f6b3f; border-color: #2f6b3f; color: #fff; }
+.anita-panel .cal-dia[aria-pressed="true"] small { color: #d6efdc; }

@@ -9,7 +9,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 | Ruta | Qué es |
 |---|---|
 | `index.html` | **Portada: página de ventas** (2-nov-2026). Ver «Página de ventas» más abajo. |
-| `material.html`, `privacidad.html`, `terminos.html`, `404.html`, `bienvenida.html` | Páginas con el estilo nuevo (mismo `sitio/estilo.css`, menú y pie). `404.html` la sirve Vercel sola en cualquier ruta que no existe. `bienvenida.html` («¡Bienvenido al Club musical Sprinkloud!») es para quien ya pagó en PayPhone: botón «Avisar que ya pagué» a WhatsApp con Anita y los 4 pasos que siguen; `noindex` y fuera del sitemap. |
+| `material.html`, `privacidad.html`, `terminos.html`, `trabaja.html`, `404.html`, `bienvenida.html` | Páginas con el estilo nuevo (mismo `sitio/estilo.css`, menú y pie). `404.html` la sirve Vercel sola en cualquier ruta que no existe. `bienvenida.html` («¡Bienvenido al Club musical Sprinkloud!») es para quien ya pagó en PayPhone: botón «Avisar que ya pagué» a WhatsApp con Anita y los 4 pasos que siguen; `noindex` y fuera del sitemap. |
 | `sitio/` | Lo del estilo nuevo: `estilo.css`, `app.js` (aparecer al entrar, la escena 3D del hero y **la burbuja de Anita, que se arma aquí para todas las páginas nuevas**), `img/` (capturas de la app, portadas, videos, foto de Keila, `compartir.jpg` 1200×630 para Open Graph) y `vendor/phosphor/`. Siempre con rutas absolutas (`/sitio/...`), para que sirvan en la 404 y en cualquier ruta. |
 | `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html`, `practica/oido.html` y `practica/partituras.html`. |
 | `images/` | Fotos y logos. `logo-sprinkloud.png` (1200×630, fondo blanco) es la imagen para compartir de las páginas que no tienen una propia. |
@@ -497,6 +497,17 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 **Pendiente**
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
+
+## Anita sin nombres, de lunes a viernes, y «Trabaja con nosotros» (3-nov-2026)
+- **Anita tiene su propio color:** cabecera verde, borde verde y fondo verde muy claro (`--anita-fondo`); su botón es esponjoso verde. La dueña dijo que se confundía con el color de la página.
+- **Sin nombres de maestras en la página:** la competencia no tiene que saber cuántos maestros hay. En «Ver horarios» se elige «Clases de piano» o «Clases de violín», y el mensaje a WhatsApp dice solo el instrumento, el día y la hora.
+- **Sin sábados:** el calendario muestra de lunes a viernes. Si alguien quiere otro día, Anita lo revisa con la maestra.
+- **`trabaja.html` (`/trabaja`):**
+  - lo que buscamos: profes que amen enseñar de forma práctica, con las canciones que les gustan a los alumnos, y que sepan explicar a niños;
+  - cómo trabajamos: pago por hora de clase, en línea desde su casa, con el método, los libros y la app del club;
+  - cómo postular: un video de máximo 2 minutos explicando, como a un niño de 7 años, un acorde mayor (piano) o la escala de do (violín), por WhatsApp (botones «Postular para piano» y «Postular para violín») o por correo.
+  - Está en el pie de todas las páginas y en el sitemap. Anita no se abre sola ahí.
+- El botón del menú de las páginas interiores ahora es «Pagar mi plan», esponjoso.
 
 ## Ajustes de la dueña (3-nov-2026)
 - **Sin el botón «Mira cómo es una clase»** en el hero: queda solo «Elegir y pagar mi plan».

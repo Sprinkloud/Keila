@@ -23,7 +23,7 @@
   // Anita, la asistente de WhatsApp del club, en todas las páginas del sitio (se arma aquí: un solo lugar).
   // La conversación empieza aquí y sigue en WhatsApp, donde ella responde (pedido de la dueña, 2-nov):
   //  · «Elegir mi plan» muestra los 3 planes; al tocar uno, WhatsApp con ese plan para Anita.
-  //  · «Ver horarios disponibles» muestra un calendario de esta semana (o de la próxima, el fin de semana) con las horas
+  //  · «Ver horarios disponibles» pregunta piano o violín y muestra un calendario de lunes a viernes de esta semana (o de la próxima, el fin de semana) con las horas
   //    libres del sistema (?api=horarios de la web app de maestros: solo días y horas); al elegir, WhatsApp con esa hora.
   //  · A los pocos segundos en la página se abre sola con los planes, para llevar a pagar (una vez por visita).
   var WA = 'https://wa.me/593987999154?text=';
@@ -34,8 +34,9 @@
     { nombre: 'Melodía', detalle: '4 clases de 60 min · recomendado', precio: 64 },
     { nombre: 'Armonía', detalle: '4 de 60 min + 4 de teoría', precio: 92 }
   ];
-  // quién da cada instrumento (dueña, 3-nov-2026); en el sistema es MAESTRA_DE (maestros/Código.js, sección 9f)
-  var INSTRUMENTOS = { piano: { nombre: 'Piano', maestra: 'Keila Espín' }, violin: { nombre: 'Violín', maestra: 'Jova' } };
+  // sin nombres de maestras: la competencia no tiene que saber cuántos maestros hay (dueña, 3-nov). Quién da cada
+  // instrumento lo sabe el sistema (MAESTRA_DE, maestros/Código.js, sección 9f).
+  var INSTRUMENTOS = { piano: { nombre: 'Piano' }, violin: { nombre: 'Violín' } };
   var CORTO = { 'Lunes': 'Lun', 'Martes': 'Mar', 'Miércoles': 'Mié', 'Jueves': 'Jue', 'Viernes': 'Vie', 'Sábado': 'Sáb', 'Domingo': 'Dom' };
   var esc = function (t) { return String(t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var wa = function (msj) { window.open(WA + encodeURIComponent('Hola Anita, ' + msj), '_blank', 'noopener'); };
@@ -52,7 +53,7 @@
         '<input id="anita-txt" type="text" placeholder="Escribe tu mensaje…" autocomplete="off" maxlength="300">' +
         '<button type="submit" aria-label="Enviar por WhatsApp"><i class="ph ph-paper-plane-right"></i></button></form>' +
     '</div>' +
-    '<button class="anita-boton esponja esponja-blanca brilla" id="anita-boton" type="button" aria-expanded="false" aria-controls="anita-panel">' +
+    '<button class="anita-boton esponja esponja-verde brilla" id="anita-boton" type="button" aria-expanded="false" aria-controls="anita-panel">' +
       '<span class="anita-ava" aria-hidden="true"><i class="ph ph-chat-teardrop-dots"></i></span>' +
       '<span class="anita-hola">¿Te ayudo? <b>Habla con Anita</b></span></button>';
   document.body.appendChild(cont);
@@ -76,17 +77,17 @@
         }).join('') + '</div><p class="cal-nota">Al mes. El primer pago suma USD 10 de inscripción.</p>' +
         (auto ? '<div class="anita-op"><button type="button" data-ir="horarios">Ver horarios disponibles</button></div>' : '');
     },
-    // primero el instrumento: cada uno tiene su maestra (piano: Keila Espín; violín: Jova), con sus propios horarios
+    // primero el instrumento: cada uno tiene sus propios horarios libres
     horarios: function () {
       vista.innerHTML = volver + burbujas(['¿Qué quieres aprender? 🎶']) +
         '<div class="anita-planes">' + Object.keys(INSTRUMENTOS).map(function (k) {
-          return '<button class="anita-plan" type="button" data-ins="' + k + '"><b>' + INSTRUMENTOS[k].nombre + '</b><span>Con ' + INSTRUMENTOS[k].maestra + '</span></button>';
+          return '<button class="anita-plan" type="button" data-ins="' + k + '"><b>Clases de ' + INSTRUMENTOS[k].nombre.toLowerCase() + '</b><span>Ver los horarios libres</span></button>';
         }).join('') + '</div>';
     },
     calendario: function (ins) {
       instrumento = ins;
       vista.innerHTML = '<button class="anita-volver" type="button" data-ir="horarios"><i class="ph ph-caret-left"></i> Volver</button>' +
-        burbujas(['Horarios de ' + INSTRUMENTOS[ins].nombre.toLowerCase() + ' con ' + INSTRUMENTOS[ins].maestra + '. Elige el tuyo 📅']) +
+        burbujas(['Horarios de las clases de ' + INSTRUMENTOS[ins].nombre.toLowerCase() + '. Elige el tuyo 📅']) +
         '<div class="cal-dias" id="cal-dias"></div><div class="cal-horas" id="cal-horas"><div class="cal-carga"></div></div><p class="cal-nota" id="cal-nota"></p>';
       cargarHorarios(ins).then(pintarCalendario, function () {
         document.getElementById('cal-horas').innerHTML = '';
@@ -119,13 +120,13 @@
       var dia = d.dias[elegido];
       horas.innerHTML = dia ? dia.horas.map(function (h) { return '<button class="cal-hora" type="button" data-hora="' + esc(h) + '">' + esc(h) + '</button>'; }).join('') : '';
       nota.textContent = elegido < 0 ? 'Esta semana ya no quedan horarios libres. Escríbele a Anita y te ayuda.' :
-        (d.semana === 'proxima' ? 'Semana que viene. ' : 'Esta semana. ') + 'Clases de 60 min; si eliges Ritmo, son de 30.';
+        (d.semana === 'proxima' ? 'Semana que viene. ' : 'Esta semana. ') + 'Clases de 60 min; si eliges Ritmo, son de 30. ¿Otro día? Escríbele a Anita.';
     };
     dias.onclick = function (ev) { var b = ev.target.closest('[data-dia]'); if (b && !b.disabled) { elegido = Number(b.dataset.dia); pintar(); } };
     horas.onclick = function (ev) {
       var b = ev.target.closest('[data-hora]'); if (!b) return;
       var x = d.dias[elegido];
-      wa('quiero clases de ' + INSTRUMENTOS[instrumento].nombre.toLowerCase() + ' con ' + INSTRUMENTOS[instrumento].maestra + ' el ' + x.dia.toLowerCase() + ' ' + x.numero + ' a las ' + b.dataset.hora + '. ¿Está disponible? Quiero elegir mi plan.');
+      wa('quiero clases de ' + INSTRUMENTOS[instrumento].nombre.toLowerCase() + ' el ' + x.dia.toLowerCase() + ' ' + x.numero + ' a las ' + b.dataset.hora + '. ¿Está disponible? Quiero elegir mi plan.');
     };
     pintar();
   };
@@ -165,7 +166,7 @@
   // se abre sola una vez por visita, con los planes (no en la bienvenida: ahí ya pagaron)
   var yaSeAbrio = false;
   try { yaSeAbrio = sessionStorage.getItem('anita-sola') === '1'; } catch (e) { }
-  if (!yaSeAbrio && !/^\/bienvenida/.test(location.pathname)) {
+  if (!yaSeAbrio && !/^\/(bienvenida|trabaja)/.test(location.pathname)) {
     setTimeout(function () {
       if (tocada || !panel.hidden || document.hidden) return;
       abrir(true, 'planes', true);
