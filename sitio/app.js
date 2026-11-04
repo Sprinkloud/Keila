@@ -1,5 +1,27 @@
-/* 1. Aparecer al entrar en pantalla (una vez), escalonado dentro de cada grupo.
+/* 0. Píxel de Meta (conjunto de datos «Sprinkloud Dec 25», el mismo que recibe las compras del sistema de registro).
+      La campaña de ventas de nov-2026 optimiza por «Compra» y necesita saber quién llega del anuncio:
+      PageView en cada página, InitiateCheckout al tocar un enlace de pago de PayPhone y Contact al abrir WhatsApp.
+   1. Aparecer al entrar en pantalla (una vez), escalonado dentro de cada grupo.
    2. La escena 3D del hero sigue apenas al mouse (solo con mouse fino y sin movimiento reducido). */
+(function () {
+  if (window.fbq) return;
+  var q = window.fbq = function () { q.callMethod ? q.callMethod.apply(q, arguments) : q.queue.push(arguments); };
+  window._fbq = q; q.push = q; q.loaded = true; q.version = '2.0'; q.queue = [];
+  var s = document.createElement('script'); s.async = true; s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+  document.head.appendChild(s);
+  q('init', '1454418059537261');
+  q('track', 'PageView');
+  // primer pago de cada plan (mensualidad + USD 10 de inscripción), por el enlace de PayPhone
+  var PAGO = { 'uibDKQRMd7xbgfIY7EOiw': ['Ritmo', 40], 'SRMIn1PCOiiClMDWW05Jw': ['Melodía', 74], 'NieRjMo9wbMCJ0OXwHrcMw': ['Armonía', 102] };
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href]');
+    if (!a) return;
+    var m = a.href.match(/ppls\.me\/(\w+)/);
+    if (m) q('track', 'InitiateCheckout', PAGO[m[1]] ? { content_name: 'Plan ' + PAGO[m[1]][0], value: PAGO[m[1]][1], currency: 'USD' } : {});
+    else if (/wa\.me|api\.whatsapp\.com/.test(a.href)) q('track', 'Contact');
+  }, true);
+})();
+
 (function () {
   var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducido || !('IntersectionObserver' in window)) {
@@ -39,7 +61,7 @@
   var INSTRUMENTOS = { piano: { nombre: 'Piano' }, violin: { nombre: 'Violín' } };
   var CORTO = { 'Lunes': 'Lun', 'Martes': 'Mar', 'Miércoles': 'Mié', 'Jueves': 'Jue', 'Viernes': 'Vie', 'Sábado': 'Sáb', 'Domingo': 'Dom' };
   var esc = function (t) { return String(t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
-  var wa = function (msj) { window.open(WA + encodeURIComponent('Hola Anita, ' + msj), '_blank', 'noopener'); };
+  var wa = function (msj) { if (window.fbq) fbq('track', 'Contact'); window.open(WA + encodeURIComponent('Hola Anita, ' + msj), '_blank', 'noopener'); };
 
   var cont = document.createElement('div');
   cont.className = 'anita';

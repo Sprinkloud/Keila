@@ -26,7 +26,7 @@ Rehecha el 2-nov-2026 con el estilo nuevo, en tres grupos (pedido de la dueña: 
 - Antes (22-oct) se habían quitado "Sujetar el violín" y "Notas en el violín" (Genially) y la página "Sonido & Notas" (su ruta redirige a `/material`; `cdn.tailwindcss.com` salió de la CSP).
 
 ## Privacidad, términos y lanzamiento (2-nov-2026)
-- `privacidad.html` y `terminos.html` solo dicen lo que es cierto del sistema: qué datos se guardan (registro, avance, Google opcional en la app), que la tarjeta la procesa PayPhone, los servicios (Google, PayPhone, WhatsApp/Meta), sin cookies de medición, derechos según la Ley Orgánica de Protección de Datos Personales del Ecuador, y los planes con sus precios. Reglas de la dueña (2-nov): un cambio de clase se avisa con al menos 2 horas; si falta sin avisar o avisa con menos de 2 horas, la clase se pierde; no hay devolución del dinero. Están en los términos y en las preguntas frecuentes de la portada.
+- `privacidad.html` y `terminos.html` solo dicen lo que es cierto del sistema: qué datos se guardan (registro, avance, Google opcional en la app), que la tarjeta la procesa PayPhone, los servicios (Google, PayPhone, WhatsApp/Meta), el píxel de Meta y el aviso cifrado de cada pago a Meta (desde el 4-nov), derechos según la Ley Orgánica de Protección de Datos Personales del Ecuador, y los planes con sus precios. Reglas de la dueña (2-nov): un cambio de clase se avisa con al menos 2 horas; si falta sin avisar o avisa con menos de 2 horas, la clase se pierde; no hay devolución del dinero. Están en los términos y en las preguntas frecuentes de la portada.
 - Sin Google Analytics ni aviso de cookies (decisión del 2-nov: no tiene cuenta y no le hace falta).
 - `sitemap.xml`: la portada, Material, privacidad, términos y todas las herramientas (se sumaron armaduras, círculo, acordes, modos y palabras); salieron metodología y music band.
 - `servidor-local.js` ahora sirve `404.html` como Vercel y los `.mp4`.
@@ -219,6 +219,10 @@ App pública (pedido de la dueña, 23 de octubre de 2026) para ver canciones de 
 - Si un maestro guarda una partitura de otro, se guarda como copia suya; la original no cambia.
 - El servidor valida todo (listas cerradas de compases, duraciones y tipos de acorde, notas de 0 a 6 con octava 2 a 7, máximo 800 notas) y descarta cualquier campo que no conozca.
 - La CSP permite `connect-src` a `script.google.com` y `script.googleusercontent.com` solo por esta app.
+- **Píxel de Meta (4-nov-2026)**, al principio de `sitio/app.js`, en todas las páginas que cargan ese archivo. Usa el conjunto de datos «Sprinkloud Dec 25» (`1454418059537261`), el mismo que recibe las compras del sistema de registro.
+  - Registra PageView, InitiateCheckout al tocar un enlace `ppls.me` (con plan y valor del primer pago: 40, 74 o 102) y Contact al tocar WhatsApp, también desde Anita (`wa()`).
+  - Lo usa la campaña de ventas (`Marketing_Sprinkloud/campana-ventas-nov-2026.md`).
+  - La CSP permite `connect.facebook.net` (en script y connect) y `www.facebook.com` (en img y connect).
 
 
 
