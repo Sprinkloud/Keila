@@ -51,10 +51,11 @@
   var WA = 'https://wa.me/593987999154?text=';
   var API_HORARIOS = 'https://script.google.com/macros/s/AKfycbyyS3H2cdaXUz9zj1oilSdmsrF6ANcy0zPkGD4NuZZNUMj7QdO8A29pioM-jYNlf7YL/exec?api=horarios';
   var ABRIR_SOLA_MS = 10000;
+  // Melodía primero y Ritmo al final: Ritmo es el más vendido, pero no se ofrece como primera opción (dueña, 4-nov)
   var PLANES = [
-    { nombre: 'Ritmo', detalle: '4 clases de 30 min', precio: 30 },
     { nombre: 'Melodía', detalle: '4 clases de 60 min · recomendado', precio: 64 },
-    { nombre: 'Armonía', detalle: '4 de 60 min + 4 de teoría', precio: 92 }
+    { nombre: 'Armonía', detalle: '4 de 60 min + 4 de teoría', precio: 92 },
+    { nombre: 'Ritmo', detalle: '4 clases de 30 min', precio: 30 }
   ];
   // sin nombres de maestras: la competencia no tiene que saber cuántos maestros hay (dueña, 3-nov). Quién da cada
   // instrumento lo sabe el sistema (MAESTRA_DE, maestros/Código.js, sección 9f).
