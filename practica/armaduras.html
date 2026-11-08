@@ -23,9 +23,9 @@
        App nueva (29-oct-2026, pedido de la dueña): practicar el orden de los sostenidos y los bemoles, la tonalidad de
        una armadura y su relativa menor, de varias maneras, para interiorizarlo. */
     :root {
-      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --bg: #F7F5F0; --surface: #FDFCF9; --surface-2: #EFEBE3; --ink: #3A3128; --ink-2: #625849; --line: #E0D9CC;   /* 7-nov-2026: crema casi neutro (antes #F6F0E2, #FBF7EE, #EFE6D1, #6D6152, #DCCFB5) */
       --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
-      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F3DED8;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F2EADB; --danger: #9A5245; --danger-soft: #F3DED8;
       --papel: #FFFDF8; --madera: #8A5A35; --madera-borde: #5E3B22;
       --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-body: "Nunito Sans", "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", system-ui, -apple-system, "Segoe UI", sans-serif;
       --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -186,20 +186,23 @@ function veredicto(texto, ok) { const v = $('#veredicto'); v.textContent = texto
 /* 1. Ordenar: tocar las alteraciones en su orden; cada acierto aparece en la armadura */
 function nuevaOrden(tipo) {
   const orden = tipo === 's' ? SOSTENIDOS : BEMOLES, signo = tipo === 's' ? '♯' : '♭';
-  actual = { tipo, k: 0, errores: 0 };
+  /* corrección al final (pedido de la dueña, 7-nov-2026): se tocan las 7 en el orden que el alumno cree y recién al
+     final se marca cada una en verde (bien) o rojo (mal) y se dice cuál iba en cada lugar; antes se rechazaba cada error */
+  actual = { tipo, elegidas: [] };
   $('#pregunta').textContent = tipo === 's' ? 'Toca los sostenidos en orden' : 'Toca los bemoles en orden';
   dibujar('C'); veredicto(''); $('#regla').textContent = '';
   botones(mezclar(orden.map(n => n + signo)), (op, b) => {
-    if (!actual || actual.k >= 7 || b.classList.contains('usado')) return;
-    if (op === orden[actual.k] + signo) {
-      actual.k++; b.classList.add('usado', 'bien'); b.disabled = true;
-      dibujar((tipo === 's' ? VF_S : VF_B)[actual.k]);
-      audio(); tono(523 + actual.k * 40, ctx.currentTime, .2, .15);
-      if (actual.k === 7) { marcar(actual.errores === 0); veredicto(actual.errores ? '¡Completo! Repítelo sin errores' : '¡Perfecto!', true); $('#regla').textContent = orden.map(n => n + signo).join(' · '); }
-    } else {
-      actual.errores++; sonidoMal(); b.classList.add('mal'); setTimeout(() => b.classList.remove('mal'), 500);
-      veredicto('Sigue ' + (actual.k + 1) + 'º', false);
-    }
+    if (!actual || actual.elegidas.length >= 7 || b.classList.contains('usado')) return;
+    actual.elegidas.push([op, b]); b.classList.add('usado'); b.disabled = true;
+    b.querySelector('.cara').textContent = actual.elegidas.length + 'º · ' + op;
+    audio(); tono(523 + actual.elegidas.length * 40, ctx.currentTime, .2, .15);
+    if (actual.elegidas.length < 7) { veredicto('Sigue el ' + (actual.elegidas.length + 1) + 'º'); return; }
+    const bien = actual.elegidas.map(([o], i) => o === orden[i] + signo), n = bien.filter(Boolean).length;
+    actual.elegidas.forEach(([, bb], i) => { bb.classList.remove('usado'); bb.classList.add(bien[i] ? 'bien' : 'mal'); });
+    dibujar((tipo === 's' ? VF_S : VF_B)[7]);
+    marcar(n === 7);
+    veredicto(n === 7 ? '¡Perfecto!' : 'Bien ' + n + ' de 7. ' + actual.elegidas.map(([o], i) => bien[i] ? null : (i + 1) + 'º: pusiste ' + o + ', era ' + orden[i] + signo).filter(Boolean).join('; ') + '.', n === 7);
+    $('#regla').textContent = 'El orden: ' + orden.map(x => x + signo).join(' · ');
   });
 }
 /* 2. ¿Qué tonalidad mayor es esta armadura? */

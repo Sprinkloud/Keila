@@ -64,7 +64,7 @@ Las rutas son cortas, en minúsculas, sin acentos, sin espacios y sin `.html` (`
 - Los pentagramas empiezan en x = 28 para que la llave que une clave de Sol y clave de Fa no quede cortada. Las notas van centradas en cada pentagrama (`dibujarCentrada`), como en la app.
 - Plicas con `auto_stem: true` (piano y violín): desde la línea del medio hacia arriba la plica va hacia abajo (Si4 en clave de Sol, Re3 en clave de Fa); por debajo, hacia arriba.
 - Aspecto: el mismo sistema visual que la app de violín (tokens de `App_Sprinkloud/DESIGN.md`: papel, musgo, ocre, Fraunces, Caveat y Nunito Sans, con tema oscuro). El pentagrama y las teclas quedan siempre sobre papel claro.
-- Tiene que funcionar en cualquier dispositivo. El teclado muestra tantas teclas blancas como quepan (24 px cada una como mínimo, de 7 a 12) y las flechas mueven una octava. Al elegir un modo se centra en sus notas; en el juego NO se mueve solo: el alumno busca la octava. Cada octava tiene un tinte crema (azulado en los graves, rosado en los agudos: `oct-1` a `oct-5`) y su nombre encima (`NOMBRE_OCTAVA`: 2 octavas abajo, 1 octava abajo, Octava central, 1 octava arriba, 2 octavas arriba). En computadora se ve completo y las flechas se ocultan. El pie de página no es fijo, los toques miden 44 px y el zoom está permitido.
+- Tiene que funcionar en cualquier dispositivo. El teclado muestra tantas teclas blancas como quepan (24 px cada una como mínimo, de 7 a 12) y las flechas mueven una octava. Al elegir un modo se centra en sus notas; en el juego NO se mueve solo: el alumno busca la octava. Cada octava tiene un tono neutro apenas distinto (`oct-1` a `oct-5`; hasta el 7-nov-2026 eran celeste y rosado) y su nombre encima (`NOMBRE_OCTAVA`: 2 octavas abajo, 1 octava abajo, Octava central, 1 octava arriba, 2 octavas arriba). En computadora se ve completo y las flechas se ocultan. El pie de página no es fijo, los toques miden 44 px y el zoom está permitido.
 
 ## Violín virtual (`practica/violin.html`)
 
@@ -319,7 +319,7 @@ Lo cargan las 5 apps de práctica: ritmo, oído, hojas, piano y violín virtuale
 - **Enlaces nuevos:**
   - apps: `?etapa=E&leccion=L`;
   - hojas: `/practica/hojas/<ins>/etapa-E-leccion-L`, y con `?modo=leccion` abren en modo lección.
-- **`leccion.js`** pasa de etapa y lección a semana con `ETAPAS = [6, 8, 10, 8, 8, 8]` (las lecciones de cada etapa en `Registro_Sprinkloud/Guia.js`; si cambian, actualizarlo). **`hojas.html`** lo calcula desde su `GUIA`.
+- **`leccion.js`** pasa de etapa y lección a semana con `ETAPAS = [6, 8, 13, 10, 9, 6, 8]` (antes del 29-oct, `[6, 8, 10, 8, 8, 8]`) (las lecciones de cada etapa en `Registro_Sprinkloud/Guia.js`; si cambian, actualizarlo). **`hojas.html`** lo calcula desde su `GUIA`.
 - **Siguen sirviendo:** los enlaces viejos `?semana=N`, `/semana-N?leccion=1` y `?semana=N&i=…`, que están en los libros ya armados y en mensajes enviados. Al abrir una hoja, la dirección se reescribe con la forma nueva.
 
 Se activa cuando el enlace trae `?semana=N`. Lo usan los enlaces del libro (Libro_Sprinkloud), el mensaje de tareas y el panel del maestro, y el reporte de la familia (Registro_Sprinkloud). La dueña lo pidió porque el alumno llegaba a la app sin saber qué hacer: veía notas que todavía no aprendió (líneas adicionales cuando apenas sabía mi y sol) y no sabía para qué sirve la camarita.
@@ -502,6 +502,54 @@ Publicado en https://sprinkloud.vercel.app/ (commits `3f6277f` en adelante, en `
 - Dar de alta el sitio en Google Search Console, verificar la propiedad y enviar `sitemap.xml` (lo hace la dueña con su cuenta; si Google entrega un archivo o etiqueta de verificación, se agrega al sitio).
 - Las páginas de la plantilla todavía tienen el estilo y el SEO anteriores.
 
+## Cada lección abre el ejercicio de su tema (7-nov-2026, reporte de la dueña)
+La dueña encontró que la lección de la pentatónica del libro abría una tarjeta que decía «toca la pentatónica», pero el juego pedía una nota suelta del pentagrama. **La causa:** `leccion.js` trataba toda lección con app «notas» como lectura de notas (`notasPiano`/`notasViolin`), y desde la lección 24 devolvía `null`, así que salía el juego general. Pasaba en 7, 13, 24, 25, 26, 30, 31, 43 y 50, y las apps de 37, 39, 41 y 46 (oído y piano) tampoco practicaban su tema. Se revisaron los 230 enlaces de los libros (60 lecciones × piano y violín, hojas y apps) en el sitio local. El informe está en `Libro_Sprinkloud/revision-enlaces-2026-11-07.md`.
+- **`leccion.js`:**
+  - `ESPECIAL[app][semana]` dice qué ejercicio abre cada lección del piano y del violín:
+    - `escala` (30, 31 y 43);
+    - `lineaEspacio` (7);
+    - `tono` (26; en el piano es el juego de intervalos con 1 y 2 semitonos, `intervalosTono`);
+    - `lectura` (13, 24 y 50: abre la lectura hablada al tocar Empezar).
+  - Las otras apps:
+    - `MODOS_LECCION`: el ejercicio de modos que pide el libro en cada lección (ver, nota característica u oído);
+    - `prepararLeccion('grados')` en acordes para la 37;
+    - pasos propios para 6, 19, 47, 48, 49 y 52 (ritmo), 39, 41 y 46 (oído) y modos.
+    - `R[47]`, `R[48]` (tempo 60) y `R[49]` (forma ABA).
+  - Lecciones 25:
+    - piano, las 12 notas de la octava central con sus dos nombres (`[tecla, clave, '#'|'b']`);
+    - violín, primera posición con sostenidos y bemoles (`'f/4:#'`, `'b/4:b'`).
+  - Violín 10 a 19: la escala de Re con Fa♯ y Do♯.
+  - `&i=violin` marca el instrumento en las apps comunes (modos).
+  - Temas: 10 «La escala de Do / La escala de Re»; 22 y 23 con «Líneas adicionales abajo/arriba» (en el violín la tarjeta decía solo «abajo»).
+- **`practica/escalas.js` (nuevo, lo cargan piano y violín):**
+  - `armar(tipo, 'Sol4')` deletrea bien cada nota (mayor, menor natural, pentatónica mayor y menor; las pentatónicas son sus 5 notas, así La menor cabe en el teclado Do4–Sol5);
+  - `dibujar(cont, notas, bien)` pinta cada nota en verde o rojo;
+  - `corregir(notas, tocadas)` arma el texto «Bien 3 de 5. nota 2: tocaste La, era Sol♯».
+- **Corrección al final en toda serie de notas** (pedido de la dueña, 7-nov): no se corta ni se rechaza al primer error. El alumno pone todas las notas y al final se marcan en verde las que están bien y en rojo las que no, con la correcta (borde ocre en la tecla o en el violín, y en el pentagrama). Está en:
+  - piano y violín virtuales (escalas): botón «Otra escala» / «Intentar otra escala»;
+  - «Toca el modo» de `modos.html`;
+  - «Orden de los ♯ / ♭» de `armaduras.html`.
+- **Piano** (`prepararLeccion(cfg)`): `juegoLeccion` con `escala` y `lineaEspacio` (botones Línea / Espacio en `#respuestas-juego`). El juego de notas compara la tecla por su altura (`claseDeAltura`): Re♭ y Do♯ son la misma tecla negra, y el pentagrama dibuja ♭.
+- **Violín** (`prepararLeccion(cfg)`):
+  - `escala`, `tono` («Desde Si, toca un semitono más arriba»: la nota de partida con borde ocre) y `lineaEspacio`;
+  - el juego compara por sonido (`midiDeFrec`, `midiDeClave`) y acepta alteraciones.
+- **Oído:** ejercicios nuevos, con sus rutas:
+  - `progresiones` (`/practica/oido/progresiones`): primero la casa y después I, IV, V o vi;
+  - `reposoMenor` (`/reposo-en-menor`): i – iv – V y termina en i o en V;
+  - `dictado` (`/dictado-melodico`): 4 notas desde Do; se elige la melodía entre 4 que cambian una nota.
+- **Acordes:** «Los 7 acordes de Do» (`grados`, con Si°) y `prepararLeccion`. **Modos:** `prepararLeccion(n, ejercicio, instrumento)`; el modo nuevo sale la mitad de las veces; con el violín, sin «Formar en el piano» ni «Toca el modo».
+- **Hojas:**
+  - la 10 del violín es la escala de Re (antes pedía la de Do);
+  - desbordes a 320 y 360 px corregidos (el selector de lecciones, `.ejercicio` y `.items.medianos` con `minmax(min(290px, 100%), 1fr)`); las 110 hojas caben a 320 px.
+- **`lectura.js`:** el pentagrama mide como mínimo 220 px (antes 300, que se salía en 320 px) y los hijos de `.lh-in` tienen `min-width: 0`.
+- **Colores** (la dueña: «no quiero que sea empalagoso»): misma estructura, menos crema amarillo y un solo acento.
+  - Tokens claros de `juegos.css` y de cada app: `--bg` #F6F0E2 → #F7F5F0, `--surface` #FBF7EE → #FDFCF9, `--surface-2` #EFE6D1 → #EFEBE3, `--line` #DCCFB5 → #E0D9CC, `--ink-2` #6D6152 → #625849 (más contraste) y `--gold-soft` #F1E0BC → #F2EADB. `theme-color` también.
+  - El modo elegido en piano y violín va en musgo (antes ocre).
+  - Las octavas del piano van en tonos neutros (antes celeste y rosado).
+  - La camarita es musgo con ícono claro (antes ocre con blanco, 2,6:1; ahora unos 5:1).
+  - El modo oscuro no cambió.
+- Probado en el servidor local a 320, 360, 390 y 1280 px: sin errores de consola.
+
 ## Planes después de la clase (3-nov-2026)
 - Los planes ahora van justo después de «Así es una clase» (el video), y no arriba: la dueña quiere que primero vean la muestra de la clase. Las portadas 5 a 7 son las nuevas, de día.
 
@@ -566,3 +614,21 @@ Pedido de la dueña: una página que venda (neuroventas), empresarial y de lider
 - `img/montse.mp4` (540 px, 5 MB, con permiso de la familia) en la sección de la historia; se carga al tocar play. Los videos van en la página y no incrustados de Instagram (no sacan a la gente de la página; la CSP del sitio bloquea iframes).
 - Los botones de los planes llevan a los links de pago de PayPhone, con la inscripción incluida: Ritmo USD 40 (`ppls.me/uibDKQRMd7xbgfIY7EOiw`), Melodía USD 74 (`ppls.me/SRMIn1PCOiiClMDWW05Jw`) y Armonía USD 102 (`ppls.me/NieRjMo9wbMCJ0OXwHrcMw`); montos comprobados en la página de PayPhone. Solo PayPhone en la página (decisión del 2-nov: una sola forma de pago, para no confundir); Wise queda como respaldo por WhatsApp. Los precios son los mismos de Ecuador.
 - Antes de publicar: `/impeccable audit` y `review-animations` (regla del workspace).
+
+## Práctica para todos los ejercicios de los libros nuevos (7-nov-2026)
+Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-practica-2026-11-07.md`). La sección 4 de ese informe listaba los tipos de ejercicio del libro que no tenían práctica. Ahora todos están en las hojas.
+- **Tipos nuevos en `T` de `hojas.html`**, generados con la semilla (ítems nuevos en cada hoja) y con la respuesta calculada:
+  - ritmo y pulso: `pulsoParejo` (●–●), `metronomo`, `contarSonidos` (y pulsos), `silabaFalta`, `ostinato` (`es`, `medir`, `continuar`), `escalera` (escalones 1 a 8), `figuras` (`sumar`, `caben`, `igual`, `corcheas` y `faltan68` del 6/8), `compasLlena`, `contarEnCompas`, `queFigura`, `llenaCompas`, `ligaduras` (`suma`, `veces`, `tipo`, `esProlongacion`, dibujadas con `StaveTie`), `sincopa`, `dondeEmpieza`, `anacrusa`;
+  - notas y lectura: `melodiaDescrita` (sol-mi, paso y salto de 3ª), `contarNotas`, `pasoSalto`, `posicion` (línea/espacio), `vecinaEscala`, `leerMelodia` (2 compases dibujados: nombres y sílabas de cada compás; final, más aguda, más grave; con armadura, la tonalidad y la nota que cambia), `dedoNota` (violín, cuerdas Sol y Mi), `rayitas` (líneas adicionales), `enarmonico`, `queSuena` (alteraciones en el compás, becuadro y armadura, dibujado con ♯ ♭ ♮);
+  - teoría: `subirTono`, `notaArriba`, `intervalos` con `extra` (2ª, 4ª y 5ª aumentadas y 5ª disminuida; con la 4ª aumentada sale «Tritono»), `errorEscala`, `escalaMayor` con `armonica`, `cambiaNota`, `gradoDe`, `tonicaDominante`, `reposoTension`, `vfTonalidad`, `progresion` (`acordes`/`romanos`), `relativaMayor`, `vMenor`, `queSube`, `enPentatonica`, `respuestaPentatonica`, `acompanar` (I, IV o V);
+  - forma y términos: `ordenar` (dinámicas pp→ff, tempos con Adagio, brillo de los modos y notas de una cuerda), `forma` (letras), `repeticiones` (barras de repetición y casillas: orden de los compases; las casillas se dibujan a mano con `casilla()`, porque la `Volta` de VexFlow 4 salía sin la raya), `queSigno`, `verdaderoFalso` (`VF_FRASES` de las lecciones 1, 3 y 6);
+  - modos: `modoDesde` (cualquier modo desde Do, Re, La, Sol… con alteraciones), `queModoDesde` (desde Do), `notaQueBaja`, `mayorMenorModo`.
+- **`ejerciciosDe`**: cada lección lleva los tipos de su libro. `SIN_HOJA = []`: **las 60 lecciones tienen hoja** (antes 1, 44, 46, 49 y 52 no tenían). **Falta** quitar esas lecciones de la lista `SIN_HOJA` de `Registro_Sprinkloud/maestros` (Maestro.html y Reporte.html), que no se tocó: hasta entonces el panel no manda el enlace de la hoja en esas 5.
+- **Corrección al final** (regla de la dueña): «Revisar» marca todo a la vez, verde o rojo, y **debajo de cada roja pone la respuesta correcta** («✓ …»). Se puede corregir y revisar otra vez, u «Otra hoja». En las series (escalas, modos, órdenes, acordes, ordenar) cada casilla se marca por separado; nunca se corta al primer error.
+- Lección 10: la escala de Do también en el violín (do fijo). `leccion.js`: violín 9 = Do, Re, Mi, Sol, La y violín 10 a 19 = la escala de Do. Los temas de `leccion.js` y la `GUIA` de `hojas.html` son los de `Registro_Sprinkloud/Guia.js` v9 (10, 17, 25, 29, 41, 47, 49 y 50). La semana 52 ya decía «I, IV y V» en las tres copias: lo de «I, IV, V y vi» es la lección 39, que sí lo lleva.
+- **Más arreglos de la hoja:** los campos y listas miden 44 px; el selector de lección muestra el nombre entero en varias líneas (`#semana-texto`, con el `select` transparente encima); `tonoSemitono` ya no repite Mi-Fa ni Sol-La; `secuencia` no repite los mismos huecos.
+- `palabras-datos.js` regenerado: 108 palabras (antes 98).
+- **Pruebas** (`pruebas/`, fuera de Vercel):
+  - `node pruebas/hojas_test.js [semillas]`: arma 60 lecciones × 2 instrumentos × N semillas sin navegador (DOM mínimo y VexFlow falso) y comprueba que no falle, que no haya ítems vacíos ni repetidos, que cada respuesta guardada se acepte y esté entre las opciones, y recalcula con las funciones de `Libro_Sprinkloud/herramientas/comprobar_soluciones.js` (o con su propia cuenta) las respuestas de 37 tipos. Con 100 semillas: 12 000 hojas, 46 600 respuestas recalculadas, 0 errores. Un error de teoría puesto a propósito (dórico con 6ª menor) lo detecta.
+  - `node pruebas/revisar_hojas.js 320,360 1-60 [variantes]`: en Chrome, cada hoja al abrir y después de revisar todo mal: errores de consola, desbordes, texto cortado, selects cortados y alturas de 44 px.
+  - `node pruebas/probar_tipos.js [carpeta]`: con clics, 50 hojas con tipos nuevos: mitad bien y mitad mal, revisa, verde/rojo y la correcta debajo, corrige y queda «¡Hoja perfecta!».

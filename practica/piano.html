@@ -9,7 +9,7 @@
   <meta name="author" content="Sprinkloud Club Musical">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://sprinkloud.vercel.app/practica/piano">
-  <meta name="theme-color" content="#F6F0E2">
+  <meta name="theme-color" content="#F7F5F0">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
@@ -69,9 +69,9 @@
   <style>
     /* Mismo sistema visual que la app de violín (App_Sprinkloud/DESIGN.md): libro ilustrado en acuarela */
     :root {
-      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --bg: #F7F5F0; --surface: #FDFCF9; --surface-2: #EFEBE3; --ink: #3A3128; --ink-2: #625849; --line: #E0D9CC;   /* 7-nov-2026: crema casi neutro (antes #F6F0E2, #FBF7EE, #EFE6D1, #6D6152, #DCCFB5) */
       --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
-      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F2EADB; --danger: #9A5245; --danger-soft: #F3DED8;
       --foto-papel: #FBF7EE; --tecla-negra: #3A3128;
       --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-hand: Caveat, "Segoe Print", cursive;
       --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --dur-press: 140ms;
@@ -84,7 +84,7 @@
       :root {
         --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
         --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
-        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585; --danger-soft: #45302B;
         --tecla-negra: #1E2521;
         color-scheme: dark;
       }
@@ -256,10 +256,10 @@
     }
     @media (hover: hover) { .btn-modo:hover, .btn-acorde:hover:not(:disabled) { border-color: var(--accent); color: var(--ink); } }
     .btn-modo:active, .btn-acorde:active:not(:disabled) { transform: scale(.97); }
-    .btn-modo.seleccionado, .btn-acorde.seleccionado {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #3A3128;
+    .btn-modo.seleccionado, .btn-acorde.seleccionado {   /* 7-nov-2026: musgo, el único acento (antes ocre) */
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--on-accent);
     }
     .btn-acorde:disabled { opacity: .45; cursor: not-allowed; }
 
@@ -360,11 +360,12 @@
       touch-action: manipulation;
       transition: background-color 80ms ease;
     }
-    .tecla.blanca.oct-1 { background: #DDE6EC; }
-    .tecla.blanca.oct-2 { background: #E9EEEC; }
-    .tecla.blanca.oct-3 { background: #FBF7EE; }
-    .tecla.blanca.oct-4 { background: #F8EBE2; }
-    .tecla.blanca.oct-5 { background: #F3DDD4; }
+    /* 7-nov-2026: las octavas se distinguen con un tono neutro apenas distinto (antes celeste y rosado: muy dulce) */
+    .tecla.blanca.oct-1 { background: #EEEBE5; }
+    .tecla.blanca.oct-2 { background: #F4F2ED; }
+    .tecla.blanca.oct-3 { background: #FDFCF9; }
+    .tecla.blanca.oct-4 { background: #F4F2ED; }
+    .tecla.blanca.oct-5 { background: #EEEBE5; }
     @media (hover: hover) { .tecla.blanca:hover { filter: brightness(.96); } }
 
     /* nombre de cada octava sobre el teclado */
@@ -384,11 +385,11 @@
       white-space: nowrap;
       overflow: hidden;
     }
-    .etiqueta-octava.oct-1 { background: #DDE6EC; }
-    .etiqueta-octava.oct-2 { background: #E9EEEC; }
-    .etiqueta-octava.oct-3 { background: #FBF7EE; color: #48592F; }
-    .etiqueta-octava.oct-4 { background: #F8EBE2; }
-    .etiqueta-octava.oct-5 { background: #F3DDD4; }
+    .etiqueta-octava.oct-1 { background: #EEEBE5; }
+    .etiqueta-octava.oct-2 { background: #F4F2ED; }
+    .etiqueta-octava.oct-3 { background: #FDFCF9; color: #48592F; }
+    .etiqueta-octava.oct-4 { background: #F4F2ED; }
+    .etiqueta-octava.oct-5 { background: #EEEBE5; }
     .tecla.blanca.activa { background: #E1E6CF !important; color: #48592F; box-shadow: inset 0 -5px 0 #647745; }
 
     /* Juego de intervalos: la tecla de partida en ocre y un puntito numerado en cada semitono que se avanza */
@@ -399,6 +400,22 @@
       background: #647745; color: #fff; font: 800 11px/20px "Nunito Sans", system-ui, sans-serif; text-align: center; pointer-events: none; }
     .tecla.negra .cuenta { bottom: 8px; }   /* en las blancas va abajo (las negras tapan la parte de arriba) */
     .tecla.mal-intervalo .cuenta { background: #9A5245; }
+    /* juego de escalas (7-nov-2026): las teclas ya tocadas quedan en musgo suave con su nombre; la pista, con borde ocre */
+    .tecla.blanca.tocada { background: #F1E0BC !important; }
+    .tecla.negra.tocada { background: #8F6A2A !important; }
+    .tecla.blanca.bien-escala { background: #E1E6CF !important; box-shadow: inset 0 -5px 0 #647745; }
+    .tecla.negra.bien-escala { background: #647745 !important; }
+    .tecla.pista { box-shadow: inset 0 0 0 3px #C4923A !important; }
+    .tecla.blanca.mal-escala { background: #F3DED8 !important; }
+    .tecla.negra.mal-escala { background: #9A5245 !important; }
+    .tecla.blanca.mal-escala .nombre-escala { color: #8E4D41; }
+    .tecla .nombre-escala { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); font-size: 11px; font-weight: 800; color: #48592F; white-space: nowrap; pointer-events: none; }
+    .tecla.negra .nombre-escala { bottom: 6px; color: #FBF7EE; font-size: 10px; }
+    /* ¿línea o espacio? (lección 7) */
+    .respuestas-juego { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .respuestas-juego button { min-height: 48px; min-width: 120px; padding: 10px 18px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-weight: 800; font-size: 1rem; cursor: pointer; }
+    .respuestas-juego button.bien { border-color: var(--pine); background: var(--accent-soft); color: var(--pine); }
+    .respuestas-juego button.mal { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
     .tecla.negra {
       position: absolute;
       height: 60%;
@@ -458,6 +475,7 @@
     }
   </style>
   <script src="/practica/leccion.js"></script>
+  <script src="/practica/escalas.js"></script>
 </head>
 <body>
 
@@ -478,6 +496,7 @@
 <div class="estado-juego">
   <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier tecla</div>
   <p id="recordatorio-octava" class="recordatorio-octava" aria-live="polite"></p>
+  <div class="respuestas-juego" id="respuestas-juego" role="group" aria-label="Tu respuesta" hidden></div>
     <div class="estrellas-juego" id="estrellas-juego" hidden>
       <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 3">
         <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
@@ -624,9 +643,10 @@
   let modoJuego = 'ambas';
 
   function poolDelModo() {
-    return modosJuego[modoJuego].map(([vfKey, clef]) => {
+    // [tecla, clave] o [tecla, clave, '#' | 'b'] (las notas con alteraciones de la lección «Las 12 notas»)
+    return modosJuego[modoJuego].map(([vfKey, clef, alt]) => {
       const tecla = notasPiano.find(n => n.vfKey === vfKey && n.alt === 'n');
-      return { vfKey, clef, alt: 'n', label: tecla.label };
+      return { vfKey, clef, alt: alt || 'n', label: tecla.label };
     });
   }
 
@@ -702,8 +722,8 @@
       });
 
       notasTreble.forEach((n, idx) => {
-        if (n.alt === '#') {
-          notaStaveTreble.addModifier(new Accidental("#"), idx);
+        if (n.alt === '#' || n.alt === 'b') {
+          notaStaveTreble.addModifier(new Accidental(n.alt), idx);
         }
       });
 
@@ -720,8 +740,8 @@
       });
 
       notasBass.forEach((n, idx) => {
-        if (n.alt === '#') {
-          notaStaveBass.addModifier(new Accidental("#"), idx);
+        if (n.alt === '#' || n.alt === 'b') {
+          notaStaveBass.addModifier(new Accidental(n.alt), idx);
         }
       });
 
@@ -925,7 +945,7 @@
     let nuevaNota;
     do {
       nuevaNota = pool[Math.floor(Math.random() * pool.length)];
-    } while (notaObjetivo && nuevaNota.vfKey === notaObjetivo.vfKey && nuevaNota.clef === notaObjetivo.clef);
+    } while (notaObjetivo && pool.length > 1 && nuevaNota.vfKey === notaObjetivo.vfKey && nuevaNota.clef === notaObjetivo.clef && nuevaNota.alt === notaObjetivo.alt);
 
     notaObjetivo = nuevaNota;
     renderizarDoblePentagrama([{ vfKey: notaObjetivo.vfKey, alt: notaObjetivo.alt, clef: notaObjetivo.clef }]);
@@ -992,7 +1012,10 @@
     8: '6ª menor', 9: '6ª mayor', 10: '7ª menor', 11: '7ª mayor', 12: 'octava' };
   const TODOS_INTERVALOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   let intervalosJuego = null, intervalo = null;   // intervalo: { desde: índice en notasPiano, st: semitonos }
-  const unoDe = (st, art) => (art ? (st === 6 ? 'un ' : 'una ') : '') + NOMBRE_INTERVALO[st];
+  /* lección «Tono y semitono» (7-nov-2026): leccion.js pone intervalosTono = true y pide 1 y 2 semitonos con esos nombres */
+  let intervalosTono = false;
+  const nombreIntervalo = st => intervalosTono && st <= 2 ? (st === 1 ? 'semitono' : 'tono') : NOMBRE_INTERVALO[st];
+  const unoDe = (st, art) => (art ? (st === 6 || (intervalosTono && st <= 2) ? 'un ' : 'una ') : '') + nombreIntervalo(st);
   const semitonos = n => n + (n === 1 ? ' semitono' : ' semitonos');
   function limpiarCuenta() {
     document.querySelectorAll('.tecla .cuenta').forEach(e => e.remove());
@@ -1042,7 +1065,7 @@
       setTimeout(() => emitirSonidoPiano(notasPiano[index].freq), 380);
       mostrarCuenta(index);
       renderizarDoblePentagrama([notasPiano[intervalo.desde], notasPiano[index]]);
-      fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + NOMBRE_INTERVALO[st].charAt(0).toUpperCase() + NOMBRE_INTERVALO[st].slice(1) + ': ' + semitonos(st) + '.';
+      fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + nombreIntervalo(st).charAt(0).toUpperCase() + nombreIntervalo(st).slice(1) + ': ' + semitonos(st) + '.';
       fb.style.color = gano ? 'var(--dorado)' : 'var(--acierto)';
       if (gano) sonidoEstrella();
       setTimeout(() => { if (juegoActivo && intervalosJuego) generarIntervalo(); }, gano ? 2200 : 1800);
@@ -1069,16 +1092,122 @@
       reiniciarEstrellas();
       document.getElementById('estrellas-juego').hidden = false;
       botonesAcorde.forEach(b => b.disabled = true);
-      if (intervalosJuego) generarIntervalo(); else generarSiguienteNotaJuego();
+      if (juegoLeccion) siguienteDeLeccion(); else if (intervalosJuego) generarIntervalo(); else generarSiguienteNotaJuego();
     } else {
-      btn.textContent = "Iniciar juego de notas";
+      btn.textContent = juegoLeccion ? juegoLeccion.boton : "Iniciar juego de notas";
       btn.classList.remove('activo');
       botonesAcorde.forEach(b => b.disabled = false);
-      notaObjetivo = null; intervalo = null; limpiarCuenta();
+      notaObjetivo = null; intervalo = null; limpiarCuenta(); limpiarEscala();
+      document.getElementById('respuestas-juego').hidden = true;
       feedbackEl.textContent = "Modo libre: Toca cualquier tecla";
       feedbackEl.style.color = "var(--texto-debil)";
       renderizarDoblePentagrama([{ vfKey: 'c/4', alt: 'n', clef: 'treble' }]);
     }
+  }
+
+  /* ---------- Juegos de lección que no son «lee esta nota» (7-nov-2026) ----------
+     La dueña encontró que la lección de la pentatónica abría el juego de leer notas: la tarjeta decía «toca la
+     pentatónica» y el juego pedía una nota suelta. leccion.js llama prepararLeccion() con lo que pide cada lección:
+     - { tipo: 'escala', escalas: ['pentaMayor:Do4', …] }: tocar la escala nota por nota, subiendo (practica/escalas.js);
+     - { tipo: 'lineaEspacio' }: ¿la nota está en una línea o en un espacio? (lección «El pentagrama»). */
+  const LETRA_PC = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+  const claseDeAltura = (vfKey, alt) => (LETRA_PC[vfKey.charAt(0)] + (alt === '#' ? 1 : alt === 'b' ? -1 : 0) + 12) % 12;
+  const midiDe = i => Math.round(69 + 12 * Math.log2(notasPiano[i].freq / 440));
+  let juegoLeccion = null, escala = null;   // escala: { tipo, raiz, notas, k, errores, fallosNota }
+  function prepararLeccion(cfg) {
+    juegoLeccion = Object.assign({ boton: cfg.tipo === 'escala' ? 'Empezar a tocar escalas' : 'Empezar' }, cfg);
+    document.getElementById('btn-juego').textContent = juegoLeccion.boton;
+    const pm = document.getElementById('panel-modos'); if (pm) pm.style.display = 'none';
+    document.getElementById('panel-acordes').style.display = 'none';
+    document.querySelector('.btn-lectura').style.display = 'none';
+  }
+  function siguienteDeLeccion() {
+    document.getElementById('recordatorio-octava').textContent = '';
+    if (juegoLeccion.tipo === 'escala') nuevaEscala(); else nuevaLineaEspacio();
+  }
+  function limpiarEscala() {
+    document.querySelectorAll('.tecla.tocada, .tecla.bien-escala, .tecla.pista, .tecla.mal-escala').forEach(t => t.classList.remove('tocada', 'bien-escala', 'pista', 'mal-escala'));
+    document.querySelectorAll('.tecla .nombre-escala').forEach(e => e.remove());
+    const r = document.getElementById('respuestas-juego'); r.hidden = true; r.replaceChildren();
+  }
+  function nuevaEscala() {
+    esperandoSiguiente = false; limpiarEscala();
+    const lista = juegoLeccion.escalas;
+    let elegida;
+    do { elegida = lista[Math.floor(Math.random() * lista.length)]; } while (escala && lista.length > 1 && elegida === escala.clave);
+    const [tipo, raiz] = elegida.split(':'), notas = SprinkloudEscalas.armar(tipo, raiz);
+    escala = { clave: elegida, tipo, raiz, notas, tocadas: [] };   // tocadas: [{ midi, index }] en el orden en que las tocó
+    inicioVentana = limitarVentana(blancaDe(notas[0].clave) - 1);   // clave sin alteración: 'f/4' (la alteración va aparte)
+    construirTecladoPiano();
+    renderizarDoblePentagrama([]);
+    const t = SprinkloudEscalas.TIPOS[tipo], titulo = SprinkloudEscalas.titulo(tipo, raiz);
+    const fb = document.getElementById('feedback-juego');
+    fb.textContent = 'Toca ' + titulo + ', nota por nota, subiendo' + (t.formula ? ' (' + t.formula + ')' : ': sus 5 notas');
+    fb.style.color = 'var(--dorado)';
+    document.getElementById('recordatorio-octava').textContent = (t.formula ? 'Empieza en ' + notas[0].nombre + ' (la octava central).' : 'Es la escala ' + t.quita + '. Empieza en ' + notas[0].nombre + '.') + ' Pon las ' + notas.length + ' notas: al final te digo cuáles están bien.';
+  }
+  function etiquetaTecla(index, texto) {
+    const t = document.querySelector(`.tecla[data-index="${index}"]`); if (!t) return null;
+    let s = t.querySelector('.nombre-escala');
+    if (!s) { s = document.createElement('span'); s.className = 'nombre-escala'; t.append(s); s.textContent = texto; }
+    else if (!s.textContent.split(', ').includes(texto)) s.textContent += ', ' + texto;
+    return t;
+  }
+  /* Corrección al final (pedido de la dueña, 7-nov-2026): no se corta al primer error. El alumno pone todas las notas;
+     después se marcan en verde las que están bien y en rojo las que no, con la nota correcta en su tecla y en el pentagrama. */
+  function manejarEscala(index) {
+    if (esperandoSiguiente || !escala) return;
+    const fb = document.getElementById('feedback-juego'), N = escala.notas.length;
+    emitirSonidoPiano(notasPiano[index].freq);
+    escala.tocadas.push({ midi: midiDe(index), index });
+    const t = etiquetaTecla(index, String(escala.tocadas.length)); if (t) t.classList.add('tocada');
+    if (escala.tocadas.length < N) { fb.textContent = 'Nota ' + (escala.tocadas.length + 1) + ' de ' + N; fb.style.color = 'var(--dorado)'; return; }
+    esperandoSiguiente = true;
+    const c = SprinkloudEscalas.corregir(escala.notas, escala.tocadas.map(x => x.midi)), limpia = c.aciertos === N;
+    document.querySelectorAll('.tecla .nombre-escala').forEach(e => e.remove());
+    document.querySelectorAll('.tecla.tocada').forEach(e => e.classList.remove('tocada'));
+    escala.tocadas.forEach((x, i) => { const k = etiquetaTecla(x.index, c.bien[i] ? escala.notas[i].nombre : '✗'); if (k) k.classList.add(c.bien[i] ? 'bien-escala' : 'mal-escala'); });
+    escala.notas.forEach((n, i) => { if (c.bien[i]) return; const j = notasPiano.findIndex((x, ii) => enTeclado(ii) && midiDe(ii) === n.midi); const k = etiquetaTecla(j, n.nombre); if (k) k.classList.add('pista'); });
+    SprinkloudEscalas.dibujar(document.getElementById('pentagrama'), escala.notas, c.bien);
+    const gano = registrarResultado(limpia);
+    fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '') + c.texto;
+    fb.style.color = limpia ? (gano ? 'var(--dorado)' : 'var(--acierto)') : 'var(--error)';
+    if (gano) sonidoEstrella(); else if (!limpia) emitirSonidoError();
+    document.getElementById('recordatorio-octava').textContent = limpia ? '' : 'En verde, lo que tocaste bien; en rojo (✗), lo que no; con borde ocre, la tecla correcta.';
+    const r = document.getElementById('respuestas-juego'); r.hidden = false; r.replaceChildren();
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = limpia ? 'Otra escala' : 'Intentar otra escala';
+    b.addEventListener('click', () => { if (juegoActivo && juegoLeccion) nuevaEscala(); });
+    r.append(b);
+  }
+  /* ¿Línea o espacio? (lección «El pentagrama»): una nota en clave de sol y dos botones */
+  const NOTAS_LINEA_ESPACIO = ['e/4', 'f/4', 'g/4', 'a/4', 'b/4', 'c/5', 'd/5', 'e/5', 'f/5'];
+  function nuevaLineaEspacio() {
+    esperandoSiguiente = false;
+    let k;
+    do { k = NOTAS_LINEA_ESPACIO[Math.floor(Math.random() * NOTAS_LINEA_ESPACIO.length)]; } while (notaObjetivo && k === notaObjetivo.vfKey);
+    notaObjetivo = { vfKey: k, clef: 'treble', alt: 'n' };
+    renderizarDoblePentagrama([notaObjetivo]);
+    const fb = document.getElementById('feedback-juego');
+    fb.textContent = '¿Esta nota está en una línea o en un espacio?'; fb.style.color = 'var(--dorado)';
+    const r = document.getElementById('respuestas-juego'); r.hidden = false; r.replaceChildren();
+    ['Línea', 'Espacio'].forEach(op => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = op;
+      b.addEventListener('click', () => responderLineaEspacio(op, b));
+      r.append(b);
+    });
+  }
+  function responderLineaEspacio(op, b) {
+    if (esperandoSiguiente || !juegoActivo) return;
+    const linea = SprinkloudEscalas.esLinea(notaObjetivo.vfKey), ok = (op === 'Línea') === linea;
+    const lugar = linea ? 'la línea ' + (NOTAS_LINEA_ESPACIO.filter(SprinkloudEscalas.esLinea).indexOf(notaObjetivo.vfKey) + 1)
+      : 'el espacio ' + (NOTAS_LINEA_ESPACIO.filter(n => !SprinkloudEscalas.esLinea(n)).indexOf(notaObjetivo.vfKey) + 1);
+    const fb = document.getElementById('feedback-juego');
+    esperandoSiguiente = true;
+    const gano = registrarResultado(ok);
+    b.classList.add(ok ? 'bien' : 'mal');
+    if (ok) { fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + 'Está en ' + lugar + '.'; fb.style.color = gano ? 'var(--dorado)' : 'var(--acierto)'; if (gano) sonidoEstrella(); }
+    else { emitirSonidoError(); fb.textContent = 'Mira otra vez: está en ' + lugar + ' (las líneas y los espacios se cuentan de abajo hacia arriba).'; fb.style.color = 'var(--error)'; }
+    setTimeout(() => { if (juegoActivo && juegoLeccion) nuevaLineaEspacio(); }, ok ? (gano ? 1500 : 900) : 2400);
   }
 
   function obtenerNotasAcorde(indexRaiz, tipo) {
@@ -1119,13 +1248,16 @@
     }
 
     // MODO JUEGO
+    if (juegoLeccion && juegoLeccion.tipo === 'escala') { manejarEscala(indexNota); return; }
+    if (juegoLeccion && juegoLeccion.tipo === 'lineaEspacio') { emitirSonidoPiano(notaPresionada.freq); return; }   // aquí se responde con los botones
     if (intervalosJuego && intervalo) { manejarIntervalo(indexNota); return; }
     const elTecla = document.querySelector(`.tecla[data-index="${indexNota}"]`);
     if (elTecla) elTecla.classList.add('activa');
 
     const feedbackEl = document.getElementById('feedback-juego');
-    // Cuenta el nombre de la nota (el teclado tiene una octava y algo más); la octava se recuerda al acertar
-    const coincide = (notaPresionada.alt === 'n' && notaPresionada.vfKey.charAt(0) === notaObjetivo.vfKey.charAt(0));
+    // Cuenta el nombre de la nota (el teclado tiene una octava y algo más); la octava se recuerda al acertar.
+    // Con alteraciones (lección «Las 12 notas») cuenta la tecla: Re♭ y Do♯ son la misma tecla negra.
+    const coincide = claseDeAltura(notaPresionada.vfKey, notaPresionada.alt) === claseDeAltura(notaObjetivo.vfKey, notaObjetivo.alt);
 
     // entre un acierto y la nota siguiente no se cuentan más toques
     if (esperandoSiguiente) return;
@@ -1168,7 +1300,7 @@
   </nav>
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
-<script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? (intervalosJuego ? 'Juego de intervalos: ' : 'Juego de notas: ') + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el piano'; } };</script>
+<script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? (juegoLeccion ? (juegoLeccion.tipo === 'escala' ? 'Escalas tocadas sin error: ' : '¿Línea o espacio?: ') : intervalosJuego ? 'Juego de intervalos: ' : 'Juego de notas: ') + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el piano'; } };</script>
 <script src="/practica/lectura.js"></script>
 <script>
   /* Lectura hablada (Dandelot) con las notas del modo elegido; con "Ambas claves" se alterna entre sol y fa */

@@ -9,7 +9,7 @@
   <meta name="author" content="Sprinkloud Club Musical">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://sprinkloud.vercel.app/practica/violin">
-  <meta name="theme-color" content="#F6F0E2">
+  <meta name="theme-color" content="#F7F5F0">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
@@ -69,9 +69,9 @@
   <style>
     /* Mismo sistema visual que la app de violín (App_Sprinkloud/DESIGN.md): libro ilustrado en acuarela */
     :root {
-      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --bg: #F7F5F0; --surface: #FDFCF9; --surface-2: #EFEBE3; --ink: #3A3128; --ink-2: #625849; --line: #E0D9CC;   /* 7-nov-2026: crema casi neutro (antes #F6F0E2, #FBF7EE, #EFE6D1, #6D6152, #DCCFB5) */
       --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
-      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F2EADB; --danger: #9A5245; --danger-soft: #F3DED8;
       --foto-papel: #FBF7EE;
       /* colores de cada cuerda, los mismos de las partituras de la app */
       --s-sol: #9C5B55; --s-re: #C4923A; --s-la: #647745; --s-mi: #567388;
@@ -88,7 +88,7 @@
       :root {
         --bg: #1E2521; --surface: #2C3530; --surface-2: #27302A; --ink: #EDE6D6; --ink-2: #B9AF9C; --line: #3E4A42;
         --pine: #C2D5A3; --accent: #9DB47A; --on-accent: #1E2521; --accent-soft: #34402A;
-        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585;
+        --gold: #D9AE63; --gold-ink: #D9AE63; --gold-soft: #4A3D24; --danger: #D69585; --danger-soft: #45302B;
         color-scheme: dark;
       }
     }
@@ -236,7 +236,7 @@
     }
     @media (hover: hover) { .btn-modo:hover { border-color: var(--accent); color: var(--ink); } }
     .btn-modo:active { transform: scale(.97); }
-    .btn-modo.seleccionado { background: var(--gold); border-color: var(--gold); color: #3A3128; }
+    .btn-modo.seleccionado { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }   /* 7-nov-2026: musgo (antes ocre) */
 
     /* Pentagrama: siempre sobre papel claro para que la tinta de VexFlow se lea */
     .contenedor-pentagrama-bloque {
@@ -303,6 +303,20 @@
     .lv-n.on text, .lv-n.activa text { fill: var(--on); opacity: 1; }
     .lv-n.activa .lv-in { transform: scale(1.3); }
     .lv-n.activa circle { fill: var(--c); fill-opacity: 1; stroke: #3A3128; stroke-opacity: 1; stroke-width: 1.2; }
+    /* juegos de lección (7-nov-2026): escala tocada, nota de partida, pista y error */
+    .lv-n.en-escala circle { fill: var(--c); fill-opacity: 1; stroke: #3A3128; stroke-opacity: .9; stroke-width: 1; }
+    .lv-n.en-escala text { fill: var(--on); opacity: 1; }
+    .lv-n.desde circle, .lv-n.pista circle { stroke: #8F6A2A; stroke-opacity: 1; stroke-width: 2.2; }
+    .lv-n.desde text { opacity: 1; }
+    .lv-n.mal-escala circle { fill: #F3DED8; fill-opacity: 1; stroke: #9A5245; stroke-opacity: 1; stroke-width: 2; }
+    .lv-n.mal-escala text { fill: #8E4D41; opacity: 1; }
+    .lv-n.tocada circle { fill: #F1E0BC; fill-opacity: 1; stroke: #8F6A2A; stroke-opacity: 1; stroke-width: 1.6; }
+    .lv-n.tocada text, .lv-n.bien-escala text { fill: #3A3128; opacity: 1; }
+    .lv-n.bien-escala circle { fill: #E1E6CF; fill-opacity: 1; stroke: #48592F; stroke-opacity: 1; stroke-width: 2; }
+    .respuestas-juego { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .respuestas-juego button { min-height: 48px; min-width: 120px; padding: 10px 18px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-weight: 800; font-size: 1rem; cursor: pointer; }
+    .respuestas-juego button.bien { border-color: var(--pine); background: var(--accent-soft); color: var(--pine); }
+    .respuestas-juego button.mal { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
 
     .leyenda {
       display: flex;
@@ -393,6 +407,7 @@
     }
   </style>
   <script src="/practica/leccion.js"></script>
+  <script src="/practica/escalas.js"></script>
 </head>
 <body>
 
@@ -414,6 +429,7 @@
     <button id="btn-juego" class="btn-juego" onclick="toggleJuego()">Iniciar juego de notas</button>
     <button class="btn-juego btn-lectura" type="button" onclick="abrirLectura()" title="Método Dandelot: decir los nombres de las notas en ritmo, sin parar">Lectura hablada</button>
     <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier nota</div>
+    <div class="respuestas-juego" id="respuestas-juego" role="group" aria-label="Tu respuesta" hidden></div>
     <div class="estrellas-juego" id="estrellas-juego" hidden>
       <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 3">
         <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
@@ -542,7 +558,7 @@
     // "Todas": las naturales de la primera posición, de la cuerda al aire al 3.er dedo (sin el 4.º dedo, semitono 7)
     document.querySelectorAll('[data-pos]').forEach(el => {
       const semitono = +el.dataset.pos.split('-')[1];
-      el.classList.toggle('on', ver === 'todas' ? !el.classList.contains('alterada') && semitono < 7 : escalaDo.has(el.dataset.pos));
+      el.classList.toggle('on', ver === 'ninguna' ? false : ver === 'todas' ? !el.classList.contains('alterada') && semitono < 7 : escalaDo.has(el.dataset.pos));
     });
   }
 
@@ -589,8 +605,8 @@
       auto_stem: true   // desde la línea del medio (Si) la plica va hacia abajo
     });
 
-    if (accidental === '#') {
-      notaStave.addModifier(new Accidental("#"), 0);
+    if (accidental === '#' || accidental === 'b') {
+      notaStave.addModifier(new Accidental(accidental), 0);
     }
 
     dibujarCentrada(context, stave, notaStave);
@@ -670,9 +686,11 @@
     let nuevaNota;
     do {
       nuevaNota = pool[Math.floor(Math.random() * pool.length)];
-    } while (notaObjetivo && nuevaNota === notaObjetivo.vfKey);
+    } while (notaObjetivo && pool.length > 1 && nuevaNota === notaObjetivo.id);
 
-    notaObjetivo = { vfKey: nuevaNota, acc: 'n' };
+    // 'f/4' o, con alteración, 'f/4:#' y 'b/4:b' (lecciones de la escala de Re y de las 12 notas)
+    const [vfKeyNueva, accNueva] = nuevaNota.split(':');
+    notaObjetivo = { id: nuevaNota, vfKey: vfKeyNueva, acc: accNueva || 'n' };
     renderizarPentagrama(notaObjetivo.vfKey, notaObjetivo.acc);
 
     const feedbackEl = document.getElementById('feedback-juego');
@@ -739,11 +757,12 @@
       btn.classList.add('activo');
       reiniciarEstrellas();
       document.getElementById('estrellas-juego').hidden = false;
-      generarSiguienteNotaJuego();
+      if (juegoLeccion) siguienteDeLeccion(); else generarSiguienteNotaJuego();
     } else {
-      btn.textContent = "Iniciar juego de notas";
+      btn.textContent = juegoLeccion ? juegoLeccion.boton : "Iniciar juego de notas";
       btn.classList.remove('activo');
-      notaObjetivo = null;
+      notaObjetivo = null; limpiarSecuencia();
+      document.getElementById('respuestas-juego').hidden = true;
       feedbackEl.textContent = "Modo libre: Toca cualquier nota";
       feedbackEl.style.color = "var(--texto-debil)";
       renderizarPentagrama('b/4', 'n');
@@ -754,6 +773,8 @@
     document.querySelectorAll('.lv-n.activa').forEach(el => el.classList.remove('activa'));
     if (elementoNodo) elementoNodo.classList.add('activa');
 
+    if (juegoActivo && juegoLeccion && juegoLeccion.tipo !== 'lineaEspacio') { manejarSecuencia(frec, elementoNodo); return; }
+    if (juegoActivo && juegoLeccion) { emitirSonido(frec); return; }   // ¿línea o espacio?: se responde con los botones
     if (!juegoActivo) {
       // MODO LIBRE
       emitirSonido(frec);
@@ -763,7 +784,8 @@
 
     // MODO JUEGO: vale cualquier lugar del violín donde suene esa nota
     const feedbackEl = document.getElementById('feedback-juego');
-    const coincideNota = (vfKey === notaObjetivo.vfKey && acc === notaObjetivo.acc);
+    // se compara el sonido: Si♭ y La♯ son el mismo lugar del violín
+    const coincideNota = midiDeFrec(frec) === midiDeClave(notaObjetivo.vfKey, notaObjetivo.acc);
 
     // entre un acierto y la nota siguiente no se cuentan más toques
     if (esperandoSiguiente) return;
@@ -792,6 +814,131 @@
         }
       }, 900);
     }
+  }
+
+  /* ---------- Juegos de lección que no son «lee esta nota» (7-nov-2026) ----------
+     Antes, las lecciones de escalas, de tono y semitono y del pentagrama abrían el juego de leer notas (reporte de la
+     dueña: la tarjeta pedía tocar la pentatónica y el juego pedía una nota suelta). leccion.js llama prepararLeccion():
+     - { tipo: 'escala', escalas: ['pentaMayor:Re4', …] }: tocar la escala nota por nota, subiendo (practica/escalas.js);
+     - { tipo: 'tono' }: desde la nota marcada, tocar un tono o un semitono más arriba;
+     - { tipo: 'lineaEspacio' }: ¿la nota está en una línea o en un espacio?
+     En todos vale cualquier lugar del violín donde suene la nota pedida. */
+  const LETRA_PC = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+  const midiDeFrec = f => Math.round(69 + 12 * Math.log2(f / 440));
+  const midiDeClave = (vfKey, acc) => 12 * (Number(vfKey.split('/')[1]) + 1) + LETRA_PC[vfKey.charAt(0)] + (acc === '#' ? 1 : acc === 'b' ? -1 : 0);
+  const nodo = i => document.querySelector(`#violin .lv-n[data-i="${i}"]`);
+  const bonito = s => s.replace('#', '♯');
+  let juegoLeccion = null, secuencia = null;   // secuencia: { notas: [{ midi, nombre }], k, errores, fallosNota, desde }
+  function prepararLeccion(cfg) {
+    juegoLeccion = Object.assign({ boton: cfg.tipo === 'escala' ? 'Empezar a tocar escalas' : 'Empezar' }, cfg);
+    document.getElementById('btn-juego').textContent = juegoLeccion.boton;
+    const g = document.querySelector('.grupo-modo'); if (g) g.style.display = 'none';
+    document.querySelector('.btn-lectura').style.display = 'none';
+    /* sin las marcas de la escala de Do: sus colores de cuerda se confundían con el verde y el rojo de la corrección */
+    if (cfg.tipo !== 'lineaEspacio') { const v = document.querySelector('.ver-notas'); if (v) v.style.display = 'none'; marcarNotas('ninguna'); }
+  }
+  function siguienteDeLeccion() {
+    if (juegoLeccion.tipo === 'escala') nuevaEscala(); else if (juegoLeccion.tipo === 'tono') nuevoTono(); else nuevaLineaEspacio();
+  }
+  function limpiarSecuencia() {
+    document.querySelectorAll('#violin .lv-n').forEach(n => n.classList.remove('en-escala', 'desde', 'pista', 'mal-escala', 'tocada', 'bien-escala'));
+    const r = document.getElementById('respuestas-juego'); if (juegoLeccion && juegoLeccion.tipo !== 'lineaEspacio') { r.hidden = true; r.replaceChildren(); }
+  }
+  function avisar(texto, color) { const fb = document.getElementById('feedback-juego'); fb.textContent = texto; fb.style.color = color; }
+  function nuevaEscala() {
+    esperandoSiguiente = false; limpiarSecuencia();
+    const lista = juegoLeccion.escalas;
+    let elegida;
+    do { elegida = lista[Math.floor(Math.random() * lista.length)]; } while (secuencia && lista.length > 1 && elegida === secuencia.clave);
+    const [tipo, raiz] = elegida.split(':'), t = SprinkloudEscalas.TIPOS[tipo];
+    secuencia = { clave: elegida, tipo, notas: SprinkloudEscalas.armar(tipo, raiz), tocadas: [] };
+    renderizarPentagrama(secuencia.notas[0].clave, secuencia.notas[0].alt || 'n');
+    avisar('Toca ' + SprinkloudEscalas.titulo(tipo, raiz) + ', nota por nota, subiendo' + (t.formula ? ' (' + t.formula + ')' : ': sus 5 notas') + '. Pon todas las notas y al final te digo cuáles están bien. Empieza aquí:', 'var(--dorado)');
+  }
+  function nuevoTono() {
+    esperandoSiguiente = false; limpiarSecuencia();
+    // una nota natural desde la que el tono todavía entra en la misma cuerda (hasta el semitono 10)
+    const opciones = posiciones.map((p, i) => [p, i]).filter(([p]) => p.n.tipo === 'natural' && p.k <= 8);
+    let desde, st;
+    do { desde = opciones[Math.floor(Math.random() * opciones.length)]; st = Math.random() < .5 ? 1 : 2; }
+    while (secuencia && secuencia.desde === desde[1] && secuencia.st === st);
+    const [p, i] = desde;
+    secuencia = { desde: i, st, inicio: midiDeFrec(p.freq), meta: midiDeFrec(p.freq) + st, nombre: bonito(p.n.label) };
+    const n = nodo(i); if (n) n.classList.add('desde');
+    renderizarPentagrama(p.n.vfKey, p.n.acc);
+    avisar('Desde ' + secuencia.nombre + ' (cuerda ' + nombresCuerda[p.id] + '), toca ' + (st === 1 ? 'un semitono' : 'un tono') + ' más arriba', 'var(--dorado)');
+  }
+  function terminarRonda(limpia, texto, espera) {
+    esperandoSiguiente = true;
+    const gano = registrarResultado(limpia);
+    avisar((gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '') + texto, gano ? 'var(--dorado)' : limpia ? 'var(--acierto)' : 'var(--error)');
+    if (gano) sonidoEstrella();
+    setTimeout(() => { if (juegoActivo && juegoLeccion) siguienteDeLeccion(); }, espera);
+  }
+  function manejarSecuencia(frec, el) {
+    if (esperandoSiguiente || !secuencia) return;
+    const m = midiDeFrec(frec);
+    if (juegoLeccion.tipo === 'tono') {
+      const d = m - secuencia.inicio;
+      if (m === secuencia.meta) {
+        emitirSonido(frec); if (el) el.classList.add('en-escala');
+        return terminarRonda(true, '¡Correcto! ' + (secuencia.st === 1 ? 'Un semitono: el dedo pegado al anterior.' : 'Un tono: deja espacio entre los dedos.'), 1800);
+      }
+      emitirSonidoError();
+      if (el) { el.classList.add('mal-escala'); setTimeout(() => el.classList.remove('mal-escala'), 450); }
+      return terminarRonda(false, (d === 1 ? 'Eso es un semitono' : d === 2 ? 'Eso es un tono' : d > 0 ? 'Eso son ' + d + ' semitonos' : 'Sube desde la nota marcada') +
+        '. ' + (secuencia.st === 1 ? 'Semitono = 1 paso: el dedo pegado.' : 'Tono = 2 semitonos: deja espacio.'), 2600);
+    }
+    /* escala: corrección al final (pedido de la dueña, 7-nov-2026): no se corta al primer error; al poner todas las notas
+       se marcan en verde las que están bien y en rojo las que no, con la correcta en el violín y en el pentagrama */
+    const N = secuencia.notas.length;
+    emitirSonido(frec);
+    secuencia.tocadas.push({ midi: m, el });
+    if (el) el.classList.add('tocada');
+    if (secuencia.tocadas.length < N) return avisar('Nota ' + (secuencia.tocadas.length + 1) + ' de ' + N + ' · tocaste: ' + secuencia.tocadas.map(x => nombreMidi(x.midi)).join(', '), 'var(--dorado)');
+    esperandoSiguiente = true;
+    const c = SprinkloudEscalas.corregir(secuencia.notas, secuencia.tocadas.map(x => x.midi));
+    document.querySelectorAll('#violin .lv-n.tocada, #violin .lv-n.activa').forEach(n => n.classList.remove('tocada', 'activa'));
+    secuencia.tocadas.forEach((x, i) => { if (x.el) x.el.classList.add(c.bien[i] ? 'bien-escala' : 'mal-escala'); });
+    secuencia.notas.forEach((n, i) => {
+      if (c.bien[i]) return;
+      // la nota correcta, en el lugar más cerca de la cejilla
+      const j = posiciones.map((p, ii) => [p, ii]).filter(([p]) => midiDeFrec(p.freq) === n.midi).sort((a, b) => a[0].k - b[0].k)[0];
+      if (j) { const nd = nodo(j[1]); if (nd) nd.classList.add('pista'); }
+    });
+    SprinkloudEscalas.dibujar(document.getElementById('pentagrama'), secuencia.notas, c.bien);
+    const limpia = c.aciertos === N, gano = registrarResultado(limpia);
+    avisar((gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '') + c.texto + (limpia ? '' : ' En verde lo que está bien, en rojo lo que no; con borde ocre, dónde va la correcta.'),
+      limpia ? (gano ? 'var(--dorado)' : 'var(--acierto)') : 'var(--error)');
+    if (gano) sonidoEstrella(); else if (!limpia) emitirSonidoError();
+    const r = document.getElementById('respuestas-juego'); r.hidden = false; r.replaceChildren();
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = limpia ? 'Otra escala' : 'Intentar otra escala';
+    b.addEventListener('click', () => { if (juegoActivo && juegoLeccion) nuevaEscala(); });
+    r.append(b);
+  }
+  const NOMBRE_MIDI_V = ['Do', 'Do♯', 'Re', 'Mi♭', 'Mi', 'Fa', 'Fa♯', 'Sol', 'La♭', 'La', 'Si♭', 'Si'];
+  const nombreMidi = m => NOMBRE_MIDI_V[((m % 12) + 12) % 12];
+  const NOTAS_LINEA_ESPACIO = ['e/4', 'f/4', 'g/4', 'a/4', 'b/4', 'c/5', 'd/5', 'e/5', 'f/5'];
+  function nuevaLineaEspacio() {
+    esperandoSiguiente = false;
+    let k;
+    do { k = NOTAS_LINEA_ESPACIO[Math.floor(Math.random() * NOTAS_LINEA_ESPACIO.length)]; } while (notaObjetivo && k === notaObjetivo.vfKey);
+    notaObjetivo = { vfKey: k, acc: 'n' };
+    renderizarPentagrama(k, 'n');
+    avisar('¿Esta nota está en una línea o en un espacio?', 'var(--dorado)');
+    const r = document.getElementById('respuestas-juego'); r.hidden = false; r.replaceChildren();
+    ['Línea', 'Espacio'].forEach(op => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = op;
+      b.addEventListener('click', () => {
+        if (esperandoSiguiente || !juegoActivo) return;
+        const linea = SprinkloudEscalas.esLinea(k), ok = (op === 'Línea') === linea;
+        const lugar = linea ? 'la línea ' + (NOTAS_LINEA_ESPACIO.filter(SprinkloudEscalas.esLinea).indexOf(k) + 1) : 'el espacio ' + (NOTAS_LINEA_ESPACIO.filter(n => !SprinkloudEscalas.esLinea(n)).indexOf(k) + 1);
+        b.classList.add(ok ? 'bien' : 'mal');
+        if (!ok) emitirSonidoError();
+        terminarRonda(ok, ok ? '¡Correcto! Está en ' + lugar + '.' : 'Mira otra vez: está en ' + lugar + ' (se cuentan de abajo hacia arriba).', ok ? 1000 : 2400);
+      });
+      r.append(b);
+    });
   }
 
   // El violín del club: recorte del mástil de 100×194 (cejilla arriba). Las notas siguen las cuerdas
@@ -849,11 +996,11 @@
   </nav>
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
-<script>window.SprinkloudPractica = { app: 'Violín virtual', detalle: function () { return aciertos ? 'Juego de notas: ' + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el violín'; } };</script>
+<script>window.SprinkloudPractica = { app: 'Violín virtual', detalle: function () { return aciertos ? (juegoLeccion ? (juegoLeccion.tipo === 'escala' ? 'Escalas tocadas sin error: ' : juegoLeccion.tipo === 'tono' ? 'Tono y semitono: ' : '¿Línea o espacio?: ') : 'Juego de notas: ') + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el violín'; } };</script>
 <script src="/practica/lectura.js"></script>
 <script>
   /* Lectura hablada (Dandelot) con las notas del modo elegido */
-  function abrirLectura() { SprinkloudLectura.abrir({ clave: 'treble', notas: modosJuego[modoJuego] }); }
+  function abrirLectura() { SprinkloudLectura.abrir({ clave: 'treble', notas: modosJuego[modoJuego].filter(n => n.indexOf(':') < 0) }); }
 </script>
 <script src="/practica/comprobante.js"></script>
 </body>

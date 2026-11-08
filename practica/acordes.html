@@ -108,7 +108,11 @@ function dibujar(claves) {
 }
 
 /* ---------- Ejercicios ---------- */
-const MODOS = { inversion: '¿Qué inversión?', nombre: '¿Qué acorde es?', barra: 'Con barra' };
+/* Los 7 acordes de Do mayor (lección «Armonizar la escala mayor», 7-nov-2026; antes abría el juego de leer notas):
+   la triada de cada grado, en estado fundamental, con su tipo. Va aparte de ACORDES porque el bosque copia esos datos. */
+const GRADOS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'], TIPO_GRADO = ['', 'm', 'm', '', '', 'm', '°'];
+const nombreGrado = g => NOTAS_ES[g] + TIPO_GRADO[g];
+const MODOS = { inversion: '¿Qué inversión?', nombre: '¿Qué acorde es?', barra: 'Con barra', grados: 'Los 7 acordes de Do' };
 let modo = 'inversion', visibles = Object.keys(MODOS), actual = null, esperando = false;
 let aciertos = 0, intentos = 0, racha = 0;
 function marcar(ok) {
@@ -136,6 +140,17 @@ function botones(ops, correcta, regla) {
   });
 }
 function nueva() {
+  if (modo === 'grados') {
+    // una triada de la escala de Do, saltando una nota (do-mi-sol, re-fa-la…): ¿cómo se llama?
+    let g; do { g = Math.floor(Math.random() * 7); } while (actual && actual.g === g);
+    const claves = clavesDe({ raiz: g }, 0);
+    actual = { g, claves };
+    dibujar(claves); sonarAcorde(claves); veredicto(''); $('#regla').textContent = '';
+    $('#pregunta').textContent = 'Grado ' + GRADOS[g] + ' de Do mayor: ¿qué acorde es?';
+    const tipo = TIPO_GRADO[g] === 'm' ? 'menor' : TIPO_GRADO[g] === '°' ? 'disminuido' : 'mayor';
+    botones([0, 1, 2, 3, 4, 5, 6].map(nombreGrado), nombreGrado(g), notasDe({ raiz: g }, 0).map(l => NOTAS_ES[l]).join('-') + ' → ' + nombreGrado(g) + ' (' + GRADOS[g] + ', ' + tipo + ')');
+    return;
+  }
   const a = azar(ACORDES), inv = Math.floor(Math.random() * 3), claves = clavesDe(a, inv);
   actual = { a, inv, claves };
   dibujar(claves); sonarAcorde(claves); veredicto(''); $('#regla').textContent = '';
@@ -163,6 +178,12 @@ function pintarModos() {
     b.addEventListener('click', () => { modo = k; pintarModos(); nueva(); });
     m.append(b);
   });
+}
+/* lo usa leccion.js: 'grados' (Armonizar la escala mayor) deja solo los 7 acordes de Do; 'inversiones', los tres de inversiones */
+function prepararLeccion(cual) {
+  if (cual === 'grados') { visibles = ['grados']; modo = 'grados'; }
+  else { visibles = ['inversion', 'nombre', 'barra']; modo = 'inversion'; }
+  pintarModos(); nueva();
 }
 $('#siguiente').addEventListener('click', nueva);
 $('#escuchar').addEventListener('click', () => actual && sonarAcorde(actual.claves));

@@ -14,7 +14,8 @@
   var CSS = '' +
     '.lh{border:0;border-radius:18px;padding:0;width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--surface,#FBF7EE);color:var(--ink,#3A3128);box-shadow:0 20px 60px rgba(0,0,0,.25)}' +
     '.lh::backdrop{background:rgba(30,37,33,.55)}' +
-    '.lh-in{padding:18px 18px 16px;display:grid;gap:12px}' +
+    '.lh-in{padding:18px 18px 16px;display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}' +
+    '.lh-in>*{min-width:0}' +   /* que ningún hijo ensanche el diálogo en 320 px */
     '.lh h2{margin:0;font-family:Fraunces,Georgia,serif;font-size:22px;color:var(--pine,#48592F)}' +
     '.lh p{margin:0;color:var(--ink-2,#6D6152);font-size:15px}' +
     '.lh-papel{background:#FFFDF8;border:1px solid var(--line,#DCCFB5);border-radius:12px;padding:6px;min-height:150px}' +
@@ -42,7 +43,8 @@
   function dibujar() {
     var VF = Vex.Flow, caja = dlg.querySelector('.lh-papel');
     caja.replaceChildren();
-    var ancho = Math.max(300, caja.clientWidth - 12), alto = est.resultado ? 190 : est.nombres ? 170 : 140;
+    // 220 (7-nov-2026): con 300 el cuadro se salía de la pantalla en un celular de 320 px
+    var ancho = Math.max(220, caja.clientWidth - 12), alto = est.resultado ? 190 : est.nombres ? 170 : 140;
     var r = new VF.Renderer(caja, VF.Renderer.Backends.SVG);
     r.resize(ancho, alto);
     var ctx = r.getContext();

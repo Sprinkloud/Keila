@@ -36,7 +36,7 @@
   var css = document.createElement('style');
   css.textContent =
     '.spk-camara{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:50;' +
-    'width:56px;height:56px;border-radius:50%;border:0;background:#C4923A;color:#fff;cursor:pointer;display:grid;place-items:center;' +
+    'width:56px;height:56px;border-radius:50%;border:0;background:#647745;color:#FDFCF9;cursor:pointer;display:grid;place-items:center;' +
     'box-shadow:0 6px 18px rgba(58,49,40,.28)}' +
     '.spk-camara svg{width:26px;height:26px}' +
     '.spk-camara:focus-visible{outline:3px solid #48592F;outline-offset:3px}' +
@@ -112,7 +112,7 @@
     var x = c.getContext('2d'), r = registro(), min = Math.floor(r.seg / 60), i = info();
     var detalle = ''; try { detalle = i.detalle ? i.detalle() : ''; } catch (e) { detalle = ''; }
     var serif = 'Fraunces, Georgia, serif', sans = '"Nunito Sans", system-ui, sans-serif';
-    x.fillStyle = '#F6F0E2'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#F7F5F0'; x.fillRect(0, 0, W, H);
     x.fillStyle = '#48592F'; x.fillRect(0, 0, W, 210);
     x.fillStyle = '#FBF7EE'; x.font = '700 64px ' + serif; x.fillText('Sprinkloud', 80, 120);
     x.font = '700 34px ' + sans; x.fillStyle = '#E1E6CF'; x.fillText('Comprobante de práctica', 80, 172);

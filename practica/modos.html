@@ -29,7 +29,9 @@
     .tm.blanca.en-modo { background: #E1E6CF; } .tm.negra.en-modo { background: #647745; }
     .tm.blanca.casa { background: #F1E0BC; box-shadow: inset 0 0 0 3px #C4923A; } .tm.negra.casa { background: #8F6A2A; }
     .tm.blanca.car { box-shadow: inset 0 0 0 3px #C4923A; } .tm.negra.car { box-shadow: 0 0 0 3px #C4923A; }
-    .tm.mal { background: #F3DED8 !important; }
+    .tm.mal, .tm.blanca.mal-fijo { background: #F3DED8 !important; } .tm.negra.mal-fijo { background: #9A5245 !important; }
+    .tm.blanca.tocada { background: #F1E0BC; } .tm.negra.tocada { background: #8F6A2A; }
+    .tm.blanca.mal-fijo .num { color: #8E4D41; }
     .tm .num { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); font-weight: 800; font-size: 11px; color: #48592F; pointer-events: none; }
     .tm.negra .num { color: #FFFDF8; bottom: 6px; }
     .elegir-modo { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
@@ -159,19 +161,19 @@ function armarTeclado() {
     teclas[st] = b; t.append(b);
   }
 }
-function limpiarTeclado() { teclas.forEach(b => { b.classList.remove('en-modo', 'casa', 'car', 'mal'); b.replaceChildren(); }); }
+function limpiarTeclado() { teclas.forEach(b => { b.classList.remove('en-modo', 'casa', 'car', 'mal', 'mal-fijo', 'tocada'); b.replaceChildren(); }); }
 function marcarModo(m, notas) {
   limpiarTeclado();
   notas.forEach((n, k) => { const b = teclas[n.st]; if (!b) return; b.classList.add(k === 0 || k === 7 ? 'casa' : 'en-modo'); if (k === m.car) b.classList.add('car'); const s = document.createElement('span'); s.className = 'num'; s.textContent = n.nombre; b.append(s); });
 }
-function dibujarModo(notas, car) {
+function dibujarModo(notas, car, bien) {   // bien: [true/false…] pinta cada nota en verde o rojo al corregir
   const cont = $('#pentagrama'); cont.innerHTML = '';
   cont.setAttribute('role', 'img'); cont.setAttribute('aria-label', 'Escala: ' + notas.map(n => n.nombre).join(', '));
   const VF = Vex.Flow, rr = new VF.Renderer(cont, VF.Renderer.Backends.SVG);
   rr.resize(380, 130);
   const c = rr.getContext(); c.setFillStyle('#3A3128'); c.setStrokeStyle('#3A3128');
   const st = new VF.Stave(6, 10, 368); st.addClef('treble'); st.setContext(c).draw();
-  const ns = notas.map((n, i) => { const x = new VF.StaveNote({ keys: [n.clave], duration: 'q' }); if (n.vf) x.addModifier(new VF.Accidental(n.vf), 0); if (i === car) x.setStyle({ fillStyle: '#C4923A', strokeStyle: '#C4923A' }); return x; });
+  const ns = notas.map((n, i) => { const x = new VF.StaveNote({ keys: [n.clave], duration: 'q' }); if (n.vf) x.addModifier(new VF.Accidental(n.vf), 0); if (bien) { const col = bien[i] ? '#48592F' : '#9A5245'; x.setStyle({ fillStyle: col, strokeStyle: col }); } else if (i === car) x.setStyle({ fillStyle: '#C4923A', strokeStyle: '#C4923A' }); return x; });
   const v = new VF.Voice({ num_beats: 8, beat_value: 4 }).setMode(VF.Voice.Mode.SOFT).addTickables(ns);
   new VF.Formatter().joinVoices([v]).format([v], 310); v.draw(c, st);
   const svg = cont.querySelector('svg'); svg.setAttribute('viewBox', '0 0 380 130'); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.width = '100%'; svg.style.height = 'auto';
@@ -199,20 +201,27 @@ function explorar() {
   };
 }
 function tocarModo() {
-  const m = azar(conocidos()), raiz = azar([0, 2, 4, 5, 7, 9, 11]), notas = modoDesde(m, raiz);
+  const m = elegirModoG(conocidos()), raiz = azar([0, 2, 4, 5, 7, 9, 11]), notas = modoDesde(m, raiz);
   limpiarTeclado(); dibujar(null); $('#respuestas').replaceChildren();
   $('#pregunta').textContent = 'Toca ' + notas[0].nombre + ' ' + m.n.toLowerCase() + ', nota por nota, subiendo';
   actual = () => sonarModo(m, 60 + raiz);
-  let k = 0, errores = 0; esperando = true;
+  /* corrección al final (pedido de la dueña, 7-nov-2026): se ponen las 8 notas y después se marca cada una en verde o
+     rojo, con la correcta en su tecla; antes se rechazaba cada error en el momento */
+  const tocadas = []; esperando = true;
   alTecla = (st, b) => {
     if (!esperando) return;
-    if (st === notas[k].st) {
-      b.classList.add(k === 0 || k === 7 ? 'casa' : 'en-modo'); if (k === m.car) b.classList.add('car');
-      const s = document.createElement('span'); s.className = 'num'; s.textContent = notas[k].nombre; b.append(s);
-      audio(); piano(ctx.currentTime, 60 + st, .5, .25); k++;
-      if (k === 8) { esperando = false; marcar(errores === 0); veredicto(errores ? '¡Completo! Ahora sin errores' : '¡Perfecto!', true); dibujarModo(notas, m.car);
-        $('#regla').textContent = m.n + ': ' + m.que + (m.car !== null ? ' (' + notas[m.car].nombre + ')' : ''); }
-    } else { errores++; sonidoMal(); b.classList.add('mal'); setTimeout(() => b.classList.remove('mal'), 450); veredicto('Sigue la nota ' + (k + 1) + ' de 8', false); }
+    audio(); piano(ctx.currentTime, 60 + st, .5, .25);
+    tocadas.push(st); b.classList.add('tocada');
+    let s = b.querySelector('.num'); if (!s) { s = document.createElement('span'); s.className = 'num'; b.append(s); s.textContent = tocadas.length; } else s.textContent += ',' + tocadas.length;
+    if (tocadas.length < 8) { veredicto('Nota ' + (tocadas.length + 1) + ' de 8'); return; }
+    esperando = false;
+    const bien = notas.map((n, i) => tocadas[i] === n.st), aciertos = bien.filter(Boolean).length;
+    limpiarTeclado();
+    tocadas.forEach((t, i) => { const tb = teclas[t]; if (!tb) return; tb.classList.add(bien[i] ? 'en-modo' : 'mal-fijo'); const sp = tb.querySelector('.num') || tb.appendChild(Object.assign(document.createElement('span'), { className: 'num' })); sp.textContent = bien[i] ? notas[i].nombre : '✗'; });
+    notas.forEach((n, i) => { if (bien[i]) return; const tb = teclas[n.st]; if (!tb) return; tb.classList.add('car'); const sp = tb.querySelector('.num') || tb.appendChild(Object.assign(document.createElement('span'), { className: 'num' })); sp.textContent = n.nombre; });
+    marcar(aciertos === 8); dibujarModo(notas, m.car, bien);
+    veredicto(aciertos === 8 ? '¡Perfecto!' : 'Bien ' + aciertos + ' de 8. ' + notas.map((n, i) => bien[i] ? null : 'nota ' + (i + 1) + ': tocaste ' + NOMBRE_ST[tocadas[i] % 12] + ', era ' + n.nombre).filter(Boolean).join('; ') + '. En rojo lo que no; con borde ocre, la correcta.', aciertos === 8);
+    $('#regla').textContent = m.n + ': ' + m.que + (m.car !== null ? ' (' + notas[m.car].nombre + ')' : '');
   };
 }
 
@@ -221,6 +230,9 @@ const EJERCICIOS = { ver: '¿Qué modo es?', caracteristica: 'Nota característi
 let modo = 'ver', visibles = Object.keys(EJERCICIOS), aprendidos = MODOS_G.length, actual = null, esperando = false;
 let aciertos = 0, intentos = 0, racha = 0;
 const conocidos = () => MODOS_G.slice(0, aprendidos);
+/* en una lección, el modo nuevo sale la mitad de las veces (7-nov-2026): antes podía no salir nunca */
+let enLeccion = false;
+const elegirModoG = lista => enLeccion && aprendidos > 1 && lista.includes(MODOS_G[aprendidos - 1]) && Math.random() < .5 ? MODOS_G[aprendidos - 1] : azar(lista);
 function marcar(ok) {
   intentos++; if (ok) { aciertos++; racha++; } else racha = 0;
   $('#aciertos').textContent = aciertos; $('#intentos').textContent = intentos; $('#racha').textContent = racha;
@@ -260,7 +272,7 @@ function nueva() {
     dibujar(e.claves); actual();
     botones(MODOS_G.map(x => x.n), m.n, BLANCAS_ES[m.blanca] + ' → ' + m.n.toLowerCase() + ': ' + m.que);
   } else if (modo === 'caracteristica') {
-    const m = azar(conocidos().filter(x => x.car !== null)) || MODOS_G[1], e = escalaBlanca(m);
+    const m = elegirModoG(conocidos().filter(x => x.car !== null)) || MODOS_G[1], e = escalaBlanca(m);
     actual = () => sonarModo(m, MIDI_BLANCA[m.blanca]);
     $('#pregunta').textContent = '¿Cuál es la nota característica de ' + e.nombres[0] + ' ' + m.n.toLowerCase() + '?';
     dibujar(e.claves); actual();
@@ -269,7 +281,7 @@ function nueva() {
     botones(ops, correcta, m.n + ': ' + m.que + ' → ' + correcta + ' (' + ORDINAL[m.car] + ')', () => dibujar(e.claves, m.car));
   } else {
     // de oído: todos desde Do, así solo cambia el color
-    const m = azar(conocidos());
+    const m = elegirModoG(conocidos());
     actual = () => sonarModo(m, 60);
     $('#pregunta').textContent = 'Escucha: ¿qué modo es? (todos empiezan en Do)';
     dibujar(null); actual();
@@ -286,11 +298,15 @@ function pintarModos() {
     m.append(b);
   });
 }
-/* lo usa leccion.js: los modos aprendidos hasta la lección (modos:N) */
-function prepararLeccion(n) {
+/* lo usa leccion.js: los modos aprendidos hasta la lección (modos:N) y el ejercicio que pide el libro en esa lección
+   (7-nov-2026: antes abría siempre «Toca el modo», aunque la tarjeta y el libro pedían reconocerlo de oído o por su nota
+   característica). En el violín no se muestra el teclado: «Formar en el piano» y «Toca el modo» son para piano. */
+function prepararLeccion(n, ejercicio, instrumento) {
   aprendidos = Math.max(1, Math.min(MODOS_G.length, n));
-  visibles = (aprendidos === 1 ? ['ver'] : aprendidos === 2 ? ['ver', 'oido'] : ['ver', 'caracteristica', 'oido']).concat(['explorar', 'tocar']);
-  modo = 'tocar';
+  enLeccion = true;
+  visibles = aprendidos === 1 ? ['ver'] : aprendidos === 2 ? ['ver', 'oido'] : ['ver', 'caracteristica', 'oido'];
+  if (instrumento !== 'violin') visibles = visibles.concat(['explorar', 'tocar']);
+  modo = ejercicio && visibles.includes(ejercicio) ? ejercicio : visibles[0];
   pintarModos(); nueva();
 }
 armarTeclado();

@@ -25,9 +25,9 @@
   <style>
     /* Mismo sistema visual que las otras herramientas (App_Sprinkloud/DESIGN.md). Los pentagramas van siempre sobre papel claro. */
     :root {
-      --bg: #F6F0E2; --surface: #FBF7EE; --surface-2: #EFE6D1; --ink: #3A3128; --ink-2: #6D6152; --line: #DCCFB5;
+      --bg: #F7F5F0; --surface: #FDFCF9; --surface-2: #EFEBE3; --ink: #3A3128; --ink-2: #625849; --line: #E0D9CC;   /* 7-nov-2026: crema casi neutro (antes #F6F0E2, #FBF7EE, #EFE6D1, #6D6152, #DCCFB5) */
       --pine: #48592F; --accent: #647745; --on-accent: #FBF7EE; --accent-soft: #E1E6CF;
-      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F1E0BC; --danger: #9A5245; --danger-soft: #F3DED8;
+      --gold: #C4923A; --gold-ink: #8F6A2A; --gold-soft: #F2EADB; --danger: #9A5245; --danger-soft: #F3DED8;
       --f-display: Fraunces, Georgia, "Times New Roman", serif; --f-hand: Caveat, "Segoe Print", cursive;
       --f-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
       color-scheme: light;
@@ -53,19 +53,27 @@
     h1 { font-size: clamp(26px, 5vw, 36px); color: var(--pine); }
     .intro { margin: 4px 0 0; color: var(--ink-2); }
     .controles { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
-    .controles label { display: grid; gap: 2px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+    .controles label { display: grid; gap: 2px; font-size: 13px; font-weight: 700; color: var(--ink-2); min-width: 0; max-width: 100%; }
+    .controles label select { width: 100%; min-width: 0; }   /* 7-nov-2026: los nombres largos de las lecciones ensanchaban la página a 460 px en el celular */
+    /* el nombre de la lección elegida se ve entero (en varias líneas) y el select transparente queda encima para elegir otra (7-nov-2026) */
+    .elegir { position: relative; display: block; min-width: 0; }
+    .elegir select { position: absolute; inset: 0; height: 100%; opacity: 0; cursor: pointer; }
+    #semana-texto { display: block; border: 1px solid var(--line); border-radius: 10px; padding: 9px 30px 9px 10px; background: var(--surface); min-height: 44px; font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.35; position: relative; }
+    #semana-texto::after { content: "▾"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--ink-2); }
+    .elegir:focus-within #semana-texto { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .controles label:first-child { flex: 1 1 260px; }
     select { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--surface); min-height: 44px; max-width: 100%; }
     .btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 14px; min-height: 44px; font-weight: 800; cursor: pointer; }
     .btn:hover { border-color: var(--accent); }
     .btn.principal { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-    .hoja { background: #FFFDF8; color: #2B241C; border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; display: grid; gap: 22px; }
+    .hoja { background: #FFFDF8; color: #2B241C; border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }   /* minmax: a 320 px un ejercicio ancho estiraba la hoja (7-nov-2026) */
     .hoja-cabeza { display: grid; gap: 4px; border-bottom: 2px solid #2B241C; padding-bottom: 10px; }
     .hoja-cabeza .etapa { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #8F6A2A; }
     .hoja-cabeza h2 { font-size: 26px; color: #2B241C; }
     .hoja-cabeza p { margin: 0; color: #5A4E40; }
     .datos-alumno { display: none; gap: 20px; font-size: 14px; }
     .datos-alumno span { flex: 1; border-bottom: 1px solid #2B241C; padding-bottom: 2px; }
-    .ejercicio { display: grid; gap: 10px; break-inside: avoid; }
+    .ejercicio { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; break-inside: avoid; }
     .ejercicio h3 { font-size: 19px; color: #2B241C; }
     .ejercicio h3 small { font-family: var(--f-body); font-size: 13px; color: #8F6A2A; font-weight: 800; margin-left: 6px; }
     .consigna { margin: 0; color: #5A4E40; }
@@ -76,11 +84,11 @@
     .item .num { font-weight: 800; font-size: 13px; color: #8F6A2A; justify-self: start; }
     .item .enunciado { font-size: 17px; font-weight: 700; }
     .item svg { width: 100%; max-width: 230px; height: auto; display: block; }
-    .items.medianos { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+    .items.medianos { grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); }   /* min(): a 320 px la columna de 290 se salía (7-nov-2026) */
     .items.medianos .item svg { max-width: 380px; }
     .respuestas { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; max-width: 100%; }
     .items.anchos .respuestas { justify-content: flex-start; }
-    .respuestas input, .respuestas select { width: 7.5em; min-height: 40px; border: 0; border-bottom: 2px solid #2B241C; border-radius: 0; background: transparent; padding: 4px 6px; text-align: center; color: #2B241C; font-family: var(--f-hand); font-size: 24px; }
+    .respuestas input, .respuestas select { width: 7.5em; min-height: 44px; border: 0; border-bottom: 2px solid #2B241C; border-radius: 0; background: transparent; padding: 4px 6px; text-align: center; color: #2B241C; font-family: var(--f-hand); font-size: 24px; }
     .respuestas select { font-family: var(--f-body); font-size: 15px; width: auto; max-width: 100%; border: 1px solid #CDBF9F; border-radius: 8px; }
     .respuestas input.corto { width: 3.6em; }
     .respuestas input.nota { width: 3.4em; }
@@ -88,7 +96,7 @@
     .respuestas .sep { color: #8F6A2A; font-weight: 800; }
     .ok input, .ok select, input.ok, select.ok { border-color: #48592F !important; background: #E1E6CF !important; }
     input.mal, select.mal { border-color: #9A5245 !important; background: #F3DED8 !important; }
-    .solucion { font-size: 14px; color: #48592F; font-weight: 700; }
+    .solucion { font-size: 14px; color: #48592F; font-weight: 700; flex-basis: 100%; overflow-wrap: anywhere; }
     .dibujable { cursor: pointer; touch-action: manipulation; }
     .sin-hoja { text-align: center; padding: 28px 12px; }
     .sin-hoja p { margin: 8px auto 0; max-width: 34em; color: var(--ink-2); }
@@ -131,7 +139,7 @@
       <p class="intro">Una hoja por lección de la guía de Sprinkloud. Resuélvela aquí o imprímela: lo que se escribe no se olvida.</p>
     </header>
     <div class="controles">
-      <label for="semana">Lección<select id="semana"></select></label>
+      <label for="semana">Lección<span class="elegir"><span id="semana-texto" aria-hidden="true"></span><select id="semana"></select></span></label>
       <label for="instrumento">Instrumento<select id="instrumento"><option value="piano">Piano</option><option value="violin">Violín</option></select></label>
       <button class="btn" type="button" id="otra">Otra hoja</button>
       <button class="btn" type="button" id="imprimir">Imprimir</button>
@@ -147,7 +155,7 @@
 
 <script>
 /* ---------- La guía (semana, etapa, tema, objetivo); la fuente es Registro_Sprinkloud/Guia.js ---------- */
-const GUIA = /*GUIA*/[[1,"1 · Cuerpo y pulso","El pulso","Mantiene el pulso 30 segundos con el metrónomo a 80, con palmas y en el pecho."],[2,"1 · Cuerpo y pulso","Largo y corto: ta y ti-ti","Dice y palmea ritmos de 4 pulsos con ta (negra) y ti-ti (corcheas)."],[3,"1 · Cuerpo y pulso","El silencio","Reconoce y respeta el silencio de negra dentro de un ritmo de 4 pulsos."],[4,"1 · Cuerpo y pulso","Agudo y grave","Distingue si un sonido sube o baja y lo muestra con el cuerpo."],[5,"1 · Cuerpo y pulso","Sol-mi: primeras notas cantadas","Canta sol-mi afinado y lo encuentra en su instrumento."],[6,"1 · Cuerpo y pulso","Ostinato y conjunto","Mantiene un ritmo repetido (ostinato) mientras otro suena distinto."],[7,"2 · Primeras lecturas","El pentagrama","Nombra líneas y espacios del pentagrama y ubica una nota en cada uno."],[8,"2 · Primeras lecturas","Clave de sol: sol, mi, la","Lee y canta sol, mi y la en clave de sol."],[9,"2 · Primeras lecturas","Do-re-mi","Canta, toca y ubica do, re y mi en el pentagrama."],[10,"2 · Primeras lecturas","La escala de Do","Canta la escala de Do subiendo y bajando, diciendo el nombre de cada nota."],[11,"2 · Primeras lecturas","Figuras: redonda, blanca, negra, corchea","Dice cuánto dura cada figura y la toca con su duración."],[12,"2 · Primeras lecturas","Compás: 2/4, 3/4 y 4/4","Marca el acento del compás y reconoce si una canción va en 2, 3 o 4."],[13,"2 · Primeras lecturas","Primera lectura de 4 compases","Lee y toca una melodía de 4 compases en clave de sol sin parar."],[14,"2 · Primeras lecturas","Dictado rítmico","Escucha un ritmo de 4 pulsos y lo escribe correctamente."],[15,"3 · Lectura y ritmo","El puntillo","Lee y toca blanca con puntillo y negra con puntillo."],[16,"3 · Lectura y ritmo","Semicorcheas: ta-ka-di-mi","Dice y toca 4 semicorcheas parejas en un pulso."],[17,"3 · Lectura y ritmo","Combinaciones: ta-di-mi y ta-ka-di","Lee corchea + 2 semicorcheas y 2 semicorcheas + corchea."],[18,"3 · Lectura y ritmo","Ligadura y síncopa","Toca una síncopa simple sin acelerar."],[19,"3 · Lectura y ritmo","Coordinación: pulso y ritmo a la vez","Marca el pulso con una mano y dice el ritmo con la voz al mismo tiempo."],[20,"3 · Lectura y ritmo","Clave de fa: líneas / Cuerda Sol","Piano: nombra y toca las 5 líneas de la clave de fa (sol, si, re, fa, la). Violín: lee y toca las notas de la cuerda Sol."],[21,"3 · Lectura y ritmo","Clave de fa: espacios / Cuerda Mi","Piano: nombra y toca los 4 espacios de la clave de fa (la, do, mi, sol). Violín: lee y toca las notas de la cuerda Mi."],[22,"3 · Lectura y ritmo","Líneas adicionales: clave de sol / abajo","Piano: lee las notas con líneas adicionales en clave de sol. Violín: lee las notas con líneas adicionales abajo del pentagrama."],[23,"3 · Lectura y ritmo","Líneas adicionales: clave de fa / arriba","Piano: lee las notas con líneas adicionales en clave de fa. Violín: lee las notas con líneas adicionales arriba del pentagrama."],[24,"3 · Lectura y ritmo","Lectura con todas las notas","Lee una melodía de 8 compases usando todo lo aprendido."],[25,"3 · Lectura y ritmo","Las 12 notas: sostenidos y bemoles","Nombra las 12 notas en orden (con sus sostenidos y bemoles) y las toca."],[26,"3 · Lectura y ritmo","Tono y semitono","Distingue tono y semitono en su instrumento y de oído."],[27,"3 · Lectura y ritmo","Intervalos 1: segundas y terceras","Explica qué es un intervalo y reconoce 2ª y 3ª, menores y mayores, contando semitonos."],[28,"4 · Intervalos, escalas y acordes","Intervalos 2: cuarta, quinta, tritono y octava","Reconoce de oído 4ª justa, 5ª justa, tritono y 8ª, con canciones de referencia."],[29,"4 · Intervalos, escalas y acordes","Intervalos 3: sextas y séptimas","Nombra los 12 intervalos con sus semitonos y reconoce de oído al menos 6."],[30,"4 · Intervalos, escalas y acordes","La escala mayor: fórmula e intervalos","Construye una escala mayor con T-T-S-T-T-T-S, nombra sus intervalos y la canta."],[31,"4 · Intervalos, escalas y acordes","Escalas de Sol y Fa mayor y su armadura","Toca Sol y Fa mayor y explica qué dice la armadura."],[32,"4 · Intervalos, escalas y acordes","Orden de los sostenidos: ¿en qué tonalidad estoy?","Dice el orden de los sostenidos y descubre la tonalidad mayor de una armadura (el último sostenido más un semitono)."],[33,"4 · Intervalos, escalas y acordes","Orden de los bemoles","Dice el orden de los bemoles y descubre la tonalidad mayor de una armadura con bemoles (el penúltimo bemol; con uno solo, Fa mayor)."],[34,"4 · Intervalos, escalas y acordes","Triadas mayor y menor","Arma un acorde mayor (4 + 3) y uno menor (3 + 4) desde cualquier nota y los distingue de oído."],[35,"4 · Intervalos, escalas y acordes","Triadas aumentada y disminuida","Construye las 4 triadas y analiza los acordes de la canción que toca."],[36,"4 · Intervalos, escalas y acordes","Inversiones de acordes","Reconoce un acorde invertido, dice su nombre y qué nota tiene en el bajo (Do/Mi, Do/Sol)."],[37,"4 · Intervalos, escalas y acordes","Armonizar la escala mayor","Nombra los 7 acordes que salen de Do mayor (I a VII) y dice cuáles son mayores y menores."],[38,"5 · Tonalidad: reposo, mayor y menor","Centro tonal y reposo","Reconoce de oído cuándo una canción \"llega a casa\" (reposo en el I)."],[39,"5 · Tonalidad: reposo, mayor y menor","Progresiones mayores: I, IV, V y vi","Acompaña una canción sencilla con I, IV, V y vi."],[40,"5 · Tonalidad: reposo, mayor y menor","Escala menor natural y su relativa","Explica que La menor y Do mayor tienen las mismas notas y distingue de oído mayor y menor."],[41,"5 · Tonalidad: reposo, mayor y menor","Progresiones menores","Toca una progresión que reposa en un acorde menor (i, iv, v o VI, VII)."],[42,"5 · Tonalidad: reposo, mayor y menor","Círculo de quintas: mayores, menores y sus acordes","Usa el círculo para ubicar una tonalidad, su relativa menor, sus 6 acordes y sus vecinas (para progresiones y cambios de tonalidad)."],[43,"5 · Tonalidad: reposo, mayor y menor","Escala pentatónica","Construye la pentatónica mayor y menor quitando 2 notas de su escala."],[44,"5 · Tonalidad: reposo, mayor y menor","Improvisar con la pentatónica","Improvisa 8 compases con la pentatónica sobre una base, terminando en reposo."],[45,"5 · Tonalidad: reposo, mayor y menor","Compás de 6/8","Siente y toca el 6/8 en dos grandes pulsos."],[46,"5 · Tonalidad: reposo, mayor y menor","Dictado melódico","Escribe una melodía corta de 4 compases de oído."],[47,"6 · Músico completo","Dinámicas y articulaciones","Toca piano, forte, crescendo, ligado y staccato cuando lo pide la partitura."],[48,"6 · Músico completo","Tempo y términos","Conoce Lento, Andante, Allegro y los toca con el metrónomo."],[49,"6 · Músico completo","La forma: AB y ABA","Reconoce las partes de una canción y las nombra."],[50,"6 · Músico completo","Lectura a primera vista","Lee 8 compases nuevos sin parar, aunque se equivoque."],[51,"6 · Músico completo","Acorde de séptima de dominante","Construye el V7 y explica por qué \"pide\" volver al I."],[52,"6 · Músico completo","Proyecto: mi primera composición","Compone y toca 8 compases usando compás, escala, acordes y reposo."],[53,"7 · Los modos griegos","¿Qué es un modo?","Explica qué es un modo (las mismas notas con otra nota casa) y nombra los 7 modos con su tecla blanca."],[54,"7 · Los modos griegos","El modo eólico: la menor natural","Toca el modo eólico y explica en qué se diferencia del jónico."],[55,"7 · Los modos griegos","El modo mixolidio","Toca el modo mixolidio y dice su nota característica (la séptima menor)."],[56,"7 · Los modos griegos","El modo dórico","Toca el modo dórico y dice su nota característica (la sexta mayor)."],[57,"7 · Los modos griegos","El modo lidio","Toca el modo lidio y dice su nota característica (la cuarta aumentada)."],[58,"7 · Los modos griegos","El modo frigio","Toca el modo frigio y dice su nota característica (la segunda menor)."],[59,"7 · Los modos griegos","El modo locrio","Toca el modo locrio y explica por qué suena inestable (la quinta disminuida)."],[60,"7 · Los modos griegos","Los 7 modos, del más brillante al más oscuro","Ordena los 7 modos por su brillo y los reconoce de oído (mayor o menor y su nota característica)."]];
+const GUIA = /*GUIA*/[[1,"1 · Cuerpo y pulso","El pulso","Mantiene el pulso 30 segundos con el metrónomo a 80, con palmas y en el pecho."],[2,"1 · Cuerpo y pulso","Largo y corto: ta y ti-ti","Dice y palmea ritmos de 4 pulsos con ta (negra) y ti-ti (corcheas)."],[3,"1 · Cuerpo y pulso","El silencio","Reconoce y respeta el silencio de negra dentro de un ritmo de 4 pulsos."],[4,"1 · Cuerpo y pulso","Agudo y grave","Distingue si un sonido sube o baja y lo muestra con el cuerpo."],[5,"1 · Cuerpo y pulso","Sol-mi: primeras notas cantadas","Canta sol-mi afinado y lo encuentra en su instrumento."],[6,"1 · Cuerpo y pulso","Ostinato y conjunto","Mantiene un ritmo repetido (ostinato) mientras otro suena distinto."],[7,"2 · Primeras lecturas","El pentagrama","Nombra líneas y espacios del pentagrama y ubica una nota en cada uno."],[8,"2 · Primeras lecturas","Clave de sol: sol, mi, la","Lee y canta sol, mi y la en clave de sol."],[9,"2 · Primeras lecturas","Do-re-mi","Canta, toca y ubica do, re y mi en el pentagrama."],[10,"2 · Primeras lecturas","La escala de Do","Canta la escala de Do subiendo y bajando, diciendo el nombre de cada nota."],[11,"2 · Primeras lecturas","Figuras: redonda, blanca, negra, corchea","Dice cuánto dura cada figura y la toca con su duración."],[12,"2 · Primeras lecturas","Compás: 2/4, 3/4 y 4/4","Marca el acento del compás y reconoce si una canción va en 2, 3 o 4."],[13,"2 · Primeras lecturas","Primera lectura de 4 compases","Lee y toca una melodía de 4 compases en clave de sol sin parar."],[14,"2 · Primeras lecturas","Dictado rítmico","Escucha un ritmo de 4 pulsos y lo escribe correctamente."],[15,"3 · Lectura y ritmo","El puntillo","Lee y toca blanca con puntillo y negra con puntillo."],[16,"3 · Lectura y ritmo","Semicorcheas: ta-ka-di-mi","Dice y toca 4 semicorcheas parejas en un pulso."],[17,"3 · Lectura y ritmo","Combinaciones: ta-di-mi y ta-ka-di","Lee corchea + 2 semicorcheas y 2 semicorcheas + corchea."],[18,"3 · Lectura y ritmo","Ligadura y síncopa","Toca una síncopa simple sin acelerar."],[19,"3 · Lectura y ritmo","Coordinación: pulso y ritmo a la vez","Marca el pulso con una mano y dice el ritmo con la voz al mismo tiempo."],[20,"3 · Lectura y ritmo","Clave de fa: líneas / Cuerda Sol","Piano: nombra y toca las 5 líneas de la clave de fa (sol, si, re, fa, la). Violín: lee y toca las notas de la cuerda Sol."],[21,"3 · Lectura y ritmo","Clave de fa: espacios / Cuerda Mi","Piano: nombra y toca los 4 espacios de la clave de fa (la, do, mi, sol). Violín: lee y toca las notas de la cuerda Mi."],[22,"3 · Lectura y ritmo","Líneas adicionales: clave de sol / Líneas adicionales abajo","Piano: lee las notas con líneas adicionales en clave de sol. Violín: lee las notas con líneas adicionales abajo del pentagrama."],[23,"3 · Lectura y ritmo","Líneas adicionales: clave de fa / Líneas adicionales arriba","Piano: lee las notas con líneas adicionales en clave de fa. Violín: lee las notas con líneas adicionales arriba del pentagrama."],[24,"3 · Lectura y ritmo","Lectura con todas las notas","Lee una melodía de 8 compases usando todo lo aprendido."],[25,"3 · Lectura y ritmo","Las 12 notas: sostenidos, bemoles y becuadro","Nombra las 12 notas en orden (con sus sostenidos y bemoles) y las toca."],[26,"3 · Lectura y ritmo","Tono y semitono","Distingue tono y semitono en su instrumento y de oído."],[27,"3 · Lectura y ritmo","Intervalos 1: segundas y terceras","Explica qué es un intervalo y reconoce 2ª y 3ª, menores y mayores, contando semitonos."],[28,"4 · Intervalos, escalas y acordes","Intervalos 2: cuarta, quinta, tritono y octava","Reconoce de oído 4ª justa, 5ª justa, tritono y 8ª, con canciones de referencia."],[29,"4 · Intervalos, escalas y acordes","Intervalos 3: sextas, séptimas, aumentados y disminuidos","Nombra los 12 intervalos con sus semitonos y reconoce de oído al menos 6."],[30,"4 · Intervalos, escalas y acordes","La escala mayor: fórmula e intervalos","Construye una escala mayor con T-T-S-T-T-T-S, nombra sus intervalos y la canta."],[31,"4 · Intervalos, escalas y acordes","Escalas de Sol y Fa mayor y su armadura","Toca Sol y Fa mayor y explica qué dice la armadura."],[32,"4 · Intervalos, escalas y acordes","Orden de los sostenidos: ¿en qué tonalidad estoy?","Dice el orden de los sostenidos y descubre la tonalidad mayor de una armadura (el último sostenido más un semitono)."],[33,"4 · Intervalos, escalas y acordes","Orden de los bemoles","Dice el orden de los bemoles y descubre la tonalidad mayor de una armadura con bemoles (el penúltimo bemol; con uno solo, Fa mayor)."],[34,"4 · Intervalos, escalas y acordes","Triadas mayor y menor","Arma un acorde mayor (4 + 3) y uno menor (3 + 4) desde cualquier nota y los distingue de oído."],[35,"4 · Intervalos, escalas y acordes","Triadas aumentada y disminuida","Construye las 4 triadas y analiza los acordes de la canción que toca."],[36,"4 · Intervalos, escalas y acordes","Inversiones de acordes","Reconoce un acorde invertido, dice su nombre y qué nota tiene en el bajo (Do/Mi, Do/Sol)."],[37,"4 · Intervalos, escalas y acordes","Armonizar la escala mayor","Nombra los 7 acordes que salen de Do mayor (I a VII) y dice cuáles son mayores y menores."],[38,"5 · Tonalidad: reposo, mayor y menor","Centro tonal y reposo","Reconoce de oído cuándo una canción \"llega a casa\" (reposo en el I)."],[39,"5 · Tonalidad: reposo, mayor y menor","Progresiones mayores: I, IV, V y vi","Acompaña una canción sencilla con I, IV, V y vi."],[40,"5 · Tonalidad: reposo, mayor y menor","Escala menor natural y su relativa","Explica que La menor y Do mayor tienen las mismas notas y distingue de oído mayor y menor."],[41,"5 · Tonalidad: reposo, mayor y menor","Progresiones menores y escala menor armónica","Toca una progresión que reposa en un acorde menor: i – iv – V – i (el V es mayor porque lleva la séptima nota subida: Sol♯ en La menor)."],[42,"5 · Tonalidad: reposo, mayor y menor","Círculo de quintas: mayores, menores y sus acordes","Usa el círculo para ubicar una tonalidad, su relativa menor, sus 6 acordes y sus vecinas (para progresiones y cambios de tonalidad)."],[43,"5 · Tonalidad: reposo, mayor y menor","Escala pentatónica","Construye la pentatónica mayor y menor quitando 2 notas de su escala."],[44,"5 · Tonalidad: reposo, mayor y menor","Improvisar con la pentatónica","Improvisa 8 compases con la pentatónica sobre una base, terminando en reposo."],[45,"5 · Tonalidad: reposo, mayor y menor","Compás de 6/8","Siente y toca el 6/8 en dos grandes pulsos."],[46,"5 · Tonalidad: reposo, mayor y menor","Dictado melódico","Escribe una melodía corta de 4 compases de oído."],[47,"6 · Músico completo","Dinámicas (pp a ff), articulaciones y ligaduras","Toca piano, forte, crescendo, ligado y staccato cuando lo pide la partitura."],[48,"6 · Músico completo","Tempo y términos","Conoce Lento, Andante, Allegro y los toca con el metrónomo."],[49,"6 · Músico completo","La forma y las repeticiones (AB, ABA, casillas y calderón)","Reconoce las partes de una canción y las nombra."],[50,"6 · Músico completo","Lectura a primera vista y anacrusa","Lee 8 compases nuevos sin parar, aunque se equivoque."],[51,"6 · Músico completo","Acorde de séptima de dominante","Construye el V7 y explica por qué \"pide\" volver al I."],[52,"6 · Músico completo","Proyecto: mi primera composición","Compone y toca 8 compases usando compás, escala, acordes y reposo."],[53,"7 · Los modos griegos","¿Qué es un modo?","Explica qué es un modo (las mismas notas con otra nota casa) y nombra los 7 modos con su tecla blanca."],[54,"7 · Los modos griegos","El modo eólico: la menor natural","Toca el modo eólico y explica en qué se diferencia del jónico."],[55,"7 · Los modos griegos","El modo mixolidio","Toca el modo mixolidio y dice su nota característica (la séptima menor)."],[56,"7 · Los modos griegos","El modo dórico","Toca el modo dórico y dice su nota característica (la sexta mayor)."],[57,"7 · Los modos griegos","El modo lidio","Toca el modo lidio y dice su nota característica (la cuarta aumentada)."],[58,"7 · Los modos griegos","El modo frigio","Toca el modo frigio y dice su nota característica (la segunda menor)."],[59,"7 · Los modos griegos","El modo locrio","Toca el modo locrio y explica por qué suena inestable (la quinta disminuida)."],[60,"7 · Los modos griegos","Los 7 modos, del más brillante al más oscuro","Ordena los 7 modos por su brillo y los reconoce de oído (mayor o menor y su nota característica)."]];
 /* Las lecciones 20 a 23 son distintas en piano y en violín: el tema dice «piano / violín» y el objetivo
    «Piano: … Violín: …». parteDe deja solo la del instrumento. */
 function parteDe(texto, ins) {
@@ -197,6 +205,16 @@ const MODOS_HOJA = [{ n: 'Jónico', b: 0, car: null }, { n: 'Eólico', b: 5, car
   { n: 'Lidio', b: 3, car: 3 }, { n: 'Frigio', b: 2, car: 1 }, { n: 'Locrio', b: 6, car: 4 }];
 const NOMBRES_BLANCAS = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
 const ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+/* 7-nov-2026: lo que piden los libros nuevos (Libro_Sprinkloud/rehacer-practica-2026-11-07.md, sección 4) */
+const ARMONICA = [0, 2, 3, 5, 7, 8, 11];
+const INTERVALOS_AD = [{ n: '2ª aumentada', st: 3, p: 1 }, { n: '4ª aumentada', st: 6, p: 3 }, { n: '5ª disminuida', st: 6, p: 4 }, { n: '5ª aumentada', st: 8, p: 4 }];
+const MODO_PAT = { 'Jónico': MAYOR, 'Dórico': [0, 2, 3, 5, 7, 9, 10], 'Frigio': [0, 1, 3, 5, 7, 8, 10], 'Lidio': [0, 2, 4, 6, 7, 9, 11],
+  'Mixolidio': [0, 2, 4, 5, 7, 9, 10], 'Eólico': MENOR, 'Locrio': [0, 1, 3, 5, 6, 8, 10] };
+const BRILLO = ['Lidio', 'Jónico', 'Mixolidio', 'Dórico', 'Eólico', 'Frigio', 'Locrio'];   // del más brillante al más oscuro
+/* duración de cada figura en negras */
+const FIG = { redonda: 4, blanca: 2, negra: 1, corchea: 0.5, semicorchea: 0.25, 'blanca con puntillo': 3, 'negra con puntillo': 1.5 };
+/* cuerdas del violín en primera posición (libro 3): dedos 0 a 3 en semitonos desde la cuerda al aire */
+const CUERDAS = { Sol: { t: nota(4, 0, 3), st: [0, 2, 4, 5] }, Mi: { t: nota(2, 0, 5), st: [0, 2, 3, 5] } };
 
 /* ---------- Lo que escribe el alumno: notas y acordes en español o con letras ---------- */
 const limpio = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
@@ -243,13 +261,14 @@ function distintos(n, gen, clave) {
 
 /* ---------- Dibujo con VexFlow ---------- */
 const VF = Vex.Flow;
-function pentagrama(contenedor, { ancho = 190, alto = 120, clave = 'treble', compas = null, sinClave = false } = {}) {
+function pentagrama(contenedor, { ancho = 190, alto = 120, clave = 'treble', compas = null, sinClave = false, armadura = null } = {}) {
   const r = new VF.Renderer(contenedor, VF.Renderer.Backends.SVG);
   r.resize(ancho, alto);
   const ctx = r.getContext();
   ctx.setFillStyle('#2B241C'); ctx.setStrokeStyle('#2B241C');
   const st = new VF.Stave(4, 10, ancho - 10);
   if (!sinClave) st.addClef(clave);
+  if (armadura) st.addKeySignature(armadura);
   if (compas) st.addTimeSignature(compas);
   st.setContext(ctx).draw();
   const svg = contenedor.querySelector('svg');
@@ -292,20 +311,20 @@ function el(tag, attrs = {}, ...hijos) {
   for (const h of hijos.flat(Infinity)) if (h != null && h !== false) e.append(h);
   return e;
 }
-let campos = [];   /* cada campo: { el, ok(valor), solucion } */
+let campos = [];   /* cada campo: { el, ok(valor), solucion, muestra } (muestra: una respuesta aceptada, si la solución trae explicación) */
 let idCampo = 0;
-function campo(ok, solucion, clase, etiqueta) {
+function campo(ok, solucion, clase, etiqueta, muestra) {
   const i = el('input', { type: 'text', class: clase || '', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', id: 'c' + (++idCampo), 'aria-label': etiqueta || 'Respuesta' });
-  campos.push({ el: i, ok, solucion });
+  campos.push({ el: i, ok, solucion, muestra: muestra == null ? solucion : muestra });
   return i;
 }
 function eleccion(opciones, correcta, etiqueta) {
   const s = el('select', { id: 'c' + (++idCampo), 'aria-label': etiqueta || 'Elige' }, el('option', { value: '', text: '…' }), opciones.map(o => el('option', { value: o, text: o })));
-  campos.push({ el: s, ok: v => v === correcta, solucion: correcta });
+  campos.push({ el: s, ok: v => v === correcta, solucion: correcta, muestra: correcta });
   return s;
 }
 const campoNota = n => campo(v => mismaNota(v, n), nombre(n), 'nota', 'Nombre de la nota');
-const campoAcorde = (r, tipo) => campo(v => { const x = leerAcorde(v); return !!x && x.r.l === r.l && x.r.a === r.a && x.tipo === tipo; }, nombreAcorde(r, tipo) + ' (' + nombre(r) + ' ' + tipo + ')', '', 'Acorde');
+const campoAcorde = (r, tipo) => campo(v => { const x = leerAcorde(v); return !!x && x.r.l === r.l && x.r.a === r.a && x.tipo === tipo; }, nombreAcorde(r, tipo) + ' (' + nombre(r) + ' ' + tipo + ')', '', 'Acorde', nombreAcorde(r, tipo));
 const campoNumero = (n, sol) => campo(v => Math.abs(leerNumero(v) - n) < 1e-9, sol || String(n).replace('.', ','), 'corto', 'Número');
 function ejercicio(titulo, consigna, items, { anchos = false, medianos = false, papel = '' } = {}) {
   return el('section', { class: 'ejercicio' },
@@ -314,6 +333,53 @@ function ejercicio(titulo, consigna, items, { anchos = false, medianos = false, 
     el('div', { class: 'items' + (anchos ? ' anchos' : medianos ? ' medianos' : '') }, items));
 }
 const item = (i, ...hijos) => el('div', { class: 'item' }, el('span', { class: 'num', text: String(i + 1) }), hijos);
+/* 7-nov-2026: piezas de los ejercicios nuevos */
+const texto = t => el('div', { class: 'enunciado', text: t });
+const resp = (...w) => el('div', { class: 'respuestas' }, w);
+const sep = t => el('span', { class: 'sep', text: t });
+/** Ejercicio de preguntas sueltas: cada una con su texto (t), un dibujo opcional (d) y sus campos (w). */
+function preguntas(titulo, consigna, lista, opciones = {}) {
+  return ejercicio(titulo, consigna, lista.map((q, i) => item(i, q.d || null, q.t ? texto(q.t) : null, resp(q.w))), Object.assign({ papel: 'Hoja rayada' }, opciones));
+}
+const pcDe = x => mod12(PC[x.l] + x.a);
+/** Acepta cualquier nombre de la misma altura (Do♯ o Re♭): para subir un tono o un semitono sin saber todavía intervalos. */
+const campoAltura = (n, sol) => campo(v => { const x = leerNota(v); return !!x && pcDe(x) === pcDe(n); }, sol || nombre(n), 'nota', 'Nombre de la nota', nombre(n));
+const campoLetras = (correcta, etiqueta) => campo(v => limpio(v).replace(/[^a-z]/g, '').toUpperCase() === correcta, correcta, '', etiqueta || 'Letras');
+/** Una lista de números en orden («1, 2, 1, 3»). Con conjunto, el orden no importa («1, 2 y 4»). */
+function campoNumeros(ns, conjunto) {
+  const sol = ns.length > 1 && conjunto ? ns.slice(0, -1).join(', ') + ' y ' + ns[ns.length - 1] : ns.join(', ');
+  const norm = a => (conjunto ? a.slice().sort((x, y) => x - y) : a).join(',');
+  return campo(v => norm((String(v).match(/\d+/g) || []).map(Number)) === norm(ns), sol, 'largo', 'Números');
+}
+const sonidosDe = celdas => celdas.reduce((s, c) => s + c.f.filter(f => !f.endsWith('r')).length, 0);
+const pulsosDe = celdas => celdas.reduce((s, c) => s + c.p, 0);
+const romanoDe = (ns, k) => { const t = tipoGrado(ns, k); return t === 'mayor' || t === 'aumentada' ? ROMANOS[k] : ROMANOS[k].toLowerCase() + (t === 'disminuida' ? '°' : ''); };
+const acordeDe = (ns, k) => nombreAcorde(ns[k], tipoGrado(ns, k));
+const mayus = t => t.charAt(0).toUpperCase() + t.slice(1);
+/** La casilla 1 o 2 (corchete con su número) encima de un compás; se dibuja a mano porque la Volta de VexFlow 4 salía sin la raya de arriba */
+function casilla(ctx, st, texto, cerrada) {
+  const x0 = st.getNoteStartX() + 2, x1 = st.getX() + st.getWidth() - 4, y = st.getYForLine(0) - 28;
+  ctx.save(); ctx.setLineWidth(1.4); ctx.beginPath(); ctx.moveTo(x0, y + 14); ctx.lineTo(x0, y); ctx.lineTo(x1, y); if (cerrada) ctx.lineTo(x1, y + 14); ctx.stroke();
+  ctx.setFont('Arial', 12, 'bold'); ctx.fillText(texto, x0 + 4, y + 13); ctx.restore();
+}
+/** Un compás con figuras y alturas (notas: [{ n, d }], n = null para un silencio) */
+function melodiaEn(contenedor, notas, opciones = {}) {
+  const { ctx, st } = pentagrama(contenedor, Object.assign({ ancho: 300, alto: 130 }, opciones));
+  const clave = opciones.clave || 'treble';
+  const sn = notas.map(x => {
+    const punto = x.d.endsWith('d');
+    const n = new VF.StaveNote({ keys: [x.n ? vfKey(x.n) : (clave === 'bass' ? 'd/3' : 'b/4')], duration: x.n ? x.d : x.d + 'r', clef: clave, auto_stem: true });
+    if (x.n && x.alt) n.addModifier(new VF.Accidental(x.alt), 0);
+    if (x.fermata) n.addModifier(new VF.Articulation('a@a').setPosition(3), 0);   // 3 = arriba
+    if (punto) VF.Dot.buildAndAttach([n], { all: true });
+    return n;
+  });
+  const beams = VF.Beam.generateBeams(sn, opciones.compas === '6/8' ? { groups: [new VF.Fraction(3, 8)] } : {});
+  VF.Formatter.FormatAndDraw(ctx, st, sn, { auto_beam: false });
+  beams.forEach(b => b.setContext(ctx).draw());
+  (opciones.ligas || []).forEach(([a, b]) => new VF.StaveTie({ first_note: sn[a], last_note: sn[b], first_indices: [0], last_indices: [0] }).setContext(ctx).draw());
+  return sn;
+}
 
 /* ---------- Tipos de ejercicio ---------- */
 const RANGO = {
@@ -407,22 +473,26 @@ const T = {
     }), { medianos: true, papel: 'Hoja pautada' });
   },
   secuencia({ titulo, consigna, series, cant = 4 }) {
+    const usados = new Set();   /* 7-nov-2026: si la misma serie sale dos veces, con otros huecos */
     return ejercicio(titulo, consigna, varios(series, cant).map((s, i) => {
-      const huecos = mezclar(s.map((_, k) => k).slice(1)).slice(0, Math.max(1, Math.round(s.length / 3)));
+      let huecos, intento = 0;
+      do { huecos = mezclar(s.map((_, k) => k).slice(1)).slice(0, Math.max(1, Math.round(s.length / 3))); } while (usados.has(s.map(nombre) + huecos.sort()) && ++intento < 20);
+      usados.add(s.map(nombre) + huecos.sort());
       return item(i, el('div', { class: 'respuestas' }, s.map((n, k) => [k ? el('span', { class: 'sep', text: '·' }) : null,
         huecos.includes(k) ? campoNota(n) : el('span', { class: 'enunciado', text: nombre(n) })])));
     }), { anchos: true, papel: 'Hoja rayada' });
   },
   tonoSemitono({ cant = 8 }) {
-    const pares = [[2, 3], [6, 0], [0, 1], [3, 4], [4, 5], [1, 2], [5, 6], [2, 3]].map(([a, b]) => [nota(a), nota(b, 0, b < a ? 5 : 4)]);
-    const extra = [[nota(3, 1), nota(4)], [nota(0), nota(0, 1)], [nota(5), nota(6, -1)], [nota(4), nota(5)]];
+    const pares = [[2, 3], [6, 0], [0, 1], [3, 4], [4, 5], [1, 2], [5, 6]].map(([a, b]) => [nota(a), nota(b, 0, b < a ? 5 : 4)]);
+    const extra = [[nota(3, 1), nota(4)], [nota(0), nota(0, 1)], [nota(5), nota(6, -1)]];   /* 7-nov-2026: sin pares repetidos (Mi-Fa y Sol-La salían dos veces) */
     return ejercicio('¿Tono o semitono?', 'Cuenta las teclas o los trastes entre las dos notas.', varios(pares.concat(extra), cant).map(([a, b], i) =>
       item(i, el('div', { class: 'enunciado', text: nombre(a) + ' → ' + nombre(b) }),
         el('div', { class: 'respuestas' }, eleccion(['Tono', 'Semitono'], semis(b) - semis(a) === 1 ? 'Semitono' : 'Tono'))))
     , { papel: 'Hoja rayada' });
   },
-  intervalos({ cuales, cant = 6 }) {
-    const lista = INTERVALOS.filter(x => cuales.includes(x.st));
+  intervalos({ cuales, cant = 6, extra = [] }) {
+    /* extra (7-nov-2026, lección 29): aumentados y disminuidos; con la 4ª aumentada sale «Tritono» (son el mismo intervalo) */
+    const lista = INTERVALOS.filter(x => cuales.includes(x.st) && !(x.n === 'Tritono' && extra.includes('4ª aumentada'))).concat(INTERVALOS_AD.filter(x => extra.includes(x.n)));
     const preguntas = distintos(cant, () => { let a, b, iv; do { iv = uno(lista); a = nota(Math.floor(azar() * 7), 0, 4); b = arriba(a, iv.p, iv.st); } while (!simple([b])); return { a, b, iv }; },
       x => nombre(x.a) + x.iv.st);
     return ejercicio('Nombra el intervalo', 'Cuenta los semitonos y escribe el nombre del intervalo.', preguntas.map(({ a, b, iv }, i) => {
@@ -431,12 +501,13 @@ const T = {
         eleccion(lista.map(x => x.n), iv.n, 'Intervalo')));
     }), { papel: 'Hoja pautada' });
   },
-  escalaMayor({ tonicas, menor = false }) {
-    const patron = menor ? MENOR : MAYOR;
-    return ejercicio(menor ? 'Completa la escala menor natural' : 'Completa la escala mayor', menor ? 'Fórmula: T-S-T-T-S-T-T.' : 'Fórmula: T-T-S-T-T-T-S. Escribe las notas que faltan con su alteración.',
+  escalaMayor({ tonicas, menor = false, armonica = false }) {
+    const patron = armonica ? ARMONICA : menor ? MENOR : MAYOR;
+    return ejercicio(armonica ? 'Completa la escala menor armónica' : menor ? 'Completa la escala menor natural' : 'Completa la escala mayor',
+      armonica ? 'Es la menor natural con la 7.ª nota subida un semitono.' : menor ? 'Fórmula: T-S-T-T-S-T-T.' : 'Fórmula: T-T-S-T-T-T-S. Escribe las notas que faltan con su alteración.',
       tonicas.map((t, i) => {
         const ns = escala(t, patron).concat([t]);
-        return item(i, el('div', { class: 'enunciado', text: nombre(t) + (menor ? ' menor' : ' mayor') }),
+        return item(i, el('div', { class: 'enunciado', text: nombre(t) + (armonica ? ' menor armónica' : menor ? ' menor' : ' mayor') }),
           el('div', { class: 'respuestas' }, ns.map((n, k) => [k ? el('span', { class: 'sep', text: '·' }) : null, k === 0 || k === 7 ? el('span', { class: 'enunciado', text: nombre(n) }) : campoNota(n)])));
       }), { anchos: true, papel: 'Hoja rayada' });
   },
@@ -529,8 +600,548 @@ const T = {
     const opciones = lista.map(x => x[1]);
     return ejercicio(titulo, 'Elige el significado.', mezclar(lista).map(([t, s], i) =>
       item(i, el('div', { class: 'enunciado', text: t }), el('div', { class: 'respuestas' }, eleccion(opciones, s)))), { medianos: true, papel: 'Hoja rayada' });
+  },
+
+  /* ================= 7-nov-2026: los ejercicios de los libros nuevos que no tenían práctica =================
+     Todo se genera con la semilla (ítems nuevos en cada hoja) y cada respuesta se calcula. En las series (escalas, modos,
+     órdenes, acordes) el alumno llena todo y al revisar se marca cada casilla: verde o roja con la correcta debajo. */
+
+  /* 1 · ¿pulso parejo? (● sonido, – pedacito de tiempo) */
+  pulsoParejo({ cant = 4 }) {
+    const lista = distintos(cant, () => {
+      const n = 4 + Math.floor(azar() * 2), base = 1 + Math.floor(azar() * 3), parejo = azar() < 0.5;
+      const g = Array.from({ length: n - 1 }, () => parejo ? base : 1 + Math.floor(azar() * 3));
+      if (!parejo && g.every(x => x === g[0])) g[Math.floor(azar() * g.length)] = g[0] === 3 ? 1 : g[0] + 1;
+      return g;
+    }, g => g.join());
+    return preguntas('¿El pulso es parejo?', 'Cada ● es un sonido y cada – es un pedacito de tiempo entre dos sonidos.', lista.map(g => ({
+      t: '●' + g.map(k => ' –'.repeat(k) + ' ●').join(''), w: [eleccion(['Parejo', 'No es parejo'], g.every(x => x === g[0]) ? 'Parejo' : 'No es parejo')] })), { anchos: true });
+  },
+  /* 1 y 48 · el metrónomo: pulsos por minuto, por segundo y cuánto duran N pulsos */
+  metronomo({ cant = 4, tipos = ['min', 'medio', 'seg', 'nseg', 'rapido'] }) {
+    const lista = distintos(cant, () => {
+      const t = uno(tipos);
+      if (t === 'min') { const b = uno([60, 72, 80, 90, 100, 120]); return { k: t + b, t: 'Con el metrónomo en ' + b + ', ¿cuántos pulsos suenan en un minuto?', n: b, u: 'pulsos' }; }
+      if (t === 'medio') { const b = uno([60, 80, 100, 120]); return { k: t + b, t: 'Con el metrónomo en ' + b + ', ¿cuántos pulsos suenan en medio minuto?', n: b / 2, u: 'pulsos' }; }
+      if (t === 'seg') { const b = uno([60, 120, 180]); return { k: t + b, t: 'Con el metrónomo en ' + b + ', ¿cuántos pulsos suenan en un segundo?', n: b / 60, u: 'pulsos' }; }
+      if (t === 'nseg') { const b = uno([60, 120]), p = uno([4, 6, 8, 12]); return { k: t + b + p, t: '¿Cuántos segundos duran ' + p + ' pulsos con el metrónomo en ' + b + '?', n: p * 60 / b, u: 'segundos' }; }
+      const [a, b] = mezclar([60, 72, 80, 90, 100, 120, 132]).slice(0, 2);
+      return { k: t + Math.min(a, b) + Math.max(a, b), t: '¿Qué es más rápido, ' + a + ' o ' + b + '?', ops: [String(a), String(b)], c: String(Math.max(a, b)) };
+    }, x => x.k);
+    return preguntas('El metrónomo', 'El número del metrónomo dice cuántos pulsos suenan en un minuto.', lista.map(x => ({ t: x.t,
+      w: x.ops ? [eleccion(x.ops, x.c)] : [campoNumero(x.n), sep(x.u)] })), { anchos: true });
+  },
+  /* 2, 3, 16 y 17 · contar los sonidos (y los pulsos) de un ritmo escrito con sílabas */
+  contarSonidos({ celdas, cant = 4, conPulsos = false }) {
+    const lista = distintos(cant, () => {
+      let resto = conPulsos ? uno([2, 3, 4]) : 4; const cs = [];
+      while (resto > 0) { const c = uno(celdas.filter(c => c.p <= resto)); cs.push(c); resto -= c.p; }
+      return cs;
+    }, cs => cs.map(c => c.s).join('|'));
+    return preguntas(conPulsos ? '¿Cuántos sonidos y cuántos pulsos?' : '¿Cuántos sonidos tiene?', 'La rayita | separa los pulsos. Cada sílaba que se dice es un sonido; el silencio (sh) no suena.',
+      lista.map(cs => ({ t: cs.map(c => c.s).join(' | '), w: [campoNumero(sonidosDe(cs)), sep('sonidos')].concat(conPulsos ? [campoNumero(pulsosDe(cs)), sep('pulsos')] : []) })), { anchos: true });
+  },
+  /* 2, 3 y 16 · la sílaba que falta para tener N sonidos en 4 pulsos */
+  silabaFalta({ celdas, cant = 3 }) {
+    const unPulso = celdas.filter(c => c.p === 1);
+    const ops = unPulso.filter((c, i) => unPulso.findIndex(x => sonidosDe([x]) === sonidosDe([c])) === i);   // sin dos opciones con los mismos sonidos
+    const lista = distintos(cant, () => ({ cs: Array.from({ length: 4 }, () => uno(ops)), h: Math.floor(azar() * 4) }), x => x.cs.map(c => c.s).join('|') + x.h);
+    return preguntas('Escribe lo que falta', 'Cada ritmo tiene 4 pulsos y los sonidos que se piden.', lista.map(({ cs, h }) => ({
+      t: cs.map((c, k) => k === h ? '___' : c.s).join(' | ') + ' (' + sonidosDe(cs) + ' sonidos)', w: [eleccion(ops.map(c => c.s), cs[h].s, 'Lo que falta')] })), { anchos: true });
+  },
+  /* 6 · el ostinato: ¿es ostinato?, cuánto dura y cuántas veces se repite, y continuarlo */
+  ostinato({ celdas, tipo, cant = 3 }) {
+    const patron = () => { let p; do { p = Array.from({ length: 2 + Math.floor(azar() * 3) }, () => uno(celdas)); } while (p.every(c => c === p[0])); return p; };
+    const escribir = gs => gs.map(g => g.map(c => c ? c.s : '___').join(' ')).join(' | ');
+    if (tipo === 'es') {
+      const lista = distintos(cant, () => {
+        const p = patron(), gs = [p, p, p, p].map(g => g.slice());
+        if (azar() < 0.5) [1, 3].forEach(k => { const j = Math.floor(azar() * p.length); gs[k][j] = uno(celdas.filter(c => c !== p[j])); });
+        return gs;
+      }, escribir);
+      return preguntas('¿Es un ostinato?', 'Un ostinato es el mismo ritmo repetido. La rayita | separa cada vuelta.', lista.map(gs => ({ t: escribir(gs),
+        w: [eleccion(SI_NO, gs.every(g => g.map(c => c.s).join() === gs[0].map(c => c.s).join()) ? 'Sí' : 'No')] })), { anchos: true });
+    }
+    if (tipo === 'medir') {
+      const lista = distintos(cant, () => ({ p: patron(), r: 2 + Math.floor(azar() * 3) }), x => x.p.map(c => c.s).join() + x.r);
+      return preguntas('¿Cuánto dura y cuántas veces se repite?', 'Cuenta los pulsos de una vuelta del ostinato y cuántas vueltas hay.', lista.map(({ p, r }) => ({
+        t: escribir(Array(r).fill(p)), w: [campoNumero(pulsosDe(p)), sep('pulsos'), campoNumero(r), sep('veces')] })), { anchos: true });
+    }
+    const lista = distintos(cant, () => ({ p: patron(), h: 0 }), x => x.p.map(c => c.s).join());
+    lista.forEach(x => { x.h = Math.floor(azar() * x.p.length); });
+    return preguntas('Continúa el ostinato', 'Escribe lo que falta en la última vuelta.', lista.map(({ p, h }) => ({
+      t: escribir([p, p, p.map((c, k) => k === h ? null : c)]), w: [eleccion(celdas.map(c => c.s), p[h].s, 'Lo que falta')] })), { anchos: true });
+  },
+  /* 1, 3, 6 y 38 · verdadero o falso (frases [texto, es verdad]) */
+  verdaderoFalso({ frases, cant = 4 }) {
+    return preguntas('¿Verdadero o falso?', null, mezclar(frases).slice(0, cant).map(([t, v]) => ({ t, w: [eleccion(['Verdadero', 'Falso'], v ? 'Verdadero' : 'Falso')] })), { anchos: true });
+  },
+  /* 4 · la escalera de sonidos: escalón 1 (grave) a 8 (agudo) */
+  escalera({ cant = 4 }) {
+    const lista = distintos(cant, () => {
+      const s = 1 + Math.floor(azar() * 8), movs = []; let pos = s;
+      for (let k = 0, n = 1 + Math.floor(azar() * 2); k < n; k++) {
+        const sube = pos === 1 || (pos < 8 && azar() < 0.5), cuanto = 1 + Math.floor(azar() * (sube ? 8 - pos : pos - 1));
+        movs.push((sube ? 'sube ' : 'baja ') + cuanto); pos += sube ? cuanto : -cuanto;
+      }
+      return { s, movs, fin: pos };
+    }, x => x.s + x.movs.join());
+    return preguntas('La escalera de sonidos', 'El escalón 1 es el más grave y el 8 el más agudo. ¿En qué escalón termina? ¿Más aguda o más grave que donde empezó?',
+      lista.map(x => ({ t: 'Empieza en el ' + x.s + ', ' + x.movs.join(' y '), w: [campoNumero(x.fin), sep('escalón')].concat(x.fin === x.s ? [sep('(igual)')] : [eleccion(['Más aguda', 'Más grave'], x.fin > x.s ? 'Más aguda' : 'Más grave')]) })), { anchos: true });
+  },
+  /* 5, 9 y 46 · escribir una melodía a partir de su descripción (notas en orden de escala; movs: [texto, pasos]) */
+  melodiaDescrita({ notas, movs, largo = 4, cant = 3, titulo = 'Escribe la melodía' }) {
+    const lista = distintos(cant, () => {
+      let i = Math.floor(azar() * notas.length); const idx = [i], dichos = [];
+      while (idx.length < largo) {
+        const m = uno(movs.filter(([, d]) => i + d >= 0 && i + d < notas.length));
+        i += m[1]; idx.push(i); dichos.push(m[0]);
+      }
+      return { idx, dichos };
+    }, x => x.idx.join());
+    return preguntas(titulo, 'Sigue las indicaciones y escribe cada nota.', lista.map(({ idx, dichos }) => ({
+      t: 'Empieza en ' + nombre(notas[idx[0]]) + ', ' + dichos.join(', '), w: [el('span', { class: 'enunciado', text: nombre(notas[idx[0]]) })].concat(idx.slice(1).map(k => [sep('·'), campoNota(notas[k])])) })), { anchos: true });
+  },
+  /* 5 · contar cuántas veces suena cada nota */
+  contarNotas({ notas, cant = 3 }) {
+    const lista = distintos(cant, () => Array.from({ length: 3 + Math.floor(azar() * 4) }, () => uno(notas)), s => s.map(nombre).join());
+    return preguntas('¿Cuántas veces suena cada una?', null, lista.map(s => ({ t: s.map(n => nombre(n).toLowerCase()).join('-'),
+      w: notas.map(n => [campoNumero(s.filter(x => x === n).length), sep(nombre(n).toLowerCase())]) })), { anchos: true });
+  },
+  /* 9 y 46 · ¿paso o salto? (y si sube o baja) */
+  pasoSalto({ notas, conDireccion = false, cant = 4 }) {
+    const lista = distintos(cant, () => { const [a, b] = mezclar(notas).slice(0, 2); return { a, b }; }, x => nombre(x.a) + x.a.o + nombre(x.b) + x.b.o);
+    const pos = n => n.l + 7 * n.o;
+    return preguntas(conDireccion ? '¿Paso o salto? ¿Sube o baja?' : '¿Paso o salto?', 'Paso: a la nota vecina. Salto: se salta una nota o más.', lista.map(({ a, b }) => ({
+      t: nombre(a) + ' → ' + nombre(b), w: [eleccion(['Paso', 'Salto'], Math.abs(pos(b) - pos(a)) === 1 ? 'Paso' : 'Salto')].concat(conDireccion ? [eleccion(['Sube', 'Baja'], pos(b) > pos(a) ? 'Sube' : 'Baja')] : []) })));
+  },
+  /* 7 · posición en el pentagrama: líneas y espacios contados de abajo hacia arriba */
+  posicion({ cant = 4 }) {
+    const POS = ['Línea 1', 'Espacio 1', 'Línea 2', 'Espacio 2', 'Línea 3', 'Espacio 3', 'Línea 4', 'Espacio 4', 'Línea 5'];
+    const lista = distintos(cant, () => {
+      const t = uno(['arriba', 'arriba', 'sube', 'baja']);
+      if (t === 'arriba') { const a = Math.floor(azar() * 9); let b; do { b = Math.floor(azar() * 9); } while ((b - a) % 2 === 0); return { k: t + Math.min(a, b) + Math.max(a, b), t: '¿Qué está más arriba: ' + POS[a].toLowerCase() + ' o ' + POS[b].toLowerCase() + '?', ops: [POS[a], POS[b]], c: POS[Math.max(a, b)] }; }
+      const k = t === 'sube' ? Math.floor(azar() * 8) : 1 + Math.floor(azar() * 8);
+      return { k: t + k, t: (t === 'sube' ? 'Sube' : 'Baja') + ' un lugar desde ' + (POS[k].startsWith('L') ? 'la ' : 'el ') + POS[k].toLowerCase(), ops: POS, c: POS[t === 'sube' ? k + 1 : k - 1] };
+    }, x => x.k);
+    return preguntas('¿Dónde está?', 'Más arriba en el pentagrama es más agudo. Subir un lugar es pasar de línea a espacio o de espacio a línea.', lista.map(x => ({ t: x.t, w: [eleccion(x.ops, x.c)] })), { anchos: true });
+  },
+  /* 11, 15, 16 y 45 · sumar figuras, cuántas caben, cuál dura lo mismo y las corcheas del 6/8 */
+  figuras({ tipo, figs, cant = 4 }) {
+    const lista = distintos(cant, () => {
+      if (tipo === 'sumar') {
+        const ps = Array.from({ length: 2 + Math.floor(azar() * 2) }, () => uno(figs));
+        return { k: ps.slice().sort().join(), t: ps.join(' + '), n: ps.reduce((s, f) => s + FIG[f], 0), u: 'pulsos' };
+      }
+      if (tipo === 'caben') {
+        let a, b; do { [a, b] = mezclar(figs).slice(0, 2); } while (!(FIG[a] < FIG[b] && Number.isInteger(FIG[b] / FIG[a])));
+        return { k: a + b, t: '¿Cuántas ' + (a === 'corchea' ? 'corcheas' : a + 's') + ' caben en una ' + b + '?', n: FIG[b] / FIG[a] };
+      }
+      if (tipo === 'igual') {
+        let a, b, m; do { [a, b] = mezclar(figs).slice(0, 2); m = FIG[b] / FIG[a]; } while (!(m >= 2 && m <= 4 && Number.isInteger(m)));
+        return { k: a + b, t: '¿Qué figura sola dura lo mismo que ' + m + ' ' + (a.endsWith('a') ? a + 's' : a) + '?', ops: figs.map(mayus), c: mayus(b) };
+      }
+      if (tipo === 'corcheas') { const f = uno(figs); return { k: f, t: '¿Cuántas corcheas dura la ' + f + '?', n: FIG[f] * 2, u: 'corcheas' }; }
+      /* faltan68: un compás de 6/8 tiene 6 corcheas */
+      let ps, s; do { ps = Array.from({ length: 1 + Math.floor(azar() * 3) }, () => uno(figs)); s = ps.reduce((x, f) => x + FIG[f] * 2, 0); } while (s >= 6);
+      return { k: ps.join(), t: '6/8: ' + ps.join(' + '), n: 6 - s, u: 'corcheas' };
+    }, x => x.k);
+    const TIT = { sumar: ['Suma los pulsos', 'La negra dura 1 pulso.'], caben: ['¿Cuántas caben?', null], igual: ['¿Qué figura dura lo mismo?', null],
+      corcheas: ['¿Cuántas corcheas dura?', 'En 6/8 se cuenta en corcheas.'], faltan68: ['¿Cuántas corcheas faltan?', 'Un compás de 6/8 tiene 6 corcheas.'] }[tipo];
+    return preguntas(TIT[0], TIT[1], lista.map(x => ({ t: x.t, w: x.ops ? [eleccion(x.ops, x.c)] : [campoNumero(x.n)].concat(x.u ? [sep(x.u)] : []) })), { anchos: true });
+  },
+  /* 12 · ¿qué compás llena el grupo? y contar con los números del compás */
+  compasLlena({ cant = 4 }) {
+    const U = [['negra', 1], ['blanca', 2], ['2 corcheas', 1], ['4 corcheas', 2], ['redonda', 4], ['blanca con puntillo', 3]];
+    const lista = distintos(cant, () => {
+      const total = uno([2, 3, 4]); let resto = total; const g = [];
+      while (resto > 0) { const u = uno(U.filter(u => u[1] <= resto)); g.push(u[0]); resto -= u[1]; }
+      return { g, total };
+    }, x => x.g.join());
+    return preguntas('¿Qué compás llena?', 'Suma los pulsos (la negra dura 1).', lista.map(x => ({ t: x.g.join(' + '), w: [eleccion(['2/4', '3/4', '4/4'], x.total + '/4')] })), { anchos: true });
+  },
+  contarEnCompas({ cant = 4 }) {
+    const lista = distintos(cant, () => { const n = uno([2, 3, 4]); return { n, p: n + 1 + Math.floor(azar() * (10 - n)) }; }, x => x.n + '-' + x.p);
+    return preguntas('Cuenta en el compás', 'Se cuenta 1, 2, 3… y al empezar cada compás se vuelve a 1. ¿Qué número dices?', lista.map(({ n, p }) => ({
+      t: 'En ' + n + '/4, en el pulso ' + p + ' de la canción', w: [campoNumero((p - 1) % n + 1)] })), { anchos: true });
+  },
+  /* 13, 24 y 50 · leer una melodía: nombres y sílabas de cada compás; final, la más aguda y la más grave; tonalidad y la nota de la armadura */
+  leerMelodia({ compas = '4/4', celdas, notas, compases = 2, tonalidad = null }) {
+    const pulsos = Number(compas.split('/')[0]);
+    const pool = notas.map(([l, o]) => nota(l, 0, o)).map(n => tonalidad ? Object.assign({}, n, { a: escala(tonalidad.t, MAYOR).find(x => x.l === n.l).a }) : n);
+    let i = Math.floor(pool.length / 2);
+    const barras = Array.from({ length: compases }, () => {
+      const cs = []; let resto = pulsos;
+      while (resto > 0) { const c = uno(celdas.filter(c => c.p <= resto)); cs.push(c); resto -= c.p; }
+      const ns = [];
+      cs.forEach(c => c.f.forEach(d => {
+        if (d.endsWith('r')) { ns.push({ n: null, d: d.slice(0, -1) }); return; }
+        i = Math.max(0, Math.min(pool.length - 1, i + uno([-2, -1, -1, 0, 1, 1, 2])));
+        ns.push({ n: pool[i], d });
+      }));
+      return { cs, ns };
+    });
+    const todas = [].concat(...barras.map(b => b.ns.filter(x => x.n).map(x => x.n)));
+    const alterada = tonalidad && pool.find(n => n.a);
+    if (alterada && !todas.some(n => n.l === alterada.l)) { const x = barras[0].ns.find(x => x.n); x.n = alterada; todas.splice(todas.indexOf(todas.find(Boolean)), 1, alterada); }
+    const altura = n => semis(n);
+    const aguda = todas.reduce((a, b) => altura(b) > altura(a) ? b : a), grave = todas.reduce((a, b) => altura(b) < altura(a) ? b : a);
+    const VFK = { 1: 'G', '-1': 'F', 2: 'D', 0: null };
+    const lectura = ejercicio('Lee la melodía', 'Escribe el nombre de cada nota' + (tonalidad ? ' (con la alteración de la armadura)' : '') + ' y las sílabas del ritmo de cada compás.', barras.map((b, k) => {
+      const d = el('div'); melodiaEn(d, b.ns, { compas: k === 0 ? compas : null, armadura: tonalidad ? VFK[tonalidad.n] : null, ancho: 330 });
+      return item(k, texto('Compás ' + (k + 1)), d, resp(b.ns.filter(x => x.n).map(x => campoNota(x.n))),
+        resp(sep('Sílabas:'), campo(v => silabas(v) === silabas(b.cs.map(c => c.s).join('')), b.cs.map(c => c.s).join(' '), 'largo', 'Sílabas')));
+    }), { medianos: true, papel: 'Hoja pautada' });
+    const qs = [{ t: '¿En qué nota termina?', w: [campoNota(todas[todas.length - 1])] }, { t: '¿Cuál es la nota más aguda?', w: [campoNota(aguda)] }, { t: '¿Y la más grave?', w: [campoNota(grave)] }];
+    if (tonalidad) qs.unshift({ t: '¿En qué tonalidad mayor está?', w: [campoNota(tonalidad.t), sep('mayor')] }, { t: '¿Qué nota cambia por la armadura?', w: [campoNota(alterada)] });
+    return [lectura, preguntas('Mira toda la melodía', null, qs)];
+  },
+  /* 14 · ¿qué figura es cada sílaba? y ¿llena el compás de 4/4? */
+  queFigura({ cant = 4 }) {
+    const P = [['ta', 'Negra'], ['ti-ti', 'Dos corcheas'], ['sh', 'Silencio de negra'], ['ta-a', 'Blanca'], ['ta-a-a', 'Blanca con puntillo'], ['ta-a-a-a', 'Redonda']];
+    return preguntas('¿Qué figura es?', null, mezclar(P).slice(0, cant).map(([s, f]) => ({ t: s, w: [eleccion(P.map(x => x[1]), f)] })));
+  },
+  llenaCompas({ celdas, cant = 4, figuras = false }) {
+    const NOM = { ta: 'negra', 'ti-ti': '2 corcheas', sh: 'silencio de negra', 'ta-a': 'blanca', 'ta-a-a': 'blanca con puntillo', 'ta-a-a-a': 'redonda' };
+    const lista = distintos(cant, () => {
+      const total = uno([3, 4, 4, 5]); let resto = total; const cs = [];
+      while (resto > 0) { const c = uno(celdas.filter(c => c.p <= resto && (!figuras || NOM[c.s]))); cs.push(c); resto -= c.p; }
+      return cs;
+    }, cs => cs.map(c => c.s).join());
+    return preguntas('¿Llena un compás de 4/4?', 'Suma los pulsos: un compás de 4/4 tiene 4.', lista.map(cs => ({ t: cs.map(c => figuras ? NOM[c.s] : c.s).join(figuras ? ', ' : ' '),
+      w: [campoNumero(pulsosDe(cs)), sep('pulsos'), eleccion(SI_NO, pulsosDe(cs) === 4 ? 'Sí' : 'No')] })), { anchos: true });
+  },
+  /* 18 y 47 · ligaduras: sumar, cuántas veces se toca, ¿prolongación o expresión? */
+  ligaduras({ tipo, cant = 4 }) {
+    const DUR = { w: 4, h: 2, hd: 3, q: 1, '8': 0.5 };
+    const NOTAS = SOL_BASICO.slice(0, 8).map(([l, o]) => nota(l, 0, o));
+    const lista = distintos(cant, () => {
+      const n = uno(NOTAS);
+      if (tipo === 'suma') { const [a, b] = uno([['q', 'q'], ['h', 'q'], ['q', '8'], ['h', 'h'], ['q', 'h'], ['8', '8'], ['hd', 'q'], ['8', 'q']]); return { k: a + b, ns: [{ n, d: a }, { n, d: b }], ligas: [[0, 1]], v: DUR[a] + DUR[b] }; }
+      if (tipo === 'veces') {
+        const k = 2 + Math.floor(azar() * 2), ligas = [];
+        for (let j = 0; j < k - 1; j++) if (azar() < 0.6) ligas.push([j, j + 1]);
+        return { k: k + ligas.join('|'), ns: Array(k).fill(0).map(() => ({ n, d: 'q' })), ligas, v: k - ligas.length };
+      }
+      const igual = azar() < 0.5, m = NOTAS[(NOTAS.indexOf(n) + 1 + Math.floor(azar() * 3)) % NOTAS.length];
+      return { k: nombre(n) + igual + nombre(m), ns: [{ n, d: 'q' }, { n: igual ? n : m, d: 'q' }], ligas: [[0, 1]], igual };
+    }, x => x.k + x.ns.map(y => nombre(y.n)).join());
+    const TIT = { suma: ['Suma las notas ligadas', 'La negra dura 1 pulso. ¿Cuántos pulsos suena en total?'], veces: ['¿Cuántas veces se toca?', 'La ligadura de prolongación une notas iguales: la segunda no se vuelve a tocar.'],
+      tipo: ['¿Prolongación o expresión?', 'Prolongación: une dos notas iguales. Expresión: une notas distintas (se tocan ligadas).'], esProlongacion: ['¿Es una ligadura de prolongación?', 'Une dos notas iguales.'] }[tipo];
+    return ejercicio(TIT[0], TIT[1], lista.map((x, i) => {
+      const d = el('div'); melodiaEn(d, x.ns, { ancho: 200, ligas: x.ligas });
+      const w = tipo === 'tipo' ? eleccion(['De prolongación', 'De expresión'], x.igual ? 'De prolongación' : 'De expresión')
+        : tipo === 'esProlongacion' ? eleccion(SI_NO, x.igual ? 'Sí' : 'No') : [campoNumero(x.v), sep(tipo === 'suma' ? 'pulsos' : 'veces')];
+      return item(i, d, resp(w));
+    }), { papel: 'Hoja pautada' });
+  },
+  /* 18 · ¿es una síncopa? (un sonido empieza en medio del pulso y sigue sonando sobre el pulso siguiente) */
+  sincopa({ cant = 4 }) {
+    const P = [['q', 'q'], ['8', 'q', '8'], ['8', '8', 'q'], ['q', '8', '8'], ['8', 'qd'], ['qd', '8'], ['h'], ['8', '8', '8', '8']];
+    const DUR = { h: 4, qd: 3, q: 2, '8': 1 };   // en corcheas
+    const es = p => { let t = 0; return p.some(d => { const ini = t; t += DUR[d]; return ini % 2 === 1 && t > ini + 1 && Math.ceil(ini / 2) * 2 < t; }); };
+    return ejercicio('¿Es una síncopa?', 'Síncopa: un sonido empieza en medio de un pulso y sigue sonando sobre el pulso siguiente.', mezclar(P).slice(0, cant).map((p, i) => {
+      const d = el('div'); ritmoEn(d, p, '2/4', 200);
+      return item(i, d, resp(eleccion(SI_NO, es(p) ? 'Sí' : 'No')));
+    }), { papel: 'Hoja pautada' });
+  },
+  /* 19 · ¿en qué pulsos empieza un sonido? */
+  dondeEmpieza({ celdas, cant = 3 }) {
+    const lista = distintos(cant, () => {
+      let cs; do { cs = []; let resto = 4; while (resto > 0) { const c = uno(celdas.filter(c => c.p <= resto)); cs.push(c); resto -= c.p; } } while (cs.filter(c => !c.f[0].endsWith('r')).length < 2);
+      return cs;
+    }, cs => cs.map(c => c.s).join('|'));
+    return ejercicio('¿En qué pulsos empieza un sonido?', 'Escribe los números de los pulsos (1 a 4) donde empieza una nota.', lista.map((cs, i) => {
+      const d = el('div'); ritmoEn(d, [].concat(...cs.map(c => c.f)), '4/4', 300);
+      const empieza = []; let p = 1; cs.forEach(c => { if (!c.f[0].endsWith('r')) empieza.push(p); p += c.p; });
+      return item(i, d, resp(campoNumeros(empieza, true)));
+    }), { medianos: true, papel: 'Hoja pautada' });
+  },
+  /* 20 y 21 (violín) · cuerda y dedo → nota */
+  dedoNota({ cuerda }) {
+    const c = CUERDAS[cuerda];
+    return preguntas('¿Qué nota es?', 'La nota de cada dedo en la cuerda ' + cuerda + ', en primera posición.', mezclar([0, 1, 2, 3]).map(k => ({
+      t: 'Cuerda ' + cuerda + ', ' + (k ? 'dedo ' + k : 'al aire (0)'), w: [campoNota(arriba(c.t, k, c.st[k]))] })));
+  },
+  /* 20 a 23 · ¿cuántas rayitas (líneas adicionales) lleva? */
+  rayitas({ notas, clave = 'treble', cant = 4 }) {
+    const base = clave === 'bass' ? 4 + 7 * 2 : 2 + 7 * 4;   // la línea 1: Sol2 en clave de fa, Mi4 en clave de sol
+    const cuantas = n => { const p = n.l + 7 * n.o - base; return p < 0 ? Math.floor(-p / 2) : p > 8 ? Math.floor((p - 8) / 2) : 0; };
+    return ejercicio('¿Cuántas rayitas lleva?', 'Cuenta las líneas adicionales (las rayitas cortas fuera del pentagrama).', mezclar(notas.map(([l, o]) => nota(l, 0, o))).slice(0, cant).map((n, i) => {
+      const d = el('div'); notasEn(d, [n], { clave, ancho: 150, alto: 140 });
+      return item(i, d, resp(campoNumero(cuantas(n)), sep('rayitas')));
+    }), { papel: 'Hoja pautada' });
+  },
+  /* 25 · el otro nombre de una nota (enarmónico) */
+  enarmonico({ cant = 5 }) {
+    const NEGRAS = [[0, 1], [1, -1], [1, 1], [2, -1], [3, 1], [4, -1], [4, 1], [5, -1], [5, 1], [6, -1]].map(([l, a]) => nota(l, a));
+    const otro = n => n.a === 1 ? nota(n.l + 1, -1) : nota(n.l - 1, 1);
+    return preguntas('El otro nombre', 'La tecla negra tiene dos nombres: con sostenido y con bemol.', mezclar(NEGRAS).slice(0, cant).map(n => ({ t: nombre(n) + ' =',
+      w: [campo(v => { const x = leerNota(v); return !!x && x.l !== n.l && pcDe(x) === pcDe(n); }, nombre(otro(n)), 'nota', 'Otro nombre')] })));
+  },
+  /* 25 y 31 · ¿qué suena? alteraciones dentro del compás, becuadro y armadura */
+  queSuena({ armaduras = [0], cant = 2 }) {
+    const SOST = [3, 0, 4, 1, 5, 2, 6], BEMS = [6, 2, 5, 1, 4, 0, 3];
+    const VFK = { 1: 'G', '-1': 'F', 2: 'D' };
+    const lista = distintos(cant, () => {
+      const n = uno(armaduras), enArm = n > 0 ? SOST.slice(0, n) : BEMS.slice(0, -n), tipoAlt = n < 0 ? -1 : 1;
+      let notas;
+      if (n === 0) {   /* sin armadura: la misma nota 4 veces; la primera alterada */
+        const a = uno([1, -1]), l = a === 1 ? uno([3, 0, 4]) : uno([6, 2, 5]);
+        const signos = [a].concat(mezclar([0, 'n', uno([0, a])]));
+        notas = signos.map(s => ({ l, s, a }));
+      } else {
+        const l = uno(enArm), otra = uno([0, 1, 2, 3, 4, 5, 6].filter(x => !enArm.includes(x)));
+        notas = mezclar([{ l, s: 0 }, { l, s: uno([0, 'n']) }, { l: otra, s: 0 }]).map(x => Object.assign(x, { a: tipoAlt }));
+      }
+      return { n, enArm, notas };
+    }, x => x.n + x.notas.map(y => y.l + '' + y.s).join());
+    return ejercicio('¿Qué suena?', 'Una alteración vale hasta el final del compás. El becuadro (♮) la quita. La armadura vale en toda la canción.', lista.map((x, i) => {
+      const actual = {};
+      const suenan = x.notas.map(y => {
+        if (y.s === 'n') actual[y.l] = 0; else if (y.s) actual[y.l] = y.s;
+        const a = actual[y.l] != null ? actual[y.l] : x.enArm.includes(y.l) ? (x.n < 0 ? -1 : 1) : 0;
+        return nota(y.l, a);
+      });
+      const d = el('div');
+      melodiaEn(d, x.notas.map(y => ({ n: nota(y.l, 0, 4 + (y.l <= 1 ? 1 : 0)), d: 'q', alt: y.s === 'n' ? 'n' : y.s === 1 ? '#' : y.s === -1 ? 'b' : null })), { armadura: VFK[x.n] || null, ancho: 260 });
+      return item(i, d, resp(x.notas.map((y, k) => { const nat = nota(y.l, 0), alt = nota(y.l, y.a);
+        return [sep(k + 1 + ':'), eleccion([nombre(alt), SOLFEO[y.l] + ' natural'], suenan[k].a ? nombre(alt) : SOLFEO[y.l] + ' natural', 'Nota ' + (k + 1))]; })));
+    }), { medianos: true, papel: 'Hoja pautada' });
+  },
+  /* 26 · subir un tono o un semitono */
+  subirTono({ cant = 4 }) {
+    const DESDE = [0, 1, 2, 3, 4, 5, 6].map(l => nota(l)).concat([nota(3, 1), nota(0, 1), nota(6, -1), nota(2, -1)]);
+    const lista = distintos(cant, () => ({ n: uno(DESDE), tono: azar() < 0.5 }), x => nombre(x.n) + x.tono);
+    return preguntas('Sube un tono o un semitono', 'Semitono: a la vecina más cercana. Tono: dos semitonos.', lista.map(({ n, tono }) => {
+      const dia = arriba(n, 1, tono ? 2 : 1), cro = nota(n.l, n.a + 1);
+      const sol = tono ? nombre(dia) : dia.a === 0 || Math.abs(cro.a) > 1 ? nombre(dia) : nombre(cro) + ' (o ' + nombre(dia) + ')';
+      return { t: nombre(n) + ' + ' + (tono ? 'un tono' : 'un semitono'), w: [campoAltura(dia, sol)] };
+    }));
+  },
+  /* 27, 28 y 29 · la nota de arriba de un intervalo */
+  notaArriba({ cuales, cant = 4 }) {
+    const lista = INTERVALOS.concat(INTERVALOS_AD).filter(x => cuales.includes(x.n));
+    const qs = distintos(cant, () => { let a, iv, b; do { iv = uno(lista); a = nota(Math.floor(azar() * 7)); b = arriba(a, iv.p, iv.st); } while (!simple([b])); return { a, iv, b }; }, x => nombre(x.a) + x.iv.n);
+    return preguntas('Escribe la nota de arriba', 'Cuenta las letras para el número y los semitonos para el tipo.', qs.map(({ a, iv, b }) => ({
+      t: nombre(a) + ' + ' + (iv.n === '8ª justa' ? 'octava' : iv.n), w: [campoNota(b)] })));
+  },
+  /* 30 · encontrar la nota mal de una escala mayor */
+  errorEscala({ tonicas, cant = 3 }) {
+    const lista = distintos(cant, () => {
+      let t, ns, k, mal;
+      do { t = uno(tonicas); ns = escala(t, MAYOR); k = 1 + Math.floor(azar() * 6); mal = nota(ns[k].l, ns[k].a + uno([1, -1])); } while (Math.abs(mal.a) > 1);
+      return { t, ns, k, mal };
+    }, x => nombre(x.t) + x.k);
+    return preguntas('Encuentra el error', 'En cada escala hay una nota mal. Escribe la nota mal y cómo debe ser (fórmula T-T-S-T-T-T-S).', lista.map(({ t, ns, k, mal }) => ({
+      t: nombre(t) + ' mayor: ' + ns.concat([t]).map((n, j) => nombre(j === k ? mal : n)).join(', '), w: [campoNota(mal), sep('debe ser'), campoNota(ns[k])] })), { anchos: true });
+  },
+  /* 34 · qué nota cambia para pasar de mayor a menor (o al revés) */
+  cambiaNota({ cant = 3 }) {
+    const lista = distintos(cant, () => {
+      let r; do { r = nota(Math.floor(azar() * 7)); } while (!simple(triada(r, 'mayor')) || !simple(triada(r, 'menor')));
+      const de = uno(['mayor', 'menor']); return { r, de, a: de === 'mayor' ? 'menor' : 'mayor' };
+    }, x => nombre(x.r) + x.de);
+    return preguntas('¿Qué nota cambias?', 'Solo cambia la tercera: mayor 4 + 3 semitonos, menor 3 + 4.', lista.map(({ r, de, a }) => ({
+      t: 'Para que ' + nombre(r) + ' ' + de + ' sea ' + nombre(r) + ' ' + a, w: [campoNota(triada(r, de)[1]), sep('pasa a'), campoNota(triada(r, a)[1])] })), { anchos: true });
+  },
+  /* 37 · ¿qué grado es este acorde? */
+  gradoDe({ tonicas, cant = 4 }) {
+    const lista = distintos(cant, () => ({ t: uno(tonicas), k: Math.floor(azar() * 7) }), x => nombre(x.t) + x.k);
+    return preguntas('¿Qué grado es?', 'Cuenta desde la tónica (I) por las notas de la escala.', lista.map(({ t, k }) => ({
+      t: '¿Qué grado es ' + acordeDe(escala(t, MAYOR), k) + ' en ' + nombre(t) + ' mayor?', w: [eleccion(ROMANOS, ROMANOS[k], 'Grado')] })), { anchos: true });
+  },
+  /* 38 · tónica y dominante */
+  tonicaDominante({ tonicas }) {
+    return preguntas('Tónica y dominante', 'La tónica es la nota 1 de la escala y la dominante, la nota 5.', tonicas.map(t => ({
+      t: nombre(t) + ' mayor', w: [sep('tónica'), campoNota(t), sep('dominante'), campoNota(escala(t, MAYOR)[4])] })));
+  },
+  /* 38, 39 y 52 · ¿la frase termina en reposo o en tensión? */
+  reposoTension({ tonicas, cant = 4 }) {
+    const lista = distintos(cant, () => ({ t: uno(tonicas), k: uno([0, 4]) }), x => nombre(x.t) + x.k);
+    return preguntas('¿Reposo o tensión?', 'Terminar en el acorde I es reposo (llegar a casa); terminar en el V deja tensión.', lista.map(({ t, k }) => ({
+      t: 'En ' + nombre(t) + ' mayor, la frase termina en ' + acordeDe(escala(t, MAYOR), k), w: [eleccion(['Reposo', 'Tensión'], k === 0 ? 'Reposo' : 'Tensión')] })), { anchos: true });
+  },
+  /* 38 · verdadero o falso calculado: tónica, dominante y final de una canción */
+  vfTonalidad({ tonicas, cant = 4 }) {
+    const lista = distintos(cant, () => {
+      const t = uno(tonicas), ns = escala(t, MAYOR), v = azar() < 0.5, q = uno(['tonica', 'dominante', 'final']);
+      if (q === 'tonica') return { k: q + nombre(t) + v, t: 'La tónica de ' + nombre(t) + ' mayor es ' + nombre(v ? ns[0] : ns[4]) + '.', v };
+      if (q === 'dominante') return { k: q + nombre(t) + v, t: 'La dominante de ' + nombre(t) + ' mayor es ' + nombre(v ? ns[4] : ns[3]) + '.', v };
+      return { k: q + nombre(t) + v, t: 'Una canción en ' + nombre(t) + ' mayor suele terminar en el acorde de ' + acordeDe(ns, v ? 0 : 4) + '.', v };
+    }, x => x.k);
+    return preguntas('¿Verdadero o falso?', null, lista.map(x => ({ t: x.t, w: [eleccion(['Verdadero', 'Falso'], x.v ? 'Verdadero' : 'Falso')] })), { anchos: true });
+  },
+  /* 39 · progresiones: de números romanos a acordes y al revés */
+  progresion({ tonicas, tipo, cant = 2 }) {
+    const PROG = [[0, 3, 4, 0], [0, 4, 5, 3], [5, 3, 0, 4], [0, 5, 3, 4], [0, 3, 0, 4], [3, 4, 0, 0]];
+    const lista = distintos(cant, () => ({ t: uno(tonicas), p: uno(PROG) }), x => nombre(x.t) + x.p.join());
+    return preguntas(tipo === 'acordes' ? 'Pasa a acordes' : 'Pasa a números romanos', tipo === 'acordes' ? 'Escribe el acorde de cada grado (ejemplo: Rem).' : 'Mayúscula para los acordes mayores, minúscula para los menores (vi).',
+      lista.map(({ t, p }) => { const ns = escala(t, MAYOR);
+        return tipo === 'acordes'
+          ? { t: p.map(k => romanoDe(ns, k)).join(' – ') + ' en ' + nombre(t) + ' mayor', w: p.map((k, j) => [j ? sep('–') : null, campoAcorde(ns[k], tipoGrado(ns, k))]) }
+          : { t: p.map(k => acordeDe(ns, k)).join(' – ') + ' (' + nombre(t) + ' mayor)', w: p.map((k, j) => [j ? sep('–') : null, eleccion(['I', 'ii', 'iii', 'IV', 'V', 'vi'], romanoDe(ns, k), 'Grado')]) }; }), { anchos: true });
+  },
+  /* 40 · la relativa mayor de una tonalidad menor */
+  relativaMayor({ tonicas }) {
+    return preguntas('La relativa mayor', 'La relativa mayor empieza en la 3.ª nota de la escala menor (3 semitonos arriba).', tonicas.map(t => ({
+      t: nombre(t) + ' menor →', w: [campoNota(escala(t, MENOR)[2]), sep('mayor')] })));
+  },
+  /* 41 · el V mayor en menor (con la 7.ª subida) y qué nota sube en la armónica */
+  vMenor({ tonicas }) {
+    return preguntas('El acorde V en menor', 'En menor, el V es mayor: lleva la 7.ª nota subida (la de la menor armónica). Escribe el acorde y sus notas.', tonicas.map(t => {
+      const v = escala(t, ARMONICA)[4];
+      return { t: 'V de ' + nombre(t) + ' menor', w: [campoAcorde(v, 'mayor'), sep(':')].concat(triada(v, 'mayor').map(campoNota)) };
+    }), { anchos: true });
+  },
+  queSube({ tonicas }) {
+    return preguntas('¿Qué nota sube?', 'De la menor natural a la menor armónica sube una sola nota.', tonicas.map(t => ({
+      t: nombre(t) + ' menor', w: [campoNota(escala(t, MENOR)[6]), sep('sube a'), campoNota(escala(t, ARMONICA)[6])] })));
+  },
+  /* 43 y 44 · ¿la nota está en la pentatónica? */
+  enPentatonica({ tonicas, cant = 5 }) {
+    const lista = distintos(cant, () => ({ tm: uno(tonicas), n: nota(Math.floor(azar() * 7)) }), x => nombre(x.tm[0]) + x.tm[1] + nombre(x.n));
+    return preguntas('¿Está en la pentatónica?', 'Mayor: sin la 4.ª ni la 7.ª. Menor: sin la 2.ª ni la 6.ª.', lista.map(({ tm: [t, menor], n }) => {
+      const ns = escala(t, menor ? MENOR : MAYOR).filter((_, k) => menor ? k !== 1 && k !== 5 : k !== 3 && k !== 6);
+      const esta = ns.some(x => x.l === n.l && x.a === n.a);   /* con su misma alteración: Fa natural no está en la de Re mayor (tiene Fa♯) */
+      return { t: '¿Está ' + nombre(n) + ' en la pentatónica de ' + nombre(t) + (menor ? ' menor' : ' mayor') + '?', w: [eleccion(SI_NO, esta ? 'Sí' : 'No')] };
+    }), { anchos: true });
+  },
+  /* 44 · ¿la respuesta usa solo la pentatónica de Do y termina en casa? */
+  respuestaPentatonica({ cant = 4 }) {
+    const PENTA = [0, 1, 2, 4, 5].map(l => nota(l));
+    const OPS = ['Sí', 'No: usa una nota que no está', 'No: no termina en Do'];
+    const lista = distintos(cant, () => {
+      const c = uno([0, 0, 1, 2]), ns = Array.from({ length: 4 }, () => uno(PENTA));
+      if (c === 1) ns[Math.floor(azar() * 4)] = nota(uno([3, 6]));
+      return { ns, fin: c === 2 ? uno(PENTA.slice(1)) : nota(0), c };
+    }, x => x.ns.map(nombre).join() + nombre(x.fin));
+    return preguntas('¿Sirve como respuesta?', 'La pregunta está en la pentatónica de Do (Do, Re, Mi, Sol, La). La respuesta usa solo esas notas y termina en casa (Do).',
+      lista.map(x => ({ t: x.ns.map(nombre).join(' ') + ' | ' + nombre(x.fin), w: [eleccion(OPS, OPS[x.c])] })), { anchos: true });
+  },
+  /* 47, 48, 60 y violín 20-21 · ordenar: el alumno pone todo y al revisar se marca cada lugar */
+  ordenar({ titulo, consigna, orden, tam = [3, 5], cant = 2 }) {
+    const lista = distintos(cant, () => {
+      const n = Math.min(orden.length, tam[0] + Math.floor(azar() * (tam[1] - tam[0] + 1)));
+      const sub = mezclar(orden.map((_, k) => k)).slice(0, n).sort((a, b) => a - b).map(k => orden[k]);
+      let mez; do { mez = mezclar(sub); } while (mez.join() === sub.join());
+      return { sub, mez };
+    }, x => x.mez.join());
+    return preguntas(titulo, consigna, lista.map(({ sub, mez }) => ({ t: mez.join(', '),
+      w: sub.map((x, k) => [k ? sep('→') : null, eleccion(mez, x, 'Lugar ' + (k + 1))]) })), { anchos: true });
+  },
+  /* 49 · la forma con letras */
+  forma({ cant = 3 }) {
+    const PAT = ['AB', 'ABA', 'AAB', 'ABB', 'AABA', 'ABAB', 'ABAC', 'AABB'];
+    const lista = distintos(cant, () => {
+      const pat = uno(PAT), frases = {};
+      [...new Set(pat)].forEach(L => { let f; do { f = Array.from({ length: 4 }, () => nombre(nota(Math.floor(azar() * 6)))).join(' '); } while (Object.values(frases).includes(f)); frases[L] = f; });
+      return { pat, frases };
+    }, x => x.pat);
+    return preguntas('Escribe la forma con letras', 'La primera frase es A. Si vuelve igual, otra vez A; una frase nueva es B (y después C).', lista.map(({ pat, frases }) => ({
+      t: [...pat].map((L, k) => 'Frase ' + (k + 1) + ': ' + frases[L]).join(' · '), w: [campoLetras(pat, 'Forma')] })), { anchos: true });
+  },
+  /* 49 · barras de repetición y casillas: en qué orden se tocan los compases */
+  repeticiones({ cant = 2 }) {
+    const lista = distintos(cant, () => {
+      const n = 3 + Math.floor(azar() * 3), voltas = azar() < 0.5;
+      /* s: primer compás que se repite; e: el que lleva :‖ (con casillas, la casilla 1; la casilla 2 es e + 1). Siempre queda un compás después. */
+      const s = Math.floor(azar() * (n - 2)), e = voltas ? s + 1 + Math.floor(azar() * (n - 2 - s)) : s + Math.floor(azar() * (n - 1 - s));
+      const r = (a, b) => Array.from({ length: Math.max(0, b - a + 1) }, (_, k) => a + k + 1);
+      const orden = voltas ? r(0, e).concat(r(s, e - 1), r(e + 1, n - 1)) : r(0, e).concat(r(s, e), r(e + 1, n - 1));
+      return { n, s, e, voltas, orden, signo: s > 0 || azar() < 0.5 };
+    }, x => [x.n, x.s, x.e, x.voltas].join());
+    return ejercicio('¿En qué orden se tocan?', 'Escribe los números de los compases en el orden en que suenan y cuántos compases suenan en total.', lista.map((x, i) => {
+      const d = el('div'), ancho = 60 + 70 * x.n;
+      const rr = new VF.Renderer(d, VF.Renderer.Backends.SVG); rr.resize(ancho, 130);
+      const ctx = rr.getContext(); ctx.setFillStyle('#2B241C'); ctx.setStrokeStyle('#2B241C');
+      let xx = 4;
+      for (let k = 0; k < x.n; k++) {
+        const w = k === 0 ? 120 : 70, st = new VF.Stave(xx, 30, w); xx += w;
+        if (k === 0) st.addClef('treble');
+        st.setMeasure(k + 1);
+        if (k === x.s && x.signo) st.setBegBarType(4);   // 4 = barra de repetición de inicio
+        if (k === x.e) st.setEndBarType(5);               // 5 = barra de repetición de fin
+        else if (k === x.n - 1) st.setEndBarType(3);      // 3 = barra final
+        st.setContext(ctx).draw();
+        if (x.voltas && k === x.e) casilla(ctx, st, '1.', true);
+        if (x.voltas && k === x.e + 1) casilla(ctx, st, '2.', false);
+        VF.Formatter.FormatAndDraw(ctx, st, [new VF.StaveNote({ keys: [uno(['c/5', 'a/4', 'g/4', 'e/4'])], duration: 'w' })]);
+      }
+      const svg = d.querySelector('svg'); svg.setAttribute('viewBox', '0 0 ' + ancho + ' 130'); svg.setAttribute('width', ancho); svg.setAttribute('height', 130); svg.style.width = ''; svg.style.height = '';
+      return item(i, d, resp(sep('Orden:'), campoNumeros(x.orden)), resp(campoNumero(x.orden.length), sep('compases en total')));
+    }), { anchos: true, papel: 'Hoja pautada' });
+  },
+  /* 49 · ¿qué signo es? */
+  queSigno() {
+    const S = ['Barra de repetición', 'Calderón', 'Casilla 1', 'Casilla 2'];
+    return ejercicio('¿Qué signo es?', null, mezclar(S).map((s, i) => {
+      const d = el('div');
+      const { ctx, st } = pentagrama(d, { ancho: 150, alto: 130, sinClave: true });
+      if (s === 'Barra de repetición') { st.setEndBarType(5); }
+      st.setContext(ctx).draw();
+      if (s.startsWith('Casilla')) casilla(ctx, st, s.slice(-1) + '.', s.endsWith('1'));
+      const n = new VF.StaveNote({ keys: ['g/4'], duration: 'w' });
+      if (s === 'Calderón') n.addModifier(new VF.Articulation('a@a').setPosition(3), 0);
+      VF.Formatter.FormatAndDraw(ctx, st, [n]);
+      return item(i, d, resp(eleccion(S, s, 'Signo')));
+    }), { papel: 'Hoja pautada' });
+  },
+  /* 50 · la anacrusa: el último compás completa lo que faltó al principio */
+  anacrusa({ cant = 3 }) {
+    const lista = distintos(cant, () => { const n = uno([2, 3, 4]); return { n, a: 1 + Math.floor(azar() * (n - 1)) }; }, x => x.n + '-' + x.a);
+    return preguntas('La anacrusa', 'La canción empieza antes del primer pulso fuerte; el último compás completa lo que faltó.', lista.map(({ n, a }) => ({
+      t: 'Compás de ' + n + '/4 que empieza con ' + a + (a > 1 ? ' pulsos' : ' pulso') + ' de anacrusa: ¿cuántos pulsos tiene el último compás?', w: [campoNumero(n - a), sep('pulsos')] })), { anchos: true });
+  },
+  /* 52 · ¿qué acorde (I, IV o V) acompaña el compás? */
+  acompanar({ tonicas, cant = 5 }) {
+    const lista = distintos(cant, () => {
+      let t, k, notas, quienes;
+      do {   /* solo compases que encajan en un único acorde */
+        t = uno(tonicas); k = uno([0, 3, 4]); const ns = escala(t, MAYOR), tri = g => [ns[g], ns[(g + 2) % 7], ns[(g + 4) % 7]];
+        notas = Array.from({ length: 4 }, () => uno(tri(k)));
+        quienes = [0, 3, 4].filter(g => notas.every(n => tri(g).some(m => m.l === n.l && m.a === n.a)));
+      } while (quienes.length !== 1);
+      return { t, notas, k };
+    }, x => nombre(x.t) + x.notas.map(nombre).join());
+    return preguntas('¿Qué acorde acompaña el compás?', 'Busca el acorde (I, IV o V) que tiene todas esas notas.', lista.map(({ t, notas, k }) => ({
+      t: notas.map(nombre).join(' ') + ' (' + nombre(t) + ' mayor)', w: [eleccion(['I', 'IV', 'V'], ROMANOS[k], 'Acorde')] })), { anchos: true });
+  },
+  /* 54 a 59 · escribir un modo desde cualquier nota (con sus alteraciones) */
+  modoDesde({ modos, tonicas, cant = 2 }) {
+    const lista = distintos(cant, () => { let m, t; do { m = uno(modos); t = uno(tonicas); } while (!simple(escala(t, MODO_PAT[m]))); return { m, t }; }, x => x.m + nombre(x.t));
+    return ejercicio('Escribe el modo', 'Desde la nota casa hasta la misma nota arriba, con sus alteraciones.', lista.map(({ m, t }, i) => {
+      const ns = escala(t, MODO_PAT[m]).concat([t]);
+      return item(i, texto(nombre(t) + ' ' + m.toLowerCase()), resp(ns.map((n, k) => [k ? sep('·') : null, k === 0 || k === 7 ? el('span', { class: 'enunciado', text: nombre(n) }) : campoNota(n)])));
+    }), { anchos: true, papel: 'Hoja rayada' });
+  },
+  /* 54 a 60 · ¿qué modo es? (todos desde Do) */
+  queModoDesde({ modos, cant = 4 }) {
+    const Do = nota(0);
+    return preguntas('¿Qué modo es?', 'Todos empiezan en Do. Compáralos con Do mayor (jónico).', mezclar(modos).slice(0, cant).map(m => ({
+      t: escala(Do, MODO_PAT[m]).map(nombre).join(', '), w: [eleccion(modos, m, 'Modo')] })), { anchos: true });
+  },
+  /* 60 · qué nota baja un semitono al pasar a un modo más oscuro (desde Do) */
+  notaQueBaja({ cant = 4 }) {
+    const Do = nota(0);
+    return preguntas('¿Qué nota baja?', 'Desde Do: al pasar al modo siguiente (más oscuro) baja una sola nota un semitono.', mezclar(BRILLO.slice(0, -1).map((m, k) => [m, BRILLO[k + 1]])).slice(0, cant).map(([a, b]) => {
+      const na = escala(Do, MODO_PAT[a]), nb = escala(Do, MODO_PAT[b]), k = na.findIndex((n, j) => n.a !== nb[j].a);
+      return { t: 'Del ' + a.toLowerCase() + ' al ' + b.toLowerCase(), w: [campoNota(na[k]), sep('→'), campoNota(nb[k])] };
+    }));
+  },
+  /* 60 · ¿mayor o menor? (por su tercera) */
+  mayorMenorModo({ modos }) {
+    return preguntas('¿Mayor o menor?', 'Mira su tercera desde la nota casa: 4 semitonos es mayor; 3, menor.', mezclar(modos).map(m => ({ t: m, w: [eleccion(['Mayor', 'Menor'], MODO_PAT[m][2] === 4 ? 'Mayor' : 'Menor')] })));
+  },
+  /* 10 · la nota siguiente o la anterior en la escala de Do */
+  vecinaEscala({ cant = 4 }) {
+    const ns = escala(nota(0), MAYOR).concat([nota(0, 0, 5)]);
+    const lista = distintos(cant, () => { const desp = azar() < 0.5; return { desp, k: desp ? Math.floor(azar() * 7) : 1 + Math.floor(azar() * 7) }; }, x => x.desp + '' + x.k);
+    return preguntas('¿Qué nota viene?', 'En la escala de Do, subiendo.', lista.map(({ desp, k }) => ({
+      t: (desp ? 'Después de ' : 'Antes de ') + nombre(ns[k]) + (k === 7 ? ' (el agudo)' : ''), w: [campoNota(ns[desp ? k + 1 : k - 1])] })));
   }
 };
+const SI_NO = ['Sí', 'No'];
 
 /* ---------- Células rítmicas por nivel (f = figuras, p = pulsos, s = sílabas) ---------- */
 const C = {
@@ -547,83 +1158,124 @@ const N = (...ls) => ls;
 const SOL_BASICO = RANGO.sol.notas, SOL_TODAS = RANGO.solAmplio.notas;
 
 /* ---------- Qué ejercicios lleva cada semana ----------
-   Solo ejercicios que el alumno puede resolver aquí y que la hoja puede revisar. Una semana sin un ejercicio así
-   (pulso con el cuerpo, dictados, improvisar, la forma, dos contra tres, componer) no tiene hoja: se practica con su app.
-   Si cambia esta lista, actualizar SIN_HOJA en Registro_Sprinkloud/maestros (Maestro.html y Reporte.html). */
+   Solo ejercicios que el alumno puede resolver aquí y que la hoja puede revisar. Desde el 7-nov-2026 las 60 lecciones
+   tienen hoja: los libros nuevos solo tienen ejercicios de teoría comprobables, y cada tipo de ejercicio del libro tiene
+   aquí su práctica (ver Libro_Sprinkloud/rehacer-practica-2026-11-07.md, sección 4).
+   Si cambia SIN_HOJA, actualizarla también en Registro_Sprinkloud/maestros (Maestro.html y Reporte.html). */
+/* frases de verdadero o falso de las lecciones de conceptos (1, 3 y 6); la 38 se calcula (vfTonalidad) */
+const VF_FRASES = {
+  1: [['El pulso late siempre igual, como un reloj.', true], ['Una canción alegre apura el pulso hasta el final.', false], ['Puedes marcar el pulso con el pie, con palmas o en el pecho.', true],
+    ['El pulso es lo mismo que la letra de la canción.', false], ['Con el metrónomo en 60 suena un pulso por segundo.', true], ['Un número más grande en el metrónomo es un pulso más lento.', false],
+    ['El pulso sigue aunque la melodía haga una pausa.', true], ['El metrónomo sirve para marcar el pulso parejo.', true]],
+  3: [['En un silencio, el pulso sigue.', true], ['El silencio de negra dura un pulso, igual que el ta.', true], ['El silencio de negra dura medio pulso.', false],
+    ['El silencio se dice «sh», muy bajito.', true], ['Durante un silencio se deja de contar el pulso.', false], ['Un ritmo de 4 pulsos con un silencio tiene 3 pulsos.', false]],
+  6: [['Un ostinato es un ritmo que se repite igual.', true], ['El ostinato cambia cada vez que cambia la melodía.', false], ['«Ostinato» quiere decir «terco».', true],
+    ['En un conjunto, todos tocan con el mismo pulso.', true], ['En un conjunto, cada uno puede ir con su propio pulso.', false], ['Un ostinato puede durar 2 pulsos y repetirse muchas veces.', true]]
+};
+const DINAMICAS = ['pp', 'p', 'mp', 'mf', 'f', 'ff'], TEMPOS = ['Lento', 'Adagio', 'Andante', 'Moderato', 'Allegro', 'Presto'];
+const DO_A_DO = escala(nota(0), MAYOR).concat([nota(0, 0, 5)]);
 function ejerciciosDe(s, ins) {
   const fa = ins === 'piano';
   const M = {
-    2: () => [T.silabas({ celdas: K1 })],
-    3: () => [T.silabas({ celdas: K2 }), T.completar({ celdas: K2 })],
-    4: () => [T.subeBaja({})],
-    5: () => [T.nombrar({ notas: N([4, 4], [2, 4]), cant: 6, titulo: '¿Sol o mi?' }), T.dibujar({ notas: N([4, 4], [2, 4]), cant: 4 })],
-    6: () => [T.silabas({ celdas: K2 })],
-    7: () => [T.lineaEspacio({}), T.dibujar({ notas: N([2, 4], [4, 4], [6, 4], [1, 5], [3, 5], [3, 4], [5, 4], [0, 5], [2, 5]) })],
+    1: () => [T.pulsoParejo({}), T.metronomo({ cant: 4 }), T.verdaderoFalso({ frases: VF_FRASES[1] })],
+    2: () => [T.silabas({ celdas: K1 }), T.contarSonidos({ celdas: K1, conPulsos: true }), T.silabaFalta({ celdas: K1 })],
+    3: () => [T.silabas({ celdas: K2 }), T.completar({ celdas: K2 }), T.contarSonidos({ celdas: K2, cant: 3 }), T.silabaFalta({ celdas: K2 }), T.verdaderoFalso({ frases: VF_FRASES[3], cant: 3 })],
+    4: () => [T.subeBaja({}), T.escalera({})],
+    5: () => [T.nombrar({ notas: N([4, 4], [2, 4]), cant: 6, titulo: '¿Sol o mi?' }), T.dibujar({ notas: N([4, 4], [2, 4]), cant: 4 }),
+      T.melodiaDescrita({ notas: [nota(2), nota(4)], movs: [['sube', 1], ['baja', -1], ['se queda igual', 0]] }), T.contarNotas({ notas: [nota(4), nota(2)] })],
+    6: () => [T.ostinato({ celdas: K2, tipo: 'es' }), T.ostinato({ celdas: K2, tipo: 'medir', cant: 2 }), T.ostinato({ celdas: K2, tipo: 'continuar' }), T.verdaderoFalso({ frases: VF_FRASES[6], cant: 3 })],
+    7: () => [T.lineaEspacio({}), T.posicion({}), T.dibujar({ notas: N([2, 4], [4, 4], [6, 4], [1, 5], [3, 5], [3, 4], [5, 4], [0, 5], [2, 5]) })],
     8: () => [T.nombrar({ notas: N([4, 4], [2, 4], [5, 4]) }), T.dibujar({ notas: N([4, 4], [2, 4], [5, 4]) })],
-    9: () => [T.nombrar({ notas: N([0, 4], [1, 4], [2, 4], [4, 4], [5, 4]) }), T.secuencia({ titulo: 'Escribe la nota que falta', consigna: 'Las notas van en orden: do, re, mi, fa, sol, la, si.', series: [escala(nota(0), MAYOR), escala(nota(4), [0, 2, 4, 5, 7, 9, 10]), escala(nota(2), [0, 1, 3, 5, 7, 8, 10])] })],
-    10: () => [T.secuencia({ titulo: 'Completa la escala de Do', consigna: 'Subiendo y bajando.', series: [escala(nota(0), MAYOR).concat([nota(0, 0, 5)]), escala(nota(0), MAYOR).concat([nota(0, 0, 5)]).reverse()], cant: 2 }), T.nombrar({ notas: SOL_BASICO.slice(0, 8) })],
-    11: () => [T.duracion({ figuras: [{ d: 'w', p: 4 }, { d: 'h', p: 2 }, { d: 'q', p: 1 }, { d: '8', p: 0.5 }] }), T.silabas({ celdas: K3 })],
-    12: () => [T.completar({ celdas: K3, compases: ['2/4', '3/4', '4/4'] })],
-    13: () => [T.nombrar({ notas: SOL_BASICO }), T.silabas({ celdas: K3 })],
-    14: () => [T.silabas({ celdas: K3 })],
-    15: () => [T.duracion({ figuras: [{ d: 'hd', p: 3 }, { d: 'qd', p: 1.5 }, { d: 'h', p: 2 }, { d: 'q', p: 1 }] }), T.completar({ celdas: K4, compases: ['3/4', '4/4'] })],
-    16: () => [T.silabas({ celdas: TK, metodo: 'Takadimi' }), T.duracion({ figuras: [{ d: '16', p: 0.25 }, { d: '8', p: 0.5 }, { d: 'q', p: 1 }, { d: 'h', p: 2 }] })],
-    17: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' }), T.completar({ celdas: TK2.concat([C.taa]) })],
-    18: () => [T.silabas({ celdas: TK3, metodo: 'Takadimi' })],
-    19: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' })],
-    /* 20 a 23 (29-oct): la vieja «Más notas» en 4 lecciones, una cosa a la vez. Piano: clave de fa y líneas adicionales;
-       violín: cuerda Sol, cuerda Mi y líneas adicionales abajo y arriba. */
-    20: () => fa ? [T.nombrar({ notas: N([4, 2], [6, 2], [1, 3], [3, 3], [5, 3]), clave: 'bass', cant: 6, titulo: 'Clave de fa: las líneas' }), T.dibujar({ notas: N([4, 2], [6, 2], [1, 3], [3, 3], [5, 3]), clave: 'bass', cant: 4 })]
-      : [T.nombrar({ notas: N([4, 3], [5, 3], [6, 3], [0, 4]), cant: 6, titulo: 'Las notas de la cuerda Sol' }), T.dibujar({ notas: N([4, 3], [5, 3], [6, 3], [0, 4]), cant: 4 })],
-    21: () => fa ? [T.nombrar({ notas: N([5, 2], [0, 3], [2, 3], [4, 3]), clave: 'bass', cant: 6, titulo: 'Clave de fa: los espacios' }), T.nombrar({ notas: RANGO.fa.notas.slice(0, 9), clave: 'bass', cant: 6, titulo: 'Líneas y espacios mezclados' })]
-      : [T.nombrar({ notas: N([2, 5], [3, 5, 1], [4, 5], [5, 5]), cant: 6, titulo: 'Las notas de la cuerda Mi' }), T.dibujar({ notas: N([2, 5], [4, 5], [5, 5]), cant: 3 })],
-    22: () => fa ? [T.nombrar({ notas: N([5, 3], [6, 3], [0, 4], [5, 5], [6, 5]), cant: 6, titulo: 'Clave de sol: líneas adicionales' }), T.dibujar({ notas: N([0, 4], [6, 3], [5, 3], [5, 5]), cant: 4 })]
-      : [T.nombrar({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]), cant: 6, titulo: 'Líneas adicionales abajo' }), T.dibujar({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]), cant: 4 })],
-    23: () => fa ? [T.nombrar({ notas: N([3, 2], [6, 3], [0, 4], [1, 4], [2, 4]), clave: 'bass', cant: 6, titulo: 'Clave de fa: líneas adicionales' }), T.dibujar({ notas: N([0, 4], [6, 3], [1, 4], [3, 2]), clave: 'bass', cant: 4 })]
-      : [T.nombrar({ notas: N([4, 5], [5, 5], [6, 5]), cant: 6, titulo: 'Líneas adicionales arriba' }), T.dibujar({ notas: N([4, 5], [5, 5], [6, 5]), cant: 3 })],
-    24: () => [T.nombrar({ notas: SOL_TODAS, cant: 6 }), T.dibujar({ notas: SOL_TODAS.slice(2, 16) })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', cant: 4, titulo: 'Notas en clave de fa' })] : []),
-    25: () => [T.nombrar({ notas: N([3, 4, 1], [0, 5, 1], [6, 4, -1], [2, 4, -1], [4, 4, 1], [5, 4, -1], [1, 4, 1]), titulo: 'Notas con alteraciones' }),
+    9: () => [T.nombrar({ notas: N([0, 4], [1, 4], [2, 4], [4, 4], [5, 4]) }), T.secuencia({ titulo: 'Escribe la nota que falta', consigna: 'Las notas van en orden: do, re, mi, fa, sol, la, si.', series: [escala(nota(0), MAYOR), escala(nota(4), [0, 2, 4, 5, 7, 9, 10]), escala(nota(2), [0, 1, 3, 5, 7, 8, 10])] }),
+      T.pasoSalto({ notas: DO_A_DO.slice(0, 6) })],
+    /* 10: la escala de Do en los dos libros (desde el 7-nov-2026 el de violín usa do fijo; antes era la de Re) */
+    10: () => [T.secuencia({ titulo: 'Completa la escala de Do', consigna: 'Subiendo y bajando.', series: [DO_A_DO, DO_A_DO.slice().reverse()], cant: 2 }), T.vecinaEscala({}), T.nombrar({ notas: SOL_BASICO.slice(0, 8) })],
+    11: () => [T.duracion({ figuras: [{ d: 'w', p: 4 }, { d: 'h', p: 2 }, { d: 'q', p: 1 }, { d: '8', p: 0.5 }] }), T.figuras({ tipo: 'sumar', figs: ['redonda', 'blanca', 'negra', 'corchea'] }),
+      T.figuras({ tipo: 'igual', figs: ['redonda', 'blanca', 'negra', 'corchea'], cant: 3 }), T.silabas({ celdas: K3 })],
+    12: () => [T.compasLlena({}), T.completar({ celdas: K3, compases: ['2/4', '3/4', '4/4'] }), T.contarEnCompas({})],
+    13: () => [...T.leerMelodia({ celdas: K3, notas: SOL_BASICO.slice(0, 6) })],
+    14: () => [T.queFigura({}), T.llenaCompas({ celdas: K3 }), T.silabas({ celdas: K3 })],
+    15: () => [T.duracion({ figuras: [{ d: 'hd', p: 3 }, { d: 'qd', p: 1.5 }, { d: 'h', p: 2 }, { d: 'q', p: 1 }] }), T.figuras({ tipo: 'sumar', figs: ['blanca con puntillo', 'negra con puntillo', 'negra', 'corchea', 'blanca'] }),
+      T.completar({ celdas: K4, compases: ['3/4', '4/4'] })],
+    16: () => [T.silabas({ celdas: TK, metodo: 'Takadimi' }), T.duracion({ figuras: [{ d: '16', p: 0.25 }, { d: '8', p: 0.5 }, { d: 'q', p: 1 }, { d: 'h', p: 2 }] }),
+      T.figuras({ tipo: 'caben', figs: ['semicorchea', 'corchea', 'negra', 'blanca'], cant: 3 }), T.contarSonidos({ celdas: TK, cant: 3 }), T.silabaFalta({ celdas: TK, cant: 2 })],
+    17: () => [T.silabas({ celdas: TK2, metodo: 'Takadimi' }), T.completar({ celdas: TK2.concat([C.taa]) }), T.contarSonidos({ celdas: TK2, cant: 3 })],
+    18: () => [T.ligaduras({ tipo: 'suma' }), T.ligaduras({ tipo: 'veces', cant: 3 }), T.ligaduras({ tipo: 'esProlongacion', cant: 3 }), T.sincopa({}), T.silabas({ celdas: TK3, metodo: 'Takadimi', cant: 2 })],
+    19: () => [T.dondeEmpieza({ celdas: [C.ta, C.titi, C.sh, C.taa, C.taaa] }), T.silabas({ celdas: TK2, metodo: 'Takadimi' })],
+    /* 20 a 23 (29-oct): piano, clave de fa y líneas adicionales; violín, cuerda Sol, cuerda Mi y líneas adicionales abajo y arriba */
+    20: () => fa ? [T.nombrar({ notas: N([4, 2], [6, 2], [1, 3], [3, 3], [5, 3]), clave: 'bass', cant: 6, titulo: 'Clave de fa: las líneas' }), T.dibujar({ notas: N([4, 2], [6, 2], [1, 3], [3, 3], [5, 3]), clave: 'bass', cant: 4 }), T.subeBaja({ cant: 4 })]
+      : [T.dedoNota({ cuerda: 'Sol' }), T.nombrar({ notas: N([4, 3], [5, 3], [6, 3], [0, 4]), cant: 6, titulo: 'Las notas de la cuerda Sol' }), T.rayitas({ notas: N([4, 3], [5, 3], [6, 3], [0, 4]) }),
+        T.ordenar({ titulo: 'De la más grave a la más aguda', consigna: 'Ordena las notas de la cuerda Sol.', orden: ['Sol', 'La', 'Si', 'Do'], tam: [3, 4], cant: 1 })],
+    21: () => fa ? [T.nombrar({ notas: N([5, 2], [0, 3], [2, 3], [4, 3]), clave: 'bass', cant: 6, titulo: 'Clave de fa: los espacios' }), T.nombrar({ notas: RANGO.fa.notas.slice(0, 9), clave: 'bass', cant: 6, titulo: 'Líneas y espacios mezclados' }),
+        T.secuencia({ titulo: 'Completa la escalera', consigna: 'Clave de fa, de abajo hacia arriba.', series: [N([4, 2], [5, 2], [6, 2], [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3]).map(([l, o]) => nota(l, 0, o))], cant: 1 })]
+      : [T.dedoNota({ cuerda: 'Mi' }), T.nombrar({ notas: N([2, 5], [3, 5, 1], [4, 5], [5, 5]), cant: 6, titulo: 'Las notas de la cuerda Mi' }), T.dibujar({ notas: N([2, 5], [4, 5], [5, 5]), cant: 3 }),
+        T.ordenar({ titulo: 'De la más grave a la más aguda', consigna: 'Ordena las notas de la cuerda Mi.', orden: ['Mi', 'Fa♯', 'Sol', 'La'], tam: [3, 4], cant: 1 })],
+    22: () => fa ? [T.nombrar({ notas: N([5, 3], [6, 3], [0, 4], [5, 5], [6, 5]), cant: 6, titulo: 'Clave de sol: líneas adicionales' }), T.rayitas({ notas: N([5, 3], [6, 3], [0, 4], [5, 5], [6, 5]) }), T.dibujar({ notas: N([0, 4], [6, 3], [5, 3], [5, 5]), cant: 4 })]
+      : [T.nombrar({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]), cant: 6, titulo: 'Líneas adicionales abajo' }), T.rayitas({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]) }), T.dibujar({ notas: N([0, 4], [6, 3], [5, 3], [4, 3]), cant: 4 })],
+    23: () => fa ? [T.nombrar({ notas: N([3, 2], [6, 3], [0, 4], [1, 4], [2, 4]), clave: 'bass', cant: 6, titulo: 'Clave de fa: líneas adicionales' }), T.rayitas({ notas: N([6, 3], [0, 4], [1, 4], [2, 4]), clave: 'bass' }), T.dibujar({ notas: N([0, 4], [6, 3], [1, 4], [3, 2]), clave: 'bass', cant: 4 })]
+      : [T.nombrar({ notas: N([4, 5], [5, 5], [6, 5]), cant: 6, titulo: 'Líneas adicionales arriba' }), T.rayitas({ notas: N([5, 5], [6, 5], [0, 4], [5, 3]) }), T.dibujar({ notas: N([4, 5], [5, 5], [6, 5]), cant: 3 })],
+    24: () => [...T.leerMelodia({ celdas: K4, notas: SOL_TODAS.slice(3, 15) })].concat(fa ? [T.nombrar({ notas: RANGO.fa.notas, clave: 'bass', cant: 4, titulo: 'Notas en clave de fa' })] : []),
+    25: () => [T.enarmonico({}), T.queSuena({ armaduras: [0] }), T.nombrar({ notas: N([3, 4, 1], [0, 5, 1], [6, 4, -1], [2, 4, -1], [4, 4, 1], [5, 4, -1], [1, 4, 1]), cant: 4, titulo: 'Notas con alteraciones' }),
       T.secuencia({ titulo: 'Escribe la nota que falta', consigna: 'Las 12 notas, subiendo por semitonos.', series: [[nota(0), nota(0, 1), nota(1), nota(1, 1), nota(2), nota(3), nota(3, 1), nota(4)], [nota(4), nota(4, 1), nota(5), nota(5, 1), nota(6), nota(0, 0, 5)]], cant: 2 })],
-    26: () => [T.tonoSemitono({})],
-    27: () => [T.intervalos({ cuales: [1, 2, 3, 4] })],
-    28: () => [T.intervalos({ cuales: [5, 6, 7, 12] })],
-    29: () => [T.intervalos({ cuales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], cant: 8 })],
-    30: () => [T.escalaMayor({ tonicas: [nota(4), nota(3), nota(1)] }), T.tonoSemitono({ cant: 4 })],
-    31: () => [T.armaduras({ tonalidades: TONALIDADES.filter(x => [0, 1, 2, -1].includes(x.n)) }), T.escalaMayor({ tonicas: [nota(4), nota(3)] })],
+    26: () => [T.tonoSemitono({}), T.subirTono({})],
+    27: () => [T.intervalos({ cuales: [1, 2, 3, 4] }), T.notaArriba({ cuales: ['2ª menor', '2ª mayor', '3ª menor', '3ª mayor'] })],
+    28: () => [T.intervalos({ cuales: [5, 6, 7, 12] }), T.notaArriba({ cuales: ['4ª justa', '5ª justa', '8ª justa'] })],
+    29: () => [T.intervalos({ cuales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], cant: 8, extra: ['2ª aumentada', '4ª aumentada', '5ª disminuida', '5ª aumentada'] }),
+      T.notaArriba({ cuales: ['6ª menor', '6ª mayor', '7ª menor', '7ª mayor', '4ª aumentada', '5ª disminuida'] })],
+    30: () => [T.escalaMayor({ tonicas: [nota(4), nota(3), nota(1)] }), T.errorEscala({ tonicas: [nota(4), nota(3), nota(1), nota(5), nota(2), nota(6, -1)] }), T.tonoSemitono({ cant: 4 })],
+    31: () => [T.armaduras({ tonalidades: TONALIDADES.filter(x => [0, 1, 2, -1].includes(x.n)) }), T.escalaMayor({ tonicas: [nota(4), nota(3)] }), T.queSuena({ armaduras: [1, -1, 2], cant: 3 })],
     /* 32 y 33 (29-oct): el orden de los sostenidos y el de los bemoles, y la tonalidad de cada armadura */
     32: () => [T.secuencia({ titulo: 'El orden de los sostenidos', consigna: 'Fa, Do, Sol, Re, La, Mi, Si.', series: [[nota(3, 1), nota(0, 1), nota(4, 1), nota(1, 1), nota(5, 1), nota(2, 1), nota(6, 1)]], cant: 2 }),
       T.queTonalidad({ tonalidades: TONALIDADES.filter(x => x.n >= 1) }), T.armaduras({ tonalidades: TONALIDADES.filter(x => x.n >= 1 && x.n <= 4) })],
     33: () => [T.secuencia({ titulo: 'El orden de los bemoles', consigna: 'Si, Mi, La, Re, Sol, Do, Fa: el de los sostenidos al revés.', series: [[nota(6, -1), nota(2, -1), nota(5, -1), nota(1, -1), nota(4, -1), nota(0, -1), nota(3, -1)]], cant: 2 }),
       T.queTonalidad({ tonalidades: TONALIDADES.filter(x => x.n <= -1).concat(TONALIDADES.filter(x => x.n >= 2 && x.n <= 3)) }), T.armaduras({ tonalidades: TONALIDADES.filter(x => x.n !== 0) })],
-    34: () => [T.triadas({ tipos: ['mayor', 'menor'] }), T.queTriada({ tipos: ['mayor', 'menor'] })],
+    34: () => [T.triadas({ tipos: ['mayor', 'menor'] }), T.queTriada({ tipos: ['mayor', 'menor'] }), T.cambiaNota({})],
     35: () => [T.triadas({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] }), T.queTriada({ tipos: ['mayor', 'menor', 'aumentada', 'disminuida'] })],
     36: () => [T.inversiones({})],
-    37: () => [T.armonizar({ tonicas: [nota(0), nota(4)] })],
-    38: () => [T.grados({ tonicas: [nota(0), nota(4), nota(3)], preguntas: [0, 3, 4, 5] })],
-    39: () => [T.grados({ tonicas: [nota(0), nota(4), nota(1), nota(3)], preguntas: [0, 3, 4, 5] })],
-    40: () => [T.relativas({ tonicas: [nota(0), nota(4), nota(3), nota(1)] }), T.escalaMayor({ tonicas: [nota(5), nota(2)], menor: true })],
-    41: () => [T.grados({ tonicas: [nota(5), nota(2)], preguntas: [0, 3, 4], menor: true }), T.armonizar({ tonicas: [nota(5)], menor: true })],
+    37: () => [T.armonizar({ tonicas: [nota(0), nota(4)] }), T.gradoDe({ tonicas: [nota(0), nota(4), nota(3), nota(1)] })],
+    38: () => [T.tonicaDominante({ tonicas: mezclar([nota(0), nota(4), nota(3), nota(1), nota(5), nota(6, -1)]).slice(0, 3) }), T.grados({ tonicas: [nota(0), nota(4), nota(3)], preguntas: [0, 3, 4], cant: 3 }),
+      T.reposoTension({ tonicas: [nota(0), nota(4), nota(3), nota(1)] }), T.vfTonalidad({ tonicas: [nota(0), nota(4), nota(3), nota(1)] })],
+    39: () => [T.grados({ tonicas: [nota(0), nota(4), nota(1), nota(3)], preguntas: [0, 3, 4, 5], cant: 4 }), T.progresion({ tonicas: [nota(4), nota(3), nota(1), nota(0)], tipo: 'acordes' }),
+      T.progresion({ tonicas: [nota(0), nota(4)], tipo: 'romanos' }), T.reposoTension({ tonicas: [nota(0), nota(4), nota(3)], cant: 3 })],
+    40: () => [T.relativas({ tonicas: [nota(0), nota(4), nota(3), nota(1)] }), T.relativaMayor({ tonicas: mezclar([nota(5), nota(2), nota(1), nota(6), nota(4), nota(0)]).slice(0, 4) }), T.escalaMayor({ tonicas: [nota(5), nota(2)], menor: true })],
+    41: () => [T.escalaMayor({ tonicas: mezclar([nota(5), nota(2), nota(1), nota(6)]).slice(0, 2), armonica: true }), T.queSube({ tonicas: mezclar([nota(5), nota(2), nota(1), nota(6), nota(4)]).slice(0, 3) }),
+      T.vMenor({ tonicas: mezclar([nota(5), nota(2), nota(1), nota(6)]).slice(0, 3) }), T.grados({ tonicas: [nota(5), nota(2)], preguntas: [0, 3], menor: true, cant: 3 })],
     42: () => [T.circulo(), T.relativas({ tonicas: [nota(0), nota(4), nota(1), nota(3), nota(6, -1)] }), T.armaduras({ tonalidades: mezclar(TONALIDADES.filter(x => Math.abs(x.n) <= 3)).slice(0, 5) })],
-    43: () => [T.pentatonica({ tonicas: [[nota(0), false], [nota(4), false], [nota(5), true], [nota(2), true]] })],
-    45: () => [T.silabas({ celdas: SEIS, compas: '6/8', metodo: 'Takadimi en 6/8' }), T.completar({ celdas: SEIS, compases: ['6/8'] })],
-    47: () => [T.terminos({ titulo: 'Dinámicas y articulaciones', lista: [['p', 'Suave'], ['f', 'Fuerte'], ['mf', 'Medio fuerte'], ['cresc.', 'Cada vez más fuerte'], ['dim.', 'Cada vez más suave'], ['Staccato', 'Notas cortas y separadas'], ['Legato', 'Notas ligadas']] })],
-    48: () => [T.terminos({ titulo: 'Tempo', lista: [['Lento', 'Muy despacio'], ['Andante', 'Al paso, tranquilo'], ['Moderato', 'Moderado'], ['Allegro', 'Rápido y alegre'], ['Presto', 'Muy rápido'], ['Ritardando', 'Ir más despacio']] })],
-    50: () => [T.nombrar({ notas: SOL_TODAS, cant: 12, titulo: 'Lectura rápida: escribe el nombre de cada nota' })],
+    43: () => [T.pentatonica({ tonicas: [[nota(0), false], [nota(4), false], [nota(5), true], [nota(2), true]] }), T.enPentatonica({ tonicas: [[nota(0), false], [nota(4), false], [nota(1), false], [nota(5), true], [nota(2), true]] })],
+    44: () => [T.respuestaPentatonica({}), T.enPentatonica({ tonicas: [[nota(0), false], [nota(5), true]], cant: 4 })],
+    45: () => [T.figuras({ tipo: 'corcheas', figs: ['corchea', 'negra', 'negra con puntillo', 'blanca con puntillo'], cant: 3 }), T.figuras({ tipo: 'faltan68', figs: ['corchea', 'negra', 'negra con puntillo'], cant: 3 }),
+      T.silabas({ celdas: SEIS, compas: '6/8', metodo: 'Takadimi en 6/8' }), T.completar({ celdas: SEIS, compases: ['6/8'] })],
+    46: () => [T.pasoSalto({ notas: DO_A_DO.slice(0, 7), conDireccion: true }), T.melodiaDescrita({ notas: DO_A_DO, movs: [['sube un paso', 1], ['baja un paso', -1], ['sube un salto de 3ª', 2], ['baja un salto de 3ª', -2]] })],
+    47: () => [T.terminos({ titulo: 'Dinámicas y articulaciones', lista: mezclar([['pp', 'Muy suave'], ['p', 'Suave'], ['mp', 'Medio suave'], ['mf', 'Medio fuerte'], ['f', 'Fuerte'], ['ff', 'Muy fuerte'], ['cresc.', 'Cada vez más fuerte'], ['dim.', 'Cada vez más suave'], ['Staccato', 'Notas cortas y separadas'], ['Legato', 'Notas ligadas']]).slice(0, 6) }),
+      T.ordenar({ titulo: 'De la más suave a la más fuerte', consigna: 'Elige la dinámica que va en cada lugar.', orden: DINAMICAS, tam: [3, 6] }), T.ligaduras({ tipo: 'tipo', cant: 3 })],
+    48: () => [T.terminos({ titulo: 'Tempo', lista: [['Lento', 'Muy despacio'], ['Adagio', 'Despacio'], ['Andante', 'Al paso, tranquilo'], ['Moderato', 'Moderado'], ['Allegro', 'Rápido y alegre'], ['Presto', 'Muy rápido'], ['Ritardando', 'Ir más despacio']] }),
+      T.ordenar({ titulo: 'Del más lento al más rápido', consigna: 'Elige el tempo que va en cada lugar.', orden: TEMPOS, tam: [3, 6] }), T.metronomo({ cant: 3, tipos: ['min', 'medio', 'seg'] })],
+    49: () => [T.forma({}), T.repeticiones({}), T.queSigno()],
+    50: () => [...T.leerMelodia({ compas: '3/4', celdas: [C.ta, C.titi, C.taa, C.taaa, C.tai], notas: SOL_TODAS.slice(4, 13), tonalidad: uno([TONALIDADES[1], TONALIDADES[6]]) }), T.anacrusa({})],
     51: () => [T.septima({ tonicas: [nota(0), nota(4), nota(3), nota(1)] })],
-    /* 53 a 60 (29-oct): los modos griegos, sumando uno por lección */
+    /* 52 (7-nov-2026, el libro nuevo): acompañar con I, IV y V, reposo o tensión y revisar los pulsos */
+    52: () => [T.acompanar({ tonicas: [nota(0), nota(0), nota(4)] }), T.reposoTension({ tonicas: [nota(0), nota(4)], cant: 3 }), T.llenaCompas({ celdas: K4, figuras: true, cant: 3 })],
+    /* 53 a 60 (29-oct): los modos griegos, sumando uno por lección; desde el 7-nov también desde otras notas, con alteraciones */
     53: () => [T.queModo({ cuales: [0] }), T.escalaModo({ cuales: [0] })],
-    54: () => [T.queModo({ cuales: [0,1] }), T.escalaModo({ cuales: [0,1] }), T.notaCaracteristica({ cuales: [0,1] })],
-    55: () => [T.queModo({ cuales: [0,1,2] }), T.escalaModo({ cuales: [0,1,2] }), T.notaCaracteristica({ cuales: [0,1,2] })],
-    56: () => [T.queModo({ cuales: [0,1,2,3] }), T.escalaModo({ cuales: [0,1,2,3] }), T.notaCaracteristica({ cuales: [0,1,2,3] })],
-    57: () => [T.queModo({ cuales: [0,1,2,3,4] }), T.escalaModo({ cuales: [0,1,2,3,4] }), T.notaCaracteristica({ cuales: [0,1,2,3,4] })],
-    58: () => [T.queModo({ cuales: [0,1,2,3,4,5] }), T.escalaModo({ cuales: [0,1,2,3,4,5] }), T.notaCaracteristica({ cuales: [0,1,2,3,4,5] })],
-    59: () => [T.queModo({ cuales: [0,1,2,3,4,5,6] }), T.escalaModo({ cuales: [0,1,2,3,4,5,6] }), T.notaCaracteristica({ cuales: [0,1,2,3,4,5,6] })],
-    60: () => [T.queModo({ cuales: [0,1,2,3,4,5,6] }), T.escalaModo({ cuales: [0,1,2,3,4,5,6] }), T.notaCaracteristica({ cuales: [0,1,2,3,4,5,6] })],
+    54: () => modos(1, [nota(0), nota(2), nota(4)]),
+    55: () => modos(2, [nota(0), nota(1), nota(5)]),
+    56: () => modos(3, [nota(0), nota(5), nota(4)]),
+    57: () => modos(4, [nota(0), nota(4), nota(1)]),
+    58: () => modos(5, [nota(0), nota(5), nota(1)]),
+    59: () => modos(6, [nota(0), nota(1), nota(5)]),
+    60: () => [T.ordenar({ titulo: 'Del más brillante al más oscuro', consigna: 'Elige el modo que va en cada lugar.', orden: BRILLO, tam: [4, 7], cant: 1 }), T.notaQueBaja({}),
+      T.queModoDesde({ modos: MODOS_HOJA.map(m => m.n) }), T.mayorMenorModo({ modos: ['Lidio', 'Mixolidio', 'Dórico', 'Frigio', 'Locrio'] })]
   };
+  /* 54 a 59: el nuevo modo y los anteriores; escribirlo desde otras notas y reconocerlo desde Do */
+  function modos(k, tonicas) {
+    const cuales = Array.from({ length: k + 1 }, (_, j) => j), nombres = MODOS_HOJA.filter((_, j) => cuales.includes(j)).map(m => m.n);
+    return [T.queModo({ cuales }), T.escalaModo({ cuales }), T.notaCaracteristica({ cuales }),
+      T.modoDesde({ modos: [MODOS_HOJA[k].n], tonicas, cant: 2 }), T.queModoDesde({ modos: nombres, cant: Math.min(4, nombres.length) })];
+  }
   return (M[s] || (() => []))();
 }
-/** Semanas sin hoja (no tienen entrada en ejerciciosDe). */
-const SIN_HOJA = [1, 44, 46, 49, 52];
+/** Semanas sin hoja (no tienen entrada en ejerciciosDe). Desde el 7-nov-2026, ninguna. */
+const SIN_HOJA = [];
 const tieneHoja = s => !SIN_HOJA.includes(s);
 
 /* ---------- Armar, revisar e imprimir ---------- */
@@ -665,20 +1317,25 @@ function armar() {
     el('div', { class: 'datos-alumno' }, el('span', { text: 'Nombre:' }), el('span', { text: 'Fecha:' }))));
   ejerciciosDe(s, ins).forEach(e => hoja.append(e));
 }
+/* Se corrige todo al final (regla de la dueña, 7-nov-2026): verde lo que está bien y rojo lo que no, con la respuesta
+   correcta debajo. Se puede corregir y revisar otra vez, o pedir «Otra hoja». Lo vacío no se marca. */
 function revisar() {
-  let bien = 0, total = 0;
+  let bien = 0, total = 0, vacias = 0;
+  document.querySelectorAll('.solucion').forEach(x => x.remove());
   campos.forEach(c => {
     const v = c.dibujo ? null : c.el.value;
-    if (!c.dibujo && v === '') { c.el.classList.remove('ok', 'mal'); total++; return; }
     total++;
+    if (!c.dibujo && v === '') { c.el.classList.remove('ok', 'mal'); vacias++; return; }
     const ok = c.ok(v);
     if (ok) bien++;
     c.el.classList.toggle('ok', ok); c.el.classList.toggle('mal', !ok);
+    if (!ok) c.el.closest('.respuestas, .item').append(el('div', { class: 'solucion', text: '✓ ' + c.solucion }));
   });
   const r = $('#resultado');
   r.hidden = false;
   r.className = 'resultado' + (bien / Math.max(total, 1) < 0.8 ? ' medio' : '');
-  r.textContent = bien + ' de ' + total + ' correctas' + (bien === total ? ' 🎉 ¡Hoja perfecta!' : '. Revisa las marcadas y vuelve a intentar.');
+  r.textContent = bien + ' de ' + total + ' correctas' + (bien === total ? ' 🎉 ¡Hoja perfecta!'
+    : '. Debajo de cada roja está la respuesta correcta' + (vacias ? ' (' + vacias + ' sin responder)' : '') + '. Corrige y revisa otra vez, o toca «Otra hoja» para practicar con ejercicios nuevos.');
 }
 function verSoluciones() {
   document.querySelectorAll('.solucion').forEach(x => x.remove());
@@ -693,7 +1350,9 @@ function iniciar() {
   });
   sel.value = String(Math.min(Math.max(semanaRuta || Number(params.get('semana')) || 1, 1), GUIA.length));
   $('#instrumento').value = (ruta ? ruta[1] : params.get('i')) === 'violin' ? 'violin' : 'piano';
-  sel.addEventListener('change', () => { variante = 1; armar(); });
+  const nombreElegido = () => { document.getElementById('semana-texto').textContent = sel.options[sel.selectedIndex].text; };
+  nombreElegido();
+  sel.addEventListener('change', () => { variante = 1; nombreElegido(); armar(); });
   $('#instrumento').addEventListener('change', armar);
   $('#otra').addEventListener('click', () => { variante++; armar(); });
   $('#imprimir').addEventListener('click', () => window.print());
