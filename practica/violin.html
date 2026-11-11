@@ -565,7 +565,7 @@
   const mastil = document.getElementById('mastil');
   let ctxAudio = null;
   let juegoActivo = false;
-  let notaObjetivo = null;
+  let notaObjetivo = null, idAnterior = null;
 
   const { Renderer, Stave, StaveNote, Accidental, Formatter } = Vex.Flow;
 
@@ -622,12 +622,18 @@
     g.setAttribute('transform', `translate(${(centro - cabeza).toFixed(1)} 0)`);
   }
 
+  /* 10-nov-2026 (la dueña: el sonido llegaba con retraso): latencia de juego, el audio se despierta con el primer toque y
+     el ataque pasó de 80 ms a 20 ms. Con audífonos Bluetooth igual hay un retraso que la página no puede quitar. */
   function obtenerContextoAudio() {
     if (!ctxAudio) {
-      ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+      const C = window.AudioContext || window.webkitAudioContext;
+      try { ctxAudio = new C({ latencyHint: 'interactive' }); } catch (e) { ctxAudio = new C(); }
     }
     return ctxAudio;
   }
+  ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, () => {
+    const c = obtenerContextoAudio(); if (c.state === 'suspended') c.resume();
+  }, { capture: true, passive: true }));
 
   function emitirSonido(frecuencia) {
     const ctx = obtenerContextoAudio();
@@ -641,8 +647,8 @@
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(frecuencia, ctx.currentTime);
 
-    gainNode.gain.setValueAtTime(0, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.08);
+    gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.4, ctx.currentTime + 0.02);
     gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
 
     osc.connect(gainNode);
@@ -683,15 +689,24 @@
   function generarSiguienteNotaJuego() {
     esperandoSiguiente = false;
     const pool = modosJuego[modoJuego];
+    /* 10-nov-2026 (la dueña): con pocas notas salía siempre una, la otra, una, la otra. Con 3 notas o menos se puede
+       repetir la misma, pero nunca 3 veces seguidas. Con más notas, nunca la misma dos veces. */
+    const repetida = notaObjetivo && notaObjetivo.id === idAnterior;
     let nuevaNota;
     do {
       nuevaNota = pool[Math.floor(Math.random() * pool.length)];
-    } while (notaObjetivo && pool.length > 1 && nuevaNota === notaObjetivo.id);
+    } while (notaObjetivo && pool.length > 1 && nuevaNota === notaObjetivo.id && (pool.length > 3 || repetida));
+    const otraVez = notaObjetivo && nuevaNota === notaObjetivo.id;
+    idAnterior = notaObjetivo ? notaObjetivo.id : null;
 
     // 'f/4' o, con alteración, 'f/4:#' y 'b/4:b' (lecciones de la escala de Re y de las 12 notas)
     const [vfKeyNueva, accNueva] = nuevaNota.split(':');
     notaObjetivo = { id: nuevaNota, vfKey: vfKeyNueva, acc: accNueva || 'n' };
     renderizarPentagrama(notaObjetivo.vfKey, notaObjetivo.acc);
+    if (otraVez) {   // la misma nota otra vez: un destello para que se note que es una nota nueva
+      const p = document.getElementById('pentagrama');
+      if (p && p.animate) p.animate([{ opacity: .35 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+    }
 
     const feedbackEl = document.getElementById('feedback-juego');
     feedbackEl.textContent = "Toca esta nota en el violín";

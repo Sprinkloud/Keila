@@ -1177,7 +1177,7 @@ const DO_A_DO = escala(nota(0), MAYOR).concat([nota(0, 0, 5)]);
 function ejerciciosDe(s, ins) {
   const fa = ins === 'piano';
   const M = {
-    1: () => [T.pulsoParejo({}), T.metronomo({ cant: 4 }), T.verdaderoFalso({ frases: VF_FRASES[1] })],
+    1: () => [T.pulsoParejo({}), T.verdaderoFalso({ frases: VF_FRASES[1] })],   // 10-nov-2026 (la dueña): sin las cuentas del metrónomo, difíciles para un niño de 8 años
     2: () => [T.silabas({ celdas: K1 }), T.contarSonidos({ celdas: K1, conPulsos: true }), T.silabaFalta({ celdas: K1 })],
     3: () => [T.silabas({ celdas: K2 }), T.completar({ celdas: K2 }), T.contarSonidos({ celdas: K2, cant: 3 }), T.silabaFalta({ celdas: K2 }), T.verdaderoFalso({ frases: VF_FRASES[3], cant: 3 })],
     4: () => [T.subeBaja({}), T.escalera({})],

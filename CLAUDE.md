@@ -632,3 +632,14 @@ Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-p
   - `node pruebas/hojas_test.js [semillas]`: arma 60 lecciones × 2 instrumentos × N semillas sin navegador (DOM mínimo y VexFlow falso) y comprueba que no falle, que no haya ítems vacíos ni repetidos, que cada respuesta guardada se acepte y esté entre las opciones, y recalcula con las funciones de `Libro_Sprinkloud/herramientas/comprobar_soluciones.js` (o con su propia cuenta) las respuestas de 37 tipos. Con 100 semillas: 12 000 hojas, 46 600 respuestas recalculadas, 0 errores. Un error de teoría puesto a propósito (dórico con 6ª menor) lo detecta.
   - `node pruebas/revisar_hojas.js 320,360 1-60 [variantes]`: en Chrome, cada hoja al abrir y después de revisar todo mal: errores de consola, desbordes, texto cortado, selects cortados y alturas de 44 px.
   - `node pruebas/probar_tipos.js [carpeta]`: con clics, 50 hojas con tipos nuevos: mitad bien y mitad mal, revisa, verde/rojo y la correcta debajo, corrige y queda «¡Hoja perfecta!».
+
+## Revisión del libro 1 de piano con la dueña (10-nov-2026)
+- **Hoja de la lección 1:** sin `T.metronomo` (las cuentas de pulsos por minuto y por segundo son difíciles para un niño de 8 años). La lección 48 lo conserva.
+- **Pasos de la hoja** (`leccion.js`): ya no dicen «toca Imprimir».
+- **Ritmo:** los pasos de las lecciones de ritmo (`leccion.js`, `TAMBOR`) y la consigna de `ritmo.html` ya no piden palmear ni tocar el pecho. Ahora se toca el tambor de la pantalla, o cualquier tecla en la computadora, y la app marca si fue a tiempo.
+- **Retraso del sonido:**
+  - el tambor de `ritmo.html` es un chasquido (ruido filtrado a 1800 Hz) más un cuerpo de 240 → 110 Hz (`sonidoTambor`); antes era un seno de 140 Hz, que casi no se oía en parlantes chicos y parecía llegar tarde;
+  - en `ritmo.html`, `piano.html` y `violin.html` el audio usa `latencyHint: 'interactive'` y se despierta con el primer toque o tecla en cualquier parte;
+  - el ataque del piano pasó de 40 a 5 ms y el del violín de 80 a 20 ms;
+  - con audífonos Bluetooth sigue habiendo un retraso que la página no puede quitar.
+- **Lectura de notas** (`generarSiguienteNotaJuego`, piano y violín): con 3 notas o menos puede repetir la misma, pero nunca 3 veces seguidas, y la nota repetida hace un destello. Antes, sol y mi salían siempre alternadas.

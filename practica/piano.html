@@ -625,7 +625,7 @@
 
   let ctxAudio = null;
   let juegoActivo = false;
-  let notaObjetivo = null;
+  let notaObjetivo = null, notaAnterior = null;
   let tipoAcordeActivo = 'OFF';
 
   // Notas de cada modo del juego: [tecla, clave en la que se muestra]
@@ -759,12 +759,19 @@
     g.setAttribute('transform', `translate(${(centro - cabeza).toFixed(1)} 0)`);
   }
 
+  /* 10-nov-2026 (la dueña: «la tecla sonaba con retraso»): el audio se pide con latencia de juego y se despierta con el
+     primer toque en cualquier parte de la página, así la primera tecla no espera a que arranque. El ataque pasó de 40 ms
+     a 5 ms: un piano suena de golpe. Si se usan audífonos Bluetooth, igual hay un retraso que la página no puede quitar. */
   function obtenerContextoAudio() {
     if (!ctxAudio) {
-      ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+      const C = window.AudioContext || window.webkitAudioContext;
+      try { ctxAudio = new C({ latencyHint: 'interactive' }); } catch (e) { ctxAudio = new C(); }
     }
     return ctxAudio;
   }
+  ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, () => {
+    const c = obtenerContextoAudio(); if (c.state === 'suspended') c.resume();
+  }, { capture: true, passive: true }));
 
   function emitirSonidoPiano(frecuencia) {
     const ctx = obtenerContextoAudio();
@@ -778,8 +785,8 @@
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(frecuencia, ctx.currentTime);
 
-    gainNode.gain.setValueAtTime(0, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.04);
+    gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.4, ctx.currentTime + 0.005);
     gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
 
     osc.connect(gainNode);
@@ -942,13 +949,23 @@
     esperandoSiguiente = false;
     document.getElementById('recordatorio-octava').textContent = '';
     const pool = poolDelModo();
+    /* 10-nov-2026 (la dueña): con pocas notas (sol y mi) salía siempre sol, mi, sol, mi. Con 3 notas o menos se puede
+       repetir la misma, pero nunca 3 veces seguidas (sol sol mi sol mi mi…). Con más notas, nunca la misma dos veces. */
+    const igual = (a, b) => a && b && a.vfKey === b.vfKey && a.clef === b.clef && a.alt === b.alt;
+    const repetida = igual(notaObjetivo, notaAnterior);
     let nuevaNota;
     do {
       nuevaNota = pool[Math.floor(Math.random() * pool.length)];
-    } while (notaObjetivo && pool.length > 1 && nuevaNota.vfKey === notaObjetivo.vfKey && nuevaNota.clef === notaObjetivo.clef && nuevaNota.alt === notaObjetivo.alt);
+    } while (notaObjetivo && pool.length > 1 && igual(nuevaNota, notaObjetivo) && (pool.length > 3 || repetida));
 
+    const otraVez = igual(nuevaNota, notaObjetivo);
+    notaAnterior = notaObjetivo;
     notaObjetivo = nuevaNota;
     renderizarDoblePentagrama([{ vfKey: notaObjetivo.vfKey, alt: notaObjetivo.alt, clef: notaObjetivo.clef }]);
+    if (otraVez) {   // la misma nota otra vez: un destello para que se note que es una nota nueva
+      const p = document.getElementById('pentagrama');
+      if (p && p.animate) p.animate([{ opacity: .35 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+    }
 
     const feedbackEl = document.getElementById('feedback-juego');
     feedbackEl.textContent = "Toca esta nota en el piano";

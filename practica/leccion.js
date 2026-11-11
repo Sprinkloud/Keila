@@ -220,19 +220,22 @@
       'Toca <b>Empezar</b>: aparece una nota en el pentagrama.',
       'Búscala y tócala ' + instrumento + '. Si aciertas, aparece otra.',
       'Junta las <b>3 estrellas</b>: la tercera sale con 6 aciertos seguidos.'];
+    /* 10-nov-2026 (la dueña): en vez de palmear o tocar el pecho, el alumno toca el tambor de la pantalla (en la computadora,
+       cualquier tecla): así la app sabe si fue a tiempo. */
+    const TAMBOR = 'toca el <b>tambor 🥁</b> (en el celular, en la pantalla; en la computadora, cualquier tecla)';
     if (app === 'ritmo') {
-      if (semana === 1) return ['Toca <b>Empezar</b> y luego <b>▶ Reproducir</b>: suena el pulso.', 'Da una palmada en cada «ta», sin adelantarte.', 'Ahora márcalo en el pecho (derecha, izquierda) durante 30 segundos.'];
-      if (semana === 14) return ['Toca <b>Dictado</b> (abajo de las tarjetas): suena un ritmo.', 'Repítelo en el pecho y elige la tarjeta que sonó.', 'Haz por lo menos 10 dictados.'];
-      if (semana === 18) return ['Toca <b>▶ Reproducir</b>: suena la cumbia.', 'Marca el pulso con la cabeza y aplaude en el sonido «corrido» (la síncopa).', 'Prueba otros ritmos en «Ritmos latinos…».'];
-      if (semana === 6) return ['Toca <b>▶ Reproducir</b>: el ostinato (ta, ti-ti, ta, sh) se repite sin parar.', 'Palméalo con la app, diciendo sus sílabas.', 'Ahora canta una canción mientras sigues palmeando el ostinato, sin dejarte llevar por la melodía.'];
-      if (semana === 19) return ['Toca <b>▶ Reproducir</b>: el círculo marca el pulso y se ilumina cada nota.', 'Con la mano izquierda marca el <b>pulso</b> en el pecho; con la voz di el <b>ritmo</b> (sus sílabas).', 'Después cambia: la mano derecha toca el ritmo y la izquierda sigue el pulso.'];
-      if (semana === 47) return ['Toca <b>▶ Reproducir</b>: el ritmo se repite.', 'Palméalo <b>suave (p)</b> una vuelta, <b>medio (mf)</b> la siguiente y <b>fuerte (f)</b> la otra. Después haz un crescendo y un diminuendo.', 'Tócalo en tu instrumento ligado (legato) y después cortito (staccato).'];
-      if (semana === 48) return ['Toca <b>▶ Reproducir</b>: el pulso está en <b>60, Lento</b>. Camina al pulso.', 'Mueve el tempo a <b>90 (Andante)</b> y después a <b>130 (Allegro)</b>, y camina o palmea cada uno.', 'Toca una escala en tu instrumento en los tres tempos.'];
-      if (semana === 49) return ['Toca <b>▶ Reproducir</b>: suena la forma <b>ABA</b>: la parte A (compases 1 y 2), la B (3 y 4) y otra vez A (5 y 6).', 'Haz palmas en la parte A y toca en el pecho en la parte B.', 'Arma tu propia forma con las tarjetas: una A, una B distinta y otra vez A.'];
+      if (semana === 1) return ['Toca <b>Empezar</b> y luego <b>▶ Reproducir</b>: suena el pulso.', 'En cada «ta», ' + TAMBOR + ', sin adelantarte.', 'La nota se pone verde si fue a tiempo. Sigue el pulso unos 30 segundos.'];
+      if (semana === 14) return ['Toca <b>Dictado</b> (abajo de las tarjetas): suena un ritmo.', 'Escúchalo con atención y elige la tarjeta que sonó.', 'Haz por lo menos 10 dictados.'];
+      if (semana === 18) return ['Toca <b>▶ Reproducir</b>: suena la cumbia.', 'Escucha el pulso y ' + TAMBOR + ' en cada nota, también en el sonido «corrido» (la síncopa).', 'Prueba otros ritmos en «Ritmos latinos…».'];
+      if (semana === 6) return ['Toca <b>▶ Reproducir</b>: el ostinato (ta, ti-ti, ta, sh) se repite sin parar.', 'Mientras se repite, ' + TAMBOR + ' en cada nota, diciendo sus sílabas.', 'Sigue varias vueltas sin perder el pulso: las notas a tiempo se ponen verdes.'];
+      if (semana === 19) return ['Toca <b>▶ Reproducir</b>: el círculo marca el pulso y se ilumina cada nota.', 'Mira el círculo: marca el <b>pulso</b>. Mientras tanto, ' + TAMBOR + ' en cada nota: ese es el <b>ritmo</b>.', 'Las notas a tiempo se ponen verdes y las que se pasaron, rojas.'];
+      if (semana === 47) return ['Toca <b>▶ Reproducir</b>: el ritmo se repite.', 'En cada nota, ' + TAMBOR + ' a tiempo.', '<b>Crea tu propio ritmo</b> con las tarjetas, dale ▶ y tócalo igual.'];
+      if (semana === 48) return ['Toca <b>▶ Reproducir</b>: el pulso está en <b>60, Lento</b>. Camina al pulso.', 'Mueve el tempo a <b>90 (Andante)</b> y después a <b>130 (Allegro)</b>, y en cada uno ' + TAMBOR + ' en cada pulso.', 'Fíjate: mientras más grande el número, más rápido el pulso.'];
+      if (semana === 49) return ['Toca <b>▶ Reproducir</b>: suena la forma <b>ABA</b>: la parte A (compases 1 y 2), la B (3 y 4) y otra vez A (5 y 6).', 'En la parte A, ' + TAMBOR + ' en cada nota; en la parte B, solo escucha.', 'Arma tu propia forma con las tarjetas: una A, una B distinta y otra vez A.'];
       if (semana === 52) return ['<b>Crea un ritmo de 2 compases</b> con las tarjetas y dale ▶.', 'Repítelo cuatro veces (8 compases) y tócalo en tu instrumento con notas de tu escala.', 'Termina en la nota casa y ponle nombre a tu canción.'];
       if (semana === 44) return ['Toca <b>▶ Reproducir</b>: el pulso se repite como base.', 'Mientras suena, improvisa en tu instrumento con la pentatónica.', 'Termina siempre en la nota casa.'];
-      return ['Toca <b>▶ Reproducir</b>: después de la cuenta (1, 2, 3, 4) se ilumina cada nota.', '<b>Palmea a tiempo</b>: una palmada justo cuando se ilumina cada nota, diciendo su sílaba (ta, ti-ti…).',
-        '<b>Crea tu propio ritmo</b> tocando las tarjetas, dale ▶ y palméalo igual.' + (semana === 11 ? ' Con <b>Pizza</b> ves cuánto dura cada figura.' : '')];
+      return ['Toca <b>▶ Reproducir</b>: después de la cuenta (1, 2, 3, 4) se ilumina cada nota.', '<b>Toca a tiempo</b>: cuando se ilumina cada nota, ' + TAMBOR + ', diciendo su sílaba (ta, ti-ti…).',
+        '<b>Crea tu propio ritmo</b> tocando las tarjetas, dale ▶ y tócalo igual en el tambor.' + (semana === 11 ? ' Con <b>Pizza</b> ves cuánto dura cada figura.' : '')];
     }
     if (app === 'armaduras') return [
       'Elige un ejercicio arriba: ordenar, descubrir la tonalidad o contar las alteraciones.',
@@ -252,7 +255,7 @@
     if (app === 'oido' && semana === 41) return ['Toca el botón grande: suena una progresión en menor (i – iv – V…).', 'Si termina en casa, en el acorde menor, es <b>reposo</b>: pon las manos en el pecho. Si pide seguir, es <b>tensión</b>.', 'Toca <b>Siguiente</b> y sigue hasta acertar 10.'];
     if (app === 'oido' && semana === 46) return ['Toca el botón grande: suena una melodía de 4 notas que empieza en Do.', 'Cántala y piensa: ¿sube o baja?, ¿paso o salto? Elige la melodía que sonó.', 'Escríbela en el pentagrama y tócala en tu instrumento.'];
     if (app === 'oido') return ['Toca el botón grande para <b>escuchar</b>.', 'Elige tu respuesta.', 'Toca <b>Siguiente</b> y sigue hasta acertar 10.'];
-    return ['Resuelve todos los ejercicios aquí mismo (o toca <b>Imprimir</b> y hazlo en papel).', 'Al terminar, toca <b>Revisar mis respuestas</b>: en <b>verde</b> lo que está bien y en <b>rojo</b> lo que no, con la respuesta correcta debajo.', 'Corrige y revisa otra vez, o toca <b>Otra hoja</b> para practicar con ejercicios nuevos.'];
+    return ['Resuelve todos los ejercicios aquí mismo.', 'Al terminar, toca <b>Revisar mis respuestas</b>: en <b>verde</b> lo que está bien y en <b>rojo</b> lo que no, con la respuesta correcta debajo.', 'Corrige y revisa otra vez, o toca <b>Otra hoja</b> para practicar con ejercicios nuevos.'];
   }
   function queNotas() {
     var lista = app === 'piano' ? notasPiano(semana) : app === 'violin' ? notasViolin(semana) : null;

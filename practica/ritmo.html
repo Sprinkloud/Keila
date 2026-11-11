@@ -557,7 +557,7 @@ body.sin-silabas .sil{display:none}
         </div>
       </div>
 
-      <p class="consigna">👏 Crea tu ritmo con las tarjetas, dale ▶ y palméalo a tiempo (o toca el tambor 🥁): un golpe en cada nota cuando se ilumina.</p>
+      <p class="consigna">🥁 Crea tu ritmo con las tarjetas, dale ▶ y toca el tambor a tiempo: un golpe en cada nota cuando se ilumina. En el celular, toca el tambor; en la computadora, cualquier tecla.</p>
 
       <div class="score" id="score">
         <div class="score-inner" id="score-inner"></div>
@@ -883,10 +883,28 @@ const visibles = () => CELLS.filter(c => state.soloCeldas && !state.soloCeldas.i
    ========================================================= */
 let ctx = null, session = null;
 
+/* 10-nov-2026 (la dueña: el tambor sonaba con retraso): latencia de juego y el audio se despierta con el primer toque en
+   cualquier parte, así el primer golpe no espera a que arranque. */
 function audio(){
-  if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if(!ctx){ const C = window.AudioContext || window.webkitAudioContext; try{ ctx = new C({latencyHint: "interactive"}); }catch(e){ ctx = new C(); } }
   if(ctx.state === "suspended") ctx.resume();
   return ctx;
+}
+["pointerdown", "keydown"].forEach(ev => document.addEventListener(ev, () => audio(), {capture: true, passive: true}));
+/* El golpe del tambor: un chasquido corto y brillante (ruido filtrado) más un cuerpo grave que cae. Antes era solo un
+   seno de 140 Hz, que en los parlantes del celular o de la laptop casi no se oye y parecía llegar tarde. */
+let ruidoTambor = null;
+function sonidoTambor(){
+  const t = ctx.currentTime;
+  if(!ruidoTambor){ ruidoTambor = ctx.createBuffer(1, Math.round(ctx.sampleRate*.05), ctx.sampleRate); const d = ruidoTambor.getChannelData(0); for(let i = 0; i < d.length; i++) d[i] = (Math.random()*2 - 1)*(1 - i/d.length); }
+  const n = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), gn = ctx.createGain();
+  n.buffer = ruidoTambor; bp.type = "bandpass"; bp.frequency.value = 1800; bp.Q.value = .8;
+  gn.gain.setValueAtTime(.55, t); gn.gain.exponentialRampToValueAtTime(.0001, t + .05);
+  n.connect(bp); bp.connect(gn); gn.connect(ctx.destination); n.start(t);
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = "sine"; o.frequency.setValueAtTime(240, t); o.frequency.exponentialRampToValueAtTime(110, t + .12);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.5, t + .002); g.gain.exponentialRampToValueAtTime(.0001, t + .16);
+  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + .18);
 }
 function tone(dest, t, freq, dur, gain, type, sustain){
   const o = ctx.createOscillator(), g = ctx.createGain();
@@ -1072,7 +1090,7 @@ function golpeRitmo(){
   const b = $("#btn-golpe");
   b.classList.add("golpe"); setTimeout(() => b.classList.remove("golpe"), 90);
   audio();
-  tone(ctx.destination, ctx.currentTime, 140, .16, .45, "sine");   // el golpe suena al instante
+  sonidoTambor();   // el golpe suena al instante
   if(!play.on) return;
   const beat = segNegra();
   let rel = (ctx.currentTime - retraso() - play.start)/beat;   // en negras, contando cuándo se oyó
