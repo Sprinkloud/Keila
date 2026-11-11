@@ -643,3 +643,4 @@ Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-p
   - el ataque del piano pasó de 40 a 5 ms y el del violín de 80 a 20 ms;
   - con audífonos Bluetooth sigue habiendo un retraso que la página no puede quitar.
 - **Lectura de notas** (`generarSiguienteNotaJuego`, piano y violín): con 3 notas o menos puede repetir la misma, pero nunca 3 veces seguidas, y la nota repetida hace un destello. Antes, sol y mi salían siempre alternadas.
+- (11-nov) «Dibuja la nota» ya no dice «(en papel, dibuja una redonda)».

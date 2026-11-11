@@ -397,7 +397,7 @@ const T = {
   },
   dibujar({ notas, clave = 'treble', cant = 6 }) {
     const lista = varios(notas.map(([l, o]) => nota(l, 0, o)), cant);
-    return ejercicio('Dibuja la nota', 'Toca el pentagrama donde va la nota (en papel, dibuja una redonda).', lista.map((n, i) => {
+    return ejercicio('Dibuja la nota', 'Toca el pentagrama donde va la nota.', lista.map((n, i) => {
       const d = el('div', { class: 'dibujable' });
       const { st, svg } = pentagrama(d, { clave, ancho: 150, alto: 140 });
       const paso = st.getSpacingBetweenLines() / 2;
