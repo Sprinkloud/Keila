@@ -440,6 +440,21 @@ body.sin-silabas .sil{display:none}
   .pastel{width:min(46vw,200px)}
   .pastel-figura .rsvg{height:62px}
 }
+/* 13-nov-2026 (la dueña: «en el teléfono el tambor queda en una posición incómoda»): en celulares el tambor va fijo
+   abajo y al centro, donde llega el pulgar, y más grande (76 px). Queda 72 px sobre el borde para no chocar con
+   «¿Qué hago?» (abajo a la izquierda), la camarita (a la derecha, ya subida 104 px) ni el pie de página. Las tarjetas
+   y el lienzo tienen aire abajo para que el tambor no tape la última fila. */
+@media (max-width:859px) and (pointer:coarse){
+  .golpe-fila{padding:0}
+  .golpe-ritmo{position:fixed;left:50%;bottom:calc(72px + env(safe-area-inset-bottom));transform:translateX(-50%) scale(.6);
+    width:76px;height:76px;min-height:76px;z-index:45;opacity:0;pointer-events:none;transition:opacity .22s ease-out,transform .32s cubic-bezier(.2,.8,.2,1.1)}
+  /* solo aparece mientras suena el ritmo (la dueña, 13-nov: «que aparezca justo cuando se le da play, para que no estorbe») */
+  body.sonando .golpe-ritmo{opacity:1;pointer-events:auto;transform:translateX(-50%) scale(1)}
+  @media (prefers-reduced-motion:reduce){.golpe-ritmo{transition:opacity .15s;transform:translateX(-50%)}body.sonando .golpe-ritmo{transform:translateX(-50%)}}
+  .golpe-ritmo .ico{font-size:2.1rem}
+  .palette{padding-bottom:96px}
+  .score{padding-bottom:96px}
+}
 @media (max-width:480px){
   .tempo label{display:none}
   input[type=range]{width:72px}
@@ -570,8 +585,8 @@ body.sin-silabas .sil{display:none}
 
 <footer id="footer">
   <nav class="pie-enlaces" aria-label="Contacto">
-    <a href="https://wa.me/593987999154" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.3L3.2 20.8l4.4-1.2A8.8 8.8 0 1 0 12 3.2z"/><path d="M9.2 8.2c.3-.3.8-.3 1 .1l.7 1.5c.1.3 0 .6-.2.8l-.5.5a6 6 0 0 0 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7.1 1-.6.7-1.5 1-2.4.7a8.4 8.4 0 0 1-4.9-4.9c-.3-.9 0-1.8.6-2.5z"/></svg></a>
-    <a href="https://instagram.com/sprinkloud" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg></a>
+    <a href="https://wa.me/593987999154" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.3L3.2 20.8l4.4-1.2A8.8 8.8 0 1 0 12 3.2z"/><path d="M9.2 8.2c.3-.3.8-.3 1 .1l.7 1.5c.1.3 0 .6-.2.8l-.5.5a6 6 0 0 0 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7.1 1-.6.7-1.5 1-2.4.7a8.4 8.4 0 0 1-4.9-4.9c-.3-.9 0-1.8.6-2.5z"/></svg></a>
+    <a href="https://instagram.com/sprinkloud" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg></a>
     <a href="mailto:sprinkloud@gmail.com" aria-label="Correo" title="Correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg></a>
   </nav>
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
@@ -1595,7 +1610,27 @@ function init(){
 
 document.addEventListener("DOMContentLoaded", init);
 </script>
-<script>window.SprinkloudPractica = { app: 'App de ritmo', subir: matchMedia('(max-width: 900px)').matches ? 104 : 0, detalle: function () { var c = state.comp.length ? Math.ceil(totalBeats() / cmp().bar - 0.001) : 0; return (state.latino ? state.latino + ' · ' : '') + 'Compás ' + state.compas + ' · tempo ' + state.tempo + (c ? ' · armó ' + c + (c === 1 ? ' compás' : ' compases') : '') + (quiz.tries ? ' · dictado: ' + quiz.hits + ' de ' + quiz.tries : ''); } };</script>
+<script>
+/* 13-nov-2026: en celulares el tambor va fijo abajo y al centro (ver el CSS). Para no tapar la fila «Dictado ·
+   Rellenar con silencio» ni el pie, se pone 12 px por encima de lo que esté visible más arriba de los dos. */
+(function () {
+  var movil = matchMedia('(max-width: 859px) and (pointer: coarse)');
+  function ubicar() {
+    var t = document.getElementById('btn-golpe'); if (!t) return;
+    if (!movil.matches) { t.style.bottom = ''; return; }
+    var tope = innerHeight;
+    ['.panel-foot', '#footer'].forEach(function (s) {
+      var e = document.querySelector(s); if (!e || !e.offsetParent) return;
+      var y = e.getBoundingClientRect().top; if (y > 0 && y < tope) tope = y;
+    });
+    t.style.bottom = Math.max(16, innerHeight - tope + 12) + 'px';
+  }
+  addEventListener('load', ubicar); addEventListener('resize', ubicar);
+  if (window.ResizeObserver) new ResizeObserver(ubicar).observe(document.body);
+  document.addEventListener('click', function () { setTimeout(ubicar, 250); });   // al plegar o abrir el panel de tarjetas
+})();
+</script>
+<script>window.SprinkloudPractica ={ app: 'App de ritmo', subir: matchMedia('(max-width: 900px)').matches ? 104 : 0, detalle: function () { var c = state.comp.length ? Math.ceil(totalBeats() / cmp().bar - 0.001) : 0; return (state.latino ? state.latino + ' · ' : '') + 'Compás ' + state.compas + ' · tempo ' + state.tempo + (c ? ' · armó ' + c + (c === 1 ? ' compás' : ' compases') : '') + (quiz.tries ? ' · dictado: ' + quiz.hits + ' de ' + quiz.tries : ''); } };</script>
 <script src="/practica/comprobante.js"></script>
 </body>
 </html>
