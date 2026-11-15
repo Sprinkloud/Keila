@@ -651,3 +651,7 @@ Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-p
   - con audífonos Bluetooth sigue habiendo un retraso que la página no puede quitar.
 - **Lectura de notas** (`generarSiguienteNotaJuego`, piano y violín): con 3 notas o menos puede repetir la misma, pero nunca 3 veces seguidas, y la nota repetida hace un destello. Antes, sol y mi salían siempre alternadas.
 - (11-nov) «Dibuja la nota» ya no dice «(en papel, dibuja una redonda)».
+
+## Apps sin explicaciones (14-nov-2026, la dueña: «queremos que todas las apps sean lo más intuitivas posible»)
+- **`ritmo.html`:** se quitó la barra `.consigna` («Crea tu ritmo con las tarjetas, dale ▶…») y su CSS. La app se entiende sola; `pruebas/tambor_movil.js` sigue pasando (tambor centrado, sin chocar con nada).
+- **Tarjetas «¿Qué hago?» (`leccion.js`, `pasos()`):** cada paso son dos o tres palabras («Toca ▶.», «Tambor 🥁 en cada nota.», «Crea tu ritmo.»). La camarita: «Al final, 📷 y envíala.» y las notas: «Notas de hoy: Do, Re, Mi.». Se mantienen el tema y «Tu meta» de la guía. Los pasos largos de piano, violín, oído, hojas, armaduras, círculo, acordes y modos también se acortaron. `copiar_motores.py` no cambia (copia solo GUIA, notas y ritmos).

@@ -192,70 +192,38 @@
 
   /* ---------- Los pasos que se muestran ---------- */
   /* fuera del bloque que copia el bosque (App_Bosque/herramientas/copiar_motores.py): ahí no existen app ni semana */
+  /* 14-nov-2026 (la dueña: «las tarjetas están muy largas»): cada paso son dos o tres palabras. La app se entiende sola;
+     la tarjeta solo dice qué tocar. */
   var especial = (app === 'piano' || app === 'violin') ? ESPECIAL[app][semana] : null;
-  var CAMARA = 'Al terminar, toca la <b>camarita</b> 📷 (abajo a la derecha): arma una imagen con tus minutos de práctica de hoy. Mándasela a tu maestra por WhatsApp.';
+  var CAMARA = 'Al final, <b>📷</b> y envíala.';
   function pasos() {
-    var instrumento = app === 'violin' ? 'en las cuerdas del violín' : 'en el teclado';
-    if (especial && especial.tipo === 'escala') return [
-      'Toca <b>Empezar a tocar escalas</b>: te pide una escala (' + (semana === 43 ? 'pentatónica mayor o menor' : semana === 31 ? 'Sol mayor o Fa mayor' : 'mayor, con su fórmula T-T-S-T-T-T-S') + ') y te dice en qué nota empieza.',
-      'Tócala ' + instrumento + ', <b>nota por nota, subiendo</b>. Pon todas las notas, aunque dudes.',
-      'Al terminar se corrige: en <b>verde</b> lo que tocaste bien y en <b>rojo</b> lo que no, con la nota correcta. Junta las <b>3 estrellas</b> tocándolas sin errores.'];
-    if (especial && especial.tipo === 'lineaEspacio') return [
-      'Toca <b>Empezar</b>: aparece una nota en el pentagrama.',
-      'Cuenta de abajo hacia arriba y toca <b>Línea</b> o <b>Espacio</b>.',
-      'Junta las <b>3 estrellas</b>. Después toca notas ' + instrumento + ' y mira dónde se escriben.'];
-    if (especial && especial.tipo === 'lectura') return [
-      'Toca <b>Empezar</b>: se abre la <b>lectura hablada</b> con una melodía en el pentagrama.',
-      'Después de la cuenta (1, 2, 3, 4), <b>di el nombre de cada nota</b> cuando el marcador llegue a ella, sin parar aunque te equivoques.',
-      'Lee otra melodía cuantas veces quieras. Después tócala ' + instrumento + ', despacio y de corrido.'];
-    if (semana === 26 && (app === 'piano' || app === 'violin')) return [
-      'Toca <b>Empezar</b>: se marca una nota y te pide <b>un tono</b> o <b>un semitono</b> más arriba.',
-      app === 'piano' ? 'Semitono es la tecla de al lado, blanca o negra; tono es saltarse una tecla.' : 'Semitono es poner el dedo pegado al anterior; tono es dejar espacio entre los dedos.',
-      'Toca la nota donde llegas. Junta las <b>3 estrellas</b>.'];
-    if (app === 'piano' && INTERVALOS[semana]) return [
-      'Toca <b>Empezar</b>: se marca una tecla y te pide un intervalo («Desde Do, toca una 3ª mayor»).',
-      'Cuenta los semitonos subiendo tecla por tecla, <b>blancas y negras</b>, y toca la tecla donde llegas.',
-      'Al acertar ves la cuenta en cada tecla. Junta las <b>3 estrellas</b>.'];
-    if (app === 'piano' || app === 'violin') return [
-      'Toca <b>Empezar</b>: aparece una nota en el pentagrama.',
-      'Búscala y tócala ' + instrumento + '. Si aciertas, aparece otra.',
-      'Junta las <b>3 estrellas</b>: la tercera sale con 6 aciertos seguidos.'];
+    var instrumento = app === 'violin' ? 'en el violín' : 'en el teclado';
+    if (especial && especial.tipo === 'escala') return ['Toca <b>Empezar</b>.', 'Toca la escala, <b>subiendo</b>.', 'Junta <b>3 estrellas</b>.'];
+    if (especial && especial.tipo === 'lineaEspacio') return ['Toca <b>Empezar</b>.', '¿<b>Línea</b> o <b>espacio</b>?', 'Junta <b>3 estrellas</b>.'];
+    if (especial && especial.tipo === 'lectura') return ['Toca <b>Empezar</b>.', '<b>Di cada nota</b> a tiempo.', 'Tócala ' + instrumento + '.'];
+    if (semana === 26 && (app === 'piano' || app === 'violin')) return ['Toca <b>Empezar</b>.', 'Sube <b>tono o semitono</b>.', 'Junta <b>3 estrellas</b>.'];
+    if (app === 'piano' && INTERVALOS[semana]) return ['Toca <b>Empezar</b>.', 'Cuenta los <b>semitonos</b>.', 'Junta <b>3 estrellas</b>.'];
+    if (app === 'piano' || app === 'violin') return ['Toca <b>Empezar</b>.', 'Toca la nota ' + instrumento + '.', 'Junta <b>3 estrellas</b>.'];
     /* 10-nov-2026 (la dueña): en vez de palmear o tocar el pecho, el alumno toca el tambor de la pantalla (en la computadora,
        cualquier tecla): así la app sabe si fue a tiempo. */
-    const TAMBOR = 'toca el <b>tambor 🥁</b> (en el celular, en la pantalla; en la computadora, cualquier tecla)';
     if (app === 'ritmo') {
-      if (semana === 1) return ['Toca <b>Empezar</b> y luego <b>▶ Reproducir</b>: suena el pulso.', 'En cada «ta», ' + TAMBOR + ', sin adelantarte.', 'La nota se pone verde si fue a tiempo. Sigue el pulso unos 30 segundos.'];
-      if (semana === 14) return ['Toca <b>Dictado</b> (abajo de las tarjetas): suena un ritmo.', 'Escúchalo con atención y elige la tarjeta que sonó.', 'Haz por lo menos 10 dictados.'];
-      if (semana === 18) return ['Toca <b>▶ Reproducir</b>: suena la cumbia.', 'Escucha el pulso y ' + TAMBOR + ' en cada nota, también en el sonido «corrido» (la síncopa).', 'Prueba otros ritmos en «Ritmos latinos…».'];
-      if (semana === 6) return ['Toca <b>▶ Reproducir</b>: el ostinato (ta, ti-ti, ta, sh) se repite sin parar.', 'Mientras se repite, ' + TAMBOR + ' en cada nota, diciendo sus sílabas.', 'Sigue varias vueltas sin perder el pulso: las notas a tiempo se ponen verdes.'];
-      if (semana === 19) return ['Toca <b>▶ Reproducir</b>: el círculo marca el pulso y se ilumina cada nota.', 'Mira el círculo: marca el <b>pulso</b>. Mientras tanto, ' + TAMBOR + ' en cada nota: ese es el <b>ritmo</b>.', 'Las notas a tiempo se ponen verdes y las que se pasaron, rojas.'];
-      if (semana === 47) return ['Toca <b>▶ Reproducir</b>: el ritmo se repite.', 'En cada nota, ' + TAMBOR + ' a tiempo.', '<b>Crea tu propio ritmo</b> con las tarjetas, dale ▶ y tócalo igual.'];
-      if (semana === 48) return ['Toca <b>▶ Reproducir</b>: el pulso está en <b>60, Lento</b>. Camina al pulso.', 'Mueve el tempo a <b>90 (Andante)</b> y después a <b>130 (Allegro)</b>, y en cada uno ' + TAMBOR + ' en cada pulso.', 'Fíjate: mientras más grande el número, más rápido el pulso.'];
-      if (semana === 49) return ['Toca <b>▶ Reproducir</b>: suena la forma <b>ABA</b>: la parte A (compases 1 y 2), la B (3 y 4) y otra vez A (5 y 6).', 'En la parte A, ' + TAMBOR + ' en cada nota; en la parte B, solo escucha.', 'Arma tu propia forma con las tarjetas: una A, una B distinta y otra vez A.'];
-      if (semana === 52) return ['<b>Crea un ritmo de 2 compases</b> con las tarjetas y dale ▶.', 'Repítelo cuatro veces (8 compases) y tócalo en tu instrumento con notas de tu escala.', 'Termina en la nota casa y ponle nombre a tu canción.'];
-      if (semana === 44) return ['Toca <b>▶ Reproducir</b>: el pulso se repite como base.', 'Mientras suena, improvisa en tu instrumento con la pentatónica.', 'Termina siempre en la nota casa.'];
-      return ['Toca <b>▶ Reproducir</b>: después de la cuenta (1, 2, 3, 4) se ilumina cada nota.', '<b>Toca a tiempo</b>: cuando se ilumina cada nota, ' + TAMBOR + ', diciendo su sílaba (ta, ti-ti…).',
-        '<b>Crea tu propio ritmo</b> tocando las tarjetas, dale ▶ y tócalo igual en el tambor.' + (semana === 11 ? ' Con <b>Pizza</b> ves cuánto dura cada figura.' : '')];
+      if (semana === 1) return ['Toca <b>▶</b>.', '<b>Tambor 🥁</b> en cada «ta».', 'Sigue 30 segundos.'];
+      if (semana === 14) return ['Toca <b>Dictado</b>.', 'Escucha y <b>elige</b>.', 'Haz 10 dictados.'];
+      if (semana === 18) return ['Toca <b>▶</b>.', '<b>Tambor 🥁</b> en cada nota.', 'Prueba otros <b>ritmos latinos</b>.'];
+      if (semana === 48) return ['Toca <b>▶</b>.', 'Cambia el <b>tempo</b>.', '<b>Tambor 🥁</b> en cada pulso.'];
+      if (semana === 49) return ['Toca <b>▶</b>: forma <b>ABA</b>.', '<b>Tambor 🥁</b> solo en A.', 'Arma tu <b>ABA</b>.'];
+      if (semana === 52) return ['<b>Crea</b> 2 compases.', 'Toca <b>▶</b>.', 'Tócalo en tu instrumento.'];
+      if (semana === 44) return ['Toca <b>▶</b>.', '<b>Improvisa</b> con la pentatónica.', 'Termina en la nota casa.'];
+      return ['Toca <b>▶</b>.', '<b>Tambor 🥁</b> en cada nota.', '<b>Crea</b> tu ritmo.'];
     }
-    if (app === 'armaduras') return [
-      'Elige un ejercicio arriba: ordenar, descubrir la tonalidad o contar las alteraciones.',
-      'Toca tu respuesta. Debajo aparece la regla para recordarla.',
-      'Cambia de ejercicio: practicar de varias maneras ayuda a recordarlo.'];
-    if (app === 'circulo') return ['Elige un ejercicio arriba: dónde va cada tonalidad, sus vecinas, su relativa o sus 6 acordes.', 'Toca en el círculo. Debajo aparece la regla.', 'Cambia de ejercicio: practicar de varias maneras ayuda a recordarlo.'];
-    if (app === 'acordes' && semana === 37) return ['Escucha el acorde y míralo en el pentagrama: es la triada de un grado de Do mayor.', 'Elige su nombre: Do, Rem, Mim, Fa, Sol, Lam o Si°.', 'Debajo aparece por qué: sus tres notas y si es mayor, menor o disminuido.'];
-    if (app === 'acordes') return ['Escucha el acorde y míralo en el pentagrama.', 'Di qué inversión es, cuál es el acorde y cómo se escribe con barra.', 'Cambia de ejercicio arriba: practicar de varias maneras ayuda a recordarlo.'];
+    if (app === 'armaduras' || app === 'circulo') return ['Elige un <b>ejercicio</b>.', 'Toca tu <b>respuesta</b>.', 'Cambia de ejercicio.'];
+    if (app === 'acordes') return ['<b>Escucha</b> el acorde.', 'Elige su <b>nombre</b>.', 'Cambia de ejercicio.'];
     if (app === 'modos') {
       var ej = MODOS_LECCION[semana];
-      var primero = ej === 'ver' ? 'Mira la escala de teclas blancas y di <b>qué modo es</b> según la nota donde empieza.'
-        : ej === 'caracteristica' ? 'Mira el modo en el pentagrama y elige su <b>nota característica</b>.'
-        : 'Toca 🔊 Escuchar: suena un modo desde Do. Elige <b>qué modo es</b> de oído: primero ¿mayor o menor?, después su nota característica.';
-      return [primero, 'Toca tu respuesta. Debajo aparece la regla.', 'Solo salen los modos que ya aprendiste, y el nuevo sale más seguido.' + (ins === 'piano' ? ' En «Toca el modo» lo tocas en el teclado.' : '')];
+      return [ej === 'ver' ? 'Mira la <b>escala</b>.' : ej === 'caracteristica' ? 'Mira el <b>modo</b>.' : 'Toca <b>🔊 Escuchar</b>.', ej === 'caracteristica' ? 'Elige su <b>nota característica</b>.' : '¿<b>Qué modo</b> es?', 'Toca tu <b>respuesta</b>.'];
     }
-    if (app === 'oido' && semana === 39) return ['Toca el botón grande: suena la casa (I) y después otro acorde.', 'Di cuál es: <b>I, IV, V o vi</b>. El vi suena menor; el V pide volver a casa.', 'Toca <b>Siguiente</b> y sigue hasta acertar 10.'];
-    if (app === 'oido' && semana === 41) return ['Toca el botón grande: suena una progresión en menor (i – iv – V…).', 'Si termina en casa, en el acorde menor, es <b>reposo</b>: pon las manos en el pecho. Si pide seguir, es <b>tensión</b>.', 'Toca <b>Siguiente</b> y sigue hasta acertar 10.'];
-    if (app === 'oido' && semana === 46) return ['Toca el botón grande: suena una melodía de 4 notas que empieza en Do.', 'Cántala y piensa: ¿sube o baja?, ¿paso o salto? Elige la melodía que sonó.', 'Escríbela en el pentagrama y tócala en tu instrumento.'];
-    if (app === 'oido') return ['Toca el botón grande para <b>escuchar</b>.', 'Elige tu respuesta.', 'Toca <b>Siguiente</b> y sigue hasta acertar 10.'];
-    return ['Resuelve todos los ejercicios aquí mismo.', 'Al terminar, toca <b>Revisar mis respuestas</b>: en <b>verde</b> lo que está bien y en <b>rojo</b> lo que no, con la respuesta correcta debajo.', 'Corrige y revisa otra vez, o toca <b>Otra hoja</b> para practicar con ejercicios nuevos.'];
+    if (app === 'oido') return ['Toca el <b>botón grande</b>.', 'Elige tu <b>respuesta</b>.', 'Acierta 10.'];
+    return ['<b>Resuelve</b> la hoja.', 'Toca <b>Revisar</b>.', 'Corrige lo <b>rojo</b>.'];
   }
   function queNotas() {
     var lista = app === 'piano' ? notasPiano(semana) : app === 'violin' ? notasViolin(semana) : null;
@@ -266,7 +234,7 @@
       var nom = NOMBRE[k] + (alt === '#' ? '♯' : alt === 'b' ? '♭' : '');
       if (vistos.indexOf(nom) < 0) vistos.push(nom);
     });
-    return (semana >= 20 && semana <= 23 ? 'Hoy practicas solo las notas nuevas: <b>' : 'Hoy practicas solo las notas que ya conoces: <b>') + vistos.join(', ') + '</b>.';
+    return 'Notas de hoy: <b>' + vistos.join(', ') + '</b>.';
   }
 
   /* ---------- Preparar cada app (se llama cuando la página ya terminó de cargar) ---------- */

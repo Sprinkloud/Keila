@@ -239,9 +239,7 @@ input[type=range]::-moz-range-thumb{
 .chip[aria-pressed=true]{color:var(--ink);border-color:var(--ink)}
 .chip[aria-pressed=true] .dot{background:var(--accent)}
 
-/* ---------- Consigna: qué se hace en la app (la dueña la pidió: no entendían que hay que palmear a tiempo) ---------- */
-.consigna{margin:0;padding:8px 14px;font-size:14px;font-weight:700;line-height:1.35;color:var(--pine);background:var(--gold-soft);border-bottom:1px solid var(--line);text-align:center;text-wrap:balance}
-body.modo-pastel .consigna{display:none}
+/* 14-nov-2026 (la dueña): se quitó la consigna de texto que explicaba la app. Las apps tienen que entenderse solas. */
 
 /* ---------- Partitura ---------- */
 .score{flex:1;min-height:0;overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
@@ -571,8 +569,6 @@ body.sin-silabas .sil{display:none}
           </button>
         </div>
       </div>
-
-      <p class="consigna">🥁 Crea tu ritmo con las tarjetas, dale ▶ y toca el tambor a tiempo: un golpe en cada nota cuando se ilumina. En el celular, toca el tambor; en la computadora, cualquier tecla.</p>
 
       <div class="score" id="score">
         <div class="score-inner" id="score-inner"></div>
