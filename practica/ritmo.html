@@ -370,6 +370,12 @@ body.sin-silabas .sil{display:none}
 }
 .tool:active{background:var(--line-soft)}
 .tool.solid{background:var(--musgo);color:var(--on-musgo);border-color:var(--musgo)}
+/* 15-nov-2026 (revisión en varios tamaños): con el dedo, botones y chips de 44 px de alto (antes 34 a 38) */
+@media (pointer:coarse){
+  .tool,.chip{height:44px}
+  .panel-asa{height:44px}
+  .borrar-compas{width:44px;height:44px}
+}
 
 /* ---------- Dictado ---------- */
 .overlay{

@@ -210,6 +210,8 @@
     .estrella { width: 20px; height: 20px; fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; stroke-linejoin: round; }
     /* 5 estrellas, amarillo brillante (la dueña, 15-nov-2026: «más amarillo para que se vean más brillantes») */
     .estrella.on { fill: #F7C948; stroke: #D4961C; }
+    /* celular angosto (≤ 430 px): la insignia va arriba del pentagrama, pegada a la derecha, para no pisar sus líneas */
+    @media (max-width: 430px) { .estrellas-juego { position: static; width: fit-content; margin: 0 0 4px auto; } }
 
     /* Modos del juego */
     .grupo-modo {

@@ -218,6 +218,9 @@
     .estrella { width: 20px; height: 20px; fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; stroke-linejoin: round; }
     /* 5 estrellas, amarillo brillante (la dueña, 15-nov-2026: «más amarillo para que se vean más brillantes») */
     .estrella.on { fill: #F7C948; stroke: #D4961C; }
+    /* celular angosto (≤ 430 px): la tarjeta mide unos 300 px y la insignia flotante pisaba la primera línea del
+       pentagrama; ahí va arriba del pentagrama, pegada a la derecha, y lo empuja hacia abajo */
+    @media (max-width: 430px) { .estrellas-juego { position: static; align-self: flex-end; margin: 0 0 4px; } }
 
     /* Panel de modos del juego */
     .panel-modos {
@@ -463,7 +466,7 @@
     .pie-copy { margin: 0; font-size: .8rem; }
 
     @media (pointer: coarse), (max-width: 760px) {
-      .btn-modo, .btn-acorde { min-height: 40px; }
+      .btn-modo, .btn-acorde { min-height: 44px; min-width: 44px; }   /* 15-nov-2026: 44 px para el dedo (antes 40, y «7» medía 34 de ancho) */
       .btn-juego { min-height: 44px; }
     }
     @media (max-width: 520px) {
