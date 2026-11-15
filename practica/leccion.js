@@ -198,12 +198,12 @@
   var CAMARA = 'Al final, <b>📷</b> y envíala.';
   function pasos() {
     var instrumento = app === 'violin' ? 'en el violín' : 'en el teclado';
-    if (especial && especial.tipo === 'escala') return ['Toca <b>Empezar</b>.', 'Toca la escala, <b>subiendo</b>.', 'Junta <b>3 estrellas</b>.'];
-    if (especial && especial.tipo === 'lineaEspacio') return ['Toca <b>Empezar</b>.', '¿<b>Línea</b> o <b>espacio</b>?', 'Junta <b>3 estrellas</b>.'];
+    if (especial && especial.tipo === 'escala') return ['Toca <b>Empezar</b>.', 'Toca la escala, <b>subiendo</b>.', 'Junta <b>5 estrellas</b>.'];
+    if (especial && especial.tipo === 'lineaEspacio') return ['Toca <b>Empezar</b>.', '¿<b>Línea</b> o <b>espacio</b>?', 'Junta <b>5 estrellas</b>.'];
     if (especial && especial.tipo === 'lectura') return ['Toca <b>Empezar</b>.', '<b>Di cada nota</b> a tiempo.', 'Tócala ' + instrumento + '.'];
-    if (semana === 26 && (app === 'piano' || app === 'violin')) return ['Toca <b>Empezar</b>.', 'Sube <b>tono o semitono</b>.', 'Junta <b>3 estrellas</b>.'];
-    if (app === 'piano' && INTERVALOS[semana]) return ['Toca <b>Empezar</b>.', 'Cuenta los <b>semitonos</b>.', 'Junta <b>3 estrellas</b>.'];
-    if (app === 'piano' || app === 'violin') return ['Toca <b>Empezar</b>.', 'Toca la nota ' + instrumento + '.', 'Junta <b>3 estrellas</b>.'];
+    if (semana === 26 && (app === 'piano' || app === 'violin')) return ['Toca <b>Empezar</b>.', 'Sube <b>tono o semitono</b>.', 'Junta <b>5 estrellas</b>.'];
+    if (app === 'piano' && INTERVALOS[semana]) return ['Toca <b>Empezar</b>.', 'Cuenta los <b>semitonos</b>.', 'Junta <b>5 estrellas</b>.'];
+    if (app === 'piano' || app === 'violin') return ['Toca <b>Empezar</b>.', 'Toca la nota ' + instrumento + '.', 'Junta <b>5 estrellas</b>.'];
     /* 10-nov-2026 (la dueña): en vez de palmear o tocar el pecho, el alumno toca el tambor de la pantalla (en la computadora,
        cualquier tecla): así la app sabe si fue a tiempo. */
     if (app === 'ritmo') {

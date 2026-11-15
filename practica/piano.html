@@ -208,16 +208,16 @@
     /* recordatorio de octava al acertar una nota que en el piano real va en otra octava: pequeño, sin mover la pantalla */
     .recordatorio-octava { margin: 0; min-height: 1.3em; font-size: .8rem; font-weight: 700; color: var(--texto-debil); }
 
-    /* Estrellas del juego */
-    .estrellas-juego { display: grid; gap: 2px; justify-items: center; }
-    /* mensaje y estrellas justo encima del pentagrama, para verlos mientras se juega */
+    /* Estrellas del juego (15-nov-2026, la dueña): solo las tres estrellas, sin aciertos ni explicación, como una insignia
+       en la esquina de la tarjeta del pentagrama, que es lo que el alumno mira mientras juega */
     .estado-juego { display: grid; gap: 4px; justify-items: center; text-align: center; margin-bottom: 8px; min-height: 22px; }
+    .estrellas-juego { position: absolute; top: 10px; right: 12px; display: flex; gap: 5px; padding: 6px 9px; border-radius: 999px;
+      background: var(--surface); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(58, 49, 40, .08); }
     .estrellas-juego[hidden] { display: none; }
-    .estrellas { display: flex; gap: 8px; }
-    .estrella { width: 26px; height: 26px; fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; stroke-linejoin: round; }
-    .estrella.on { fill: var(--gold); stroke: var(--gold-ink); }
-    .marcador { margin: 0; font-weight: 700; color: var(--ink-2); font-size: .8rem; }
-    .metas { margin: 0; font-size: .72rem; color: var(--ink-2); }
+    .estrellas { display: flex; gap: 4px; }
+    .estrella { width: 20px; height: 20px; fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; stroke-linejoin: round; }
+    /* 5 estrellas, amarillo brillante (la dueña, 15-nov-2026: «más amarillo para que se vean más brillantes») */
+    .estrella.on { fill: #F7C948; stroke: #D4961C; }
 
     /* Panel de modos del juego */
     .panel-modos {
@@ -277,6 +277,7 @@
 
     /* Pentagrama: siempre sobre papel claro para que la tinta de VexFlow se lea */
     .contenedor-pentagrama-bloque {
+      position: relative;   /* las estrellas van en su esquina */
       background: var(--foto-papel);
       padding: 8px;
       border-radius: 22px;
@@ -497,18 +498,18 @@
   <div id="feedback-juego" class="feedback-juego" style="color: var(--texto-debil);">Modo libre: Toca cualquier tecla</div>
   <p id="recordatorio-octava" class="recordatorio-octava" aria-live="polite"></p>
   <div class="respuestas-juego" id="respuestas-juego" role="group" aria-label="Tu respuesta" hidden></div>
-    <div class="estrellas-juego" id="estrellas-juego" hidden>
-      <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 3">
-        <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
-        <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
-        <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
-      </div>
-      <p class="marcador" id="marcador">Aciertos: 0 · Seguidos: 0</p>
-      <p class="metas">1 estrella: 5 aciertos · 2: 4 seguidos · 3: 6 seguidos</p>
-    </div>
 </div>
 
 <div class="contenedor-pentagrama-bloque">
+  <div class="estrellas-juego" id="estrellas-juego" hidden>
+    <div class="estrellas" id="estrellas" role="img" aria-label="Estrellas ganadas: 0 de 5">
+      <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+      <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+      <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+      <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+      <svg class="estrella" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.4l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z"/></svg>
+    </div>
+  </div>
   <div id="pentagrama"></div>
 </div>
 
@@ -972,17 +973,16 @@
     feedbackEl.style.color = "var(--dorado)";
   }
 
-  // --- ESTRELLAS: 1 con 5 aciertos, 2 con 4 aciertos seguidos, 3 con 6 aciertos seguidos ---
+  // --- ESTRELLAS (5 desde el 15-nov-2026): 3 aciertos, 6 aciertos, 4 seguidos, 6 seguidos y 8 seguidos. No se explican en la app. ---
   let aciertos = 0, racha = 0, mejorRacha = 0, estrellasGanadas = 0, esperandoSiguiente = false;
 
   function contarEstrellas() {
-    return [aciertos >= 5, mejorRacha >= 4, mejorRacha >= 6].filter(Boolean).length;
+    return [aciertos >= 3, aciertos >= 6, mejorRacha >= 4, mejorRacha >= 6, mejorRacha >= 8].filter(Boolean).length;
   }
 
   function pintarEstrellas(nueva) {
     document.querySelectorAll('.estrella').forEach((el, i) => el.classList.toggle('on', i < estrellasGanadas));
-    document.getElementById('estrellas').setAttribute('aria-label', `Estrellas ganadas: ${estrellasGanadas} de 3`);
-    document.getElementById('marcador').textContent = `Aciertos: ${aciertos} · Seguidos: ${racha}`;
+    document.getElementById('estrellas').setAttribute('aria-label', `Estrellas ganadas: ${estrellasGanadas} de 5`);
     const el = document.querySelectorAll('.estrella')[estrellasGanadas - 1];
     if (nueva && el && el.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       el.animate([{ transform: 'scale(.6)', opacity: .4 }, { transform: 'scale(1.15)', opacity: 1, offset: .6 }, { transform: 'scale(1)' }],
@@ -1082,7 +1082,7 @@
       setTimeout(() => emitirSonidoPiano(notasPiano[index].freq), 380);
       mostrarCuenta(index);
       renderizarDoblePentagrama([notasPiano[intervalo.desde], notasPiano[index]]);
-      fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + nombreIntervalo(st).charAt(0).toUpperCase() + nombreIntervalo(st).slice(1) + ': ' + semitonos(st) + '.';
+      fb.textContent = (gano ? (estrellasGanadas === 5 ? '¡Cinco estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + nombreIntervalo(st).charAt(0).toUpperCase() + nombreIntervalo(st).slice(1) + ': ' + semitonos(st) + '.';
       fb.style.color = gano ? 'var(--dorado)' : 'var(--acierto)';
       if (gano) sonidoEstrella();
       setTimeout(() => { if (juegoActivo && intervalosJuego) generarIntervalo(); }, gano ? 2200 : 1800);
@@ -1187,7 +1187,7 @@
     escala.notas.forEach((n, i) => { if (c.bien[i]) return; const j = notasPiano.findIndex((x, ii) => enTeclado(ii) && midiDe(ii) === n.midi); const k = etiquetaTecla(j, n.nombre); if (k) k.classList.add('pista'); });
     SprinkloudEscalas.dibujar(document.getElementById('pentagrama'), escala.notas, c.bien);
     const gano = registrarResultado(limpia);
-    fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '') + c.texto;
+    fb.textContent = (gano ? (estrellasGanadas === 5 ? '¡Cinco estrellas! ' : '¡Ganaste una estrella! ') : '') + c.texto;
     fb.style.color = limpia ? (gano ? 'var(--dorado)' : 'var(--acierto)') : 'var(--error)';
     if (gano) sonidoEstrella(); else if (!limpia) emitirSonidoError();
     document.getElementById('recordatorio-octava').textContent = limpia ? '' : 'En verde, lo que tocaste bien; en rojo (✗), lo que no; con borde ocre, la tecla correcta.';
@@ -1222,7 +1222,7 @@
     esperandoSiguiente = true;
     const gano = registrarResultado(ok);
     b.classList.add(ok ? 'bien' : 'mal');
-    if (ok) { fb.textContent = (gano ? (estrellasGanadas === 3 ? '¡Tres estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + 'Está en ' + lugar + '.'; fb.style.color = gano ? 'var(--dorado)' : 'var(--acierto)'; if (gano) sonidoEstrella(); }
+    if (ok) { fb.textContent = (gano ? (estrellasGanadas === 5 ? '¡Cinco estrellas! ' : '¡Ganaste una estrella! ') : '¡Correcto! ') + 'Está en ' + lugar + '.'; fb.style.color = gano ? 'var(--dorado)' : 'var(--acierto)'; if (gano) sonidoEstrella(); }
     else { emitirSonidoError(); fb.textContent = 'Mira otra vez: está en ' + lugar + ' (las líneas y los espacios se cuentan de abajo hacia arriba).'; fb.style.color = 'var(--error)'; }
     setTimeout(() => { if (juegoActivo && juegoLeccion) nuevaLineaEspacio(); }, ok ? (gano ? 1500 : 900) : 2400);
   }
@@ -1283,7 +1283,7 @@
       esperandoSiguiente = true;
       const gano = registrarResultado(true);
       emitirSonidoPiano(notaPresionada.freq);
-      feedbackEl.textContent = gano ? (estrellasGanadas === 3 ? "¡Tres estrellas!" : "¡Ganaste una estrella!") : "¡Correcto!";
+      feedbackEl.textContent = gano ? (estrellasGanadas === 5 ? "¡Cinco estrellas!" : "¡Ganaste una estrella!") : "¡Correcto!";
       feedbackEl.style.color = gano ? "var(--dorado)" : "var(--acierto)";
       if (gano) sonidoEstrella();
       const aviso = recordarOctava(notaPresionada, notaObjetivo);
@@ -1317,7 +1317,7 @@
   </nav>
   <p class="pie-copy">&copy; 2026 Sprinkloud · Club musical</p>
 </footer>
-<script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? (juegoLeccion ? (juegoLeccion.tipo === 'escala' ? 'Escalas tocadas sin error: ' : '¿Línea o espacio?: ') : intervalosJuego ? 'Juego de intervalos: ' : 'Juego de notas: ') + aciertos + ' aciertos · ' + estrellasGanadas + ' de 3 estrellas' : 'Exploró las notas en el piano'; } };</script>
+<script>window.SprinkloudPractica = { app: 'Piano virtual', detalle: function () { return aciertos ? (juegoLeccion ? (juegoLeccion.tipo === 'escala' ? 'Escalas tocadas sin error: ' : '¿Línea o espacio?: ') : intervalosJuego ? 'Juego de intervalos: ' : 'Juego de notas: ') + aciertos + ' aciertos · ' + estrellasGanadas + ' de 5 estrellas' : 'Exploró las notas en el piano'; } };</script>
 <script src="/practica/lectura.js"></script>
 <script>
   /* Lectura hablada (Dandelot) con las notas del modo elegido; con "Ambas claves" se alterna entre sol y fa */

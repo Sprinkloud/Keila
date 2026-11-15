@@ -652,6 +652,12 @@ Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-p
 - **Lectura de notas** (`generarSiguienteNotaJuego`, piano y violín): con 3 notas o menos puede repetir la misma, pero nunca 3 veces seguidas, y la nota repetida hace un destello. Antes, sol y mi salían siempre alternadas.
 - (11-nov) «Dibuja la nota» ya no dice «(en papel, dibuja una redonda)».
 
+## Estrellas solas, cinco y amarillas (15-nov-2026, pedido de la dueña)
+- **Piano y violín:** se quitaron «Aciertos · Seguidos» y la explicación «1 estrella: 5 aciertos…». Quedan solo las estrellas, como una píldora en la **esquina superior derecha de la tarjeta del pentagrama** (`.estrellas-juego` dentro de `.contenedor-pentagrama-bloque`, que ahora es `position: relative`). Es lo que el alumno mira mientras juega.
+- **Son 5** (antes 3): 3 aciertos, 6 aciertos, 4 seguidos, 6 seguidos y 8 seguidos (`contarEstrellas`). La app no lo explica. Al completarlas: «¡Cinco estrellas!». Las tarjetas «¿Qué hago?» dicen «Junta 5 estrellas» y la camarita «N de 5 estrellas».
+- **Color:** amarillo brillante `#F7C948` con borde `#D4961C` (la dueña: «más amarillo para que se vean más brillantes»), en vez del ocre `--gold`.
+- Capturas antes/después en `Libro_Sprinkloud/revision-app/estrellas/` (carpeta fuera de git).
+
 ## Apps sin explicaciones (14-nov-2026, la dueña: «queremos que todas las apps sean lo más intuitivas posible»)
 - **`ritmo.html`:** se quitó la barra `.consigna` («Crea tu ritmo con las tarjetas, dale ▶…») y su CSS. La app se entiende sola; `pruebas/tambor_movil.js` sigue pasando (tambor centrado, sin chocar con nada).
 - **Tarjetas «¿Qué hago?» (`leccion.js`, `pasos()`):** cada paso son dos o tres palabras («Toca ▶.», «Tambor 🥁 en cada nota.», «Crea tu ritmo.»). La camarita: «Al final, 📷 y envíala.» y las notas: «Notas de hoy: Do, Re, Mi.». Se mantienen el tema y «Tu meta» de la guía. Los pasos largos de piano, violín, oído, hojas, armaduras, círculo, acordes y modos también se acortaron. `copiar_motores.py` no cambia (copia solo GUIA, notas y ritmos).
