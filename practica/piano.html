@@ -852,6 +852,9 @@
     return 0;
   }
 
+  /* largo de la tecla blanca ÷ su ancho; para probar otros valores en vivo: ?proporcion=6 */
+  const PROPORCION_TECLA = Number(new URLSearchParams(location.search).get('proporcion')) || 3.9;   // 15-nov: la dueña las pidió más cortas, dos veces (5,4 → 4,5 → 3,9)
+
   function blancasVisibles() {
     const ancho = document.getElementById('teclado-piano').clientWidth;
     return Math.max(7, Math.min(totalBlancas, Math.floor(ancho / 24)));   // con teclas de 24 px entran las 12 en un celular común
@@ -885,6 +888,11 @@
     const anchoTeclaBlanca = contenedor.clientWidth / N;
     const anchoTeclaNegra = anchoTeclaBlanca * 0.62;
     const fin = inicioVentana + N;
+    /* 15-nov-2026 (la dueña: «en mi teléfono las teclas no son proporcionales, el largo con el ancho»): el alto del
+       teclado sale del ancho de la tecla, como en un piano de verdad (una blanca mide unas 6 veces su ancho; aquí 5,4
+       para que quede cómodo al pulgar). Antes era 30 % del alto de la pantalla: en el celular, teclas de 28 px de ancho
+       y 250 de largo. Tope de 280 px en pantallas grandes y piso de 120. */
+    contenedor.style.height = Math.round(Math.max(96, Math.min(280, anchoTeclaBlanca * PROPORCION_TECLA))) + 'px';
 
     let contadorBlancas = 0;
     const octavasVisibles = {};

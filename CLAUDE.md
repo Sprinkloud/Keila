@@ -652,6 +652,12 @@ Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-p
 - **Lectura de notas** (`generarSiguienteNotaJuego`, piano y violín): con 3 notas o menos puede repetir la misma, pero nunca 3 veces seguidas, y la nota repetida hace un destello. Antes, sol y mi salían siempre alternadas.
 - (11-nov) «Dibuja la nota» ya no dice «(en papel, dibuja una redonda)».
 
+## Teclas del piano proporcionadas (15-nov-2026, la dueña: «en mi teléfono las teclas no son proporcionales, el largo con el ancho»)
+- **Antes:** el alto del teclado era `clamp(150px, 30vh, 280px)`: en un celular, teclas de 28 px de ancho y 250 de largo.
+- **Ahora** (`construirTecladoPiano` en `piano.html`): el alto sale del ancho de la tecla blanca × `PROPORCION_TECLA` = **3,9** (piso 96 px, tope 280). La dueña lo eligió viéndolo en vivo: 5,4 → 4,5 → 3,9 («más cortas», «un poco más»). En un celular de 390 px: 28 × 109 px; en computadora sigue en 280 (el tope).
+- Para probar otro valor sin tocar el código: `?proporcion=4.5`.
+- **Cómo se revisó en vivo:** un proxy de la sesión en el puerto 8011 reenvía al servidor local (8010) y recarga la página sola cuando cambia un archivo de `practica/`; se abrió en el navegador de Playwright a 390 × 844 y sirve también desde el celular por la IP de la computadora (misma wifi).
+
 ## Revisión en 7 tamaños de pantalla con impeccable (15-nov-2026, pedido de la dueña)
 - **Cómo:** `impeccable live` (config en `.impeccable/live/config.json`: piano, violín y ritmo; la dueña abre las páginas en su navegador con el servidor local en 8010 y ve la barra de Impeccable) más una revisión automática a 320×568, 360×740, 390×844, 740×360 (celular acostado), 768×1024, 1024×768 y 1280×800: scroll horizontal, elementos que se salen, botones de menos de 40 px para el dedo, la insignia de estrellas sobre el pentagrama y el tambor. Prueba: `node pruebas/revision_tamanos.js` (con el servidor local; deja las capturas en `Libro_Sprinkloud/revision-app/tamanos/`). **Ojo:** `impeccable live` inyecta un script en los tres HTML; antes de un commit hay que correr `impeccable live-server stop`, que lo quita.
 - **Lo que salió y se arregló:**
