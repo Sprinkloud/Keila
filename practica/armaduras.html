@@ -72,6 +72,16 @@
     .puff[disabled] { cursor: default; }
     .veredicto { min-height: 28px; font-weight: 800; font-size: 18px; margin: 0; }
     .veredicto.bien { color: var(--pine); } .veredicto.mal { color: var(--danger); }
+    /* 21-nov-2026: «Tu orden» arriba y «El orden» debajo, casilla por casilla, para comparar */
+    .comparar { display: grid; gap: 8px; margin: 4px 0 12px; }
+    .comparar:empty { display: none; }
+    .fila-orden { display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
+    .fila-orden b { flex: 0 0 100%; font-size: 13px; text-align: center; color: var(--ink-2); }   /* el nombre arriba: con 7 casillas no cabía al lado */
+    .fila-orden .casilla { flex: 1 1 0; min-width: 0; max-width: 64px; height: 44px; display: grid; place-items: center; border-radius: 10px; border: 2px dashed var(--line); font-weight: 800; font-size: clamp(11px, 3.4vw, 15px); white-space: nowrap; background: var(--surface); }
+    .fila-orden .casilla:not(:empty) { border-style: solid; }
+    .fila-orden .casilla.bien { border-color: var(--pine); background: var(--bien-fondo, #E1E6CF); color: #33401F; }
+    .fila-orden .casilla.mal { border-color: var(--danger); background: var(--mal-fondo, #F3DED8); color: var(--mal-tinta, #8E4D41); }
+    .fila-orden.correcta .casilla { border-color: var(--pine); border-style: solid; }
     .regla { font-family: "Caveat", cursive; font-size: 25px; color: var(--gold-ink); margin: 0; min-height: 1.2em; }
     .acciones { display: flex; gap: 10px; justify-content: center; }
     .btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 16px; min-height: 44px; font-weight: 800; cursor: pointer; }
@@ -183,30 +193,45 @@ function marcar(ok) {
 }
 function veredicto(texto, ok) { const v = $('#veredicto'); v.textContent = texto; v.className = 'veredicto' + (ok === undefined ? '' : ok ? ' bien' : ' mal'); }
 
-/* 1. Ordenar: tocar las alteraciones en su orden; cada acierto aparece en la armadura */
+/* 1. Ordenar. 21-nov-2026 (la dueña): se pide una cantidad (por ejemplo, «los 4 primeros sostenidos») y el alumno elige
+   cuáles y en qué orden. Cada toque se anota en «Tu orden»; al terminar aparece debajo «El orden» correcto para que
+   compare, casilla por casilla (verde o rojo). Ya no hay frase que explique qué falló: la comparación lo dice sola. */
 function nuevaOrden(tipo) {
   const orden = tipo === 's' ? SOSTENIDOS : BEMOLES, signo = tipo === 's' ? '♯' : '♭';
-  /* corrección al final (pedido de la dueña, 7-nov-2026): se tocan las 7 en el orden que el alumno cree y recién al
-     final se marca cada una en verde (bien) o rojo (mal) y se dice cuál iba en cada lugar; antes se rechazaba cada error */
+  const cuantos = azar([2, 3, 3, 4, 4, 5, 5, 6, 7, 7]);
   actual = { tipo, elegidas: [] };
-  $('#pregunta').textContent = tipo === 's' ? 'Toca los sostenidos en orden' : 'Toca los bemoles en orden';
+  $('#pregunta').textContent = cuantos === 7 ? (tipo === 's' ? 'Toca los 7 sostenidos en orden' : 'Toca los 7 bemoles en orden')
+    : 'Toca los ' + cuantos + ' primeros ' + (tipo === 's' ? 'sostenidos' : 'bemoles') + ' en orden';
   dibujar('C'); veredicto(''); $('#regla').textContent = '';
+  const caja = compararOrden();
+  const fila = (titulo, clase) => { const f = document.createElement('div'); f.className = 'fila-orden ' + clase; f.innerHTML = '<b></b>'; f.firstChild.textContent = titulo;
+    for (let k = 0; k < cuantos; k++) { const c = document.createElement('span'); c.className = 'casilla'; f.append(c); } caja.append(f); return f; };
+  const tuya = fila('Tu orden', 'tuya');
   botones(mezclar(orden.map(n => n + signo)), (op, b) => {
-    if (!actual || actual.elegidas.length >= 7 || b.classList.contains('usado')) return;
-    actual.elegidas.push([op, b]); b.classList.add('usado'); b.disabled = true;
-    b.querySelector('.cara').textContent = actual.elegidas.length + 'º · ' + op;
+    if (!actual || actual.elegidas.length >= cuantos || b.classList.contains('usado')) return;
+    actual.elegidas.push(op); b.classList.add('usado'); b.disabled = true;
+    tuya.querySelectorAll('.casilla')[actual.elegidas.length - 1].textContent = op;   // se va anotando lo que presiona
     audio(); tono(523 + actual.elegidas.length * 40, ctx.currentTime, .2, .15);
-    if (actual.elegidas.length < 7) { veredicto('Sigue el ' + (actual.elegidas.length + 1) + 'º'); return; }
-    const bien = actual.elegidas.map(([o], i) => o === orden[i] + signo), n = bien.filter(Boolean).length;
-    actual.elegidas.forEach(([, bb], i) => { bb.classList.remove('usado'); bb.classList.add(bien[i] ? 'bien' : 'mal'); });
-    dibujar((tipo === 's' ? VF_S : VF_B)[7]);
-    marcar(n === 7);
-    veredicto(n === 7 ? '¡Perfecto!' : 'Bien ' + n + ' de 7. ' + actual.elegidas.map(([o], i) => bien[i] ? null : (i + 1) + 'º: pusiste ' + o + ', era ' + orden[i] + signo).filter(Boolean).join('; ') + '.', n === 7);
-    $('#regla').textContent = 'El orden: ' + orden.map(x => x + signo).join(' · ');
+    if (actual.elegidas.length < cuantos) return;
+    const bien = actual.elegidas.map((o, k) => o === orden[k] + signo), todas = bien.every(Boolean);
+    tuya.querySelectorAll('.casilla').forEach((c, k) => c.classList.add(bien[k] ? 'bien' : 'mal'));
+    const correcta = fila('El orden', 'correcta');
+    correcta.querySelectorAll('.casilla').forEach((c, k) => { c.textContent = orden[k] + signo; });
+    $('#respuestas').querySelectorAll('button').forEach(x => { x.disabled = true; });
+    dibujar((tipo === 's' ? VF_S : VF_B)[cuantos]);
+    marcar(todas);
+    veredicto(todas ? '¡Perfecto!' : '', todas);
   });
+}
+/* el lugar donde se comparan «Tu orden» y «El orden»: va justo arriba de los botones y se vacía en cada pregunta */
+function compararOrden() {
+  let caja = $('#comparar');
+  if (!caja) { caja = document.createElement('div'); caja.id = 'comparar'; caja.className = 'comparar'; $('#respuestas').before(caja); }
+  caja.replaceChildren(); return caja;
 }
 /* 2. ¿Qué tonalidad mayor es esta armadura? */
 function nuevaTonalidad() {
+  if ($('#comparar')) $('#comparar').replaceChildren();
   const tipo = tipoAlAzar(), n = 1 + Math.floor(Math.random() * 7);
   const mayores = tipo === 's' ? MAYORES_S : MAYORES_B, correcta = mayores[n] + ' mayor';
   actual = { correcta };
@@ -217,6 +242,7 @@ function nuevaTonalidad() {
 }
 /* 3. ¿Cuántas alteraciones tiene esta tonalidad? */
 function nuevaArmadura() {
+  if ($('#comparar')) $('#comparar').replaceChildren();
   const tipo = tipoAlAzar(), n = 1 + Math.floor(Math.random() * 7), signo = tipo === 's' ? '♯' : '♭';
   const correcta = n + ' ' + signo;
   actual = { correcta };
@@ -226,6 +252,7 @@ function nuevaArmadura() {
 }
 /* 4. La relativa menor de una armadura (la misma armadura, 3 semitonos abajo) */
 function nuevaRelativa() {
+  if ($('#comparar')) $('#comparar').replaceChildren();
   const tipo = tipoAlAzar(), n = Math.floor(Math.random() * 6);
   const mayor = (tipo === 's' ? MAYORES_S : MAYORES_B)[n], menores = tipo === 's' ? MENORES_S : MENORES_B, correcta = menores[n] + ' menor';
   actual = { correcta };

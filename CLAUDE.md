@@ -10,6 +10,7 @@ Sitio web público del Club Musical Sprinkloud, publicado en https://sprinkloud.
 |---|---|
 | `index.html` | **Portada: página de ventas** (2-nov-2026). Ver «Página de ventas» más abajo. |
 | `material.html`, `privacidad.html`, `terminos.html`, `trabaja.html`, `404.html`, `bienvenida.html` | Páginas con el estilo nuevo (mismo `sitio/estilo.css`, menú y pie). `404.html` la sirve Vercel sola en cualquier ruta que no existe. `bienvenida.html` («¡Bienvenido al Club musical Sprinkloud!») es para quien ya pagó en PayPhone: botón «Avisar que ya pagué» a WhatsApp con Anita y los 4 pasos que siguen; `noindex` y fuera del sitemap. |
+| `certificacion.html` | **Certificación de maestros** (21-nov-2026, sin subir): la página donde cada maestro lee, da la prueba y manda sus entregas. Se abre desde su panel con su clave (`/certificacion?m=…`); `noindex`, fuera del sitemap, sin píxel de Meta ni Anita. Lo técnico está en `Registro_Sprinkloud/CLAUDE.md` («Certificación de maestros»). Usa `sitio/img/osito-cargando.webp` (copia del bosque: la CSP no deja traer imágenes de GitHub Pages). |
 | `sitio/` | Lo del estilo nuevo: `estilo.css`, `app.js` (aparecer al entrar, la escena 3D del hero y **la burbuja de Anita, que se arma aquí para todas las páginas nuevas**), `img/` (capturas de la app, portadas, videos, foto de Keila, `compartir.jpg` 1200×630 para Open Graph) y `vendor/phosphor/`. Siempre con rutas absolutas (`/sitio/...`), para que sirvan en la 404 y en cualquier ruta. |
 | `practica/` | Herramientas interactivas, cada una en un solo HTML con su CSS y JS en línea: `practica/piano.html` (piano de 5 octavas y juego de notas en clave de Sol y Fa, con VexFlow 4.2.2), `practica/violin.html`, `practica/ritmo.html`, `practica/hojas.html`, `practica/oido.html` y `practica/partituras.html`. |
 | `images/` | Fotos y logos. `logo-sprinkloud.png` (1200×630, fondo blanco) es la imagen para compartir de las páginas que no tienen una propia. |
@@ -680,3 +681,12 @@ Los 7 libros se rehicieron como teoría autodidacta (`Libro_Sprinkloud/rehacer-p
 ## Apps sin explicaciones (14-nov-2026, la dueña: «queremos que todas las apps sean lo más intuitivas posible»)
 - **`ritmo.html`:** se quitó la barra `.consigna` («Crea tu ritmo con las tarjetas, dale ▶…») y su CSS. La app se entiende sola; `pruebas/tambor_movil.js` sigue pasando (tambor centrado, sin chocar con nada).
 - **Tarjetas «¿Qué hago?» (`leccion.js`, `pasos()`):** cada paso son dos o tres palabras («Toca ▶.», «Tambor 🥁 en cada nota.», «Crea tu ritmo.»). La camarita: «Al final, 📷 y envíala.» y las notas: «Notas de hoy: Do, Re, Mi.». Se mantienen el tema y «Tu meta» de la guía. Los pasos largos de piano, violín, oído, hojas, armaduras, círculo, acordes y modos también se acortaron. `copiar_motores.py` no cambia (copia solo GUIA, notas y ritmos).
+
+## Orden de los ♯ / ♭: se anota y se compara (21-nov-2026, pedido de la dueña; publicado el 21-nov)
+- **`armaduras.html`, `nuevaOrden`:** ya no se piden siempre las 7. Cada pregunta pide una cantidad al azar, de 2 a 7 («Toca los 4 primeros sostenidos en orden»); los 7 botones siguen a la vista, así que el alumno elige cuáles y en qué orden.
+- **Se anota lo que presiona:** cada toque llena una casilla de la fila «Tu orden» (`#comparar`, `.fila-orden`).
+- **Al terminar aparece debajo «El orden»** correcto, casilla por casilla, y las de «Tu orden» quedan en verde o rojo. El pentagrama muestra la armadura con esa cantidad.
+- **Sin frase que explique el error** (la dueña: «con la comparación ya queda entendido»): se quitó «Bien 5 de 7. 2º: pusiste…» y la regla «El orden: …». Solo dice «¡Perfecto!» cuando todo está bien.
+- El nombre de la fila va arriba de las casillas y la letra se achica con la pantalla: con 7 casillas cabe en 320 px.
+- Probado a 390 y 320 px, con sostenidos (etapa 4, lección 5) y bemoles (lección 6), bien y mal: sin errores ni texto cortado.
+- **El bosque tiene su propia versión** de este ejercicio (`App_Bosque/js/actividades.js`): se cambió igual el mismo día.
