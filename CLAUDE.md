@@ -92,7 +92,7 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
     - «Ajusta» o «Afloja», con la clavija si está a más de 50 cents y con el afinador fino si está cerca (el afinador fino ajusta a la derecha ↻);
     - al terminar cada toque, `finDeGolpe` compara con el anterior y dice «¡Vas bien!» o «Se alejó: gira hacia el otro lado». No se da el sentido de giro de la clavija: el alumno lo descubre con esa tendencia.
   - **Cuándo cuenta como afinada:** ±6 cents en 6 lecturas seguidas.
-  - **Lejos o cerca: tres zonas en la barra (21-nov-2026, sin subir todavía).** La dueña: «el alumno no sabe si está lejísimos de la nota o ya está muy cerca… la barrita es pequeña»; propuso la palabra clavija cuando está lejos y microafinador cuando está cerca.
+  - **Lejos o cerca: tres zonas en la barra (21-nov-2026, publicado el mismo día).** La dueña: «el alumno no sabe si está lejísimos de la nota o ya está muy cerca… la barrita es pequeña»; propuso la palabra clavija cuando está lejos y microafinador cuando está cerca.
     - La barra tiene tres zonas, con su nombre debajo: **Clavija · Microafinador · Clavija**. El centro (40 % de la barra) es de 0 a 50 cents; las de afuera van de 50 a 700 cents en escala logarítmica (`aguja()`). La raya recorre toda la barra; antes se quedaba pegada al borde desde 46 cents.
     - El nombre de la zona donde está la raya se enciende (`#zonas li.aqui`). En las cintas, los nombres de las zonas no se ven.
     - Las palabras de los extremos («Ajusta», «Afloja») van arriba de la barra, y la barra ocupa todo el ancho: en un celular de 390 px pasó de 176 a 314 px, y de 46 a 56 px de alto.
