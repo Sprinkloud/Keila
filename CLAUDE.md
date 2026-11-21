@@ -92,6 +92,12 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
     - «Ajusta» o «Afloja», con la clavija si está a más de 50 cents y con el afinador fino si está cerca (el afinador fino ajusta a la derecha ↻);
     - al terminar cada toque, `finDeGolpe` compara con el anterior y dice «¡Vas bien!» o «Se alejó: gira hacia el otro lado». No se da el sentido de giro de la clavija: el alumno lo descubre con esa tendencia.
   - **Cuándo cuenta como afinada:** ±6 cents en 6 lecturas seguidas.
+  - **Lejos o cerca: tres zonas en la barra (21-nov-2026, sin subir todavía).** La dueña: «el alumno no sabe si está lejísimos de la nota o ya está muy cerca… la barrita es pequeña»; propuso la palabra clavija cuando está lejos y microafinador cuando está cerca.
+    - La barra tiene tres zonas, con su nombre debajo: **Clavija · Microafinador · Clavija**. El centro (40 % de la barra) es de 0 a 50 cents; las de afuera van de 50 a 700 cents en escala logarítmica (`aguja()`). La raya recorre toda la barra; antes se quedaba pegada al borde desde 46 cents.
+    - El nombre de la zona donde está la raya se enciende (`#zonas li.aqui`). En las cintas, los nombres de las zonas no se ven.
+    - Las palabras de los extremos («Ajusta», «Afloja») van arriba de la barra, y la barra ocupa todo el ancho: en un celular de 390 px pasó de 176 a 314 px, y de 46 a 56 px de alto.
+    - Lejos dice «⬆ Ajusta» y «Con la clavija, muy poquito.»; cerca, «⬆ Ajusta un poquito» y «Con el microafinador.» (antes «afinador fino»; las pestañas de ayuda de abajo, las preguntas del JSON-LD y los comentarios del código también dicen «microafinador» desde el 21-nov, a pedido de la dueña).
+    - Probado con un tono de prueba en la cuerda La a −600, −200, −80, −30, −10, 0, +20, +90 y +400 cents, a 390 px: la raya y la zona encendida corresponden, y nada se sale de la pantalla.
 - **Cintas:** botón «✨ Poner las cintas», con un brillo que gira alrededor para que den ganas de tocarlo. Es un borde `conic-gradient` animado con `@property --giro`, y la chispa titila; con movimiento reducido, todo queda quieto.
   - Cinta 1 = Si (dedo 1), cinta 2 = Do (dedo 2) y cinta 3 = Re (dedo 3), en la cuerda La. La explicación está en las pestañas de abajo, no en el botón.
   - **Las cintas 1 y 2 van juntas, pegadas**, porque entre Si y Do (igual que entre Mi y Fa) los dedos se tocan. La dueña lo pidió así para que el alumno no deje espacio entre los dedos 1 y 2. En el dibujo, la cinta 2 va pegada a la 1 (`ANCHO_CINTA` = 12, más ancha que antes) y la cinta 3 va en Re (semitono 5).

@@ -52,9 +52,9 @@
         "@type": "FAQPage",
         "mainEntity": [
           { "@type": "Question", "name": "¿Cuáles son las cuerdas del violín?", "acceptedAnswer": { "@type": "Answer", "text": "De la más gruesa a la más delgada: Sol, Re, La y Mi. Se afinan en Sol 196 Hz, Re 293,7 Hz, La 440 Hz y Mi 659,3 Hz." } },
-          { "@type": "Question", "name": "¿Hay que ajustar o aflojar?", "acceptedAnswer": { "@type": "Answer", "text": "Si la cuerda suena más grave que su nota, hay que ajustarla (apretarla); si suena más aguda, aflojarla. La clavija sirve para cambios grandes y el afinador fino para los pequeños." } },
+          { "@type": "Question", "name": "¿Hay que ajustar o aflojar?", "acceptedAnswer": { "@type": "Answer", "text": "Si la cuerda suena más grave que su nota, hay que ajustarla (apretarla); si suena más aguda, aflojarla. La clavija sirve para cambios grandes y el microafinador para los pequeños." } },
           { "@type": "Question", "name": "¿Cómo se lee el medidor?", "acceptedAnswer": { "@type": "Answer", "text": "A la izquierda están los sonidos graves y a la derecha los agudos. Si la raya queda a la izquierda, la cuerda está grave: ajústala. Si queda a la derecha, está aguda: aflójala. En el centro verde, está afinada." } },
-          { "@type": "Question", "name": "¿Cómo giro la clavija y el afinador fino?", "acceptedAnswer": { "@type": "Answer", "text": "Gira la clavija muy poquito y empújala hacia adentro. Si la raya se acerca al centro, sigue hacia el mismo lado; si se aleja, gira al otro lado. El afinador fino ajusta a la derecha y afloja a la izquierda." } },
+          { "@type": "Question", "name": "¿Cómo giro la clavija y el microafinador?", "acceptedAnswer": { "@type": "Answer", "text": "Gira la clavija muy poquito y empújala hacia adentro. Si la raya se acerca al centro, sigue hacia el mismo lado; si se aleja, gira al otro lado. El microafinador ajusta a la derecha y afloja a la izquierda." } },
           { "@type": "Question", "name": "¿Dónde van las cintas del violín?", "acceptedAnswer": { "@type": "Answer", "text": "En la cuerda La: la cinta 1 en Si (dedo 1), la cinta 2 pegada a la primera en Do (dedo 2) y la cinta 3 en Re (dedo 3)." } },
           { "@type": "Question", "name": "¿Cómo pongo las cintas?", "acceptedAnswer": { "@type": "Answer", "text": "Afina la cuerda La, pon el dedo donde está el círculo y tócala. Si suena grave, desliza el dedo hacia el puente; si suena agudo, hacia el caracol. Cuando la app diga «¡Ahí es!», pega la cinta justo debajo del dedo, de lado a lado." } },
           { "@type": "Question", "name": "El afinador no escucha mi violín, ¿qué hago?", "acceptedAnswer": { "@type": "Answer", "text": "Permite el micrófono, acerca el celular al violín, toca la cuerda con el arco y busca un lugar sin ruido." } }
@@ -167,15 +167,28 @@
     .donde b { color: var(--ink); }
 
     /* Medidor: a los extremos, la palabra de lo que hay que hacer */
-    .barra { position: relative; height: 46px; border-radius: 999px; overflow: hidden;
-      background: linear-gradient(90deg, #D6E2EC 0 38%, var(--accent-soft) 44% 56%, #F6DCC4 62% 100%); border: 1px solid var(--line); }
+    /* 21-nov-2026 (la dueña: «el alumno no sabe si está lejísimos o ya está muy cerca»): la barra tiene tres zonas. Las dos
+       de afuera son de la clavija (lejos: de 50 centésimos a más de media octava) y la del centro, más clara, es del
+       microafinador (cerca: menos de 50). La raya recorre toda la barra; antes se quedaba pegada al borde desde 46. */
+    .barra { position: relative; height: 56px; border-radius: 999px; overflow: hidden;
+      background: linear-gradient(90deg, #C5D6E4 0 30%, var(--accent-soft) 30% 70%, #F3D2B4 70% 100%); border: 1px solid var(--line); }
+    .barra::before { content: ""; position: absolute; top: 0; bottom: 0; left: 30%; width: 40%; border-left: 2px dashed var(--line); border-right: 2px dashed var(--line); box-sizing: border-box; }
+    .zonas { display: grid; grid-template-columns: 30fr 40fr 30fr; margin: 4px 0 0; padding: 0; list-style: none; font-size: .78rem; font-weight: 800; text-align: center; color: var(--ink-2); }
+    .zonas li { padding: 3px 2px; border-radius: 999px; opacity: .55; transition: opacity 160ms ease, background-color 160ms ease, color 160ms ease; min-width: 0; overflow-wrap: anywhere; }
+    .zonas li.aqui { opacity: 1; background: var(--ink); color: var(--surface); }
+    .cintas .zonas { display: none; }
+    .medio { min-width: 0; }
+    .zonas { font-size: .9rem; }
     .barra::after { content: ""; position: absolute; left: 50%; top: 5px; bottom: 5px; width: 2px; margin-left: -1px; background: var(--pine); opacity: .5; }
-    .medidor { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+    /* 21-nov-2026: las palabras de los extremos van arriba y la barra ocupa todo el ancho (en el celular medía 176 px) */
+    .medidor { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 8px; align-items: end; }
+    .medidor .izq { text-align: left; } .medidor .der { text-align: right; }
+    .medidor .medio { grid-column: 1 / -1; grid-row: 2; }
     .extremo { font-weight: 800; font-size: 1rem; line-height: 1.1; text-align: center; }
     .extremo.izq { color: var(--frio); }
     .extremo.der { color: var(--calido); }
     .extremo small { display: block; font-size: .68rem; font-weight: 700; opacity: .8; }
-    .aguja { position: absolute; top: 4px; bottom: 4px; width: 10px; margin-left: -5px; left: 50%; border-radius: 5px; background: var(--ink); opacity: 0; z-index: 1;
+    .aguja { position: absolute; top: 4px; bottom: 4px; width: 12px; margin-left: -6px; left: 50%; border-radius: 5px; background: var(--ink); opacity: 0; z-index: 1;
       transition: left 120ms linear, opacity 200ms ease, background-color 200ms ease; }
     .aguja.visible { opacity: 1; }
     .aguja.bien { background: var(--accent); }
@@ -254,7 +267,8 @@
     <div id="medidor-caja" hidden style="display:grid;gap:10px">
       <div class="medidor" aria-hidden="true">
         <span class="extremo izq" id="izq"></span>
-        <div class="barra"><div class="aguja" id="aguja"></div></div>
+        <div class="medio"><div class="barra"><div class="aguja" id="aguja"></div></div>
+          <ul class="zonas" id="zonas"><li data-z="izq">Clavija</li><li data-z="centro">Microafinador</li><li data-z="der">Clavija</li></ul></div>
         <span class="extremo der" id="der"></span>
       </div>
       <p class="suena" id="suena"></p>
@@ -274,9 +288,9 @@
 <section class="faq" aria-labelledby="faq-titulo">
   <h2 id="faq-titulo">Cómo afinar el violín</h2>
   <details><summary>¿Cuáles son las cuerdas del violín?</summary><p>De la más gruesa a la más delgada: <b>Sol</b>, <b>Re</b>, <b>La</b> y <b>Mi</b>. Con el violín de frente y el caracol arriba, Sol queda a la izquierda y Mi a la derecha. Se afinan en Sol 196 Hz, Re 293,7 Hz, La 440 Hz y Mi 659,3 Hz.</p></details>
-  <details><summary>¿Hay que ajustar o aflojar?</summary><p>Si la cuerda suena más grave que su nota, hay que <b>ajustarla</b> (apretarla). Si suena más aguda, hay que <b>aflojarla</b>. Para cambios grandes se usa la clavija, girándola muy poquito; para cambios pequeños, el afinador fino del cordal: a la derecha ajusta y a la izquierda afloja.</p></details>
+  <details><summary>¿Hay que ajustar o aflojar?</summary><p>Si la cuerda suena más grave que su nota, hay que <b>ajustarla</b> (apretarla). Si suena más aguda, hay que <b>aflojarla</b>. Para cambios grandes se usa la clavija, girándola muy poquito; para cambios pequeños, el microafinador del cordal: a la derecha ajusta y a la izquierda afloja.</p></details>
   <details><summary>¿Cómo se lee el medidor?</summary><p>A la <b>izquierda</b> están los sonidos <b>graves</b> (en color frío) y a la <b>derecha</b> los <b>agudos</b> (en color cálido). Si la raya queda a la izquierda, la cuerda está grave: <b>ajústala</b>. Si queda a la derecha, está aguda: <b>aflójala</b>. En el centro verde, está afinada.</p></details>
-  <details><summary>¿Cómo giro la clavija y el afinador fino?</summary><p>Gira la clavija <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Vuelve a tocar: si la raya se acerca al centro («¡Vas bien!»), sigue hacia el mismo lado; si se aleja, gira al otro lado. Para los cambios pequeños usa el afinador fino (el tornillito del cordal): a la derecha ajusta y a la izquierda afloja.</p></details>
+  <details><summary>¿Cómo giro la clavija y el microafinador?</summary><p>Gira la clavija <b>muy poquito</b> y empújala hacia adentro para que no se suelte. Vuelve a tocar: si la raya se acerca al centro («¡Vas bien!»), sigue hacia el mismo lado; si se aleja, gira al otro lado. Para los cambios pequeños usa el microafinador (el tornillito del cordal): a la derecha ajusta y a la izquierda afloja.</p></details>
   <details><summary>¿Dónde van las cintas del violín?</summary><p>En la cuerda La: la <b>cinta 1</b> donde suena Si (dedo 1), la <b>cinta 2</b> pegada a la primera, donde suena Do (dedo 2), y la <b>cinta 3</b> donde suena Re (dedo 3). Entre Si y Do no queda espacio: los dedos 1 y 2 se tocan.</p></details>
   <details><summary>¿Cómo pongo las cintas?</summary><p>Primero afina la cuerda La. Pon el dedo sobre la cuerda La, donde está el círculo del dibujo, y tócala. Si suena grave, desliza el dedo <b>hacia el puente</b> (más agudo); si suena agudo, deslízalo <b>hacia el caracol</b> (más grave). Cuando la app diga «¡Ahí es!», deja el dedo quieto y pega la cinta justo debajo, derecha y de lado a lado, cruzando las 4 cuerdas.</p></details>
   <details><summary>El afinador no escucha mi violín, ¿qué hago?</summary><p>Permite el uso del micrófono, acerca el celular al violín, toca la cuerda con el arco y busca un lugar sin ruido. La barra «Te escucho» se mueve cuando el micrófono oye sonido.</p></details>
@@ -293,7 +307,7 @@
   /* ---------- El violín: ilustración de la dueña (images/violin-partes.webp, 424 × 1064) con marcas encima ----------
      Medidas tomadas de la imagen: cejilla en y = 187, puente en y = 735. Las cuerdas, de izquierda a derecha, son
      Sol, Re, La y Mi (el violín de frente, con el caracol arriba). Clavijas: Re y Sol a la izquierda (Re arriba),
-     La y Mi a la derecha (La arriba). El afinador fino del dibujo está en la cuerda Mi. */
+     La y Mi a la derecha (La arriba). El microafinador del dibujo está en la cuerda Mi. */
   const CEJILLA = 187, PUENTE = 735;
   const CUERDAS = {
     sol: { nombre: 'Sol', f: 196.00, color: '#9C5B55', nut: 185, puente: 175, cordal: [180, 852], clavija: [132, 163],
@@ -420,7 +434,7 @@
     return `<button class="btn-cuerda" type="button" data-id="${id}" aria-pressed="false" style="--c:${c.color}"><b>${c.nombre}</b><small>${c.corto}</small><span class="ok">✓ afinada</span></button>`; }).join('');
   $('#chips-cintas').innerHTML = CINTAS.map(c => `<button class="chip" type="button" data-n="${c.n}" aria-pressed="false">Cinta ${c.n} · ${c.nota}</button>`).join('');
 
-  function reiniciarLecturas() { lecturas = []; bienSeguidas = 0; ultimoGolpe = null; enGolpe = []; $('#aguja').classList.remove('visible', 'bien'); $('#suena').textContent = ''; }
+  function reiniciarLecturas() { lecturas = []; bienSeguidas = 0; ultimoGolpe = null; enGolpe = []; $('#aguja').classList.remove('visible', 'bien'); $('#suena').textContent = ''; document.querySelectorAll('#zonas li').forEach(li => li.classList.remove('aqui')); }
 
   function elegirCuerda(id) {
     sel = { tipo: 'cuerda', id }; reiniciarLecturas();
@@ -473,8 +487,14 @@
   }
   function aguja(c, bien) {
     const ag = $('#aguja');
-    ag.style.left = (50 + Math.max(-46, Math.min(46, c))) + '%';
+    /* cerca (hasta 50 centésimos) la raya recorre la zona del centro, de a poco; lejos, las zonas de la clavija, cada vez
+       más despacio, hasta más de media octava (700): así siempre se ve si está lejísimos, lejos, cerca o casi */
+    const a = Math.abs(c), lado = c < 0 ? -1 : 1;
+    const pos = a <= 50 ? a / 50 * 20 : 20 + Math.min(1, Math.log(a / 50) / Math.log(14)) * 27;
+    ag.style.left = (50 + lado * pos) + '%';
     ag.classList.add('visible'); ag.classList.toggle('bien', bien);
+    const z = a <= 50 ? 'centro' : c < 0 ? 'izq' : 'der';
+    document.querySelectorAll('#zonas li').forEach(li => li.classList.toggle('aqui', li.dataset.z === z));
   }
 
   // Cada lectura de la nota: qué hacer según lo lejos que está
@@ -501,8 +521,9 @@
         return;
       }
       const muy = Math.abs(c) > 50;
-      if (c < 0) decir('⬆ Ajusta un poquito', 'ajusta', muy ? 'Con la clavija, muy poquito.' : 'Con el afinador fino.');
-      else decir('⬇ Afloja un poquito', 'afloja', muy ? 'Con la clavija, muy poquito.' : 'Con el afinador fino.');
+      const con = muy ? 'Con la clavija, muy poquito.' : 'Con el microafinador.';
+      if (c < 0) decir(muy ? '⬆ Ajusta' : '⬆ Ajusta un poquito', 'ajusta', con);
+      else decir(muy ? '⬇ Afloja' : '⬇ Afloja un poquito', 'afloja', con);
     } else {
       const n = sel.c.n;
       if (Math.abs(centsDe(f, 440)) < 30) { decir('Esa es la cuerda La sola', 'aviso', 'Apoya bien el dedo.'); flecha(null); return; }
