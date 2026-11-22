@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificación de maestros | Sprinkloud</title>
+<meta name="description" content="Certificación de maestros del Club musical Sprinkloud.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1d2747">
+<link rel="icon" href="/images/logo-sprinkloud.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Certificación de maestros (21-nov-2026). Mismos colores del sitio: marino del logo y un solo acento, el verde.
+     Sin esperas (regla de la dueña): la página se arma sola al abrir, lo último que se vio queda guardado en el
+     navegador y el servidor se consulta por detrás; cada acción hace un solo viaje. */
+  :root {
+    --fondo: #f4f5f7; --superficie: #fff; --superficie-2: #eceef2; --tinta: #141b33; --tinta-2: #4a5268; --linea: #d9dce4;
+    --marino: #1d2747; --sobre-marino: #eef0f6; --sobre-marino-2: #b9c0d6;
+    --acento: #2f6b3f; --acento-base: #1f4a2b; --acento-suave: #e3f1e6;
+    --alerta: #9a3412; --alerta-suave: #fdeee2; --espera: #7a5a00; --espera-suave: #fbf2d0;
+    --sombra: 0 1px 2px rgb(20 27 51 / .06), 0 6px 16px -6px rgb(20 27 51 / .16);
+    --radio: 16px; --ease: cubic-bezier(.23, 1, .32, 1);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: "Plus Jakarta Sans", system-ui, sans-serif; background: var(--fondo); color: var(--tinta); line-height: 1.55; -webkit-tap-highlight-color: transparent; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  h1, h2, h3 { line-height: 1.2; margin: 0; text-wrap: balance; }
+  p { margin: 0 0 .9em; }
+  .cabeza { background: var(--marino); color: var(--sobre-marino); padding: 14px 16px; }
+  .cabeza-in { max-width: 860px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .marca { font-weight: 800; letter-spacing: .04em; font-size: .95rem; }
+  .marca small { display: block; font-weight: 500; letter-spacing: 0; color: var(--sobre-marino-2); font-size: .78rem; }
+  .quien { font-size: .85rem; color: var(--sobre-marino-2); text-align: right; }
+  main { max-width: 860px; margin: 0 auto; padding: 16px 16px 72px; }
+  .vista { animation: entra 180ms var(--ease); }
+  @keyframes entra { from { opacity: 0; } to { opacity: 1; } }
+
+  /* los 7 niveles */
+  .niveles { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; margin: 0; list-style: none; scrollbar-width: none; }
+  .niveles li { flex: 0 0 auto; }
+  .nivel { min-width: 108px; min-height: 52px; padding: 8px 12px; border-radius: 12px; border: 0; background: var(--superficie-2); color: var(--tinta-2); font-size: .8rem; font-weight: 600; text-align: center; transition: transform 120ms var(--ease); }
+  .nivel:active { transform: scale(.97); }
+  .nivel b { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+  .nivel[disabled] { opacity: .55; cursor: default; }
+  .nivel.listo { background: var(--acento-suave); color: var(--acento-base); }
+  .nivel.aqui { background: var(--marino); color: #fff; }
+  .subtitulo { font-size: 1.15rem; font-weight: 800; margin: 28px 0 10px; }
+  .certs { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .cert { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--linea); border-radius: var(--radio); background: var(--superficie); }
+  .cert b { display: block; } .cert span:not(.pastilla) { font-size: .85rem; color: var(--tinta-2); }
+  .cert.logrado { border-color: var(--acento); background: var(--acento-suave); }
+  .cert .btn { min-height: 44px; padding: 8px 18px; }
+  textarea { width: 100%; font: inherit; color: inherit; line-height: 1.5; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--linea); background: var(--superficie); resize: vertical; min-height: 180px; }
+  textarea:focus-visible { outline: 3px solid var(--marino); outline-offset: 2px; }
+  .fila.bajo { margin-top: 8px; justify-content: space-between; }
+  .letras { font-size: .82rem; color: var(--tinta-2); font-weight: 600; }
+  .oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .escrito { white-space: pre-wrap; }
+  .entrega details { margin-top: 6px; } .entrega summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+  .diploma .chico { font-size: .88rem; color: var(--tinta-2); }
+
+  .titulo { margin: 8px 0 4px; font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 800; }
+  .bajada { color: var(--tinta-2); margin-bottom: 16px; }
+  .avance { height: 8px; border-radius: 99px; background: var(--superficie-2); overflow: hidden; margin: 0 0 18px; }
+  .avance i { display: block; height: 100%; background: var(--acento); border-radius: 99px; transition: width 300ms var(--ease); }
+
+  .pasos { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .paso { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 14px; border: 1px solid var(--linea); border-radius: var(--radio); background: var(--superficie); box-shadow: var(--sombra); min-height: 72px;
+    transition: transform 140ms var(--ease), border-color 140ms ease; }
+  .paso:active { transform: scale(.985); }
+  @media (hover: hover) and (pointer: fine) { .paso:hover { border-color: var(--marino); } }
+  .paso .num { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--superficie-2); color: var(--tinta-2); }
+  .paso.hecho .num { background: var(--acento); color: #fff; }
+  .paso h3 { font-size: 1.02rem; font-weight: 700; }
+  .paso p { margin: 2px 0 0; font-size: .86rem; color: var(--tinta-2); }
+  .pastilla { font-size: .74rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; white-space: nowrap; background: var(--superficie-2); color: var(--tinta-2); }
+  .pastilla.bien { background: var(--acento-suave); color: var(--acento-base); }
+  .pastilla.espera { background: var(--espera-suave); color: var(--espera); }
+  .pastilla.mal { background: var(--alerta-suave); color: var(--alerta); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 22px; border-radius: 99px; border: 0; font-weight: 700; background: var(--acento); color: #fff; box-shadow: 0 4px 0 var(--acento-base); text-decoration: none;
+    transition: transform 90ms var(--ease), box-shadow 90ms var(--ease); }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--acento-base); }
+  .btn.blanco { background: var(--superficie); color: var(--tinta); border: 1px solid var(--linea); box-shadow: 0 4px 0 var(--linea); }
+  .btn.blanco:active { box-shadow: 0 1px 0 var(--linea); }
+  .btn[disabled] { opacity: .5; pointer-events: none; }
+  .volver { background: none; border: 0; padding: 10px 0; min-height: 44px; font-weight: 700; color: var(--marino); }
+  .fila { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+
+  /* lecturas */
+  .hoja { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); padding: clamp(16px, 4vw, 32px); box-shadow: var(--sombra); }
+  .lectura { max-width: 65ch; }
+  .lectura h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+  .lectura h3 { font-size: 1.08rem; font-weight: 800; margin: 1.5em 0 .4em; }
+  .lectura .minutos { color: var(--tinta-2); font-size: .85rem; margin-bottom: 1.2em; }
+  .lectura ul, .lectura ol { padding-left: 1.2em; margin: 0 0 1em; }
+  .lectura li { margin-bottom: .4em; }
+  .lectura .clave { border-left: 4px solid var(--acento); background: var(--acento-suave); padding: 12px 14px; border-radius: 0 12px 12px 0; margin: 1em 0; font-weight: 600; }
+  .lectura .fuente { font-size: .8rem; color: var(--tinta-2); }
+  .lectura kbd { font: inherit; font-weight: 700; background: var(--superficie-2); padding: 1px 6px; border-radius: 6px; }
+
+  /* el libro */
+  .libro-barra { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 12px 0; }
+  .libro-barra span { font-size: .85rem; color: var(--tinta-2); font-weight: 600; text-align: center; }
+  .libro-hoja { background: #fffdf8; color: #2b2622; border: 1px solid var(--linea); border-radius: var(--radio); padding: clamp(14px, 4vw, 30px); box-shadow: var(--sombra); overflow-wrap: anywhere; }
+  .libro-hoja img { max-width: 100%; height: auto; }
+
+  /* la prueba */
+  .cuenta { font-size: .85rem; font-weight: 700; color: var(--tinta-2); display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .pregunta { font-size: clamp(1.1rem, 3.6vw, 1.35rem); font-weight: 700; margin: 6px 0 16px; }
+  .opciones { display: grid; gap: 10px; }
+  .opcion { text-align: left; padding: 14px 16px; min-height: 56px; border-radius: 14px; border: 2px solid var(--linea); background: var(--superficie); font-weight: 500; transition: border-color 120ms ease, background-color 120ms ease, transform 100ms var(--ease); }
+  .opcion:active { transform: scale(.985); }
+  .opcion[aria-pressed="true"] { border-color: var(--marino); background: #e9ecf6; font-weight: 700; }
+  .opcion.bien { border-color: var(--acento); background: var(--acento-suave); }
+  .opcion.mal { border-color: var(--alerta); background: var(--alerta-suave); }
+  .puntaje { font-size: clamp(3rem, 14vw, 5rem); font-weight: 800; line-height: 1; margin: 8px 0; }
+  .puntaje.si { color: var(--acento); } .puntaje.no { color: var(--alerta); }
+  .repaso { display: grid; gap: 10px; margin-top: 18px; padding: 0; list-style: none; }
+  .repaso li { border: 1px solid var(--linea); border-radius: 12px; padding: 12px 14px; background: var(--superficie); font-size: .92rem; }
+  .repaso li b { display: block; margin-bottom: 4px; }
+  .repaso .por { color: var(--tinta-2); }
+
+  /* las entregas */
+  .entrega { border: 1px solid var(--linea); border-radius: var(--radio); background: var(--superficie); padding: 16px; box-shadow: var(--sombra); margin-bottom: 12px; }
+  .entrega header { display: flex; justify-content: space-between; align-items: start; gap: 10px; margin-bottom: 6px; }
+  .entrega h3 { font-size: 1.05rem; font-weight: 700; }
+  .entrega p { color: var(--tinta-2); font-size: .92rem; }
+  .entrega .nota { background: var(--alerta-suave); color: var(--alerta); border-radius: 12px; padding: 10px 12px; font-weight: 600; }
+  .entrega input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .entrega input[type=file]:focus-visible + label { outline: 3px solid var(--marino); outline-offset: 3px; }
+
+  /* el certificado */
+  .diploma { background: #fffdf8; border: 3px solid var(--marino); outline: 1px solid var(--marino); outline-offset: -10px; border-radius: 6px; padding: clamp(28px, 8vw, 64px) clamp(18px, 6vw, 56px); text-align: center; box-shadow: var(--sombra); }
+  .diploma .club { font-weight: 800; letter-spacing: .14em; color: var(--marino); }
+  .diploma .certifica { color: var(--tinta-2); margin: 1.4em 0 .2em; }
+  .diploma .nombre { font-size: clamp(1.8rem, 7vw, 2.8rem); font-weight: 800; color: var(--marino); }
+  .diploma .que { max-width: 46ch; margin: 1em auto; }
+  .diploma .grado { font-weight: 800; font-size: 1.2rem; color: var(--acento-base); }
+  .diploma .pie { display: flex; justify-content: space-around; gap: 16px; margin-top: 2.2em; font-size: .85rem; color: var(--tinta-2); flex-wrap: wrap; }
+  .diploma .pie b { display: block; color: var(--tinta); border-top: 1px solid var(--tinta); padding-top: 6px; min-width: 150px; }
+
+  /* el programa, los criterios de cada entrega y lo que acredita el certificado */
+  .meta { font-size: .85rem; color: var(--tinta-2); font-weight: 600; margin: -8px 0 16px; }
+  .enlace { background: none; border: 0; padding: 10px 0; min-height: 44px; font-weight: 700; color: var(--marino); text-decoration: underline; text-underline-offset: 3px; }
+  .prog-nivel { border-top: 1px solid var(--linea); padding: 14px 0 2px; }
+  .prog-nivel h4 { margin: 0; font-size: 1rem; font-weight: 800; line-height: 1.2; }
+  .prog-nivel .minutos { margin: 2px 0 8px; }
+  .prog-nivel p { margin-bottom: .3em; }
+  .criterios { background: var(--superficie-2); border-radius: 12px; padding: 10px 14px; margin: 0 0 12px; font-size: .9rem; }
+  .criterios b { display: block; }
+  .criterios ul { margin: 6px 0 0; padding-left: 1.2em; }
+  .criterios li { margin-bottom: .25em; }
+  .acredita { margin-top: 16px; max-width: none; }
+  .acredita h2 { font-size: 1.2rem; }
+  .acredita h3 { margin: 1.1em 0 .1em; font-size: 1rem; }
+  .acredita .minutos { margin: 0 0 .4em; }
+
+  .aviso { position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, 20px); background: var(--tinta); color: #fff; padding: 12px 18px; border-radius: 14px; font-weight: 600; font-size: .92rem; max-width: calc(100vw - 32px); opacity: 0; pointer-events: none; transition: opacity 180ms ease, transform 180ms var(--ease); z-index: 9; }
+  .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
+  .cargando { display: grid; place-items: center; gap: 10px; padding: 48px 0; color: var(--tinta-2); font-weight: 600; }
+  .cargando img { width: 120px; height: auto; animation: camina 1.2s ease-in-out infinite; }
+  @keyframes camina { 50% { transform: translateY(-6px); } }
+  .vacio { text-align: center; padding: 48px 12px; }
+  :focus-visible { outline: 3px solid var(--marino); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .vista, .cargando img { animation: none; } .paso, .btn, .opcion, .avance i, .aviso, .nivel { transition: none; } }
+  @media print {
+    body { background: #fff; }
+    .cabeza, .volver, .fila, .aviso { display: none !important; }
+    main { padding: 0; max-width: none; }
+    .diploma { box-shadow: none; margin: 8mm; }
+    .acredita { break-before: page; box-shadow: none; border: 0; margin: 8mm; }
+  }
+</style>
+</head>
+<body>
+<header class="cabeza"><div class="cabeza-in">
+  <div class="marca">SPRINKLOUD<small>Certificación de maestros</small></div>
+  <div class="quien" id="quien"></div>
+</div></header>
+<main id="app" aria-live="polite"></main>
+<div class="aviso" id="aviso" role="status"></div>
+
+<script>
+'use strict';
+/* ---------- Lo que se lee va en /certificacion/nivelN.js (no es secreto, y así la página abre al instante). Las
+   preguntas y sus respuestas viven en el servidor (Registro_Sprinkloud/maestros/Certificacion.js y CertBancoN.js). ---------- */
+window.CERT_LECTURAS = window.CERT_LECTURAS || {};
+
+/* ---------- El programa: lo que el aspirante ve antes de empezar. Qué va a poder hacer al terminar cada nivel y cuánto
+   le toma (lecturas + libro + prueba + entregas; es una estimación). Va aquí para que abra al instante.
+   Los nombres de los niveles y de los libros son los de Registro_Sprinkloud/maestros/Certificacion.js (CERT_NIVELES):
+   pruebas/certificacion_test.js comprueba que digan lo mismo. ---------- */
+/* PROGRAMA:INICIO */
+const PROGRAMA = [
+  { nombre: 'Conectar', libro: 'Pulso', horas: 2.5,
+    logro: 'Aprendes a recibir a un alumno y a dar una clase por videollamada en la que toca y sale contento.',
+    puedes: ['Dar una primera clase en la que el alumno toca desde el primer día.', 'Preparar tu aula en línea: el sonido, la cámara y la regla del retraso.', 'Poner el nombre de las notas en una partitura con MuseScore 4 y sacarla en PDF.', 'Explicar un tema del libro en un pizarrón de Miro, como para un niño.'] },
+  { nombre: 'Pasos pequeños', libro: 'Primeras lecturas', horas: 2.5,
+    logro: 'Aprendes a enseñar cualquier tema en pasos pequeños y a simplificar una canción.',
+    puedes: ['Enseñar algo nuevo en tres momentos: lo muestras, lo hacen juntos y lo hace solo.', 'Comprobar que entendió sin preguntarle «¿entendiste?».', 'Simplificar una canción en MuseScore 4 y entregarla en PDF y MP3.', 'Usar en la clase el piano o el violín virtual, y el bosque.'] },
+  { nombre: 'La música por el cuerpo', libro: 'Lectura y ritmo', horas: 2,
+    logro: 'Aprendes a enseñar el pulso y el ritmo con el cuerpo, la voz y una sola nota del instrumento.',
+    puedes: ['Enseñar un ritmo con el cuerpo, con las sílabas del club y con una sola nota.', 'Guiar por videollamada: uno marca y el otro lo sigue.', 'Ayudar a un alumno que pierde el pulso y se frustra.', 'Usar la app de ritmo en la clase y cambiar de tonalidad en MuseScore 4.'] },
+  { nombre: 'Motivar', libro: 'Intervalos, escalas y acordes', horas: 2.5,
+    logro: 'Aprendes a cuidar las ganas del alumno y a adaptarle la canción que él eligió.',
+    puedes: ['Cuidar las tres cosas que sostienen las ganas: elegir, sentirse capaz y sentirse acompañado.', 'Dejar una tarea que sí se hace: una sola meta pequeña.', 'Adaptar la canción que eligió el alumno y escribirle los acordes en MuseScore 4.', 'Usar las apps de partituras con acordes, de acordes e inversiones y de armaduras.'] },
+  { nombre: 'Corregir sin apagar', libro: 'Tonalidad', horas: 2,
+    logro: 'Aprendes a corregir sin apagar al alumno y a resolver un problema antes de la clase siguiente.',
+    puedes: ['Corregir lo que hizo, nunca lo que es: en privado y sin comparar.', 'Resolver un malentendido el mismo día, antes de la clase siguiente.', 'Leer en tu panel cómo va cada alumno y saber qué hacer en cada caso.', 'Usar el círculo de quintas y el entrenador de oído.'] },
+  { nombre: 'Enseñar a adultos', libro: 'Músico completo', horas: 2,
+    logro: 'Aprendes a acompañar a un adulto que empieza de cero.',
+    puedes: ['Planear las primeras clases de un adulto, con la canción que él quiere tocar.', 'Hacerle ver cada avance, con dulzura y sin tratarlo como a un niño.', 'Responder cuando dice «soy muy torpe, mejor lo dejo».', 'Elegirle material: la biblioteca de partituras y las hojas de práctica.'] },
+  { nombre: 'Enseñar a enseñar', libro: 'Los modos griegos', horas: 2,
+    logro: 'Aprendes a guiar a la familia, a cuidar al alumno que está por irse y a elegir la herramienta justa.',
+    puedes: ['Guiar a la familia para la práctica en casa: un hábito a la vez.', 'Ver las señales de un alumno que está por irse y armarle un plan de un mes.', 'Elegir, entre todas las herramientas del club, la que necesita cada alumno.', 'Decir con tus palabras cuál es tu forma de enseñar.'] }
+];
+/* PROGRAMA:FIN */
+const HORAS = PROGRAMA.reduce((t, x) => t + x.horas, 0);
+const tiempo = h => 'Unas ' + Math.floor(h) + ' horas' + (h % 1 ? ' y media' : '');
+const dinero = v => 'USD ' + Number(v).toFixed(2).replace('.', ',');
+
+/* ---------- conexión ---------- */
+const P = new URLSearchParams(location.search);
+const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+const API = LOCAL && P.get('api') ? P.get('api') : 'https://script.google.com/macros/s/AKfycbyyS3H2cdaXUz9zj1oilSdmsrF6ANcy0zPkGD4NuZZNUMj7QdO8A29pioM-jYNlf7YL/exec';
+const guardado = { leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, poner(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } } };
+let clave = P.get('m');
+if (clave) {
+  // otro enlace es otra persona: lo guardado en este navegador (estado, lecturas marcadas, respuestas y borradores) era de la anterior
+  if (guardado.leer('cert-clave') !== clave) ['cert-estado-7', 'cert-leidas-7', 'cert-respuestas', 'cert-borradores', 'cert-programa-visto'].forEach(k => { try { localStorage.removeItem(k); } catch (e) { } });
+  guardado.poner('cert-clave', clave); P.delete('m'); history.replaceState(null, '', location.pathname + (P.toString() ? '?' + P : ''));
+}
+else clave = guardado.leer('cert-clave');
+async function pedir(q) { const r = await fetch(API + '?' + new URLSearchParams(Object.assign({ m: clave }, q))); const j = await r.json(); if (j.error) throw new Error(j.error); return j; }
+async function mandar(d) { const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ m: clave }, d)) }); const j = await r.json(); if (j.error) throw new Error(j.error); return j; }
+
+/* ---------- estado ---------- */
+let estado = guardado.leer('cert-estado-7');         // lo último que se vio: la página abre con eso, sin esperar
+let leidas = guardado.leer('cert-leidas-7') || {};   // lecturas marcadas como leídas, «nivel-cuál» (en este navegador)
+const libros = {}, librosPromesa = {};               // el libro de cada nivel, una vez bajado
+const respuestas = guardado.leer('cert-respuestas') || {}, borradores = guardado.leer('cert-borradores') || {};
+let vista = { v: 'inicio' }, nivelVisto = 0;
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fecha = f => f ? f.split('-').reverse().join('/') : '';
+const NOMBRES = PROGRAMA.map(x => x.nombre);
+const nivel = n => estado && estado.niveles[(n || nivelVisto) - 1];
+const rango = ns => ns.length === 2 ? ns[0] + ' y ' + ns[1] : ns[0] + ' a ' + ns[ns.length - 1];
+/* el nivel en el que va: el primero abierto que todavía no envió todo; si ya envió todo, el último abierto */
+function nivelActual() {
+  if (!estado) return 1;
+  const abiertos = estado.niveles.filter(x => x.abierto);
+  return (abiertos.find(x => !x.enviado) || abiertos[abiertos.length - 1] || estado.niveles[0]).n;
+}
+function aviso(t) { const a = $('#aviso'); a.textContent = t; a.classList.add('ver'); clearTimeout(aviso.t); aviso.t = setTimeout(() => a.classList.remove('ver'), 4200); }
+function ir(v) { vista = v; pintar(); window.scrollTo(0, 0); }
+function ponerEstado(e) {
+  const primera = !estado, antes = estado ? estado.niveles.filter(x => x.abierto).length : 0;
+  estado = e; guardado.poner('cert-estado-7', e); $('#quien').textContent = e.maestro || '';
+  // la primera vez que llega el estado (navegador nuevo, sin nada guardado) se va al nivel en el que está; si ya abrió una lectura, no se le mueve
+  if (!nivelVisto || (primera && (vista.v === 'inicio' || vista.v === 'programa'))) nivelVisto = nivelActual();
+  const ahora = e.niveles.filter(x => x.abierto).length;
+  if (antes && ahora > antes) { aviso('Se abrió el nivel ' + ahora + ' 🎉'); if (vista.v === 'inicio') nivelVisto = nivelActual(); }   // en el inicio pasa solo al nivel nuevo; a mitad de una lectura o de sus entregas, no lo mueve
+}
+async function refrescar() {
+  try {
+    ponerEstado(await pedir({ api: 'cert' }));
+    const a = document.activeElement;   // si está escribiendo un caso, no se le mueve la pantalla
+    if ((vista.v === 'inicio' || vista.v === 'entregas' || vista.v === 'programa') && !(a && a.tagName === 'TEXTAREA')) repintar();
+    traerLibro(nivelActual()).catch(() => { });
+  }
+  catch (e) { if (!estado) { $('#app').innerHTML = `<div class="vacio vista"><h2>No pudimos abrir tu certificación</h2><p>${esc(e.message)}</p></div>`; } }
+}
+function traerLibro(n) { return librosPromesa[n] || (librosPromesa[n] = pedir({ api: 'certLibro', n }).then(l => (libros[n] = l)).catch(e => { delete librosPromesa[n]; throw e; })); }
+
+/* ---------- pantallas ---------- */
+const OSITO = '/sitio/img/osito-cargando.webp';
+const cargando = t => `<div class="cargando"><img src="${OSITO}" alt="" width="120" height="120"><span>${esc(t)}</span></div>`;
+const volver = `<button class="volver" data-ir="inicio">← Volver</button>`;
+
+function inicio() {
+  const n = nivelVisto || 1, nv = nivel(n), pr = nv && nv.prueba, ent = (nv && nv.entregas) || [];
+  const lect = (window.CERT_LECTURAS[n] || {}), le = lect.educador || {}, lh = lect.herramientas || {};
+  const entOk = ent.filter(e => e.estado === 'aprobada').length;
+  const hechos = [!!leidas[n + '-educador'], !!leidas[n + '-libro'], !!leidas[n + '-herramientas'], !!(pr && pr.aprobada), ent.length > 0 && entOk === ent.length];
+  const pasPrueba = !pr ? ['', ''] : pr.aprobada ? ['Aprobada · ' + pr.mejor, 'bien'] : pr.puede ? [pr.intentos ? 'Otro intento' : '20 preguntas', ''] : pr.desde ? ['Desde el ' + fecha(pr.desde), 'espera'] : ['', ''];
+  const pasEnt = !ent.length ? ['', ''] : entOk === ent.length ? ['Aprobadas', 'bien'] : ent.some(e => e.estado === 'devuelta') ? ['Hay una devuelta', 'mal'] : ent.some(e => e.estado === 'pendiente') ? ['En revisión', 'espera'] : [ent.length + ' entregas', ''];
+  const paso = (i, v, titulo, texto, pastilla) => `<li><button class="paso${hechos[i] ? ' hecho' : ''}" data-ir="${v}">
+      <span class="num">${hechos[i] ? '✓' : i + 1}</span><span><h3>${esc(titulo)}</h3><p>${esc(texto)}</p></span>
+      ${pastilla && pastilla[0] ? `<span class="pastilla ${pastilla[1]}">${esc(pastilla[0])}</span>` : ''}</button></li>`;
+  const leido = k => leidas[n + '-' + k] ? ['Leído', 'bien'] : null;
+  const niveles = [1, 2, 3, 4, 5, 6, 7].map(k => { const x = nivel(k) || { abierto: k === 1 };
+    return `<li><button class="nivel${k === n ? ' aqui' : ''}${x.completo ? ' listo' : ''}" data-nivel="${k}" ${x.abierto ? '' : 'disabled'} aria-pressed="${k === n}"><b>Nivel ${k}${x.completo ? ' ✓' : x.abierto ? '' : ' 🔒'}</b>${esc(NOMBRES[k - 1])}</button></li>`; }).join('');
+  const certs = (estado ? estado.certificados : []).map(c => {
+    const faltan = c.niveles.filter(k => !(nivel(k) || {}).completo);
+    return `<li class="cert${c.fecha ? ' logrado' : ''}"><div><b>${esc(c.nombre)}</b><span>Niveles ${rango(c.niveles)}${c.pago != null ? ' · ' + dinero(c.pago) + ' la hora' : ''}</span></div>
+      ${c.fecha ? `<button class="btn blanco" data-certificado="${c.n}">Ver</button>` : `<span class="pastilla">${faltan.length === c.niveles.length ? 'Por lograr' : 'Falta el nivel ' + faltan.join(' y el ')}</span>`}</li>`; }).join('');
+  return `<div class="vista"><ul class="niveles" aria-label="Niveles">${niveles}</ul>
+    <h1 class="titulo">Nivel ${n} · ${esc(NOMBRES[n - 1])}</h1>
+    <p class="bajada">${esc(PROGRAMA[n - 1].logro)}</p>
+    <p class="meta">${tiempo(PROGRAMA[n - 1].horas)} · La prueba se aprueba con ${estado ? estado.aprobarCon : 85}</p>
+    <div class="avance" role="img" aria-label="${hechos.filter(Boolean).length} de 5 pasos"><i style="width:${hechos.filter(Boolean).length * 20}%"></i></div>
+    <ul class="pasos">
+      ${paso(0, 'educador', 'Ser educador', (le.titulo || 'Lectura') + (le.minutos ? ' · ' + le.minutos + ' min' : ''), leido('educador'))}
+      ${paso(1, 'libro', 'El libro ' + n + (nv && nv.libro ? ': ' + nv.libro : ''), 'Todas sus lecciones, con sus ejercicios', leido('libro'))}
+      ${paso(2, 'herramientas', 'Tus herramientas', (lh.titulo || 'Lectura') + (lh.minutos ? ' · ' + lh.minutos + ' min' : ''), leido('herramientas'))}
+      ${paso(3, 'prueba', 'La prueba', '20 preguntas. Se aprueba con 85', pasPrueba)}
+      ${paso(4, 'entregas', 'Tus entregas', ent.map(e => e.nombre).join(' · ') || 'Tus trabajos de este nivel', pasEnt)}
+    </ul>
+    ${certs ? `<h2 class="subtitulo">Tus certificados</h2><ul class="certs">${certs}</ul>` : ''}
+    <p><button class="enlace" data-ir="programa">Cómo funciona la certificación</button></p></div>`;
+}
+
+function programa() {
+  const empezo = Object.keys(leidas).length > 0 || !!(estado && estado.niveles.some(x => x.prueba && x.prueba.intentos));
+  const certs = estado ? estado.certificados : [{ nombre: 'Primer certificado', niveles: [1, 2, 3] }, { nombre: 'Segundo certificado', niveles: [4, 5] }, { nombre: 'Tercer certificado', niveles: [6, 7] }];
+  const conPago = certs.some(c => c.pago != null);
+  return `<div class="vista">${empezo ? volver : ''}
+    <article class="hoja lectura">
+      <h2>La certificación de maestros Sprinkloud</h2>
+      <p class="minutos">7 niveles · 3 certificados · unas ${Math.round(HORAS)} horas en total, a tu ritmo</p>
+      <p>Ya eres músico. Aquí aprendes a enseñar como enseña Sprinkloud: clases por videollamada en las que el alumno toca, avanza y quiere volver.</p>
+      <div class="clave">Hoy sobran los videos, los cursos grabados y las inteligencias artificiales que explican música. Lo que no se puede reemplazar es un maestro que acompaña. Eso es lo que se certifica aquí.</div>
+      <div class="fila"><button class="btn" data-ir="inicio">${empezo ? 'Seguir con mi nivel' : 'Empezar el nivel 1'}</button></div>
+      <h3>Cómo es cada nivel</h3>
+      <ol>
+        <li><b>Lees «Ser educador».</b> Cómo se enseña, con casos de clase.</li>
+        <li><b>Lees el libro del nivel.</b> La teoría que vas a enseñar, con las mismas palabras que lee tu alumno.</li>
+        <li><b>Lees «Tus herramientas».</b> Las apps del club, tu panel, Miro y MuseScore 4.</li>
+        <li><b>Das la prueba.</b> Son 20 preguntas y se aprueba con ${estado ? estado.aprobarCon : 85}. Si no la apruebas, la das otra vez al día siguiente, con otras preguntas.</li>
+        <li><b>Mandas tus entregas.</b> Son trabajos de verdad: una partitura, un pizarrón, un caso resuelto. Cada una dice con qué se aprueba, y Keila las revisa una por una.</li>
+      </ol>
+      <h3>Los 7 niveles</h3>
+      ${PROGRAMA.map((x, i) => `<section class="prog-nivel"><h4>Nivel ${i + 1} · ${esc(x.nombre)}</h4>
+        <p class="minutos">Libro ${i + 1}: ${esc(x.libro)} · ${tiempo(x.horas)}</p>
+        <p>Al terminar puedes:</p><ul>${x.puedes.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>`).join('')}
+      <h3>Los 3 certificados</h3>
+      <ul>${certs.map((c, i) => `<li><b>${esc(c.nombre)}:</b> niveles ${rango(c.niveles)}${c.pago != null ? ', ' + dinero(c.pago) + ' la hora' : ''}.${i ? '' : ' Con él puedes empezar a dar clases en Sprinkloud.'}</li>`).join('')}</ul>
+      <p>Un certificado sale cuando Keila aprobó todas las entregas de sus niveles.${conPago ? ' Cada subida de pago también la aprueba ella.' : ''}</p>
+      <h3>Lo que conviene saber</h3>
+      <ul>
+        <li>Vas a tu ritmo: no hay fechas. Un nivel se abre cuando enviaste todo lo del anterior.</li>
+        <li>No hace falta tener alumnos para empezar: las entregas se pueden hacer antes de tu primera clase.</li>
+        <li>Por ahora todos se certifican con los libros de piano, también quienes enseñan violín.</li>
+        <li>Si Keila te devuelve una entrega, viene con un comentario: la corriges y la mandas otra vez.</li>
+      </ul>
+      <div class="fila"><button class="btn" data-ir="inicio">${empezo ? 'Seguir con mi nivel' : 'Empezar el nivel 1'}</button></div>
+    </article></div>`;
+}
+
+function lectura(id) {
+  const n = nivelVisto, l = (window.CERT_LECTURAS[n] || {})[id];
+  if (!l) { setTimeout(() => { if (vista.v === id) pintar(); }, 400); return `<div class="vista">${volver}${cargando('Abriendo la lectura…')}</div>`; }
+  return `<div class="vista">${volver}
+    <article class="hoja lectura"><h2>${esc(l.titulo)}</h2><p class="minutos">Nivel ${n} · lectura de ${l.minutos} minutos</p>${l.html}
+    <div class="fila"><button class="btn" data-leida="${id}">${leidas[n + '-' + id] ? 'Listo' : 'Ya la leí'}</button></div></article></div>`;
+}
+
+function verLibro() {
+  const n = nivelVisto, libro = libros[n];
+  if (!libro) { traerLibro(n).then(() => { if (vista.v === 'libro' && nivelVisto === n) pintar(); }).catch(e => { aviso(e.message); ir({ v: 'inicio' }); }); return `<div class="vista">${volver}${cargando('Abriendo el libro…')}</div>`; }
+  if (!$('#css-libro')) {   // el estilo del libro, encerrado en su hoja
+    const css = libro.css.replace(/@font-face[^}]*}/g, '').replace(/([^{}]+)\{/g, (m, sel) => sel.split(',').map(x => { x = x.trim(); return x === 'body' ? '.libro-hoja' : '.libro-hoja ' + x; }).join(', ') + ' {');
+    const st = document.createElement('style'); st.id = 'css-libro'; st.textContent = css; document.head.append(st);
+  }
+  const i = Math.max(0, Math.min(libro.paginas.length - 1, vista.i || 0)), pg = libro.paginas[i], ultima = i === libro.paginas.length - 1;
+  return `<div class="vista">${volver}
+    <div class="libro-barra"><button class="btn blanco" data-hoja="${i - 1}" ${i ? '' : 'disabled'} aria-label="Hoja anterior">◀</button>
+      <span>${esc(pg.titulo)}<br>${i + 1} de ${libro.paginas.length}</span>
+      <button class="btn blanco" data-hoja="${i + 1}" ${ultima ? 'disabled' : ''} aria-label="Hoja siguiente">▶</button></div>
+    <div class="libro-hoja" id="hoja-libro">${pg.html}</div>
+    <div class="fila">${ultima ? `<button class="btn" data-leida="libro">${leidas[n + '-libro'] ? 'Listo' : 'Ya lo leí'}</button>` : `<button class="btn" data-hoja="${i + 1}">Siguiente hoja ▶</button>`}</div></div>`;
+}
+
+function prueba() {
+  const n = nivelVisto, pr = nivel() && nivel().prueba;
+  if (!pr) return `<div class="vista">${volver}${cargando('Preparando tu prueba…')}</div>`;
+  if (pr.aprobada) return `<div class="vista">${volver}<div class="hoja"><h2>Prueba aprobada</h2><p class="puntaje si">${pr.mejor}</p><p>Ya no tienes que darla otra vez.</p></div></div>`;
+  if (!pr.puede) return `<div class="vista">${volver}<div class="hoja"><h2>Hoy ya diste la prueba</h2><p>Sacaste ${pr.mejor} y se aprueba con ${estado.aprobarCon}. Desde el <b>${fecha(pr.desde)}</b> puedes intentarlo otra vez, con otras preguntas.</p><p>Mientras tanto, vuelve a leer lo que fallaste.</p></div></div>`;
+  const qs = pr.preguntas, i = vista.i;
+  if (i == null) return `<div class="vista">${volver}<div class="hoja">
+    <h2>La prueba del nivel ${n}</h2>
+    <p>Son ${qs.length} preguntas: del libro ${n}, de ser educador y de tus herramientas. Se aprueba con ${estado.aprobarCon}.</p>
+    <p>Si no la apruebas, mañana puedes darla otra vez, con otras preguntas.</p>
+    <div class="fila"><button class="btn" data-pregunta="0">Empezar</button></div></div></div>`;
+  const q = qs[i], elegida = respuestas[q.id], faltan = qs.filter(x => respuestas[x.id] == null).length;
+  return `<div class="vista"><div class="cuenta"><span>Pregunta ${i + 1} de ${qs.length}</span><span>${{ libro: 'El libro', educador: 'Ser educador', herramientas: 'Herramientas' }[q.c]}</span></div>
+    <div class="avance"><i style="width:${(i + 1) * 100 / qs.length}%"></i></div>
+    <h2 class="pregunta">${esc(q.p)}</h2>
+    <div class="opciones">${q.o.map((o, k) => `<button class="opcion" aria-pressed="${elegida === k}" data-elegir="${k}">${esc(o)}</button>`).join('')}</div>
+    <div class="fila"><button class="btn blanco" data-pregunta="${i - 1}" ${i ? '' : 'disabled'}>◀ Anterior</button>
+      ${i < qs.length - 1 ? `<button class="btn" data-pregunta="${i + 1}" ${elegida == null ? 'disabled' : ''}>Siguiente ▶</button>`
+        : `<button class="btn" data-entregar-prueba ${faltan ? 'disabled' : ''}>Entregar la prueba</button>`}</div></div>`;
+}
+
+function resultado() {
+  const r = vista.r, qs = vista.preguntas, malas = r.revision.filter(x => !x.bien), pr = nivel(r.nivel).prueba;
+  return `<div class="vista"><div class="hoja"><h2>${r.aprobada ? '¡Aprobaste la prueba!' : 'Todavía no'}</h2>
+    <p class="puntaje ${r.aprobada ? 'si' : 'no'}">${r.puntaje}</p>
+    <p>${r.bien} de ${r.total} bien. Se aprueba con ${estado.aprobarCon}.${r.aprobada ? '' : ` Desde el <b>${fecha(pr.desde)}</b> puedes intentarlo otra vez, con otras preguntas.`}</p>
+    <div class="fila"><button class="btn" data-ir="${r.aprobada ? 'entregas' : 'inicio'}">${r.aprobada ? 'Ir a mis entregas' : 'Volver a leer'}</button></div>
+    ${malas.length ? `<h3 style="margin-top:22px">Lo que hay que repasar</h3><ul class="repaso">${malas.map(x => { const q = qs.find(y => y.id === x.id); return `<li><b>${esc(q.p)}</b>Era: ${esc(q.o[x.correcta])}<br><span class="por">${esc(x.e)}</span></li>`; }).join('')}</ul>` : ''}</div></div>`;
+}
+
+function entregas() {
+  const ent = nivel() ? nivel().entregas : null;
+  if (!ent) return `<div class="vista">${volver}${cargando('Abriendo tus entregas…')}</div>`;
+  const pastilla = { falta: ['Falta', ''], pendiente: ['En revisión', 'espera'], aprobada: ['Aprobada', 'bien'], devuelta: ['Devuelta', 'mal'], subiendo: ['Enviando…', 'espera'] };
+  const min = estado.textoMin || 400, max = estado.textoMax || 8000;
+  const subir = e => `<input type="file" id="f-${e.id}" accept="${e.tipos.join(',')}" data-entrega="${e.id}"><label class="btn ${e.estado === 'falta' || e.estado === 'devuelta' ? '' : 'blanco'}" for="f-${e.id}">${e.estado === 'falta' || e.estado === 'devuelta' ? (e.tipos[0] === 'application/pdf' ? 'Subir el PDF' : e.tipos[0] === 'audio/mpeg' ? 'Subir el MP3' : 'Subir la imagen') : 'Subir otro archivo'}</label>`;
+  const escribir = e => { const t = borradores[e.id] != null ? borradores[e.id] : e.escrito || '';
+    return `<label class="oculto" for="t-${e.id}">${esc(e.nombre)}</label><textarea id="t-${e.id}" data-borrador="${e.id}" rows="9" maxlength="${max}" placeholder="Escribe aquí tu respuesta…">${esc(t)}</textarea>
+      <div class="fila bajo"><span class="letras" id="c-${e.id}">${t.trim().length} de ${min} letras como mínimo</span>
+      <button class="btn ${e.estado === 'pendiente' ? 'blanco' : ''}" data-enviar-texto="${e.id}">${e.estado === 'pendiente' ? 'Enviar otra vez' : 'Enviar'}</button></div>`; };
+  return `<div class="vista">${volver}
+    <h1 class="titulo">Tus entregas del nivel ${nivelVisto}</h1><p class="bajada">Keila revisa cada entrega y la aprueba o te la devuelve con un comentario.</p>
+    ${ent.map(e => `<section class="entrega"><header><h3>${esc(e.nombre)}</h3><span class="pastilla ${pastilla[e.estado][1]}">${pastilla[e.estado][0]}</span></header>
+      <p>${esc(e.pide)}</p>
+      ${e.estado !== 'aprobada' && (e.criterios || []).length ? `<div class="criterios"><b>Se aprueba si:</b><ul>${e.criterios.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>` : ''}
+      ${e.estado === 'devuelta' && e.comentario ? `<p class="nota">Para corregir: ${esc(e.comentario)}</p>` : ''}
+      ${e.estado === 'aprobada' ? (e.texto && e.escrito ? `<details><summary>Lo que escribiste</summary><p class="escrito">${esc(e.escrito)}</p></details>` : '') : e.texto ? escribir(e) : subir(e)}
+    </section>`).join('')}</div>`;
+}
+
+function certificado() {
+  const c = estado && estado.certificados.find(x => x.n === vista.c);
+  if (!c || !c.fecha) return inicio();
+  const trabajos = c.niveles.reduce((t, k) => t + ((nivel(k) || {}).entregas || []).length, 0);
+  return `<div class="vista">${volver}
+    <div class="diploma"><div class="club">CLUB MUSICAL SPRINKLOUD</div>
+      <p class="certifica">certifica que</p><div class="nombre">${esc(estado.nombreCertificado || estado.maestro)}</div>
+      <p class="que">completó los niveles ${rango(c.niveles)} de la certificación de maestros Sprinkloud: aprobó sus ${c.niveles.length} pruebas con ${estado.aprobarCon} o más sobre 100 y presentó ${trabajos} trabajos prácticos, aprobados uno por uno.</p>
+      <div class="grado">${esc(c.nombre)}</div>
+      <p class="que chico">${c.niveles.map(k => NOMBRES[k - 1]).join(' · ')}</p>
+      <div class="pie"><span><b>Keila Espín</b>Fundadora</span><span><b>${fecha(c.fecha)}</b>Fecha</span></div></div>
+    <article class="hoja lectura acredita"><h2>Lo que acredita este certificado</h2>
+      ${c.niveles.map(k => `<h3>Nivel ${k} · ${esc(NOMBRES[k - 1])}</h3><p class="minutos">Libro ${k}: ${esc(PROGRAMA[k - 1].libro)}</p><ul>${PROGRAMA[k - 1].puedes.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`).join('')}
+    </article>
+    <div class="fila"><button class="btn" data-imprimir>Imprimir o guardar en PDF</button></div></div>`;
+}
+
+function pintar() {
+  const app = $('#app');
+  if (!clave) { app.innerHTML = `<div class="vacio vista"><h2>Abre esta página con tu enlace</h2><p>Si ya eres maestro del club, está en tu panel. Si todavía no, te lo manda Sprinkloud.</p></div>`; return; }
+  if (!nivelVisto) nivelVisto = nivelActual();
+  const v = vista.v;
+  app.innerHTML = v === 'educador' || v === 'herramientas' ? lectura(v) : v === 'libro' ? verLibro() : v === 'prueba' ? prueba() : v === 'resultado' ? resultado()
+    : v === 'entregas' ? entregas() : v === 'certificado' ? certificado() : v === 'programa' ? programa() : inicio();
+  const hoja = $('#hoja-libro'), libro = libros[nivelVisto];
+  if (hoja && libro) {
+    hoja.querySelectorAll('[data-img]').forEach(im => { const d = libro.imgs[im.dataset.img]; if (d) im.src = 'data:image/webp;base64,' + d.replace(/-/g, '+').replace(/_/g, '/'); });
+    hoja.querySelectorAll('a[href]').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+  }
+}
+
+/* volver a pintar lo mismo con datos nuevos (llegó el estado o una lectura): sin la animación de entrada, para que no parpadee */
+function repintar() { pintar(); const v = $('#app .vista'); if (v) v.style.animation = 'none'; }
+
+/* ---------- acciones ---------- */
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('button, a.btn'); if (!b) return;
+  if (b.dataset.nivel) { nivelVisto = Number(b.dataset.nivel); traerLibro(nivelVisto).catch(() => { }); return ir({ v: 'inicio' }); }
+  if (b.dataset.ir) return ir({ v: b.dataset.ir });
+  if (b.dataset.leida) { leidas[nivelVisto + '-' + b.dataset.leida] = true; guardado.poner('cert-leidas-7', leidas); return ir({ v: 'inicio' }); }
+  if (b.dataset.hoja != null) return ir({ v: 'libro', i: Number(b.dataset.hoja) });
+  if (b.dataset.pregunta != null) return ir({ v: 'prueba', i: Number(b.dataset.pregunta) });
+  if (b.dataset.elegir != null) {
+    const q = nivel().prueba.preguntas[vista.i]; respuestas[q.id] = Number(b.dataset.elegir); guardado.poner('cert-respuestas', respuestas);
+    return pintar();
+  }
+  if (b.dataset.certificado) return ir({ v: 'certificado', c: Number(b.dataset.certificado) });
+  if (b.dataset.enviarTexto) return enviarTexto(b.dataset.enviarTexto);
+  if ('entregarPrueba' in b.dataset) return entregarPrueba();
+  if ('imprimir' in b.dataset) return window.print();
+});
+async function entregarPrueba() {
+  const n = nivelVisto, qs = nivel().prueba.preguntas;
+  $('#app').innerHTML = `<div class="vista">${cargando('Calificando tu prueba…')}</div>`;
+  try {
+    const r = await mandar({ accion: 'certPrueba', nivel: n, respuestas: Object.fromEntries(qs.map(q => [q.id, respuestas[q.id]])) });
+    qs.forEach(q => delete respuestas[q.id]); guardado.poner('cert-respuestas', respuestas);
+    ponerEstado(r.estado); ir({ v: 'resultado', r, preguntas: qs });
+  } catch (e) { aviso(e.message); refrescar().then(() => ir({ v: 'prueba' })); }
+}
+/* una entrega se ve «Enviando…» al instante y viaja por detrás; si falla, vuelve a como estaba */
+function enviar(ent, cuerpo) {
+  const antes = { estado: ent.estado, comentario: ent.comentario }, n = nivelVisto;
+  ent.estado = 'subiendo'; ent.comentario = ''; pintar();
+  return mandar(Object.assign({ accion: 'certEntrega', nivel: n, entrega: ent.id }, cuerpo))
+    .then(r => { const abiertos = estado.niveles.filter(x => x.abierto).length; ponerEstado(r.estado); const ahora = estado.niveles.filter(x => x.abierto).length;
+      if (vista.v === 'entregas' || vista.v === 'inicio') pintar(); aviso(ahora > abiertos ? 'Recibido. Ya puedes empezar el nivel ' + ahora + ' 🎉' : 'Recibido. Keila lo va a revisar.'); return true; })
+    .catch(e => { Object.assign(ent, antes); if (vista.v === 'entregas') pintar(); aviso(e.message); return false; });
+}
+function enviarTexto(id) {
+  const ent = nivel().entregas.find(e => e.id === id), caja = $('#t-' + id), texto = caja ? caja.value.trim() : '';
+  const min = estado.textoMin || 400;
+  if (texto.length < min) return aviso('Escribe un poco más: por lo menos ' + min + ' letras (llevas ' + texto.length + ').');
+  ent.escrito = texto;
+  enviar(ent, { texto }).then(ok => { if (ok) { delete borradores[id]; guardado.poner('cert-borradores', borradores); } });
+}
+document.addEventListener('input', ev => {
+  const t = ev.target; if (!t.dataset || !t.dataset.borrador) return;
+  borradores[t.dataset.borrador] = t.value; guardado.poner('cert-borradores', borradores);   // lo escrito no se pierde si cierra la página
+  const c = $('#c-' + t.dataset.borrador); if (c) c.textContent = t.value.trim().length + ' de ' + (estado.textoMin || 400) + ' letras como mínimo';
+});
+document.addEventListener('change', ev => {
+  const inp = ev.target; if (!inp.dataset || !inp.dataset.entrega || !inp.files || !inp.files[0]) return;
+  const f = inp.files[0], ent = nivel().entregas.find(e => e.id === inp.dataset.entrega);
+  if (ent.tipos.indexOf(f.type) < 0) return aviso(ent.tipos[0] === 'application/pdf' ? 'Este archivo tiene que ser un PDF.' : ent.tipos[0] === 'audio/mpeg' ? 'Este archivo tiene que ser un MP3.' : 'Este archivo tiene que ser una imagen (PNG o JPG).');
+  if (f.size > 8 * 1024 * 1024) return aviso('El archivo pesa demasiado (máximo 8 MB).');
+  const lector = new FileReader();
+  lector.onload = () => enviar(ent, { nombre: f.name, tipo: f.type, datos: String(lector.result).split(',')[1] });
+  lector.onerror = () => aviso('No se pudo leer el archivo.');
+  lector.readAsDataURL(f);
+});
+document.addEventListener('keydown', ev => {
+  const libro = libros[nivelVisto];
+  if (vista.v === 'libro' && libro && (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft')) {
+    const i = (vista.i || 0) + (ev.key === 'ArrowRight' ? 1 : -1);
+    if (i >= 0 && i < libro.paginas.length) { vista = { v: 'libro', i }; pintar(); const v = $('#app .vista'); if (v) v.style.animation = 'none'; }   // con el teclado, sin animación de entrada
+  }
+});
+
+/* ---------- arranque: se pinta con lo guardado y se consulta por detrás ---------- */
+if (estado) { $('#quien').textContent = estado.maestro || ''; nivelVisto = nivelActual(); }
+/* la primera vez en este navegador se abre el programa: qué es, cuánto toma y cómo se evalúa, antes de empezar */
+if (clave && !guardado.leer('cert-programa-visto')) { vista = { v: 'programa' }; guardado.poner('cert-programa-visto', 1); }
+pintar();
+if (clave) refrescar();   // al llegar el estado se empieza a bajar el libro del nivel en el que va
+document.addEventListener('DOMContentLoaded', () => { if (clave && vista.v === 'inicio') repintar(); });   // ya llegaron las lecturas: se ven sus títulos
+</script>
+<script defer src="/certificacion/nivel1.js"></script>
+<script defer src="/certificacion/nivel2.js"></script>
+<script defer src="/certificacion/nivel3.js"></script>
+<script defer src="/certificacion/nivel4.js"></script>
+<script defer src="/certificacion/nivel5.js"></script>
+<script defer src="/certificacion/nivel6.js"></script>
+<script defer src="/certificacion/nivel7.js"></script>
+</body>
+</html>
