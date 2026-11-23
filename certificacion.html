@@ -108,6 +108,11 @@
   .libro-barra span { font-size: .85rem; color: var(--tinta-2); font-weight: 600; text-align: center; }
   .libro-hoja { background: #fffdf8; color: #2b2622; border: 1px solid var(--linea); border-radius: var(--radio); padding: clamp(14px, 4vw, 30px); box-shadow: var(--sombra); overflow-wrap: anywhere; }
   .libro-hoja img { max-width: 100%; height: auto; }
+  /* el libro es para preparar la clase, no para llevárselo: marca de agua con el logo y el nombre, sin copiar ni imprimir */
+  .libro-hoja { position: relative; overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  .libro-hoja .agua { position: absolute; inset: -40%; pointer-events: none; opacity: .07; background-repeat: repeat; background-size: 200px auto; transform: rotate(-18deg); }
+  .libro-marca { font-size: .8rem; color: #8F6A2A; margin: 0 0 10px; font-weight: 600; }
+  .libro-pie { font-size: .78rem; color: var(--tinta-2); text-align: center; margin-top: 10px; }
 
   /* la prueba */
   .cuenta { font-size: .85rem; font-weight: 700; color: var(--tinta-2); display: flex; justify-content: space-between; margin-bottom: 8px; }
@@ -173,6 +178,7 @@
     .cabeza, .volver, .fila, .aviso { display: none !important; }
     main { padding: 0; max-width: none; }
     .diploma { box-shadow: none; margin: 8mm; }
+    .libro-hoja, .libro-barra { display: none !important; }
     .acredita { break-before: page; box-shadow: none; border: 0; margin: 8mm; }
   }
 </style>
@@ -307,7 +313,7 @@ function inicio() {
     <div class="avance" role="img" aria-label="${hechos.filter(Boolean).length} de 5 pasos"><i style="width:${hechos.filter(Boolean).length * 20}%"></i></div>
     <ul class="pasos">
       ${paso(0, 'educador', 'Ser educador', (le.titulo || 'Lectura') + (le.minutos ? ' · ' + le.minutos + ' min' : ''), leido('educador'))}
-      ${paso(1, 'libro', 'El libro ' + n + (nv && nv.libro ? ': ' + nv.libro : ''), 'Todas sus lecciones, con sus ejercicios', leido('libro'))}
+      ${paso(1, 'libro', 'El libro ' + n + (nv && nv.libro ? ': ' + nv.libro : ''), 'La teoría de todas sus lecciones', leido('libro'))}
       ${paso(2, 'herramientas', 'Tus herramientas', (lh.titulo || 'Lectura') + (lh.minutos ? ' · ' + lh.minutos + ' min' : ''), leido('herramientas'))}
       ${paso(3, 'prueba', 'La prueba', '20 preguntas. Se aprueba con 85', pasPrueba)}
       ${paso(4, 'entregas', 'Tus entregas', ent.map(e => e.nombre).join(' · ') || 'Tus trabajos de este nivel', pasEnt)}
@@ -373,7 +379,8 @@ function verLibro() {
     <div class="libro-barra"><button class="btn blanco" data-hoja="${i - 1}" ${i ? '' : 'disabled'} aria-label="Hoja anterior">◀</button>
       <span>${esc(pg.titulo)}<br>${i + 1} de ${libro.paginas.length}</span>
       <button class="btn blanco" data-hoja="${i + 1}" ${ultima ? 'disabled' : ''} aria-label="Hoja siguiente">▶</button></div>
-    <div class="libro-hoja" id="hoja-libro">${pg.html}</div>
+    <div class="libro-hoja" id="hoja-libro"><p class="libro-marca">${esc(libro.marca || '')}</p>${pg.html}<div class="agua" aria-hidden="true"></div></div>
+    <p class="libro-pie">© Keila Espín · Club musical Sprinkloud. Material para preparar la clase: no se comparte.</p>
     <div class="fila">${ultima ? `<button class="btn" data-leida="libro">${leidas[n + '-libro'] ? 'Listo' : 'Ya lo leí'}</button>` : `<button class="btn" data-hoja="${i + 1}">Siguiente hoja ▶</button>`}</div></div>`;
 }
 
@@ -455,6 +462,7 @@ function pintar() {
   if (hoja && libro) {
     hoja.querySelectorAll('[data-img]').forEach(im => { const d = libro.imgs[im.dataset.img]; if (d) im.src = 'data:image/webp;base64,' + d.replace(/-/g, '+').replace(/_/g, '/'); });
     hoja.querySelectorAll('a[href]').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+    if (libro.logo) hoja.querySelector('.agua').style.backgroundImage = 'url(data:image/webp;base64,' + libro.logo.replace(/-/g, '+').replace(/_/g, '/') + ')';
   }
 }
 
@@ -518,6 +526,7 @@ document.addEventListener('change', ev => {
   lector.onerror = () => aviso('No se pudo leer el archivo.');
   lector.readAsDataURL(f);
 });
+document.addEventListener('contextmenu', ev => { if (ev.target.closest && ev.target.closest('.libro-hoja')) ev.preventDefault(); });
 document.addEventListener('keydown', ev => {
   const libro = libros[nivelVisto];
   if (vista.v === 'libro' && libro && (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft')) {
