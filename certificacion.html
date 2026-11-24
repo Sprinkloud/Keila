@@ -10,7 +10,7 @@
 <link rel="icon" href="/images/logo-sprinkloud.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 <style>
   /* Certificación de maestros (21-nov-2026). Mismos colores del sitio: marino del logo y un solo acento, el verde.
      Sin esperas (regla de la dueña): la página se arma sola al abrir, lo último que se vio queda guardado en el
@@ -61,7 +61,6 @@
   .oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .escrito { white-space: pre-wrap; }
   .entrega details { margin-top: 6px; } .entrega summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
-  .diploma .chico { font-size: .88rem; color: var(--tinta-2); }
 
   .titulo { margin: 8px 0 4px; font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 800; }
   .bajada { color: var(--tinta-2); margin-bottom: 16px; }
@@ -140,14 +139,16 @@
   .entrega input[type=file]:focus-visible + label { outline: 3px solid var(--marino); outline-offset: 3px; }
 
   /* el certificado */
-  .diploma { background: #fffdf8; border: 3px solid var(--marino); outline: 1px solid var(--marino); outline-offset: -10px; border-radius: 6px; padding: clamp(28px, 8vw, 64px) clamp(18px, 6vw, 56px); text-align: center; box-shadow: var(--sombra); }
-  .diploma .club { font-weight: 800; letter-spacing: .14em; color: var(--marino); }
-  .diploma .certifica { color: var(--tinta-2); margin: 1.4em 0 .2em; }
-  .diploma .nombre { font-size: clamp(1.8rem, 7vw, 2.8rem); font-weight: 800; color: var(--marino); }
-  .diploma .que { max-width: 46ch; margin: 1em auto; }
-  .diploma .grado { font-weight: 800; font-size: 1.2rem; color: var(--acento-base); }
-  .diploma .pie { display: flex; justify-content: space-around; gap: 16px; margin-top: 2.2em; font-size: .85rem; color: var(--tinta-2); flex-wrap: wrap; }
-  .diploma .pie b { display: block; color: var(--tinta); border-top: 1px solid var(--tinta); padding-top: 6px; min-width: 150px; }
+  .diploma { --serif: "Fraunces", Georgia, serif; background: #fffdf8; border: 2px solid var(--marino); outline: 1px solid #b8a06a; outline-offset: -12px; border-radius: 4px; padding: clamp(32px, 8vw, 64px) clamp(20px, 7vw, 64px); text-align: center; box-shadow: var(--sombra); color: var(--tinta); }
+  .diploma .logo { width: clamp(140px, 34vw, 190px); height: auto; display: block; margin: 0 auto 20px; }
+  .diploma .grado { font-family: var(--serif); font-weight: 600; font-size: clamp(1.7rem, 6.5vw, 2.6rem); color: var(--marino); line-height: 1.1; }
+  .diploma .programa { margin-top: 8px; font-size: .74rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: #8a7340; }
+  .diploma .raya { width: 64px; height: 1px; background: #b8a06a; margin: clamp(20px, 5vw, 30px) auto; border: 0; }
+  .diploma .certifica { font-family: var(--serif); font-style: italic; color: var(--tinta-2); margin: 0 0 10px; }
+  .diploma .nombre { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 8vw, 3.2rem); color: var(--marino); line-height: 1.15; }
+  .diploma .que { max-width: 40ch; margin: 14px auto 0; font-family: var(--serif); font-size: 1.05rem; color: var(--tinta-2); }
+  .diploma .pie { display: flex; justify-content: center; gap: clamp(24px, 10vw, 72px); margin-top: clamp(32px, 8vw, 52px); font-size: .8rem; color: var(--tinta-2); flex-wrap: wrap; }
+  .diploma .pie b { display: block; color: var(--tinta); font-weight: 600; border-top: 1px solid var(--tinta); padding-top: 8px; margin-bottom: 2px; min-width: 160px; }
 
   /* el programa, los criterios de cada entrega y lo que acredita el certificado */
   .meta { font-size: .85rem; color: var(--tinta-2); font-weight: 600; margin: -8px 0 16px; }
@@ -442,13 +443,15 @@ function entregas() {
 function certificado() {
   const c = estado && estado.certificados.find(x => x.n === vista.c);
   if (!c || !c.fecha) return inicio();
-  const trabajos = c.niveles.reduce((t, k) => t + ((nivel(k) || {}).entregas || []).length, 0);
   return `<div class="vista">${volver}
-    <div class="diploma"><div class="club">CLUB MUSICAL SPRINKLOUD</div>
-      <p class="certifica">certifica que</p><div class="nombre">${esc(estado.nombreCertificado || estado.maestro)}</div>
-      <p class="que">completó los niveles ${rango(c.niveles)} de la certificación de maestros Sprinkloud: aprobó sus ${c.niveles.length} pruebas con ${estado.aprobarCon} o más sobre 100 y presentó ${trabajos} trabajos prácticos, aprobados uno por uno.</p>
+    <div class="diploma">
+      <img class="logo" src="/sitio/img/logo-diploma.webp" alt="Sprinkloud · Donde la música echa raíces" width="440" height="364">
       <div class="grado">${esc(c.nombre)}</div>
-      <p class="que chico">${c.niveles.map(k => NOMBRES[k - 1]).join(' · ')}</p>
+      <div class="programa">Certificación de Maestros</div>
+      <hr class="raya">
+      <p class="certifica">El Club musical Sprinkloud certifica que</p>
+      <div class="nombre">${esc(estado.nombreCertificado || estado.maestro)}</div>
+      <p class="que">completó los niveles ${rango(c.niveles)} de la Certificación de Maestros Sprinkloud.</p>
       <div class="pie"><span><b>Keila Espín</b>Fundadora</span><span><b>${fecha(c.fecha)}</b>Fecha</span></div></div>
     <article class="hoja lectura acredita"><h2>Lo que acredita este certificado</h2>
       ${c.niveles.map(k => `<h3>Nivel ${k} · ${esc(NOMBRES[k - 1])}</h3><p class="minutos">Libro ${k}: ${esc(PROGRAMA[k - 1].libro)}</p><ul>${PROGRAMA[k - 1].puedes.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`).join('')}
