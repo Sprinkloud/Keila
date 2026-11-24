@@ -107,7 +107,7 @@ window.CERT_LECTURAS[7] = {
       <li><b>La casita y el álbum:</b> con sus malvaviscos compra calcomanías y decora. Es su recompensa por volver cada día.</li>
       <li><b>La biblioteca:</b> ahí están los libros de las etapas a las que ya llegó, para volver a cualquier lección.</li>
       <li><b>Cómo avanza:</b> pasa de lección cuando termina la práctica del día con 70 % o más de aciertos, en 2 días distintos.</li>
-      <li><b>Cómo entra:</b> con su enlace secreto, que tú le mandas desde tu panel.</li>
+      <li><b>Cómo entra:</b> con el enlace que le manda el club. Tú no tienes que mandarlo.</li>
     </ul>
     <p>Por ahora el bosque usa el libro de piano para todos los alumnos, también los de violín.</p>
     <h3>Las apps del sitio</h3>

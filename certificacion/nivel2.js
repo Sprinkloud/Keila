@@ -87,7 +87,7 @@ window.CERT_LECTURAS[2] = {
     <p>En el piano virtual cuenta el nombre de la nota, no la octava. En el violín virtual, el acierto vale en cualquier lugar del violín donde suene esa nota.</p>
     <div class="clave">Antes de mandarle una app a un alumno, ábrela tú con el enlace de su lección y juega una ronda. Así sabes qué va a ver.</div>
     <h3>El bosque de Sprinkloud</h3>
-    <p>Es la práctica diaria del alumno, en forma de cuento. Entra con su enlace secreto, el que tú le mandas por WhatsApp desde tu panel.</p>
+    <p>Es la práctica diaria del alumno, en forma de cuento.</p>
     <ul>
       <li><b>Qué hace cada día:</b> la práctica de hoy, que son 3 o 4 actividades cortas de su lección. Cada actividad empieza con un ejemplo, y los ejercicios cambian cada día.</li>
       <li><b>Qué lo anima:</b> la fogata, que es su racha de días; los malvaviscos, que son sus monedas; y su casita y su álbum, que decora con lo que compra.</li>
