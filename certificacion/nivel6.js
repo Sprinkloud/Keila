@@ -24,7 +24,7 @@ window.CERT_LECTURAS[6] = {
     <p>Malcolm Knowles estudió cómo aprenden los adultos y dio a conocer la palabra andragogía. De sus ideas, cuatro te sirven en cada clase:</p>
     <ul>
       <li><b>Quiere saber para qué sirve.</b> Un niño acepta un ejercicio porque sí. Un adulto pregunta «¿y esto para qué?». Ten siempre la respuesta, y que la respuesta sea su canción: «con estos tres acordes ya la puedes acompañar».</li>
-      <li><b>Decide él.</b> Un adulto se dirige a sí mismo. Tú propones opciones y él elige con qué canción y a qué ritmo. Tú acompañas, no impones.</li>
+      <li><b>Decide él.</b> Un adulto se dirige a sí mismo. Tú propones 2 o 3 opciones y él elige con qué canción y a qué ritmo. Tú acompañas, no impones.</li>
       <li><b>Trae experiencia.</b> Ha vivido, ha trabajado, ha escuchado música toda su vida. Úsalo: compara lo nuevo con cosas que ya conoce.</li>
       <li><b>Aprende lo que le resuelve algo hoy.</b> Si quiere tocar una canción en una reunión de su familia en tres semanas, esa meta ordena tus clases: una versión a su nivel y un pedazo por semana.</li>
     </ul>
@@ -36,7 +36,7 @@ window.CERT_LECTURAS[6] = {
 
     <h3>La canción que él eligió</h3>
     <p>Un adulto casi siempre viene por una canción. La que le recuerda a su papá, la de su boda, la que siempre quiso tocar. Esa canción es tu mejor aliada.</p>
-    <p>Si la partitura está sobre su nivel, no le dices «más adelante» ni se la das tal cual: <b>la adaptas</b> y empiezan por una parte corta. Tocar algo de su canción desde las primeras clases es lo que lo hace practicar.</p>
+    <p>Búscala con la cuenta de MuseScore del club; si no está, súbele a MuseScore un PDF o una imagen que encuentres en internet para que la convierta. Si la partitura está sobre su nivel, no le dices «más adelante» ni se la das tal cual: <b>la adaptas</b> y empiezan por una parte corta. Tocar algo de su canción desde las primeras clases es lo que lo hace practicar.</p>
 
     <h3>Dulzura sin infantilizar</h3>
     <p>La dulzura y el carisma no son solo para los niños. Con un adulto también hay que generar cercanía y confianza: saludarlo por su nombre, sonreír, preguntarle por su día, celebrar con él.</p>

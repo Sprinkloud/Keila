@@ -130,6 +130,15 @@ window.CERT_LECTURAS[1] = {
       <li><b>El cuaderno</b> de cada alumno guarda la canción en la que trabaja, lo que trabaja en el instrumento y tus notas con fecha.</li>
       <li><b>Libros de la guía:</b> ahí lees la lección antes de la clase, para preparar el tema.</li>
     </ul>
+    <h3>De dónde salen las partituras</h3>
+    <p>Sprinkloud te da acceso a su cuenta <b>PRO de MuseScore</b>. El club te pasa el usuario y la contraseña en privado: no los compartas con nadie, ni con tus alumnos.</p>
+    <ol>
+      <li><b>Busca la canción en musescore.com</b> y descarga la partitura en formato de MuseScore. Así la abres en el editor y la puedes cambiar.</li>
+      <li><b>Si no está:</b> busca en internet un PDF o una imagen de la partitura y súbela a MuseScore, que la convierte en una partitura que se puede editar.</li>
+      <li><b>Revísala nota por nota</b> contra el original: la conversión a veces se equivoca en una nota, una figura o una alteración.</li>
+      <li><b>Adáptala a su nivel</b> en el editor y saca su PDF y su MP3.</li>
+    </ol>
+    <p>Si una canción es muy difícil de encontrar, no te quedes días buscándola: ofrécele al alumno otras opciones que le puedan gustar (lo ves en el nivel 4).</p>
     <h3>MuseScore 4: la partitura a su nivel</h3>
     <p>Muchas partituras no están al nivel del alumno. En el editor puedes ponerle el nombre a las notas, cambiar la tonalidad, y quitar o poner notas. Después sacas dos archivos: el <b>PDF</b>, para que la imprima, y el <b>MP3</b>, para que escuche cómo tiene que sonar.</p>
     <p>En el libro 1 el alumno todavía no aprendió a leer partitura. Por eso su partitura lleva el nombre de cada nota dentro de la nota:</p>

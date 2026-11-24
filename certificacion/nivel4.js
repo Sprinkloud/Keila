@@ -19,7 +19,8 @@ window.CERT_LECTURAS[4] = {
     <p>Mira tus clases con esas tres preguntas. ¿Qué eligió hoy mi alumno? ¿Qué le salió hoy que antes no le salía? ¿Supo que me alegra verlo?</p>
 
     <h3>Elegir: la canción correcta</h3>
-    <p>La forma más fácil de darle voz al alumno es la canción. No hace falta que elija todo: basta con que elija entre dos, o que un día te diga «quiero tocar esta» y tú se la consigas.</p>
+    <p>La forma más fácil de darle voz al alumno es la canción. Pero no le preguntes «¿cuál es tu canción favorita?»: es una pregunta enorme, a muchos los deja en blanco, y cuando responden suele ser una canción muy difícil o imposible de conseguir.</p>
+    <p>Lo que sí funciona: <b>tú le preparas 2 o 3 opciones y él escoge una.</b> Cada opción le conviene (está a su nivel y sirve para lo que está aprendiendo) y le puede gustar (por su edad, por lo que escucha, por lo que te contó). Si un día llega diciendo «quiero tocar esta», búscala y adáptala.</p>
     <p>En una investigación sobre la práctica en casa, una alumna de clarinete estudió mucho más, usó mejores estrategias y aguantó más tiempo cuando la pieza la había elegido ella. Era la misma niña y el mismo instrumento. Lo que cambió fue de quién era la canción.</p>
     <p>La canción correcta tiene dos condiciones, y las dos pesan igual:</p>
     <ul>
@@ -57,7 +58,7 @@ window.CERT_LECTURAS[4] = {
 
     <h3>Cómo sí y cómo no</h3>
     <ul>
-      <li><b>Sí:</b> ofrecer dos canciones y dejar que elija. <b>No:</b> imponer el repertorio «porque así es el método».</li>
+      <li><b>Sí:</b> ofrecer 2 o 3 canciones a su nivel y dejar que elija. <b>No:</b> imponer el repertorio «porque así es el método», ni preguntarle «¿cuál es tu favorita?» y pasar días buscándola.</li>
       <li><b>Sí:</b> adaptar la partitura a su nivel. <b>No:</b> darle la original «para que se esfuerce».</li>
       <li><b>Sí:</b> cambiar de canción cuando ya se intentó de todo. <b>No:</b> dejarlo un mes en la misma página.</li>
       <li><b>Sí:</b> una meta pequeña por semana. <b>No:</b> «para la próxima, la canción completa».</li>
@@ -72,7 +73,7 @@ window.CERT_LECTURAS[4] = {
 
     <h3>Tu práctica de esta semana</h3>
     <ol>
-      <li><b>Deja elegir.</b> En cada clase, ofrece una elección de verdad: entre dos canciones, o con cuál parte empezamos hoy.</li>
+      <li><b>Deja elegir.</b> En cada clase, ofrece una elección de verdad: entre 2 o 3 canciones, o con cuál parte empezamos hoy.</li>
       <li><b>Nombra un avance.</b> A cada alumno, dile una cosa concreta que hoy le salió y antes no. A los adultos, sin falta.</li>
       <li><b>Revisa tus canciones.</b> Busca en tu cuaderno al alumno que lleva más tiempo con la misma canción. Antes de su próxima clase, simplifícale la partitura o llévale otra opción.</li>
     </ol>
@@ -94,7 +95,7 @@ window.CERT_LECTURAS[4] = {
     <h3>Por qué solo hay canciones tradicionales y clásicas</h3>
     <p>La biblioteca tiene canciones infantiles, villancicos, tradicionales y piezas clásicas famosas. Todas son de dominio público y cada una dice quién es su autor original.</p>
     <p>No vas a encontrar ahí canciones de moda, de películas ni de artistas actuales. La app es una página abierta a todo el mundo, y publicar ahí una canción con derechos de autor expone al club a reclamos.</p>
-    <div class="clave">Si tu alumno elige una canción con derechos de autor, no la busques en la app: adáptala tú en MuseScore 4 y entrégale su PDF y su MP3.</div>
+    <div class="clave">Si tu alumno elige una canción con derechos de autor, no la busques en la app: búscala con la cuenta de MuseScore del club (o súbele un PDF o una imagen para que la convierta), adáptala en MuseScore 4 y entrégale su PDF y su MP3.</div>
 
     <h3>La app de acordes e inversiones</h3>
     <p>Trabaja con los acordes de Do mayor, dibujados en el pentagrama y con sonido. Tiene estos ejercicios:</p>
