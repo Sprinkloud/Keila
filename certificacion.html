@@ -294,7 +294,7 @@ function inicio() {
   const lect = (window.CERT_LECTURAS[n] || {}), le = lect.educador || {}, lh = lect.herramientas || {};
   const entOk = ent.filter(e => e.estado === 'aprobada').length;
   const hechos = [!!leidas[n + '-educador'], !!leidas[n + '-libro'], !!leidas[n + '-herramientas'], !!(pr && pr.aprobada), ent.length > 0 && entOk === ent.length];
-  const pasPrueba = !pr ? ['', ''] : pr.aprobada ? ['Aprobada · ' + pr.mejor, 'bien'] : pr.puede ? [pr.intentos ? 'Otro intento' : '20 preguntas', ''] : pr.desde ? ['Desde el ' + fecha(pr.desde), 'espera'] : ['', ''];
+  const pasPrueba = !pr ? ['', ''] : pr.aprobada ? ['Aprobada · ' + pr.mejor, 'bien'] : pr.puede ? [pr.intentos ? 'Otro intento' : '20 preguntas', ''] : ['', ''];
   const pasEnt = !ent.length ? ['', ''] : entOk === ent.length ? ['Aprobadas', 'bien'] : ent.some(e => e.estado === 'devuelta') ? ['Hay una devuelta', 'mal'] : ent.some(e => e.estado === 'pendiente') ? ['En revisión', 'espera'] : [ent.length + ' entregas', ''];
   const paso = (i, v, titulo, texto, pastilla) => `<li><button class="paso${hechos[i] ? ' hecho' : ''}" data-ir="${v}">
       <span class="num">${hechos[i] ? '✓' : i + 1}</span><span><h3>${esc(titulo)}</h3><p>${esc(texto)}</p></span>
@@ -343,7 +343,7 @@ function programa() {
         <li><b>Lees «Ser educador».</b> Cómo se enseña, con casos de clase.</li>
         <li><b>Lees el libro del nivel.</b> La teoría que vas a enseñar, con las mismas palabras que lee tu alumno.</li>
         <li><b>Lees «Tus herramientas».</b> Las apps del club, tu panel, Miro y MuseScore 4.</li>
-        <li><b>Das la prueba.</b> Son 20 preguntas y se aprueba con ${estado ? estado.aprobarCon : 85}. Si no la apruebas, la das otra vez al día siguiente, con otras preguntas.</li>
+        <li><b>Das la prueba.</b> Son 20 preguntas y se aprueba con ${estado ? estado.aprobarCon : 85}.</li>
         <li><b>Mandas tus entregas.</b> Son trabajos de verdad: una partitura, un pizarrón, un caso resuelto. Cada una dice con qué se aprueba, y Keila las revisa una por una.</li>
       </ol>
       <h3>Los 7 niveles</h3>
@@ -394,12 +394,11 @@ function prueba() {
   const n = nivelVisto, pr = nivel() && nivel().prueba;
   if (!pr) return `<div class="vista">${volver}${cargando('Preparando tu prueba…')}</div>`;
   if (pr.aprobada) return `<div class="vista">${volver}<div class="hoja"><h2>Prueba aprobada</h2><p class="puntaje si">${pr.mejor}</p><p>Ya no tienes que darla otra vez.</p></div></div>`;
-  if (!pr.puede) return `<div class="vista">${volver}<div class="hoja"><h2>Hoy ya diste la prueba</h2><p>Sacaste ${pr.mejor} y se aprueba con ${estado.aprobarCon}. Desde el <b>${fecha(pr.desde)}</b> puedes intentarlo otra vez, con otras preguntas.</p><p>Mientras tanto, vuelve a leer lo que fallaste.</p></div></div>`;
+  if (!pr.puede || !pr.preguntas) return `<div class="vista">${volver}${cargando('Preparando tu prueba…')}</div>`;
   const qs = pr.preguntas, i = vista.i;
   if (i == null) return `<div class="vista">${volver}<div class="hoja">
     <h2>La prueba del nivel ${n}</h2>
     <p>Son ${qs.length} preguntas: del libro ${n}, de ser educador y de tus herramientas. Se aprueba con ${estado.aprobarCon}.</p>
-    <p>Si no la apruebas, mañana puedes darla otra vez, con otras preguntas.</p>
     <div class="fila"><button class="btn" data-pregunta="0">Empezar</button></div></div></div>`;
   const q = qs[i], elegida = respuestas[q.id], faltan = qs.filter(x => respuestas[x.id] == null).length;
   return `<div class="vista"><div class="cuenta"><span>Pregunta ${i + 1} de ${qs.length}</span><span>${{ libro: 'El libro', educador: 'Ser educador', herramientas: 'Herramientas' }[q.c]}</span></div>
@@ -415,8 +414,8 @@ function resultado() {
   const r = vista.r, qs = vista.preguntas, malas = r.revision.filter(x => !x.bien), pr = nivel(r.nivel).prueba;
   return `<div class="vista"><div class="hoja"><h2>${r.aprobada ? '¡Aprobaste la prueba!' : 'Todavía no'}</h2>
     <p class="puntaje ${r.aprobada ? 'si' : 'no'}">${r.puntaje}</p>
-    <p>${r.bien} de ${r.total} bien. Se aprueba con ${estado.aprobarCon}.${r.aprobada ? '' : ` Desde el <b>${fecha(pr.desde)}</b> puedes intentarlo otra vez, con otras preguntas.`}</p>
-    <div class="fila"><button class="btn" data-ir="${r.aprobada ? 'entregas' : 'inicio'}">${r.aprobada ? 'Ir a mis entregas' : 'Volver a leer'}</button></div>
+    <p>${r.bien} de ${r.total} bien. Se aprueba con ${estado.aprobarCon}.</p>
+    <div class="fila">${r.aprobada ? `<button class="btn" data-ir="entregas">Ir a mis entregas</button>` : `<button class="btn" data-ir="prueba">Intentar otra vez</button><button class="btn blanco" data-ir="inicio">Volver a leer</button>`}</div>
     ${malas.length ? `<h3 style="margin-top:22px">Lo que hay que repasar</h3><ul class="repaso">${malas.map(x => { const q = qs.find(y => y.id === x.id); return `<li><b>${esc(q.p)}</b>Era: ${esc(q.o[x.correcta])}<br><span class="por">${esc(x.e)}</span></li>`; }).join('')}</ul>` : ''}</div></div>`;
 }
 
