@@ -304,6 +304,10 @@ function inicio() {
     return `<li><button class="nivel${k === n ? ' aqui' : ''}${x.completo ? ' listo' : ''}" data-nivel="${k}" ${x.abierto ? '' : 'disabled'} aria-pressed="${k === n}"><b>Nivel ${k}${x.completo ? ' ✓' : x.abierto ? '' : ' 🔒'}</b>${esc(NOMBRES[k - 1])}</button></li>`; }).join('');
   const certs = (estado ? estado.certificados : []).map(c => {
     const faltan = c.niveles.filter(k => !(nivel(k) || {}).completo);
+    if (c.formacion) return `<li class="cert${c.fecha ? ' logrado' : ''}"><div><b>${esc(c.nombre)}</b><span>${c.fecha
+        ? 'Ya puedes dar clases' + (c.pago != null ? ' · ' + dinero(c.pago) + ' la hora' : '') + '. Las clases que te asignamos aparecen en tu Calendario de Google, con el correo que nos diste.'
+        : 'Con el nivel 1 completo ya puedes dar clases' + (c.pago != null ? ' · ' + dinero(c.pago) + ' la hora' : '')}</span></div>
+      <span class="pastilla${c.fecha ? ' bien' : ''}">${c.fecha ? 'Logrado' : 'Por lograr'}</span></li>`;
     return `<li class="cert${c.fecha ? ' logrado' : ''}"><div><b>${esc(c.nombre)}</b><span>Niveles ${rango(c.niveles)}${c.pago != null ? ' · ' + dinero(c.pago) + ' la hora' : ''}</span></div>
       ${c.fecha ? `<button class="btn blanco" data-certificado="${c.n}">Ver</button>` : `<span class="pastilla">${faltan.length === c.niveles.length ? 'Por lograr' : 'Falta el nivel ' + faltan.join(' y el ')}</span>`}</li>`; }).join('');
   return `<div class="vista"><ul class="niveles" aria-label="Niveles">${niveles}</ul>
@@ -324,7 +328,8 @@ function inicio() {
 
 function programa() {
   const empezo = Object.keys(leidas).length > 0 || !!(estado && estado.niveles.some(x => x.prueba && x.prueba.intentos));
-  const certs = estado ? estado.certificados : [{ nombre: 'Primer certificado', niveles: [1, 2, 3] }, { nombre: 'Segundo certificado', niveles: [4, 5] }, { nombre: 'Tercer certificado', niveles: [6, 7] }];
+  const todos = estado ? estado.certificados : [{ formacion: true }, { nombre: 'Primer certificado', niveles: [1, 2, 3] }, { nombre: 'Segundo certificado', niveles: [4, 5] }, { nombre: 'Tercer certificado', niveles: [6, 7] }];
+  const certs = todos.filter(c => !c.formacion), formacion = todos.find(c => c.formacion);
   const conPago = certs.some(c => c.pago != null);
   return `<div class="vista">${empezo ? volver : ''}
     <article class="hoja lectura">
@@ -346,12 +351,13 @@ function programa() {
         <p class="minutos">Libro ${i + 1}: ${esc(x.libro)} · ${tiempo(x.horas)}</p>
         <p>Al terminar puedes:</p><ul>${x.puedes.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>`).join('')}
       <h3>Los 3 certificados</h3>
-      <ul>${certs.map((c, i) => `<li><b>${esc(c.nombre)}:</b> niveles ${rango(c.niveles)}${c.pago != null ? ', ' + dinero(c.pago) + ' la hora' : ''}.${i ? '' : ' Con él puedes empezar a dar clases en Sprinkloud.'}</li>`).join('')}</ul>
+      ${formacion ? `<p><b>Empiezas a dar clases con el nivel 1 completo,</b> como maestro en formación${formacion.pago != null ? ' (' + dinero(formacion.pago) + ' la hora)' : ''}. Los niveles 2 y 3 los haces ya con tus alumnos. Las clases que te asignamos aparecen en tu Calendario de Google, con el correo que nos diste.</p>` : ''}
+      <ul>${certs.map(c => `<li><b>${esc(c.nombre)}:</b> niveles ${rango(c.niveles)}${c.pago != null ? ', ' + dinero(c.pago) + ' la hora' : ''}.</li>`).join('')}</ul>
       <p>Un certificado sale cuando Keila aprobó todas las entregas de sus niveles.${conPago ? ' Cada subida de pago también la aprueba ella.' : ''}</p>
       <h3>Lo que conviene saber</h3>
       <ul>
         <li>Vas a tu ritmo: no hay fechas. Un nivel se abre cuando enviaste todo lo del anterior.</li>
-        <li>No hace falta tener alumnos para empezar: las entregas se pueden hacer antes de tu primera clase.</li>
+        <li>No hace falta tener alumnos para empezar: las entregas del nivel 1 se hacen antes de tu primera clase.</li>
         <li>Por ahora todos se certifican con los libros de piano, también quienes enseñan violín.</li>
         <li>Si Keila te devuelve una entrega, viene con un comentario: la corriges y la mandas otra vez.</li>
       </ul>
