@@ -54,7 +54,7 @@ window.CERT_LECTURAS[1] = {
     <h3>Cómo se ve en una clase</h3>
     <ul>
       <li><b>El saludo:</b> por su nombre, con una sonrisa, y una pregunta sobre su día. Así sabe que te importa él, no solo la música.</li>
-      <li><b>La voz y la cara:</b> alegres y en calma. Con los más pequeños, la clase tiene que parecer un cuento: imágenes, personajes, la voz que juega. Así eran las maestras que marcaron a la fundadora del club.</li>
+      <li><b>La voz y la cara:</b> alegres y en calma. Con los más pequeños, la clase tiene que parecer un cuento: imágenes, personajes, la voz que juega.</li>
       <li><b>Nunca la cara seria «para que sepa quién manda»:</b> el alumno no aprende mejor con miedo. Se aleja, y termina por irse.</li>
       <li><b>Con los adultos también:</b> la dulzura y el carisma no son solo para niños. Un adulto que empieza siente vergüenza; necesita cercanía, confianza y una prueba de que sí puede («esto que te sale hoy no te salía la semana pasada»).</li>
     </ul>
