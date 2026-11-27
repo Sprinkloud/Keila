@@ -70,17 +70,17 @@ const VERIF = {
     const q = { I: 0, IV: 3, V: 4 }; const ok = Object.keys(q).filter(g => notas(ns).every(n => tri(q[g]).includes(n))); return ok.length === 1 && ok[0] === r; },
   'El otro nombre': (t, [r]) => L.CHK.enarm(t.replace(' =', ''), r),
   'Sube un tono o un semitono': (t, [r]) => { const m = t.match(/^(\S+) \+ un (tono|semitono)$/); return (L.pc(L.nota(r.split(' ')[0])) - L.pc(L.nota(m[1])) + 12) % 12 === (m[2] === 'tono' ? 2 : 1); },
-  '¿Qué grado es?': (t, [r]) => { const m = t.match(/^¿Qué grado es (\S+) en (\S+) mayor\?$/); return L.gradoDe(L.nota(m[2]), ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'].indexOf(r)) === m[1]; },
+  '¿Qué grado es?': (t, [r]) => { const m = t.match(/^(\S+) en (\S+) mayor$/); return L.gradoDe(L.nota(m[2]), ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'].indexOf(r)) === m[1]; },
   '¿Qué nota cambias?': (t, [a, b]) => { const m = t.match(/^Para que (\S+) (mayor|menor) sea \S+ (mayor|menor)$/); return L.triada(L.nota(m[1]), m[2]).map(L.nombre)[1] === a && L.triada(L.nota(m[1]), m[3]).map(L.nombre)[1] === b; },
-  'Encuentra el error': (t, [mal, bien]) => { const m = t.match(/^(\S+) mayor: (.*)$/), e = L.escala(L.nota(m[1]), L.MAYOR).map(L.nombre), x = notas(m[2]);
+  'Encuentra la nota mal': (t, [mal, bien]) => { const m = t.match(/^(\S+) mayor: (.*)$/), e = L.escala(L.nota(m[1]), L.MAYOR).map(L.nombre), x = notas(m[2]);
     const k = x.findIndex((n, j) => n !== e[j]); return x.filter((n, j) => n !== e[j]).length === 1 && x[k] === mal && e[k] === bien; },
   '¿Reposo o tensión?': (t, [r]) => { const m = t.match(/^En (\S+) mayor, la frase termina en (\S+)$/); return (L.gradoDe(L.nota(m[1]), 0) === m[2] ? 'Reposo' : L.gradoDe(L.nota(m[1]), 4) === m[2] ? 'Tensión' : '?') === r; },
   'Pasa a acordes': (t, rs) => { const m = t.match(/^(.*) en (\S+) mayor$/); const R = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'];
     return m[1].split(' – ').every((g, j) => L.gradoDe(L.nota(m[2]), R.indexOf(g)) === rs[j].split(' ')[0]); },
   'Pasa a números romanos': (t, rs) => { const m = t.match(/^(.*) \((\S+) mayor\)$/); const R = ['I', 'ii', 'iii', 'IV', 'V', 'vi'];
     return m[1].split(' – ').every((a, j) => L.gradoDe(L.nota(m[2]), R.indexOf(rs[j])) === a); },
-  '¿Qué nota sube?': (t, [a, b]) => { const n = L.nota(t.split(' ')[0]); return L.escala(n, L.MENOR).map(L.nombre)[6] === a && L.escala(n, L.ARMONICA).map(L.nombre)[6] === b; },
-  '¿Está en la pentatónica?': (t, [r]) => { const m = t.match(/^¿Está (\S+) en la pentatónica de (\S+) (mayor|menor)\?$/);
+  '¿Qué nota sube en la armónica?': (t, [a, b]) => { const n = L.nota(t.split(' ')[0]); return L.escala(n, L.MENOR).map(L.nombre)[6] === a && L.escala(n, L.ARMONICA).map(L.nombre)[6] === b; },
+  '¿Está en la pentatónica?': (t, [r]) => { const m = t.match(/^(\S+) en la de (\S+) (mayor|menor)$/);
     const e = L.escala(L.nota(m[2]), m[3] === 'menor' ? L.MENOR : L.MAYOR).slice(0, 7).filter((_, k) => m[3] === 'menor' ? k !== 1 && k !== 5 : k !== 3 && k !== 6).map(L.nombre);
     return (e.includes(m[1]) ? 'Sí' : 'No') === r; },
   '¿Qué nota baja?': (t, [a, b]) => { const m = t.match(/^Del (\S+) al (\S+)$/), ea = L.escala(L.nota('Do'), L.MODOS[MODO_ID[mayus(m[1])]]).map(L.nombre), eb = L.escala(L.nota('Do'), L.MODOS[MODO_ID[mayus(m[2])]]).map(L.nombre);
@@ -89,7 +89,7 @@ const VERIF = {
   '¿Cuántos sonidos tiene?': (t, [r]) => t.split(' | ').reduce((s, c) => s + SIL[c], 0) === num(r),
   '¿Cuántos sonidos y cuántos pulsos?': (t, [a, b]) => t.split(' | ').reduce((s, c) => s + SIL[c], 0) === num(a) && t.split(' | ').reduce((s, c) => s + PUL[c], 0) === num(b),
   'Escribe lo que falta': (t, [r]) => { const m = t.match(/^(.*) \((\d+) sonidos\)$/); return m[1].split(' | ').reduce((s, c) => s + (c === '___' ? SIL[r] : SIL[c]), 0) === Number(m[2]); },
-  'La escalera de sonidos': (t, [fin, dir]) => { const m = t.match(/^Empieza en el (\d), (.*)$/); let p = Number(m[1]);
+  '¿En qué escalón termina?': (t, [fin, dir]) => { const m = t.match(/^Empieza en el (\d), (.*)$/); let p = Number(m[1]);
     m[2].split(' y ').forEach(x => { const [v, n] = x.split(' '); p += v === 'sube' ? +n : -n; }); return p === num(fin) && p >= 1 && p <= 8 && (dir === undefined || (p > Number(m[1]) ? 'Más aguda' : 'Más grave') === dir); },
   'El metrónomo': (t, [r]) => { let m;
     if ((m = t.match(/en (\d+), ¿cuántos pulsos suenan en un minuto/))) return +m[1] === num(r);
@@ -98,12 +98,12 @@ const VERIF = {
     if ((m = t.match(/duran (\d+) pulsos con el metrónomo en (\d+)/))) return +m[1] * 60 / +m[2] === num(r);
     if ((m = t.match(/rápido, (\d+) o (\d+)/))) return Math.max(+m[1], +m[2]) === num(r); return 'pregunta desconocida'; },
   '¿El pulso es parejo?': (t, [r]) => { const g = t.split('●').slice(1, -1).map(x => (x.match(/–/g) || []).length); return (g.every(x => x === g[0]) ? 'Parejo' : 'No es parejo') === r; },
-  'Cuenta en el compás': (t, [r]) => { const m = t.match(/En (\d)\/4, en el pulso (\d+)/); return (m[2] - 1) % m[1] + 1 === num(r); },
+  '¿Qué número dices?': (t, [r]) => { const m = t.match(/En (\d)\/4, en el pulso (\d+)/); return (m[2] - 1) % m[1] + 1 === num(r); },
   'La anacrusa': (t, [r]) => { const m = t.match(/Compás de (\d)\/4 que empieza con (\d)/); return m[1] - m[2] === num(r); },
   '¿Qué compás llena?': (t, [r]) => { const P = { negra: 1, blanca: 2, '2 corcheas': 1, '4 corcheas': 2, redonda: 4, 'blanca con puntillo': 3 }; return t.split(' + ').reduce((s, x) => s + P[x], 0) + '/4' === r; },
   'Suma los pulsos': (t, [r]) => t.split(' + ').reduce((s, x) => s + FIG[x], 0) === num(r),
-  '¿Cuántas caben?': (t, [r]) => { const m = t.match(/¿Cuántas (.+?)s? caben en una (.+)\?/); return FIG[m[2]] / FIG[m[1].replace(/s$/, '')] === num(r); },
-  '¿Cuántas corcheas faltan?': (t, [r]) => 6 - t.replace('6/8: ', '').split(' + ').reduce((s, x) => s + 2 * FIG[x], 0) === num(r),
+  '¿Cuántas caben?': (t, [r]) => { const m = t.match(/^(.+?)s? en una (.+)$/); return FIG[m[2]] / FIG[m[1].replace(/s$/, '')] === num(r); },
+  '¿Cuántas corcheas faltan en 6/8?': (t, [r]) => 6 - t.replace('6/8: ', '').split(' + ').reduce((s, x) => s + 2 * FIG[x], 0) === num(r),
   '¿Llena un compás de 4/4?': (t, [p, sn]) => { const NOM = { negra: 'ta', '2 corcheas': 'ti-ti', 'silencio de negra': 'sh', blanca: 'ta-a', 'blanca con puntillo': 'ta-a-a', redonda: 'ta-a-a-a' };
     const cs = t.includes(',') || NOM[t] ? t.split(', ').map(x => NOM[x]) : t.match(/ta-i ti|ta-a-a-a|ta-a-a|ta-a|ti-ti|ta|sh/g); const s = cs.reduce((a, c) => a + PUL[c], 0); return s === num(p) && (s === 4 ? 'Sí' : 'No') === sn; },
   '¿Paso o salto?': (t, [r]) => { const [a, b] = t.split(' → ').map(L.nota); return (Math.abs(b.l - a.l) === 1 ? 'Paso' : 'Salto') === r; },
@@ -119,7 +119,7 @@ function escalaDelItem(item, rs) { const r = item.querySelector('.respuestas'); 
 
 /* ---------- Recorrido ---------- */
 /* los tipos de antes del 7-nov repiten ítems a propósito cuando hay pocas notas (varios()); los nuevos, nunca */
-const VIEJOS = /^(Dibuja la nota|Escribe el nombre|¿Sol o mi?|Las notas de la cuerda|Clave de|Líneas|Notas con|Notas en clave|Lectura rápida|¿Línea o espacio?|¿Sube o baja?|Escribe las sílabas|¿Cuántos pulsos)/;
+const VIEJOS = /^(Dibuja la nota|Toca donde va la nota|Escribe el nombre|¿Sol o mi?|Las notas de la cuerda|Clave de|Líneas|Notas con|Notas en clave|Lectura rápida|¿Línea o espacio?|¿Sube o baja?|Escribe las sílabas|¿Cuántos pulsos)/;
 let errores = 0, items = 0, campos = 0, verificados = 0;
 const tipos = {};
 const falla = m => { if (errores++ < 40) console.log('✗ ' + m); };

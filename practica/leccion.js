@@ -39,22 +39,23 @@
   var ins = app === 'violin' || (rutaHoja || rutaNueva || [])[1] === 'violin' || q.get('i') === 'violin' ? 'violin' : 'piano';   // &i=violin: los libros de violín lo mandan a las apps comunes (modos)
   function para(t) { var p = String(t).split(' / '); return p.length === 2 && (app === 'piano' || app === 'violin' || rutaHoja || rutaNueva) ? p[ins === 'violin' ? 1 : 0] : t; }
 
+  /* 27-nov-2026: las metas de 1 a 14 (y la 27) dicen lo mismo que el «Lo logré» del libro. (La línea de abajo la busca App_Bosque/herramientas/copiar_motores.py: no cambiarla.) */
   /* [tema, meta] de cada semana */
   var GUIA = [null,
-    ['El pulso', 'Mantener el pulso 30 segundos con el metrónomo a 80, con palmas y en el pecho.'],
-    ['Largo y corto: ta y ti-ti', 'Decir y palmear ritmos de 4 pulsos con ta (negra) y ti-ti (corcheas).'],
-    ['El silencio', 'Respetar el silencio de negra (sh) dentro de un ritmo de 4 pulsos.'],
-    ['Agudo y grave', 'Distinguir si un sonido sube o baja.'],
-    ['Sol-mi: primeras notas cantadas', 'Cantar sol-mi y encontrarlas en tu instrumento.'],
-    ['Ostinato y conjunto', 'Mantener un ritmo repetido mientras otro suena distinto.'],
-    ['El pentagrama', 'Saber si una nota está en una línea o en un espacio.'],
-    ['Clave de sol: sol, mi, la', 'Leer sol, mi y la en clave de sol.'],
-    ['Do-re-mi', 'Ubicar Do, Re y Mi en el pentagrama y en tu instrumento.'],
-    ['La escala de Do', 'Leer y tocar las notas de la escala de Do, subiendo y bajando.'],   // 7-nov-2026: también en el violín (do fijo; antes, la escala de Re)
-    ['Figuras: redonda, blanca, negra, corchea', 'Saber cuánto dura cada figura.'],
-    ['Compás: 2/4, 3/4 y 4/4', 'Marcar el pulso fuerte de cada compás.'],
-    ['Primera lectura de 4 compases', 'Leer una melodía de 4 compases sin parar.'],
-    ['Dictado rítmico', 'Escuchar un ritmo y escribirlo.'],
+    ['El pulso', 'Reconocer un pulso parejo y saber qué marca el número del metrónomo.'],
+    ['Largo y corto: ta y ti-ti', 'Decir cuántos sonidos y cuántos pulsos tiene un ritmo con ta y ti-ti.'],
+    ['El silencio', 'Encontrar el silencio en un ritmo y contar sus sonidos y sus pulsos.'],
+    ['Agudo y grave', 'Distinguir agudo y grave y decir si una melodía sube o baja.'],
+    ['Sol-mi: primeras notas cantadas', 'Reconocer sol y mi y decir cuál es más aguda.'],
+    ['Ostinato y conjunto', 'Reconocer un ostinato, decir cuánto dura y continuarlo.'],
+    ['El pentagrama', 'Nombrar las líneas y los espacios y decir qué nota está más arriba.'],
+    ['Clave de sol: sol, mi, la', 'Nombrar sol, mi y la en clave de sol y decir dónde van.'],
+    ['Do-re-mi', 'Ubicar do, re y mi en el pentagrama y distinguir pasos y saltos.'],
+    ['La escala de Do', 'Escribir la escala de Do subiendo y bajando y decir qué nota sigue.'],   // 7-nov-2026: también en el violín (do fijo; antes, la escala de Re)
+    ['Figuras: redonda, blanca, negra, corchea', 'Decir cuánto dura cada figura y sumar sus pulsos.'],
+    ['Compás: 2/4, 3/4 y 4/4', 'Leer los dos números del compás y completar compases.'],
+    ['Primera lectura de 4 compases', 'Leer el ritmo y las notas de una melodía de 4 compases.'],
+    ['Dictado rítmico', 'Pasar un ritmo de sílabas a figuras.'],
     ['El puntillo', 'Leer la blanca con puntillo y la negra con puntillo.'],
     ['Semicorcheas: ta-ka-di-mi', 'Tocar 4 semicorcheas parejas en un pulso.'],
     ['Combinaciones: ta-di-mi y ta-ka-di', 'Leer corchea con dos semicorcheas y al revés.'],
@@ -67,9 +68,9 @@
     ['Lectura con todas las notas', 'Leer una melodía de 8 compases.'],
     ['Las 12 notas: sostenidos, bemoles y becuadro', 'Nombrar las 12 notas y saber qué hace el becuadro.'],
     ['Tono y semitono', 'Distinguir tono y semitono.'],
-    ['Intervalos 1: segundas y terceras', 'Reconocer segundas y terceras de oído.'],
+    ['Intervalos 1: segundas y terceras', 'Nombrar segundas y terceras contando notas y semitonos.'],
     ['Intervalos 2: cuarta, quinta, tritono y octava', 'Reconocer de oído la 4ª, la 5ª, el tritono y la 8ª.'],
-    ['Intervalos 3: sextas, séptimas, aumentados y disminuidos', 'Nombrar los intervalos con sus semitonos y reconocer de oído al menos 6.'],
+    ['Intervalos 3: sextas, séptimas, aumentados y disminuidos', 'Nombrar los intervalos contando notas y semitonos, y reconocer de oído al menos 6.'],
     ['La escala mayor: fórmula e intervalos', 'Construir una escala mayor con T-T-S-T-T-T-S.'],
     ['Escalas de Sol y Fa mayor y su armadura', 'Tocar Sol y Fa mayor y leer la armadura.'],
     ['Orden de los sostenidos: ¿en qué tonalidad estoy?', 'Decir el orden de los sostenidos y descubrir la tonalidad mayor de una armadura.'],
@@ -202,12 +203,13 @@
     if (especial && especial.tipo === 'lineaEspacio') return ['Toca <b>Empezar</b>.', '¿<b>Línea</b> o <b>espacio</b>?', 'Junta <b>5 estrellas</b>.'];
     if (especial && especial.tipo === 'lectura') return ['Toca <b>Empezar</b>.', '<b>Di cada nota</b> a tiempo.', 'Tócala ' + instrumento + '.'];
     if (semana === 26 && (app === 'piano' || app === 'violin')) return ['Toca <b>Empezar</b>.', 'Sube <b>tono o semitono</b>.', 'Junta <b>5 estrellas</b>.'];
-    if (app === 'piano' && INTERVALOS[semana]) return ['Toca <b>Empezar</b>.', 'Cuenta los <b>semitonos</b>.', 'Junta <b>5 estrellas</b>.'];
+    /* 27-nov-2026: los dos pasos del libro (notas → número, semitonos → nombre) */
+    if (app === 'piano' && INTERVALOS[semana]) return ['Toca <b>Empezar</b>.', 'Cuenta <b>notas</b> y <b>semitonos</b>.', 'Junta <b>5 estrellas</b>.'];
     if (app === 'piano' || app === 'violin') return ['Toca <b>Empezar</b>.', 'Toca la nota ' + instrumento + '.', 'Junta <b>5 estrellas</b>.'];
     /* 10-nov-2026 (la dueña): en vez de palmear o tocar el pecho, el alumno toca el tambor de la pantalla (en la computadora,
        cualquier tecla): así la app sabe si fue a tiempo. */
     if (app === 'ritmo') {
-      if (semana === 1) return ['Toca <b>▶</b>.', '<b>Tambor 🥁</b> en cada «ta».', 'Sigue 30 segundos.'];
+      if (semana === 1) return ['Toca <b>▶</b>.', '<b>Tambor 🥁</b> en cada pulso.', 'Sigue 30 segundos.'];
       if (semana === 14) return ['Toca <b>Dictado</b>.', 'Escucha y <b>elige</b>.', 'Haz 10 dictados.'];
       if (semana === 18) return ['Toca <b>▶</b>.', '<b>Tambor 🥁</b> en cada nota.', 'Prueba otros <b>ritmos latinos</b>.'];
       if (semana === 48) return ['Toca <b>▶</b>.', 'Cambia el <b>tempo</b>.', '<b>Tambor 🥁</b> en cada pulso.'];

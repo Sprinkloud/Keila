@@ -141,6 +141,31 @@ Pedido de la dueña (28 de octubre de 2026): que alguien que nunca afinó un vio
 
 Hojas de teoría para escribir: una por cada semana de la guía de Sprinkloud (48 semanas, ver `Registro_Sprinkloud/guia-teoria-musical.md`). Sirven para resolver en el dispositivo o para imprimir en A4.
 
+- **Poco texto (27-nov-2026, la dueña: «título corto, sin subtítulos, no repetir lo mismo: el usuario se cansa antes de empezar»):**
+  - **La hoja:** muestra solo «Etapa · Lección» y el tema. Se quitaron el objetivo de la guía (`g[3]`) y el párrafo de presentación de la página.
+  - **Cada ejercicio:** un título corto y los ítems. «Hoja pautada / rayada» se ve solo al imprimir.
+  - **Consignas:** casi todas son `null`. Solo quedan las que dan un dato que no está en el título: «Así: Rem», «Así: I, vi», «T-T-S-T-T-T-S», «● = un sonido», «Escalón 1: el más grave · 8: el más agudo», «Pentatónica de Do: …» y «Todos empiezan en Do».
+  - **Los ítems no repiten la pregunta del título:** por ejemplo, «2 negras» y no «¿Qué figura sola dura lo mismo que 2 negras?».
+  - **Para un ejercicio nuevo:** si hace falta explicar, primero se busca un título más claro.
+  - `pruebas/hojas_test.js` usa los títulos nuevos.
+- **Libros 1 y 2 sin desfase (27-nov-2026):** cada hoja pide solo lo que el libro ya enseñó.
+  - **3:** «¿En qué pulso está el silencio?» (`T.dondeSilencio`).
+  - **4 y 5:** sin pentagrama. Usan `T.elegir` («¿Agudo o grave?», «Sol o mi», «¿Sube, baja o se queda igual?») y `T.subeBajaEscalera`.
+  - **7:** «Toca donde va la nota» por lugar (`dibujar` con `porLugar`: «Línea 2»).
+  - **9:** solo do, re y mi.
+  - **11:** `leerNumero` acepta «½», «medio» y «2 y medio».
+  - **12 y 14:** sin la blanca con puntillo (`conPuntillo: false`).
+  - **13:** 4 compases.
+  - **2, 3 y 11:** sin la cifra 4/4 en «Escribe las sílabas» (`cifra: false`).
+  - **El dictado de `ritmo.html`:** usa las tarjetas de la lección aunque sean menos de 4.
+  - **`leccion.js`:** las metas de 1 a 14 y de la 27 son las del «Lo logré» del libro, y el paso de la lección 1 dice «Tambor en cada pulso».
+  - `Registro_Sprinkloud/Guia.js` (la guía de los maestros) no se tocó.
+- **Intervalos en dos pasos (27-nov-2026), como en los libros:**
+  - En las semanas 27, 28 y 29, «Nombra el intervalo» lleva arriba el ejemplo de su lección (`dosPasos()`, clases `dp-*`): 1 · Notas → el número; 2 · Semitonos → el nombre.
+  - Va sin consigna ni subtítulo. La dueña: «solo un título corto y de ahí el ejemplo; tanta letra y explicación cansa».
+  - Cada ítem pide notas, semitonos y nombre.
+  - El piano virtual (modo «Intervalos») dice también las notas contadas («Sol, La, Si = 3 notas · 4 semitonos»).
+
 **Datos y parámetros**
 - `GUIA`: semana, etapa, tema y objetivo. Se copia de `Registro_Sprinkloud/Guia.js`, reemplazando el arreglo que sigue a `/*GUIA*/`. Si cambia la guía, hay que volver a copiarlo.
 - Parámetros de la URL:

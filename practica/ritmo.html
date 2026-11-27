@@ -1433,7 +1433,9 @@ function closeQuiz(){ $("#quiz").classList.remove("open"); }
 
 function nextQuiz(){
   const pool = visibles().filter(c => c.notes.some(n => !n.rest));
-  const src = pool.length >= 4 ? pool : CELLS.filter(c => c.tab === "base");
+  /* 27-nov-2026: con 2 o 3 tarjetas visibles (lección 14: ta, ti-ti y ta-a) se usan solo esas; antes caía a todas las de
+     «base» y salían semicorcheas, puntillos y tresillos, que el libro enseña después */
+  const src = pool.length >= 2 ? pool : CELLS.filter(c => c.tab === "base");
   const shuffled = src.slice().sort(() => Math.random() - .5).slice(0,4);
   quiz.opts = shuffled;
   quiz.target = shuffled[Math.floor(Math.random()*shuffled.length)];
